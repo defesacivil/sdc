@@ -95,7 +95,13 @@ class CompdecController extends \App\Http\Controllers\Controller
     {
         $active_tab = "";
 
-        $compdec_id = (is_null($id)) ? Session::get('user')['compdec_id'] : $id;
+        $compdec_id_session = isset(Session::get('user')['compdec_id']) ? Session::get('user')['compdec_id'] : null;
+        
+        if(!is_null($id)){
+            $compdec_id = $id;
+        }else if(!is_null($compdec_id_session)) {
+            $compdec_id = $compdec_id_session;
+        }
 
         $compdec = Compdec::find($compdec_id);
         $municipio = Municipio::find($compdec->municipio_id);
@@ -110,7 +116,6 @@ class CompdecController extends \App\Http\Controllers\Controller
             'compdec.edit',
             [
                 'compdec' => $compdec,
-
                 'regioes' => $regioes,
                 'associacoes' => $associacoes,
                 'territorios' => $territorios,
@@ -216,13 +221,13 @@ class CompdecController extends \App\Http\Controllers\Controller
 
         $fileName = $request->id . "-" . time() . '.' . $request->file('fotoCompdec')->extension();
 
-        $request->file('fotoCompdec')->storeAs('public/compdec', $fileName);
+        $request->file('fotoCompdec')->storeAs('compdec', $fileName);
 
         $compdec = Compdec::find($request->id);
 
 
-        if (Storage::exists('public/compdec/' . $compdec->fotoCompdec)) {
-            Storage::delete('public/compdec/' . $compdec->fotoCompdec);
+        if (Storage::exists('compdec/' . $compdec->fotoCompdec)) {
+            Storage::delete('compdec/' . $compdec->fotoCompdec);
         }
 
         $compdec->fotoCompdec = $fileName;

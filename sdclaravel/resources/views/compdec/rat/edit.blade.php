@@ -182,13 +182,17 @@
             <script type="text/javascript">
                 $(document).ready(function() {
 
+
+                    /* delete */
                     $(".btnRemove").click(function(e) {
 
                         var formdata = new FormData();
 
                         var file = $(this).data('file');
+                        var id = '{{$rat->id}}';
 
-                        formdata.append('file', file)
+                        formdata.append('file', file);
+                        formdata.append('id', id);
                         formdata.append('_token', "{{ csrf_token() }}");
 
                         var url = '{{ url('rat/deleteImagem') }}';
@@ -203,7 +207,7 @@
                             processData: false,
                             success: function(data) {
                                 //console.log(data);
-                                //window.location.href = data.view;
+                                window.location.href = "{{url('rat/edit/'.$rat->id)}}";
                             },
                             error: function(data) {
                                 console.log(data + "erro");

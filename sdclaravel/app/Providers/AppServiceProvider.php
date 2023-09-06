@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
 
+
         Sanctum::getAccessTokenFromRequestUsing(
             function ($request) {
                 return $request->token;

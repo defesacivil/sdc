@@ -18,18 +18,16 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    if($_SERVER['HTTP_HOST'] == 'localhost:8081'){
-
+    if ($_SERVER['HTTP_HOST'] == 'localhost:8081') {
         return view('dashboard');
-
-    }else if(null != session()->get('routeInicio')) {
+    } else if (null != session()->get('routeInicio')) {
         return redirect()->away(session()->get('routeInicio'));
-    }else {
+    } //else {
         //if($_SERVER)
-        
-        return redirect()->away('http://sistema.defesacivil.mg.gov.br');
-    }
-    
+
+        //return redirect()->away('http://sistema.defesacivil.mg.gov.br');
+    //}
+
     //inicio com tela para login
     //return view('welcome');
 });
@@ -41,7 +39,7 @@ Route::get('/', function () {
 # http://localhost:8081/drrd1?token=16|zuC7Mdwo8XAn3CzfOnzt5i4xsTefgjRF1AhfFBRI
 
 Route::group(['middleware' => 'auth'], function () {
-    
+
     Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
 
     # configurações 
@@ -113,78 +111,78 @@ Route::group(['middleware' => 'auth'], function () {
 
     # PERMiSSAO ####################
 
-        # index
-        Route::get('permissao', 'App\Http\Controllers\Usuario\PermissionController@index');
+    # index
+    Route::get('permissao', 'App\Http\Controllers\Usuario\PermissionController@index');
 
-        # cadastro permissao 
-        Route::get('config/permissao/create', 'App\Http\Controllers\Usuario\PermissionController@create');
+    # cadastro permissao 
+    Route::get('config/permissao/create', 'App\Http\Controllers\Usuario\PermissionController@create');
 
-        # view 
-        //Route::get('config/permissao/show/{id}', 'App\Http\Controllers\PermissionController@show');
+    # view 
+    //Route::get('config/permissao/show/{id}', 'App\Http\Controllers\PermissionController@show');
 
-        # editar
-        Route::get('permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionController@edit');
+    # editar
+    Route::get('permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionController@edit');
 
-        # deletar
-        Route::get('config/permissao/delete/{id}', 'App\Http\Controllers\Usuario\PermissionController@destroy');
+    # deletar
+    Route::get('config/permissao/delete/{id}', 'App\Http\Controllers\Usuario\PermissionController@destroy');
 
-        # gravar Permissao 
-        Route::post('config/permissao/store', 'App\Http\Controllers\Usuario\PermissionController@store');
+    # gravar Permissao 
+    Route::post('config/permissao/store', 'App\Http\Controllers\Usuario\PermissionController@store');
 
-        # update
-        Route::put('config/permissao/update/{id}', 'App\Http\Controllers\Usuario\PermissionController@update');
+    # update
+    Route::put('config/permissao/update/{id}', 'App\Http\Controllers\Usuario\PermissionController@update');
 
 
 
     # PERMISSION_ROLE
 
-        # index
-        Route::get('permission_role', 'App\Http\Controllers\Usuario\PermissionRoleController@index');
+    # index
+    Route::get('permission_role', 'App\Http\Controllers\Usuario\PermissionRoleController@index');
 
-        # create
-        Route::get('permission/role/create/{roler_id}/{user_id}', 'App\Http\Controllers\Usuario\PermissionRoleController@create')->name('permission/role/create');
+    # create
+    Route::get('permission/role/create/{roler_id}/{user_id}', 'App\Http\Controllers\Usuario\PermissionRoleController@create')->name('permission/role/create');
 
-        # gravar Permissao 
-        Route::post('config/permission_role/store', 'App\Http\Controllers\Usuario\PermissionRoleController@store');
-        
-        # view 
-        Route::get('config/permission_role/show/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@show');
+    # gravar Permissao 
+    Route::post('config/permission_role/store', 'App\Http\Controllers\Usuario\PermissionRoleController@store');
 
-        # edit
-        Route::get('permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@edit');
+    # view 
+    Route::get('config/permission_role/show/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@show');
 
-        # update
-        Route::put('config/permission_role/update/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@update');
-        
-        # deletar
-        Route::get('config/permission_role/delete/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@destroy');
+    # edit
+    Route::get('permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@edit');
+
+    # update
+    Route::put('config/permission_role/update/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@update');
+
+    # deletar
+    Route::get('config/permission_role/delete/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@destroy');
 
 
 
     # ROLE_USER #######################
 
-        #index
-        Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserController@index');
+    #index
+    Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserController@index');
 
-        # add user
-        Route::get('role_add_user/{id}', 'App\Http\Controllers\Usuario\RoleController@adduser');
+    # add user
+    Route::get('role_add_user/{id}', 'App\Http\Controllers\Usuario\RoleController@adduser');
 
-        # add gravar
-        Route::post('role_add_user/store', 'App\Http\Controllers\Usuario\RoleUserController@store');
+    # add gravar
+    Route::post('role_add_user/store', 'App\Http\Controllers\Usuario\RoleUserController@store');
 
-        # edit 
-        Route::get('role_add_user/delete/{id}', 'App\Http\Controllers\Usuario\RoleUserController@destroy');
+    # edit 
+    Route::get('role_add_user/delete/{id}', 'App\Http\Controllers\Usuario\RoleUserController@destroy');
 
-        # view 
-        Route::get('role_user/show/{id}', 'App\Http\Controllers\Usuario\RoleUserController@show');
+    # view 
+    Route::get('role_user/show/{id}', 'App\Http\Controllers\Usuario\RoleUserController@show');
 
-        # update
-        Route::post('role_user/update', 'App\Http\Controllers\Usuario\RoleUserController@update');
+    # update
+    Route::post('role_user/update', 'App\Http\Controllers\Usuario\RoleUserController@update');
 
-        ##### add perfil
+    ##### add perfil
 
-        # add perfil 
-        Route::post('role_user/usuario_perfil', 'App\Http\Controllers\Usuario\RoleUserController@user_roler');
+    # add perfil 
+    Route::post('role_user/usuario_perfil', 'App\Http\Controllers\Usuario\RoleUserController@user_roler');
 
 
 
@@ -262,7 +260,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     #############################  DRRD ###########################################
     # menu DRRD
-    
+
 
 
     #  PROTOCOLO  ###########################
@@ -423,7 +421,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('pmda', 'App\Http\Controllers\Pmda\PmdaController@index');
     Route::post('pmda', 'App\Http\Controllers\Pmda\PmdaController@index');
-    
+
     Route::get('pmda/create', 'App\Http\Controllers\Pmda\PmdaController@create');
 
 
@@ -536,9 +534,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('mah/pedido/store', 'App\Http\Controllers\Ajuda\AjudaPedidoController@store');
     # mah DESTROY
     Route::get('mah/pedido/destroy/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@destroy');
-    
+
     Route::post('mah/pedido/upload', 'App\Http\Controllers\Ajuda\AjudaPedidoController@upload');
-    
+
     Route::post('mah/pedido/deletedoc', 'App\Http\Controllers\Ajuda\AjudaPedidoController@deletedoc')->name('mah/deletedoc');
 
     ################## ANEXO
@@ -558,7 +556,7 @@ Route::group(['middleware' => 'auth'], function () {
     ################## ANALISE TECNICA
     # mah INDEX
     Route::get('mah/analise/index', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@index');
-    
+
     # mah CREATE
     Route::get('mah/analise/create', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@create');
     # mah EDIT
@@ -568,10 +566,10 @@ Route::group(['middleware' => 'auth'], function () {
     # mah VIEW
     Route::get('mah/panalise/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@show');
     # mah STORE
-    
+
     Route::post('mah/analise/store', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@store')->name('analise.store');
     # mah DESTROY
-    
+
     Route::get('mah/analise/destroy/{analise}', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@destroy')->name('parecer.deletar');
 
     #
@@ -631,49 +629,49 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('vistoria/menu', 'App\Http\Controllers\Compdec\VistoriaController@menu');
 
     ################## VISTORIA
-    
+
     # Vistoria Index
     Route::get('vistoria', 'App\Http\Controllers\Compdec\VistoriaController@index');
 
     # Vistoria CREATE
     Route::get('vistoria/create', 'App\Http\Controllers\Compdec\VistoriaController@create');
-    
+
     # Vistoria EDIT
     Route::get('vistoria/edit/{vistoria}', 'App\Http\Controllers\Compdec\VistoriaController@edit');
 
     # Vistoria UPDATE
     Route::post('vistoria/update', 'App\Http\Controllers\Compdec\VistoriaController@update');
-    
+
     # Vistoria VIEW
     Route::get('vistoria/show/{vistoria}/{all?}', 'App\Http\Controllers\Compdec\VistoriaController@show')->name('vistoria/show');
-    
+
     # Vistoria STORE
     Route::post('vistoria/store', 'App\Http\Controllers\Compdec\VistoriaController@store');
-    
+
     # Vistoria DESTROY
     Route::get('vistoria/destroy', 'App\Http\Controllers\Compdec\VistoriaController@destroy');
 
-    
+
     ################## INTERDICAO
-    
+
     # Interdicao Index
     Route::get('interdicao', 'App\Http\Controllers\Compdec\InterdicaoController@index');
 
     # Interdicao CREATE
     Route::get('interdicao/create', 'App\Http\Controllers\Compdec\InterdicaoController@create');
-    
+
     # Interdicao EDIT
     Route::get('interdicao/edit', 'App\Http\Controllers\Compdec\InterdicaoController@edit');
 
     # Interdicao UPDATE
     Route::post('interdicao/update', 'App\Http\Controllers\Compdec\InterdicaoController@update');
-    
+
     # Interdicao VIEW
     Route::get('interdicao/show/{interdicao}', 'App\Http\Controllers\Compdec\InterdicaoController@show')->name('interdicao.show');
-    
+
     # Interdicao STORE
     Route::post('interdicao/store', 'App\Http\Controllers\Compdec\InterdicaoController@store');
-    
+
     # Interdicao DESTROY
     Route::get('interdicao/destroy', 'App\Http\Controllers\Compdec\InterdicaoController@destroy');
 
@@ -685,76 +683,74 @@ Route::group(['middleware' => 'auth'], function () {
 
     # Rat CREATE
     Route::get('rat/create', 'App\Http\Controllers\Compdec\RatController@create');
-    
+
     # Rat EDIT
     Route::get('rat/edit/{rat}', 'App\Http\Controllers\Compdec\RatController@edit');
 
     # Rat UPDATE
     Route::post('rat/update/{rat}', 'App\Http\Controllers\Compdec\RatController@update');
-    
+
     # Rat VIEW
     Route::get('rat/show/{rat}', 'App\Http\Controllers\Compdec\RatController@show');
-    
+
     # Rat STORE
     Route::post('rat/store', 'App\Http\Controllers\Compdec\RatController@store');
-    
+
     # Rat DESTROY
     Route::get('rat/destroy', 'App\Http\Controllers\Compdec\RatController@destroy');
-    
+
     # Rat SEARCH
     Route::match(['GET', 'POST'], 'rat/search', 'App\Http\Controllers\Compdec\RatController@search');
-    
-    
+
+
     # Rat DELETE IMAGEM
     Route::post('rat/deleteImagem', 'App\Http\Controllers\Compdec\RatController@deleteImagem');
-    
-    
+
+
     ############## OCORRENCIA
     //Route::get('rat/destroy', 'App\Http\Controllers\Compdec\RatController@destroy');
-    
+
     ############## ALVO
     //Route::get('rat/destroy', 'App\Http\Controllers\Compdec\RatController@destroy');
 
 
-##################################### PREPARA MINAS ######################################
+    ##################################### PREPARA MINAS ######################################
 
     # Rat Index
     Route::get('prepara', 'App\Http\Controllers\Compdec\PreparaController@index');
 
     # Prepara CREATE
     Route::get('prepara/create', 'App\Http\Controllers\Compdec\PreparaController@create');
-    
+
     # Prepara EDIT
     Route::get('prepara/edit/{prepara}', 'App\Http\Controllers\Compdec\PreparaController@edit');
 
     # Prepara UPDATE
     Route::post('prepara/update/{prepara}', 'App\Http\Controllers\Compdec\PreparaController@update');
-    
+
     # Prepara VIEW
     Route::get('prepara/show/{prepara}', 'App\Http\Controllers\Compdec\PreparaController@show');
-    
+
     # Prepara STORE
     Route::post('prepara/store', 'App\Http\Controllers\Compdec\PreparaController@store');
-    
+
     # Prepara DESTROY
     Route::get('prepara/destroy', 'App\Http\Controllers\Compdec\PreparaController@destroy');
-    
+
     # Prepara SEARCH
     Route::match(['GET', 'POST'], 'prepara/search', 'App\Http\Controllers\Compdec\PreparaController@search');
 
-    
+
     ##############################  DASHBOARD ##############################
     Route::get('/dashboard', function () {
-        
-        if($_SERVER['HTTP_HOST'] == 'localhost:8081'){
-            return view('dashboard');
-            
-        }elseif(null != session()->get('routeInicio')){
-            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token='.md5(12345678).'&'.session()->get('routeInicio'));
-        }else {
-            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token='.md5(12345678).'&modulo=index&controller=index&action=menu');
-        }
 
+        if ($_SERVER['HTTP_HOST'] == 'localhost:8081') {
+            return view('dashboard');
+        } elseif (null != session()->get('routeInicio')) {
+            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
+        } else {
+            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
+        }
     })->name('dashboard');
 });
 

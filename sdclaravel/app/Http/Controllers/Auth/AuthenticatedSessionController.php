@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
 
-        return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
+       // return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
 
         $request->authenticate();
         

@@ -77,7 +77,7 @@ class Compdec extends Model
      */
     public function arquivos()
     {
-        return $this->hasMany(CompdecAnexo::class, 'id_compdec', 'id');
+        return $this->hasMany(CompdecAnexo::class, 'compdec_id', 'id');
     }
 
     /**

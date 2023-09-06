@@ -21,7 +21,11 @@ class RatController extends Controller
     public static function dataRat()
     {
         /* Cod ocorrencia */
-        $ratCodOcorrencia = RatOcorrencia::orderBy('descricao')->pluck('descricao', 'id');
+        $ratCodOcorrencia = RatOcorrencia::select(
+            DB::raw("CONCAT(cod,' - ',descricao) as descricao_full"), 'id')
+            ->orderBy('descricao')
+            ->pluck('descricao_full', 'id');
+
         /* alvo */
         $ratAlvo = RatAlvo::orderBy('alvo')->pluck('alvo', 'id');
         /* municipios */
@@ -408,8 +412,14 @@ class RatController extends Controller
      */
     public function deleteImagem(Request $request)
     {
-        dd(Storage::delete($request->file));
-        //dd($request);
+        if(Storage::delete($request->file)) {
+            return response()->json(
+                [
+                    'id' => $request->id,
+                    'result' => true,
+                ]
+                );
+        };
     }
 
 
