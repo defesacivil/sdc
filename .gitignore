@@ -1,0 +1,15 @@
+/sdclaravel/node_modules
+/public_html/storage
+/sdclaravel/public/storage
+/sdclaravel/storage/*.key
+/sdclaravel/vendor
+/sdclaravel/.env
+/sdclaravel/.env.backup
+/sdclaravel/.phpunit.result.cache
+/sdclaravel/docker-compose.override.yml
+/sdclaravel/Homestead.json
+/sdclaravel/Homestead.yaml
+/sdclaravel/npm-debug.log
+/sdclaravel/yarn-error.log
+/sdclaravel/.idea
+/.vscode

@@ -1,0 +1,11 @@
+{
+    "name": "Sitegmg",
+    "alias": "sitegmg",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Sitegmg\\Providers\\SitegmgServiceProvider"
+    ],
+    "files": []
+}
