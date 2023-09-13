@@ -58,11 +58,9 @@
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a></p>
 
 
-                @can('mah', $pedido->municipio_id)
-                    <legend>Edição Pedido Ajuda Humanitária - <i>({{ $pedido->municipio->nome }})</i></legend>
-                    <p>Nº : {{ $pedido->numero }}-{{ substr($pedido->data_entrada_sistema, 0, 4) }}</p>
-                    <p>Data Geração :<b> {{ \Carbon\Carbon::parse($pedido->data_entrada_sistema)->format('d/m/Y H:i:s') }}</b></p>
-
+                @can('mah', $municipio->id)
+                    <legend>Pedido Ajuda Humanitária - <i>Novo Registro</i></legend>
+                    
                     <ul class="nav nav-pills nav-fill" id="tab-mah" role="tablist">
 
                         <li class="nav-item">
@@ -77,10 +75,7 @@
                             <a class="nav-link" href="#documentos-tab" id="-documentos-tab" data-toggle="tab"
                                 role="tab">Documentos/Arquivos</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#despachos_analise-tab" id="-despachos_analise-tab" data-toggle="tab"
-                                role="tab">Despachos/Analises</a>
-                        </li>
+                        
                        
                     </ul>
                     <br>
@@ -89,10 +84,9 @@
                         {{-- Dados do pedido --}}
                         <div class="tab-pane fade show active" id="dados_pedidos-tab" role="tabpanel"
                             aria-labelledby="dados_pedidos-tab">
-                            {{ Form::open(['url' => 'mah/update/{id_pedido}']) }}
+                            {{ Form::open(['url' => 'mah/store']) }}
                             {{ Form::token() }}
-                            {{ Form::hidden('numero', $pedido->numero . '-' . substr($pedido->data_entrada_sistema, 0, 4), ['class' => 'form form-control', 'readonly' => 'readonly']) }}
-                            {{ Form::hidden('data_entrada_sistema', $pedido->data_entrada_sistema, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => '6']) }}
+                            {{ Form::input('dateTime-local', 'data_entrada_sistema', '', ['class' => 'form form-control', 'value' => old('data_entrada_sistema'), 'id' => 'data_entrada_sistema']) }}
 
                             <div class="row">
                                 <div class="col">
@@ -100,29 +94,29 @@
                                         <legend class="w-auto">Dados Município</legend>
                                         <div class="col p-3">
                                             {{ Form::label('municipio_id', 'Município') }} :
-                                            {{ Form::text('nome_municicpio', $pedido->municipio->nome . ' - ' . $pedido->municipio_id, ['class' => 'form form-control', 'maxlength' => '110', 'readonly' => 'readonly']) }}
-                                            {{ Form::hidden('municipio_id', $pedido->municipio_id, ['maxlength' => '11', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('nome_municicpio', $municipio->nome . ' - ' . $municipio->id, ['class' => 'form form-control', 'maxlength' => '110', 'readonly' => 'readonly']) }}
+                                            {{ Form::hidden('municipio_id', $municipio->id, ['maxlength' => '11', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('regiao_id', 'Região') }} :
-                                            {{ Form::text('nome_regiao', $pedido->mesoregiao->nome . ' - ' . $pedido->regiao_id, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
-                                            {{ Form::hidden('regiao_id', $pedido->regiao_id, ['class' => 'form form-control']) }}
+                                            {{ Form::select('regiao_id', $regiaos, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'regiao_id', 'placeholder' => 'Regiao de Desenvolvimento', 'data-regiao_id' => '']) }}
+                                        
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('nome_prefeito', 'Nome do Prefeito') }} :
-                                            {{ Form::text('nome_prefeito', $pedido->nome_prefeito, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('nome_prefeito', $municipio->nome_prefeito, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('email_prefeito', 'Email do Prefeito') }} :
-                                            {{ Form::text('email_prefeito', $pedido->email_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('email_prefeito', $municipio->email_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('tel_prefeito', 'Telefone do Prefeito') }} :
-                                            {{ Form::text('tel_prefeito', $pedido->tel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('tel_prefeito', $municipio->tel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('cel_prefeito', 'Celular do Prefeito') }} :
-                                            {{ Form::text('cel_prefeito', $pedido->cel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('cel_prefeito', $municipio->cel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                     </fieldset>
                                 </div>
@@ -133,22 +127,24 @@
                                 <div class="col">
                                     <fieldset class="border p-2">
                                         <legend class="w-auto">Dados Coordenador de Proteção e Defesa Civil</legend>
+                                        <p class="alert alert-danger">
+                                                A alteração dos dados do Coordenador deve ser feito no Cadastro do Compdec, <a href='{{url('compdec/edit/'.$compdec_id)}}' onclick="return confirm('Os dados serão perdidos ! deseja sair desta página ?')"> Clique aqui para acessar o Cadastro de Compdec</a>
 
                                         <div class="col p-3">
                                             {{ Form::label('nome_coordenador', 'Nome do Coordenador') }} :
-                                            {{ Form::text('nome_coordenador', $pedido->nome_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '110', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('nome_coordenador', $coordenador->nome, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '110', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('email_coordenador', 'Email do Coordenador') }} :
-                                            {{ Form::text('email_coordenador', $pedido->email_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('email_coordenador', $coordenador->email, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('tel_coordenador', 'Telefone do Coordenador') }} :
-                                            {{ Form::text('tel_coordenador', $pedido->tel_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('tel_coordenador', $coordenador->tel, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('cel_coordenador', 'Celular do Coordenador') }} :
-                                            {{ Form::text('cel_coordenador', $pedido->cel_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('cel_coordenador', $coordenador->cel, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                     </fieldset>
                                 </div>
@@ -162,17 +158,16 @@
 
                                         <div class="col p-3">
                                             {{ Form::label('id_cobrade', 'Nome do Desastre do Cobrade') }} :
-                                            {{ Form::text('nome_cobrade', $pedido->cobrade->descricao . ' - ' . $pedido->cobrade->codigo, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '11']) }}
-                                            {{ Form::hidden('id_cobrade', $pedido->cobrade_id, ['required' => 'required', 'maxlength' => '11']) }}
+                                            {{ Form::select('id_cobrade', $cobrades, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'id_cobrade', 'placeholder' => 'Código Cobrade', 'data-id_cobrade' => '']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('pop_atendida', 'População Atendida') }} :
-                                            {{ Form::text('pop_atendida', $pedido->pop_atendida, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                            {{ Form::number('pop_atendida', '', ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
                                         </div>
 
                                         <div class="col p-3">
                                             {{ Form::label('decreto_se_ecp_vig', 'Existe decreto vigente ?') }} :
-                                            {{ Form::select('decreto_se_ecp_vig', ['0' => 'Não', '1' => 'Sim'], $pedido->decreto_se_ecp_vig, [
+                                            {{ Form::select('decreto_se_ecp_vig', ['0' => 'Não', '1' => 'Sim'], '', [
                                                 'class' => 'form form-control',
                                                 'required' => 'required',
                                                 'maxlength' => '16',
@@ -180,22 +175,22 @@
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('numero_decreto', 'Número do Decreto') }} :
-                                            {{ Form::text('numero_decreto', $pedido->numero_decreto, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                            {{ Form::text('numero_decreto', '', ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
                                         </div>
 
                                         <div class="col p-3">
                                             {{ Form::label('tipo_decreto', 'Tipo do Decreto ?') }} :
-                                            {{ Form::select('tipo_decreto', ['SE' => 'SE - Situação de Emergência', 'ECP' => 'ECP - Estado de Calamidade Pública'], $pedido->tipo_decreto, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                            {{ Form::select('tipo_decreto', ['SE' => 'SE - Situação de Emergência', 'ECP' => 'ECP - Estado de Calamidade Pública'], '', ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('data_vigencia', 'Data de Vigência do Decreto') }} :
-                                            {{ Form::text('data_vigencia', $pedido->data_vigencia, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                            {{ Form::text('data_vigencia', '', ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
                                         </div>
 
                                         <div class="col p-3">
                                             {{ Form::label('esforcos_realizados', 'Esforços Realizados') }} : (Caracteres restantes : <span
                                                 id='carac_restante_esforcos'>0</span>)
-                                            {{ Form::textarea('esforcos_realizados', $pedido->esforcos_realizados, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '1000', 'rows' => 10, 'id' => 'esforcos_realizados']) }}
+                                            {{ Form::textarea('esforcos_realizados', '', ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '1000', 'rows' => 10, 'id' => 'esforcos_realizados']) }}
                                         </div>
                                     </fieldset>
                                 </div>
@@ -231,17 +226,6 @@
 
                                         </tr>
 
-                                        @foreach ($materiais as $key=>$material)
-                                            <tr>
-                                                <td>{{ $key+1 }}</td>
-                                                {{-- <td>{{ $material->codigo }}</td> --}}
-                                                <td>{{ $material->descricao_item }}</td>
-                                                <td>{{ $material->qtd }}</td>
-                                                <td>{{ $material->familia_at }}</td>
-                                                <td><img onclick="return confirm('Deseja Apagar o Registro !')" name='deletarMaterial' src={{ asset('imagem/icon/delete.png') }}></td>
-
-                                            </tr>
-                                        @endforeach
                                     </table>
                                 </div>
                                 <div class="col-md-3"></div>
@@ -256,7 +240,7 @@
                                         
                                         {{ Form::open(['url' => 'mah/pedidoitem/store']) }}
                                         {{ Form::token() }}
-                                        {{ Form::hidden('pedido_id', $pedido->id, ['readonly' => 'readonly']) }}
+
 
                                         <div class="modal-header">
                                             <h5 class="modal-title">Adicione Materiais no Pedido de Ajuda Humanitária</h5>
@@ -323,7 +307,7 @@
                                         <th>Opções</th>
                                     </tr>
 
-                                    @foreach ($documentos as $key => $documento)
+                                    {{-- @foreach ($documentos as $key => $documento)
                                         <tr>
                                             @php
                                                 $nome = substr(basename($documento), 7 + strlen($pedido->id));
@@ -342,87 +326,19 @@
                                             <td>{{ $documento->nome_arquivo }}</td>
                                             <td>{{ $documento->descricao }}</td>
                                             <td><img src={{ asset('imagem/icon/delete.png') }}></td>
-                                        </tr> --}}
-                                    @endforeach
-
-                                </table>
-
-                            </div>
-
-                        </div>
-
-                        {{-- DESPACHOS DO PEDIDO --}}
-                        <div class="tab-pane fade" id="despachos_analise-tab" role="tabpanel" aria-labelledby="despachos_analise-tab">
-
-                            @can('cedec')
-                            <p>
-                                <button class="btn btn-success btn-sm" value="Envio Documentos Anexo" data-toggle="modal" data-target="#parecer_tec">
-                                    Análise /Despacho
-                                </button>
-                            </p>
-                            @endcan
-                            <div class="col-12 back">
-                                <table class="table table-sm">
-                                    <tr>
-                                        <th class="">#</th>
-                                        <th>Data</th>
-                                        <th>Descrição/Parecer</th>
-                                        <th>Situação</th>
-                                        <th>Opções</th>
-                                    </tr>
-                                    @foreach ($despachos as $key => $despacho)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $despacho->data_parecer }}</td>
-                                            <td>{{ $despacho->parecer }}</td>
-                                            <td>{{ $despacho->tramit_parecer }}</td>
-                                            <td>
-                                                <button type='button' name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
-                                                <a href='{{ route('parecer.deletar', $despacho->id) }}' onclick="return confirm('Deseja Apagar o Registro !')" name='deletarDespacho'><img src={{ asset('imagem/icon/delete.png') }}></a>
-                                            </td>
                                         </tr>
-                                    @endforeach
+                                    -endforeach --}}
+
                                 </table>
+
                             </div>
+
                         </div>
+
+                        
 
                        
-                        {{-- MODAL DESPACHOS PARECER --}}
-                        <div class="modal fade" id="parecer_tec" tabindex="-1" role="dialog" aria-labelledby="parecer_tecTitle" aria-hidden="true" data-backdrop="static">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Lançamento Despacho / Parecer</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class='col'>
-                                            {{ Form::open(['url' => 'mah/analise/store', 'id' => 'form_parecer']) }}
-                                            {{ Form::token() }}
-                                            {{ Form::hidden('data_parecer', Carbon\Carbon::now(), ['id' => 'data_parecer', 'required']) }}
-                                            {{ Form::hidden('user_id', Auth::user()->id, ['id' => 'user_id', 'required']) }}
-                                            {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
-
-                                            {{ Form::label('Descrição Despacho / Parecer') }} <span> ( Caracteres restantes &nbsp;<i id='carac_rest'> 255 </i>&nbsp;)</span>
-                                            {{ Form::textarea('parecer', '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
-
-                                            {{ Form::label('Descrição Despacho / Parecer') }}
-                                            {{ Form::select('tramit_parecer', $secao_tramitar, '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
-
-
-                                            {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnSalvarParecer']) }}
-
-                                            {{ Form::close() }}
-
-                                            <br><br>
-                                            <br>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
                 @endcan
             </div>
@@ -475,7 +391,7 @@
 
                 var formdata = new FormData(this);
 
-                formdata.append('pedido_id', {{ $pedido->id }});
+                formdata.append('pedido_id', '');
                 formdata.append('_token', "{{ csrf_token() }}");
                 formdata.append('data_parecer', $("#data_parecer").val());
                 formdata.append('parecer', $("#parecer").val());
@@ -499,111 +415,7 @@
 
             // ADICIONAR MATERIAIS NO PEDIDO
             $('.js-example-basic-single').select2();
-            // $("#add_material").click(function(e) {
-
-            //     var formData = new FormData();
-
-            //     var descricao_item  = $('#material').select2('data')[0]['text']; 
-            //     var codigo          = $('#material').val();
-            //     var qtd             = $('#qtd').val();
-            //     var familia_at      = $('#familia_at').val();
-            //     var tp_item         = $('#tp_item').val();
-
-            //     formData.append('_token',         "{{ csrf_token() }}");
-            //     formData.append('descricao_item', descricao_item);
-            //     formData.append('pedido_id',      '{{ $pedido->id }}');
-            //     formData.append('codigo',         codigo);
-            //     formData.append('qtd',            qtd);
-            //     formData.append('familia_at',     familia_at);
-            //     formData.append('tp_item',        tp_item);
-
-
-            //     $.ajax({
-            //         url: '{{ route('mah.item.store') }}',
-            //         type: 'POST',
-            //         data: formData,
-            //         contentType: false,
-            //         cache: false,
-            //         processData: false,
-            //         success: function(e) {
-            //             window.location.href = '{{ url('mah/pedido/edit/' . $pedido->id) }}';
-            //         },
-            //         error: function(e) {
-                        
-            //         }
-            //     });
-            //     e.preventDefault();
-
-
-            //     // key++;
-
-            //     // materiais.push([material, qtd, familia]);
-
-            //     // var tr = "<tr><td>" + key + "</td><td>" + cod + "</td><td>" + material + "</td><td>" + qtd + "</td><td>" + familia + "</td><td><img src='{{ asset('imagem/icon/delete.png') }}' onclick='removerMaterial()'></td></tr>";
-
-            //     // $("#tbl_material").append(tr);
-
-            // });
-
-            /* REMOVER DOCUMENTO PEDIDO */
-            $("a[name='removeDocPedido']").click(function(e) {
-
-                var formdata = new FormData();
-
-                formdata.append('id', '{{ $pedido->id }}');
-                formdata.append('file', $(this).children().data('file'));
-                formdata.append('_token', "{{ csrf_token() }}");
-
-                $.ajax({
-                    url: '{{ route('mah/deletedoc') }}',
-                    type: 'POST',
-                    data: formdata,
-                    dataType: 'JSON',
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    success: function(data) {
-                        window.location.href = '{{ url('mah/pedido/edit/' . $pedido->id) }}';
-                    },
-                    error: function(data) {
-                        console.log(data + "erro");
-                    }
-                });
-                e.preventDefault();
-
-            });
-
-            
-            /* UPLOAD DOCUMENTO PEDIDO */
-            $("#btnUpAnexo").click(function(e) {
-
-                var formdata = new FormData();
-
-                var file = $('#anexoDoc')[0].files[0];
-
-                formdata.append('anexoDoc', file);
-                formdata.append('_token', '{{ csrf_token() }}');
-                formdata.append('id', {{ $pedido->id }});
-
-                $.ajax({
-                    url: '{{ url('mah/pedido/upload') }}',
-                    type: "POST",
-                    data: formdata,
-                    dataType: "json",
-                    processData: false, // tell jQuery not to process the data
-                    contentType: false, // tell jQuery not to set contentType
-                    success: function(data) {
-                        window.location.href = '{{ url('mah/pedido/edit/' . $pedido->id) }}';
-
-                    },
-                    error: function(e1) {
-
-                    }
-                });
-
-                e.preventDefault();
-
-            });
+        
 
             var zTreeObj;
             // zTree configuration information, refer to API documentation (setting details)

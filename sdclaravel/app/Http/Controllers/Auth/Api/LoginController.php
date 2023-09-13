@@ -10,7 +10,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
-        $credentials = $request->json('content');
+        # servidor online
+        //$credentials = $request->json('content');
+        
+        #localhost
+        $credentials = $request->only('cpf', 'password');
+
 
         if (!auth()->attempt($credentials)) {
             abort(401, 'Credendiais Inválidas');

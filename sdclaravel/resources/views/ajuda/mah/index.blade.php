@@ -26,7 +26,7 @@
                         <!-- ####### Acesso COMPDEC ###### -->
                         @can('compdec')
                             <li class="nav-item mr-1">
-                                <a class="btn btn-primary btn-sm" href="{{ url('pae/empdor/create') }}"
+                                <a class="btn btn-primary btn-sm" href="{{ url('mah/pedido/create') }}"
                                     title="Inserir novo Registro">+
                                     Novo Registro</a>
                             </li>

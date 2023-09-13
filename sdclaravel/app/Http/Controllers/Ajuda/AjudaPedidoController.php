@@ -8,6 +8,10 @@ use App\Models\Ajuda\AjudaPedidoAnaliseTecnica;
 use App\Models\Ajuda\AjudaPedidoAnexo;
 use App\Models\Ajuda\AjudaPedidoItens;
 use App\Models\Compdec\Compdec;
+use App\Models\Compdec\CompdecEquipe;
+use App\Models\Decreto\Cobrade;
+use App\Models\Municipio\Municipio;
+use App\Models\Municipio\Regiao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -102,7 +106,50 @@ class AjudaPedidoController extends Controller
      */
     public function create()
     {
-        //
+
+        $id_municipio = Session::get('user')['municipio_id'];
+
+        $compdec_id = Session::get('user')['compdec_id'];
+        
+        $municipio = Municipio::find($id_municipio);
+
+        $regiaos = Regiao::orderBy('nome')->pluck('nome', 'id');
+
+        $cobrades = Cobrade::select(
+            DB::raw("CONCAT(codigo,' - ',descricao) as descricao_full"), 'id')
+            ->orderBy('descricao')
+            ->pluck('descricao_full', 'id');
+
+        $coordenador = CompdecEquipe::where(['id_municipio'=> $id_municipio])
+        ->where(['funcao' => 'Coordenador'])->first();
+
+        $active_tab = "";
+
+        $materiais_list = [
+            ["material" => ["id" => "01", "name" => 'CESTA BASICA']],
+            ["material" => ["id" => "02", "name" => 'COLCHAO']],
+            ["material" => ["id" => "03", "name" => 'KIT HIGIENE']],
+            ["material" => ["id" => "04", "name" => 'KIT LIMPEZA']],
+
+        ];
+        $pluck = collect($materiais_list)->pluck('material');
+
+
+        
+        
+        //dd($coordenador);
+        
+        return view(
+            'ajuda/mah/create',
+            [
+                'municipio'   => $municipio,
+                'regiaos'     => $regiaos,
+                'coordenador' => $coordenador,
+                'cobrades'    => $cobrades,
+                'materiais_list' => $pluck,
+                'compdec_id' => $compdec_id,
+            ]
+        );
     }
 
     /**
@@ -156,6 +203,24 @@ class AjudaPedidoController extends Controller
 
         ];
         $pluck = collect($materiais_list)->pluck('material');
+
+
+        /* despacho */
+        $status = 0;
+
+        if ($status == 0) {
+        } elseif ($status == 1) {
+        } elseif ($status == 2) {
+        } elseif ($status == 3) {
+        } elseif ($status == 4) {
+        } elseif ($status == 5) {
+        } elseif ($status == 6) {
+        } elseif ($status == 7) {
+        } elseif ($status == 8) {
+        } elseif ($status == 9) {
+        }
+
+
 
         $secao_parecer_list = [
             'Analise Dlog' => 'Analise Dlog',

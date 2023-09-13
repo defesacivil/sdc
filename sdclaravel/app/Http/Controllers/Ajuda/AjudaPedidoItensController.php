@@ -37,6 +37,8 @@ class AjudaPedidoItensController extends Controller
     public function store(Request $request)
     {
 
+        dd($request);
+
         $itens = new AjudaPedidoItens();
         $itens->codigo               = $request->codigo;
         $itens->descricao_item       = $request->descricao_item;
