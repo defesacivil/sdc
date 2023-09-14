@@ -26,7 +26,7 @@
     @endif-->
 </head>
 
-<body class="body">
+<body class="body" style="background-color: rgb(215, 217, 219)">
 
     <!-- nav -->
     <div class="row">

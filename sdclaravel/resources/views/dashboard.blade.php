@@ -150,6 +150,7 @@
 
             {{-- COMPDEC EDIT --}}
             @can('compdec')
+
                 <div class="col-6 col-md-4 col-lg-3 text-center">
                     <div class="col bg-gray-100 sm:rounded-lg">
                         <figure class="figure">

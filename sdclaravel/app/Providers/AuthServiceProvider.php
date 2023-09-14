@@ -45,8 +45,7 @@ class AuthServiceProvider extends ServiceProvider
 
             # usuario ativo
         if(Auth::check() && $usuario['ativo'] == 1){
-
-            
+           
             // tratar usuario compdec
             if($usuario['tipo'] == 'compdec'){
                 
@@ -75,10 +74,7 @@ class AuthServiceProvider extends ServiceProvider
 
                 }
             
-            }
-                
-            // usuario cedec
-            if($usuario['tipo'] == 'cedec'){
+            }elseif($usuario['tipo'] == 'cedec'){
 
                 Log::channel('usuario')->info('Login Usuário CEDEC', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
                 # Dados Cedec_usuario
@@ -112,59 +108,61 @@ class AuthServiceProvider extends ServiceProvider
 
         }
         $this->registerPolicies();
-
+        
         /* ACESSO COMPDEC */
         Gate::define('compdec', function (User $user) {
-
-            return $user->tipo === 'compdec';
+            
+          return $user->tipo === 'compdec';
         });
 
-        // ACESSO CEDEC
-        // Gate::define('cedec', function (User $user) {
-        //     return $user->tipo === 'cedec';
-        // });
+        
+        //ACESSO CEDEC
+        Gate::define('cedec', function (User $user) {
+            return $user->tipo === 'cedec';
+        });
 
+
+        //dd(Gate::abilities());
 
 
         // permissoes 
-        Gate::define('cedec', function (User $user) {
+        // Gate::define('cedec', function (User $user) {
 
-            if ($user->tipo === 'cedec') {
-
-                //dd($user->id, RoleUser::find($user->id)->get());
-                return true;
-            } else {
-                //     print "<script>$('img[name=^icon]').addClass('imgCinza')</script>";
-                return false;
-            }
-        });
+        //     if ($user->tipo === 'cedec') {
+        //         //$user->id, RoleUser::find($user->id)->get();
+        //         return true;
+        //     } else {
+        //         //     print "<script>$('img[name=^icon]').addClass('imgCinza')</script>";
+        //         return false;
+        //     }
+        // });
 
         // ENTRADA paebm 
-        Gate::define('paebm', function (User $user) {
+        // Gate::define('paebm', function (User $user) {
 
-            foreach ($user->roles as $role) {
-                foreach ($role->permissions as $permission) {
-                    if ($permission->name == 'paebm') {
-                        return true;
-                    }
-                }
-            }
-        });
+        //     foreach ($user->roles as $role) {
+        //         foreach ($role->permissions as $permission) {
+        //             if ($permission->name == 'paebm') {
+        //                 return true;
+        //             }
+        //         }
+        //     }
+        // });
 
 
-        Gate::define('mah', function (User $user, $municipio_id) {
+        // Gate::define('mah', function (User $user, $municipio_id) {
 
-            if (
-                ($user->tipo === 'compdec') &&
-                (Session::get('user')['municipio_id'] == $municipio_id) ||
-                $user->tipo === 'cedec'
-            ) {
-                return true;
-            } else {
-                print "<p class='alert alert-danger'>Prezado Usuário, <br> Voçe esta tentando acessar um PROCESSO/DOCUMENTO que não faz parte do seu município
-                gentileza verifique o click clicado.</p>";
-            }
-        });
+        //     if (
+        //         ($user->tipo === 'compdec') &&
+        //         (Session::get('user')['municipio_id'] == $municipio_id) ||
+        //         $user->tipo === 'cedec'
+        //     ) {
+        //         return true;
+        //     } else {
+        //         print "<p class='alert alert-danger'>Prezado Usuário, <br> Voçe esta tentando acessar um PROCESSO/DOCUMENTO que não faz parte do seu município
+        //         gentileza verifique o click clicado.</p>";
+        //     }
+        // });
 
 
         //$this->defineAdminGate();
