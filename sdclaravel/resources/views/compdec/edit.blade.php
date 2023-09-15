@@ -145,25 +145,25 @@
                                 <div class="row">
                                     <div class='col'>
                                         {{ Form::label('prefeito', 'Nome do Prefeito') }}:
-                                        {{ Form::text('prefeito', $compdec->municipio->prefeito, ['class' => 'form form-control', 'maxlength' => 70]) }}
+                                        {{ Form::text('prefeito', $compdec->municipio->nome_prefeito, ['class' => 'form form-control', 'maxlength' => 70]) }}
                                         <br>
                                     </div>
                                     <div class='col'>
-                                        {{ Form::label('tel_pref', 'Telefone Prefeito') }}:
-                                        {{ Form::text('tel_pref', $compdec->municipio->tel_pref, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                        {{ Form::label('tel_prefeito', 'Telefone Prefeito') }}:
+                                        {{ Form::text('tel_prefeito', $compdec->municipio->tel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
                                         <br>
                                     </div>
                                 </div>
 
                                 <div class='row'>
                                     <div class='col'>
-                                        {{ Form::label('cel_pref', 'Celular Prefeito') }}:
-                                        {{ Form::text('cel_pref', $compdec->municipio->cel_pref, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                        {{ Form::label('cel_prefeito', 'Celular Prefeito') }}:
+                                        {{ Form::text('cel_prefeito', $compdec->municipio->cel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
                                         <br>
                                     </div>
                                     <div class="col">
-                                        {{ Form::label('email_pref', 'Email do Prefeito') }}:
-                                        {{ Form::email('email_pref', $compdec->municipio->email_pref, ['class' => 'form form-control', 'maxlength' => 110]) }}
+                                        {{ Form::label('email_prefeito', 'Email do Prefeito') }}:
+                                        {{ Form::email('email_prefeito', $compdec->municipio->email_prefeito, ['class' => 'form form-control', 'maxlength' => 110]) }}
 
                                     </div>
                                 </div>
@@ -325,20 +325,20 @@
                                         <br>
                                     </div>
                                     <div class='col'>
-                                        {{ Form::label('email', 'Email Prefeitura') }}:
-                                        {{ Form::email('email', $compdec->municipio->email, ['class' => 'form form-control', 'maxlength' => 110]) }}
+                                        {{ Form::label('email_prefeitura', 'Email Prefeitura') }}:
+                                        {{ Form::email('email_prefeitura', $compdec->municipio->email_prefeitura, ['class' => 'form form-control', 'maxlength' => 110]) }}
                                         <br>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class='col'>
-                                        {{ Form::label('fax', 'Fax Prefeitura') }}:
-                                        {{ Form::text('fax', $compdec->municipio->fax, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                        {{ Form::label('fax_prefeitura', 'Fax Prefeitura') }}:
+                                        {{ Form::text('fax_prefeitura', $compdec->municipio->fax_prefeitura, ['class' => 'form form-control', 'maxlength' => 20]) }}
                                         <br>
                                     </div>
                                     <div class='col'>
-                                        {{ Form::label('tel', 'Telefone Prefeitura') }}:
-                                        {{ Form::text('tel', $compdec->municipio->tel, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                        {{ Form::label('tel_prefeitura', 'Telefone Prefeitura') }}:
+                                        {{ Form::text('tel_prefeitura', $compdec->municipio->tel_prefeitura, ['class' => 'form form-control', 'maxlength' => 20]) }}
                                         <br>
                                     </div>
 
@@ -417,7 +417,7 @@
                                 </div>
                             </div>
 
-                            
+
                             <div class="row">
                                 <br>
                                 <legend class="alert alert-info">Informações Leis/Decretos</legend>
@@ -499,41 +499,41 @@
                                     <br>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class='row p-2'>
-                            <br>
+
+                            <div class='row p-2'>
+                                <br>
                                 <legend class="alert alert-info">Informações sobre estrutura funcional da COMPDEC</legend>
-                               
-                                       <div class='col-md-12 border border-secondary rounded'>
-                                        <div class='row p-2'>
-                                            <div class="col p-2">
-                                                {{ Form::label('efetivo', 'Funcionários Efetivos') }}:
-                                                <div class='form-check'>
-                                                    {{ Form::radio('efetivo', 1, $compdec->efetivo == 1 ? true : false) }}
-                                                    <label class='form-check-label' for='efetivo'>
-                                                        Sim
-                                                    </label>
-                                                </div>
-                                                <div class='form-check'>
-                                                    {{ Form::radio('efetivo', 0, $compdec->efetivo == 0 ? true : false) }}
-                                                    <label class='form-check-label' for='efetivo'>
-                                                        Não
-                                                    </label>
-                                                </div>
-                                                <br>
+
+                                <div class='col-md-12 border border-secondary rounded'>
+                                    <div class='row p-2'>
+                                        <div class="col p-2">
+                                            {{ Form::label('efetivo', 'Funcionários Efetivos') }}:
+                                            <div class='form-check'>
+                                                {{ Form::radio('efetivo', 1, $compdec->efetivo == 1 ? true : false) }}
+                                                <label class='form-check-label' for='efetivo'>
+                                                    Sim
+                                                </label>
                                             </div>
-                                            <div class='col'>
-                                                {{ Form::label('qtd_efetivo', 'Quantidade Funcionário') }}:
-                                                {{ Form::number('qtd_efetivo', $compdec->num_lei, ['class' => 'form form-control', 'max' => 100]) }}
-                                                <br>
+                                            <div class='form-check'>
+                                                {{ Form::radio('efetivo', 0, $compdec->efetivo == 0 ? true : false) }}
+                                                <label class='form-check-label' for='efetivo'>
+                                                    Não
+                                                </label>
                                             </div>
+                                            <br>
                                         </div>
-                                       </div>
+                                        <div class='col'>
+                                            {{ Form::label('qtd_efetivo', 'Quantidade Funcionário') }}:
+                                            {{ Form::number('qtd_efetivo', $compdec->num_lei, ['class' => 'form form-control', 'max' => 100]) }}
+                                            <br>
+                                        </div>
                                     </div>
-                                
-                        </div>
-                            
+                                </div>
+                            </div>
+
+
+
                             <div class='row'>
                                 <div class='col'>
                                     {{ Form::label('nudec', 'Possui Nudec') }}:
@@ -573,7 +573,7 @@
 
                             </div>
                             <div class='row'>
-                                
+
                                 <div class='col'>
                                     {{ Form::label('plano_cont', 'Possui Plano Contingência') }}:
                                     <div class='form-check'>
@@ -699,6 +699,8 @@
                                 </div>
 
                             </div>
+
+
                             <div class='row'>
                                 <div class='col'>
                                     {{ Form::label('curso_gestao', 'Possui Curso Gestão PDC Mud. Climaticas') }}:

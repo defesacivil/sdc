@@ -150,8 +150,7 @@ class CompdecController extends \App\Http\Controllers\Controller
             $ex->getMessage();
         }
 
-        return back()->with('message', 'Registro Atualizado com Sucesso !')
-            ->with('active_tab', '#-gerais-tab');
+        return back()->with('message', 'Registro Atualizado com Sucesso !');
     }
 
     /**
@@ -254,9 +253,9 @@ class CompdecController extends \App\Http\Controllers\Controller
             [
                 'id'                => 'required', #"7221"
                 'prefeito'          => 'required|max:70', #"ANTONHO DA ONCAERR1"
-                'tel_pref'          => 'required|max:20', #"(45) 94545-4000"
-                'cel_pref'          => 'required|max:20', #"(00) 98888-8888"
-                'email_pref'        => 'required|max:110', #"antonio@antonio.com.br"
+                'tel_prefeito'      => 'required|max:20', #"(45) 94545-4000"
+                'cel_prefeito'      => 'required|max:20', #"(00) 98888-8888"
+                'email_prefeito'    => 'required|max:110', #"antonio@antonio.com.br"
                 'macroregiao'       => 'required|max:200', #"CENTRAL"
                 'latitude'          => 'required|max:13', #"1"
                 'longitude'         => 'required|max:13', #"2"
@@ -273,9 +272,9 @@ class CompdecController extends \App\Http\Controllers\Controller
                 'endereco'          => 'required|max:110', #"AV. AMERICO"
                 'bairro'            => 'required|max:45', #"CENTRO"
                 'cep'               => 'required|max:45', #"11111-111"
-                'email'             => 'required|max:110', #"prefeitura@prefeitura@gmail.com1"
-                'fax'               => 'max:20', #"(44) 44444-4444"
-                'tel'               => 'required|max:20', #"(33)33333-3333"
+                'email_prefeitura'             => 'required|max:110', #"prefeitura@prefeitura@gmail.com1"
+                'fax_prefeitura'               => 'max:20', #"(44) 44444-4444"
+                'tel_prefeitura'               => 'required|max:20', #"(33)33333-3333"
                 'cobra_iss'         => 'required|max:3', #"NAO"
                 'aliquota_iss'      => 'max:5', #"0.00"
                 'num_lei_iss'       => 'max:30', #"1998555"
@@ -286,12 +285,12 @@ class CompdecController extends \App\Http\Controllers\Controller
                 'id.required'           => 'O Campo Id é Obrigatório !',
                 'prefeito.required'     => 'O Campo nome do Prefeito é obrigatório',
                 'prefeito.max'          => 'O Campo nome do Prefeiro deve ter no máximo 70 caracteres',
-                'tel_pref.required'     => 'O Campo Telefone é Obrigatório !',
-                'tel_pref.max'          => 'O Campo Telefone do Prefeito deve ter no máximo 20 caracteres',
-                'cel_pref.required'     => 'O Campo Celular do Prefeito é Obrigatório',
-                'cel_pref.max'          => 'O Campo Celular do Prefeito deve ter no máximo 20 Caracteres',
-                'email_pref.required'   => 'O Campo Email do Prefeito é Obrigatório',
-                'email_pref.max'        => 'O Campo Email do Prefeito deve ter no máximo 110 Caracteres !',
+                'tel_prefeito.required'     => 'O Campo Telefone é Obrigatório !',
+                'tel_prefeito.max'          => 'O Campo Telefone do Prefeito deve ter no máximo 20 caracteres',
+                'cel_prefeito.required'     => 'O Campo Celular do Prefeito é Obrigatório',
+                'cel_prefeito.max'          => 'O Campo Celular do Prefeito deve ter no máximo 20 Caracteres',
+                'email_prefeito.required'   => 'O Campo Email do Prefeito é Obrigatório',
+                'email_prefeito.max'        => 'O Campo Email do Prefeito deve ter no máximo 110 Caracteres !',
                 'macroregiao.required'  => 'O Campo Macrorregião é Obrigatório !',
                 'macroregiao.max'       => 'O Campo Macrorregiao deve ter no máximo 200 Caracteres',
                 'latitude.required'     => 'O Campo Latitude é Obrigatório',
@@ -322,11 +321,11 @@ class CompdecController extends \App\Http\Controllers\Controller
                 'bairro.max'            => 'O Campo Bairro deve ter no máximo 45 Caracteres',
                 'cep.required'          => 'O Campo CEP é Obrigatório',
                 'cep.max'               => 'O Campo CEP deve ter no máximo 45 Caracteres',
-                'email.required'        => 'O Campo Email da Prefeitura é Obrigatório ',
-                'email.max'             => 'O Campo Email da Prefeitura deve ter no máximo 110 Caracteres',
-                'fax.max'               => 'O Campo Fax deve ter no máximo 20 Caracteres',
-                'tel.required'          => 'O Campo Telefone da Prefeitura é Obrigatório',
-                'tel.max'               => 'O Campo Telefone da Prefeitura deve ter no máximo 20 Caracteres',
+                'email_prefeitura.required'        => 'O Campo Email da Prefeitura é Obrigatório ',
+                'email_prefeitura.max'             => 'O Campo Email da Prefeitura deve ter no máximo 110 Caracteres',
+                'fax_prefeitura.max'               => 'O Campo Fax deve ter no máximo 20 Caracteres',
+                'tel_prefeitura.required'          => 'O Campo Telefone da Prefeitura é Obrigatório',
+                'tel_prefeitura.max'               => 'O Campo Telefone da Prefeitura deve ter no máximo 20 Caracteres',
                 'cobra_iss.required'    => 'O Campo Cobra ISS é Obrigatório',
                 'cobra_iss.max'         => 'O Campo Cobra ISS deve ter no máximo 3 Caracteres',
                 'aliquota_iss.digits'   => 'O Campo Aliquita de INSS deve ser Decimal 0.0',
@@ -360,17 +359,16 @@ class CompdecController extends \App\Http\Controllers\Controller
         $municipio->endereco = $request->input('endereco');
         $municipio->bairro = $request->input('bairro');
         $municipio->cep = $request->input('cep');
-        $municipio->email = $request->input('email');
-        $municipio->fax = $request->input('fax');
-        $municipio->tel = $request->input('tel');
+        $municipio->email_prefeitura = $request->input('email_prefeitura');
+        $municipio->fax_prefeitura = $request->input('fax_prefeitura');
+        $municipio->tel_prefeitura = $request->input('tel_prefeitura');
         $municipio->cobra_iss = $request->input('cobra_iss');
         $municipio->aliquota_iss = $request->input('aliquota_iss');
         $municipio->num_lei_iss = $request->input('num_lei_iss');
         $municipio->resp_cob_iss = $request->input('resp_cob_iss');
 
         $municipio->update();
-        return redirect()->back()->with('message','Registro Atualizado com Sucesso')
-                                ->with('active_tab', '#-municipio-tab');
+        return redirect()->back()->with('message','Registro Atualizado com Sucesso');
 
 
     }
