@@ -43,6 +43,9 @@ class AuthServiceProvider extends ServiceProvider
         if ($autor = PersonalAccessToken::findToken($request->token)) {
             $usuario = auth()->loginUsingId($autor->tokenable_id);
 
+            //dd(Session());
+            
+
             # usuario ativo
         if(Auth::check() && $usuario['ativo'] == 1){
            
@@ -89,7 +92,7 @@ class AuthServiceProvider extends ServiceProvider
                                     'funcionario' => $cedecFuncionario,
                                 ];
                                 
-                $request->session()->regenerate();
+                Session()->regenerate();
                 Session()->put('user', $dadosSession);
                 return redirect()->intended(RouteServiceProvider::HOME);
             }

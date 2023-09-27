@@ -59,11 +59,48 @@ class RatController extends Controller
         $rats = DB::table('com_rat')
             ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
             ->join('users', 'users.id', '=', 'com_rat.operador_id')
+            ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
             ->addSelect('com_rat.*')
             ->addSelect('cedec_municipio.nome as nome')
             ->addSelect('users.name as operador_nome')
+            ->addSelect('dec_cobrade.descricao as cobrade')
             ->paginate(10);
         //->get();
+
+        # chutas intensas 
+        $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
+
+        # estiagem 
+        $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
+
+        #Qtd por mes Ocorrencias
+        $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
+        ->groupBy('cobrade_id')
+        ->get()->toArray();
+
+
+        #Qtd por Tipo de desastre Chuva/Seca
+        $chart_ocor_list_total = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
+        ->whereIn('cobrade_id', ['26','1'])
+        ->groupBy('cobrade_id')
+        ->get()->toArray();
+        
+
+        var_dump($chart_ocor_list_total);
+
+        //print '"'.implode('","', $chart_ocor_corrente['cobrade_count']).'"';
+
+        $chart_ocorrencias_array = $chart_ocor_corrente;
+        $chart_ocor_list_ano_corrente = "'";
+
+        foreach($chart_ocorrencias_array as $key=>$val) {
+            if(array_key_last($chart_ocorrencias_array) == $key) {
+                $chart_ocor_list_ano_corrente .= $val['cobrade_count']."'";
+            }else {
+                $chart_ocor_list_ano_corrente .= $val['cobrade_count']."','";
+            }
+        }
+
         return view(
             'compdec/rat/index',
             [
@@ -72,6 +109,10 @@ class RatController extends Controller
                 'ratAlvo' => self::dataRat()['ratAlvo'],
                 'optionMunicipio' => self::dataRat()['optionMunicipio'],
                 'optionCobrade' => self::dataRat()['optionCobrade'],
+                'ratSeca'   => $ratSeca,
+                'ratChuva'   => $ratChuva,
+                'chart_ocor_list_ano_corrente' => "[".$chart_ocor_list_ano_corrente."]",
+                'chart_ocor_list_total' => "[".$chart_ocor_list_total."]",
             ]
         );
     }

@@ -111,8 +111,116 @@
                 {{ Form::close() }}
             </div>
         </div>
+
+
+        <br><!-- RESUMO-->
+        <div class="row p-2">
+            <div class="col p-2">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ $rats->total() }}</h3>
+                        <h3>Total Ocorrências</h3>
+                        <p>Total Registros</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col p-2">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ $ratChuva }} Registros</h3>
+                        <h3>{{ ($ratChuva / $rats->total()) * 100 }} % das Ocorrências</h3>
+                        <p>Ocorrência Chuvas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col p-2">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ $ratSeca }} Registros</h3>
+                        <h3>{{ ($ratSeca / $rats->total()) * 100 }} % das Ocorrências</h3>
+                        <p>Ocorrências Seca</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <br><!-- RESUMO CHARTS -->
+        <div class="row p-2">
+            <div class="col p-2">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Ocorrências por Mês</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="ratsAnoCorrente" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 524px;" width="524" height="250" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col p-2">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Ocorrencias por Tipo de Desastre</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="ratsTotal" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 524px;" width="524" height="250" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
         <br>
-        Total Registros : {{$rats->total()}}
+        Total Registros : {{ $rats->total() }}
         <div class="table table-responsive table-sm border p-3">
             <h5 class="text-center bolder">Registro das Ocorrências</h5>
             @if (count($rats) > 0)
@@ -126,6 +234,7 @@
                         <tr>
                             <th class="p-2">Número</th>
                             <th class="p-2">Município</th>
+                            <th class="p-2">Cobrade</th>
                             <th class="p-2">Endereço</th>
                             <th class="p-2">Data Ocorrencia</th>
                             <th class="p-2">Operador</th>
@@ -137,6 +246,7 @@
                             <tr class="table-primary">
                                 <td scope="row">{{ $rat->num_ocorrencia }}</td>
                                 <td>{{ $rat->nome }}</td>
+                                <td>{{ $rat->cobrade }}</td>
                                 <td>{{ $rat->endereco }}</td>
                                 <td>{{ \Carbon\Carbon::parse($rat->dt_ocorrencia)->format('d/m/Y H:i:s') }}</td>
                                 <td>{{ $rat->operador_nome }}</td>
@@ -158,12 +268,10 @@
                     </tfoot>
                 </table>
 
-              
-                @if (count($rats) >0)
-                    {{$rats->links() }}
-                @endif
-                    
 
+                @if (count($rats) > 0)
+                    {{ $rats->links() }}
+                @endif
             @else
                 <p class="alert alert-danger">Sua pesquisa não encontrou nenhum registro</p>
             @endif
@@ -172,7 +280,7 @@
         <div class="row">
 
             <div class="col">
-                
+
             </div>
 
         </div>
@@ -191,14 +299,15 @@
 
     <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            
+
             $('.js-example-basic-single').select2();
 
             $("#search2").hide();
 
-            $("#btnSearch").click(function(){
+            $("#btnSearch").click(function() {
                 $("#search2").toggle('slow');
 
             });
@@ -222,5 +331,47 @@
 
         })
     </script>
+
+    <script>
+        const ratsAnoCorrente = document.getElementById('ratsAnoCorrente');
+        new Chart(ratsAnoCorrente, {
+          type: 'bar',
+          data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            datasets: [{
+              label: '# of Votes',
+              data: <?=$chart_ocor_list_ano_corrente;?>,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+        const ratsTotal = document.getElementById('ratsTotal');
+        new Chart(ratsAnoCorrente, {
+          type: 'bar',
+          data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            datasets: [{
+              label: '# of Votes',
+              data: <?=$chart_ocor_list_total;?>,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      </script>
 
 @endsection
