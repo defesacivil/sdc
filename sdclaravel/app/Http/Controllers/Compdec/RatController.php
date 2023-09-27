@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Compdec;
 
+use App\Exports\ExportRat;
 use App\Http\Controllers\Controller;
 use App\Models\Compdec\Rat;
 use App\Models\Compdec\RatAlvo;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class RatController extends Controller
@@ -81,14 +83,9 @@ class RatController extends Controller
 
         #Qtd por Tipo de desastre Chuva/Seca
         $chart_ocor_list_total = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
-        ->whereIn('cobrade_id', ['26','1'])
+        ->whereIn('cobrade_id', ['26','31'])
         ->groupBy('cobrade_id')
         ->get()->toArray();
-        
-
-        var_dump($chart_ocor_list_total);
-
-        //print '"'.implode('","', $chart_ocor_corrente['cobrade_count']).'"';
 
         $chart_ocorrencias_array = $chart_ocor_corrente;
         $chart_ocor_list_ano_corrente = "'";
@@ -112,7 +109,7 @@ class RatController extends Controller
                 'ratSeca'   => $ratSeca,
                 'ratChuva'   => $ratChuva,
                 'chart_ocor_list_ano_corrente' => "[".$chart_ocor_list_ano_corrente."]",
-                'chart_ocor_list_total' => "[".$chart_ocor_list_total."]",
+                //'chart_ocor_list_total' => "[".$chart_ocor_list_total."]",
             ]
         );
     }
@@ -575,5 +572,10 @@ class RatController extends Controller
                 'optionCobrade' => self::dataRat()['optionCobrade'],
             ]
         );
+    }
+
+    /* Todos Relatorios de Atividade */
+    public function exportRats(Request $request){
+        return Excel::download(new ExportRat, 'Rat_Todos_'.date('d_m_Y_H.i.s').'.xlsx');
     }
 }

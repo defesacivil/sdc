@@ -20,6 +20,8 @@
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('/dashboard') }}>Voltar</a>
                     <a class='btn btn-info btn-sm' href={{ url('rat/create') }} title="Criar novo Registro">+ Novo</a>
                     <a class='btn btn-primary btn-sm' id='btnSearch' title="Criar novo Registro">Pesquisa</a>
+                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }}  title="Criar novo Registro">Exportar Excel</a>
                 </p>
 
                 <legend class="p-4">Rat - Relatório de Atividades de Defesa Civil</legend>
@@ -145,7 +147,7 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ $ratSeca }} Registros</h3>
-                        <h3>{{ ($ratSeca / $rats->total()) * 100 }} % das Ocorrências</h3>
+                        <h3>{{ number_format(($ratSeca / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
                         <p>Ocorrências Seca</p>
                     </div>
                     <div class="icon">
@@ -339,7 +341,7 @@
           data: {
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
-              label: '# of Votes',
+              label: '# de Ocorrências',
               data: <?=$chart_ocor_list_ano_corrente;?>,
               borderWidth: 1
             }]
@@ -360,7 +362,7 @@
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
               label: '# of Votes',
-              data: <?=$chart_ocor_list_total;?>,
+              data: '',
               borderWidth: 1
             }]
           },
