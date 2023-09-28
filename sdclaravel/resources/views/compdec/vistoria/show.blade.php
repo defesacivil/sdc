@@ -18,7 +18,10 @@
         <div class="row">
             <div class="col">
 
-                <p class='text-center'><a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}'>Voltar</a></p><br>
+                <p class='text-center'>
+                    <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}'>Voltar</a>
+                    <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/1') }}'>Envio Email</a>
+                </p><br>
 
                 <p class="h2 text-center">
                     RELATÓRIO DE VISTORIA DE ATENDIMENTO

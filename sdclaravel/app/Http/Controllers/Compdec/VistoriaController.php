@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers\Compdec;
 
+use App\Exports\ExportVistoria;
 use App\Http\Controllers\Controller;
 use App\Models\Compdec\Interdicao;
 use App\Models\Compdec\Vistoria;
+use App\Models\Municipio\Municipio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VistoriaController extends Controller
 {
+
+    public static function dataVistoria() {
+    
+        $optionMunicipio = Municipio::all()->pluck('nome', 'id');
+        $tp_imovel = ['Casa' => 'Casa', 'Apartamento' => 'Apartamento', 'Predio' => 'Predio', 'Galpão' => 'Galpão', 'Lote' => 'Lote', 'Praça' => 'Praça'];
+
+        return [
+            'optionMunicipio' => $optionMunicipio,
+            //'optionCobrade' => $optionCobrade
+            'tp_imovel' => $tp_imovel,
+        ];
+
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +57,8 @@ class VistoriaController extends Controller
             'compdec/vistoria/index',
             [
                 'vistorias' => $vistorias,
+                'optionMunicipio' => self::dataVistoria()['optionMunicipio'],
+                'tp_imovel' => self::dataVistoria()['tp_imovel'],
             ]
         );
     }
@@ -565,5 +584,108 @@ class VistoriaController extends Controller
     public function destroy(Vistoria $vistoria)
     {
         //
+    }
+
+
+    public function search(Request $request)
+    {
+
+        $filter = $request;
+        $filter_all = " com_vistorias.id > 1 ";
+
+        /**
+         * 
+         *  tratar dos dados sql
+         * 
+         */
+
+        //dd($filter->ano);
+        if ($filter->ano) {
+            $filter_all .= ' and year(com_vistorias.dt_vistoria) = "' . $filter->ano . '" ';
+        }
+
+        if ($filter->numero) {
+            $filter_all .= ' and com_vistorias.numero = "' . $filter->numero . '" ';
+        }
+
+        // municipio
+        if ($filter->municipio_id) {
+            $filter_all .= ' and com_vistorias.municipio_id = "' . $filter->municipio_id . '" ';
+        }
+
+        // data inicial
+        if ($filter->data_inicio and is_null($filter->data_final)) {
+            $filter_all .= ' and com_vistorias.dt_vistoria >= cast("' . $filter->data_inicio . '" as date) ';
+        }
+
+        // data final
+        if ($filter->data_final and is_null($filter->data_inicio)) {
+            $filter_all .= ' and com_vistorias.dt_vistoria <= "' . $filter->data_final . '" ';
+        }
+
+        // data inicial e final
+        if ($filter->data_inicio and $filter->data_final) {
+            $filter_all .= ' and cast(com_vistorias.dt_vistoria as date) between "' . $filter->data_inicio . '" and "' . $filter->data_final . '" ';
+        }
+
+        // Tipo Imóvel
+        if ($filter->tp_imovel) {
+            $filter_all .= ' and com_vistorias.tp_imovel like "%' . $filter->tp_imovel . '%" ';
+        }
+
+        // endereco
+        if ($filter->endereco) {
+            $filter_all .= ' and com_vistorias.endereco like "%' . $filter->endereco . '%" ';
+        }
+
+        // // historico
+        // if ($filter->historico) {
+        //     $filter_all .= ' and com_vistorias.acoes like "%' . $filter->historico . '%" ';
+        // }
+
+
+        // Vistorias com Interdição 
+        // if ($filter->interdicao) {
+        //     $filter_all .= ' and com_rat.alvo_id = "' . $filter->alvo_id . '" ';
+        // }
+
+       
+        /* pesquisa sem parametro retorna sem dados**/
+        if ($filter_all == ' com_vistorias.id > "0" ') {
+            $rats = array();
+        } else {
+
+
+            $vistorias = DB::table('com_vistorias')
+                ->whereRaw(DB::raw($filter_all))
+                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
+                ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
+                ->addSelect('com_vistorias.*')
+                ->addSelect('cedec_municipio.nome as municipio')
+                ->addSelect('users.name as operador_nome')
+                ->orderBy('com_vistorias.dt_vistoria', 'asc')
+                ->paginate(10);
+            //->get();
+            //->toSql();
+        }
+
+        //$vistorias
+        /* municipios */
+        
+
+        return view(
+            'compdec/vistoria/index',
+            [
+                'vistorias' => $vistorias,
+                'optionMunicipio' => self::dataVistoria()['optionMunicipio'],
+                //'optionCobrade' => self::dataRat()['optionCobrade'],
+                'tp_imovel' => self::dataVistoria()['tp_imovel'],
+            ]
+        );
+    }
+
+    /* Todos Relatorios de Vistorias */
+    public function exportVistoria(Request $request){
+        return Excel::download(new ExportVistoria, 'Vistoria_registros'.date('d_m_Y_H.i.s').'.xlsx');
     }
 }

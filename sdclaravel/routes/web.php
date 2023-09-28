@@ -652,6 +652,12 @@ Route::group(['middleware' => 'auth'], function () {
     # Vistoria DESTROY
     Route::get('vistoria/destroy', 'App\Http\Controllers\Compdec\VistoriaController@destroy');
 
+    Route::match(['GET', 'POST'], 'vistoria/search', 'App\Http\Controllers\Compdec\VistoriaController@search');
+
+    Route::get('vistoria/exportVistoria', 'App\Http\Controllers\Compdec\VistoriaController@exportVistoria');
+
+    Route::get('send-email-vistoria/{vistoria}', 'App\Http\Controllers\PDFController@PDFVistoria');
+
 
     ################## INTERDICAO
 

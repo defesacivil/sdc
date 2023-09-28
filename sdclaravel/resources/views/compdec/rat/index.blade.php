@@ -133,8 +133,8 @@
             <div class="col p-2">
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>{{ $ratChuva }} Registros</h3>
-                        <h3>{{ ($ratChuva / $rats->total()) * 100 }} % das Ocorrências</h3>
+                        <h3>{{ $ratChuva }} Registro(s)</h3>
+                        <h3>{{ number_format(($ratChuva / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
                         <p>Ocorrência Chuvas</p>
                     </div>
                     <div class="icon">
@@ -146,7 +146,7 @@
             <div class="col p-2">
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>{{ $ratSeca }} Registros</h3>
+                        <h3>{{ $ratSeca }} Registro(s)</h3>
                         <h3>{{ number_format(($ratSeca / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
                         <p>Ocorrências Seca</p>
                     </div>
