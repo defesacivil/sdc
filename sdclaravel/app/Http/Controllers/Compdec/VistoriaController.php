@@ -358,7 +358,13 @@ class VistoriaController extends Controller
     public function show(Vistoria $vistoria, Request $request)
     {
 
-        $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
+        if( $vistoria->ck_clas_risc_muito_alta == 1 ) {
+            $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
+        }else {
+            $interdicao = false;
+        }
+
+        //dd($interdicao);
 
 
         $img_el_estrs = [];
@@ -550,7 +556,7 @@ class VistoriaController extends Controller
 
         $existeLaudo = Interdicao::where('ids_vistoria', $request->id)->count();
 
-        dd($existeLaudo, $request);
+        //dd($existeLaudo, $request);
 
         if ($vistoria->ck_vuln_muito_alta  == 1 || $vistoria->ck_clas_risc_muito_alta == 1 && ($existeLaudo == 0)) {
 
@@ -591,7 +597,7 @@ class VistoriaController extends Controller
     {
 
         $filter = $request;
-        $filter_all = " com_vistorias.id > 1 ";
+        $filter_all = " com_vistorias.id > 0 ";
 
         /**
          * 
@@ -671,6 +677,8 @@ class VistoriaController extends Controller
 
         //$vistorias
         /* municipios */
+
+        //dd($vistorias);
         
 
         return view(

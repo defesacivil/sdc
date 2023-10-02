@@ -656,7 +656,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('vistoria/exportVistoria', 'App\Http\Controllers\Compdec\VistoriaController@exportVistoria');
 
-    Route::get('send-email-vistoria/{vistoria}', 'App\Http\Controllers\PDFController@PDFVistoria');
+    Route::get('send-email-vistoria/{vistoria}/{tp}', 'App\Http\Controllers\PDFController@PDFVistoria');
 
 
     ################## INTERDICAO

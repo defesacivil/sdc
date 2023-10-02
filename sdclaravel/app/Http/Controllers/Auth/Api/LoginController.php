@@ -28,4 +28,12 @@ class LoginController extends Controller
             'result' => true,
         ]);
     }
+
+
+    /* */
+    public function update($val) {
+
+        $user = "";
+
+    }
 }

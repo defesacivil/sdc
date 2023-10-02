@@ -1,16 +1,18 @@
 @extends('layouts.pagina_master')
 {{-- header --}}
-@section('header')
-    <!-- breadcrumb -->
-    <nav aria-label="breadcrumb" class="print">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ url('/vistoria/menu') }}">Vistoria - Interdição</a></li>
-            <li class="breadcrumb-item"><a href="{{ url('vistoria') }}">Vistoria</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Cadastro Vistoria</li>
-        </ol>
-    </nav>
-@endsection
+
+    @section('header')
+        <!-- breadcrumb -->
+        <nav aria-label="breadcrumb" class="print">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('/vistoria/menu') }}">Vistoria - Interdição</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('vistoria') }}">Vistoria</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Cadastro Vistoria</li>
+            </ol>
+        </nav>
+    @endsection
+
 @section('content')
 
     <div class="container">
@@ -18,10 +20,14 @@
         <div class="row">
             <div class="col">
 
-                <p class='text-center'>
-                    <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}'>Voltar</a>
-                    <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/1') }}'>Envio Email</a>
+                {{-- Não impressao dos botoes em PDF --}}
+                @if(!isset($pdf))
+                <p class=''>
+                    <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}' title="Voltar para a página anterior">Voltar</a>
+                    <a class='btn btn-primary btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/pdf') }}' title='Salvar Documento em PDF'>Salvar PDF</a>
+                    <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/email') }}' title='Enviar Vistoria por E-mail'>Envio E-mail</a>
                 </p><br>
+                @endif
 
                 <p class="h2 text-center">
                     RELATÓRIO DE VISTORIA DE ATENDIMENTO
@@ -739,10 +745,13 @@
 
 
 @section('css')
+
 @stop
 @section('code')
     <script type="text/javascript">
         $(document).ready(function() {
+
+
 
         })
     </script>

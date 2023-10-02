@@ -55,10 +55,8 @@ class InterdicaoController extends Controller
      */
     public function show($id_vistoria)
     {
-        //dd($id_vistoria);
         $interdicao = Interdicao::where('ids_vistoria', $id_vistoria)->first();
 
-        //dd($interdicao);
         return view(
             'compdec/interdicao/show',
             [

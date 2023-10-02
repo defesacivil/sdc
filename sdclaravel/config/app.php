@@ -17,6 +17,8 @@ return [
 
     'version' => env('APP_VERSION', '2.1.1.0 - 17/08/2023'),
 
+    'public_path' => '/o',
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

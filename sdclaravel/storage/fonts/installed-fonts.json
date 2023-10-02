@@ -6,7 +6,7 @@
         "normal": "font_awesome_5_brands_normal_3e1732d8dab27056b97efa93f3e1f178"
     },
     "font awesome 5 free": {
-        "normal": "C:\\wamp\\www\\cedec\\sdclaravel\\storage\\fonts\/font_awesome_5_free_normal_779ce99e8ef4d0d99f03154868ece018",
-        "900": "font_awesome_5_free_900_fb86e7a3a54c1b4cf8b998dad978ff9a"
+        "normal": "font_awesome_5_free_normal_779ce99e8ef4d0d99f03154868ece018",
+        "900": "\/var\/www\/html\/cedec\/sdclaravel\/storage\/fonts\/font_awesome_5_free_900_fb86e7a3a54c1b4cf8b998dad978ff9a"
     }
 }
