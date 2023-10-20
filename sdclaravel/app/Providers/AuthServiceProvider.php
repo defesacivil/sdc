@@ -37,20 +37,14 @@ class AuthServiceProvider extends ServiceProvider
     // public function boot(Request $request)
     public function boot(Request $request)
     {
-
-        $credential = $request->token;
-
         if ($autor = PersonalAccessToken::findToken($request->token)) {
-            $usuario = auth()->loginUsingId($autor->tokenable_id);
-
-            //dd(Session());
-            
+            $usuario = auth()->loginUsingId($autor->tokenable_id);          
 
             # usuario ativo
         if(Auth::check() && $usuario['ativo'] == 1){
            
-            // tratar usuario compdec
-            if($usuario['tipo'] == 'compdec'){
+            // tratar usuario compdec redec
+            if( ($usuario['tipo'] == 'compdec') || ($usuario['tipo'] == 'redec') ) {
                 
                 if($usuario['municipio_id'] == 0){
                     
@@ -77,19 +71,20 @@ class AuthServiceProvider extends ServiceProvider
 
                 }
             
-            }elseif($usuario['tipo'] == 'cedec'){
+            }elseif( ($usuario['tipo'] == 'cedec') || ($usuario['tipo'] == 'redec') ){
 
                 Log::channel('usuario')->info('Login Usuário CEDEC', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
                 # Dados Cedec_usuario
-                $cedecUsuario = CedecUsuario::find($usuario['id_user_cedec']);
+                //$cedecUsuario = CedecUsuario::find($usuario['id_user_cedec']);
                 
-                $cedecFuncionario = CedecFuncionario::find($cedecUsuario['id_funcionario']);
+                //$cedecFuncionario = CedecFuncionario::find($cedecUsuario['id_funcionario']);
                 
                 # Dados Sessao
                 $dadosSession = [
                                     'admin' => $usuario['ativo'],
-                                    'usuario' => $cedecUsuario,
-                                    'funcionario' => $cedecFuncionario,
+                                    //'usuario' => $cedecUsuario,
+                                    'usuario' => Auth::user()->name,
+                                    //'funcionario' => $cedecFuncionario,
                                 ];
                                 
                 Session()->regenerate();
@@ -107,8 +102,10 @@ class AuthServiceProvider extends ServiceProvider
             
             # adicionar rota para voltar no sdc 
             $sdc = 'sistema.defesacivil.mg.gov.br';
-            Session()->put('routeInicio', $request->routeInicio.'&controller='.$request->controller.'&action='.$request->action);
 
+                Session()->put('routeInicio', $request->routeInicio.'&controller='.$request->controller.'&action='.$request->action);
+
+                
         }
         $this->registerPolicies();
         
@@ -122,6 +119,11 @@ class AuthServiceProvider extends ServiceProvider
         //ACESSO CEDEC
         Gate::define('cedec', function (User $user) {
             return $user->tipo === 'cedec';
+        });
+
+        //ACESSO REDEC
+        Gate::define('redec', function (User $user) {
+            return $user->tipo === 'redec';
         });
 
 
@@ -153,19 +155,19 @@ class AuthServiceProvider extends ServiceProvider
         // });
 
 
-        // Gate::define('mah', function (User $user, $municipio_id) {
+        Gate::define('mah', function (User $user, $municipio_id) {
 
-        //     if (
-        //         ($user->tipo === 'compdec') &&
-        //         (Session::get('user')['municipio_id'] == $municipio_id) ||
-        //         $user->tipo === 'cedec'
-        //     ) {
-        //         return true;
-        //     } else {
-        //         print "<p class='alert alert-danger'>Prezado Usuário, <br> Voçe esta tentando acessar um PROCESSO/DOCUMENTO que não faz parte do seu município
-        //         gentileza verifique o click clicado.</p>";
-        //     }
-        // });
+            if (
+                ($user->tipo === 'compdec') &&
+                (Session::get('user')['municipio_id'] == $municipio_id) ||
+                $user->tipo === 'cedec'
+            ) {
+                return true;
+            } else {
+                print "<p class='alert alert-danger'>Prezado Usuário, <br> Voçe esta tentando acessar um PROCESSO/DOCUMENTO que não faz parte do seu município
+                gentileza verifique o click clicado.</p>";
+            }
+        });
 
 
         //$this->defineAdminGate();

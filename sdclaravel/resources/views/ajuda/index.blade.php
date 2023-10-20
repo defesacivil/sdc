@@ -61,39 +61,35 @@
                         </div>
                     @endcan
 
+                    {{-- ############################### MODULOS COMPDEC ################################################ --}}
+
                     @can('compdec')
+
+                        {{-- PMDA --}}
                         <div class="col-6 col-md-4 col-lg-3 text-center">
-
-                            <figure class="figure">
-                                <a href='mah_compdec'>
-                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
-                                        alt=""></a>
-                                <figcaption class="figure-caption text-center">ADM. PEDIDO MAH</figcaption>
-
-                        </div>
-
-                        {{-- ############################### MODULOS COMPDEC ################################################ --}}
-
-                        {{-- MODULO PMDA COMPDEC --}}
-                        <div class="col-6 col-md-4 col-lg-3 text-center">
-
                             <figure class="figure">
                                 <a href='#'>
                                     <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
                                         alt=""></a>
                                 <figcaption class="figure-caption text-center">PMDA</figcaption>
+                        </div>
 
+                        {{-- TDAP / CONFORMIDADE --}}
+                        <div class="col-6 col-md-4 col-lg-3 text-center">
+                            <figure class="figure">
+                                <a href='mah_compdec'>
+                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
+                                        alt=""></a>
+                                <figcaption class="figure-caption text-center">TDAP</figcaption>
                         </div>
 
                         {{-- MODULO PAH --}}
                         <div class="col-6 col-md-4 col-lg-3 text-center">
-
                             <figure class="figure">
                                 <a href='mah_compdec'>
                                     <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
                                         alt=""></a>
                                 <figcaption class="figure-caption text-center">PEDIDO MAH</figcaption>
-
                         </div>
                     @endcan
 

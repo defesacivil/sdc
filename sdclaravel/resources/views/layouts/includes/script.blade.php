@@ -35,16 +35,16 @@
         "progressBar": true,
         "showDuration": "800",
     }
-    @if (session('message'))
+    @if (Session::has('message'))
         toastr.options = {
             "closeButton": true,
             "progressBar": true,
             "showDuration": "800",
         }
         toastr.success("{{ session('message') }}"); 
-            <div class = "alert alert-success" >
-                {{ session('message') }}
-            </div>
+            // <div class = "alert alert-success" >
+            //     {{ session('message') }}
+            // </div>
     @endif
     @if ($errors->any())
 

@@ -134,7 +134,11 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ $ratChuva }} Registro(s)</h3>
-                        <h3>{{ number_format(($ratChuva / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
+                        @if ($ratChuva > 0) 
+                            <h3>{{ number_format(($ratChuva / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
+                        @else
+                            0
+                        @endif
                         <p>Ocorrência Chuvas</p>
                     </div>
                     <div class="icon">
@@ -147,8 +151,12 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ $ratSeca }} Registro(s)</h3>
-                        <h3>{{ number_format(($ratSeca / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
-                        <p>Ocorrências Seca</p>
+                        @if ($ratSeca > 0)
+                            <h3>{{ number_format(($ratSeca / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
+                        @else
+                            0
+                        @endif
+                            <p>Ocorrências Seca</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
@@ -159,11 +167,11 @@
         </div>
 
         <br><!-- RESUMO CHARTS -->
-        <div class="row p-2">
+        <div class="row p-2" id="chart1">
             <div class="col p-2">
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Ocorrências por Mês</h3>
+                        <h3 class="card-title">Total de Ocorrências por Mês (Geral)</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -189,7 +197,7 @@
 
                 </div>
             </div>
-            <div class="col p-2">
+            <div class="col p-2"  id="chart2">
                 <div class="card card-success">
                     <div class="card-header">
                         <h3 class="card-title">Ocorrencias por Tipo de Desastre</h3>
@@ -305,16 +313,21 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
+            /* chart */
+            var hideChart = '{{$search}}';
+            if(hideChart) {
+                $("#chart1").css('display', 'none');
+            }
             $('.js-example-basic-single').select2();
 
+            /* busca*/
             $("#search2").hide();
 
             $("#btnSearch").click(function() {
                 $("#search2").toggle('slow');
+                $('#btnSearch').css('display', 'none');
 
             });
-
-
 
             $('#btnPesquisa').click(function() {
 

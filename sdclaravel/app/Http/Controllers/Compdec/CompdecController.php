@@ -151,6 +151,7 @@ class CompdecController extends \App\Http\Controllers\Controller
         }
 
         return back()->with('message', 'Registro Atualizado com Sucesso !');
+        
     }
 
     /**
@@ -368,6 +369,7 @@ class CompdecController extends \App\Http\Controllers\Controller
         $municipio->resp_cob_iss = $request->input('resp_cob_iss');
 
         $municipio->update();
+        
         return redirect()->back()->with('message','Registro Atualizado com Sucesso');
 
 

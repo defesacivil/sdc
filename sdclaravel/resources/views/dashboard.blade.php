@@ -99,13 +99,12 @@
                 
                 {{-- CONFIGURAÇÕES --}}
                 <div class="col-6 col-md-4 col-lg-3 text-center">
-
+                    
                     <figure class="figure">
                         <a href='config'><img class="figure-img img-fluid rounded"
                                 src='{{ asset('/imagem/icon/config.png') }}' alt=""></a>
                         <figcaption class="figure-caption text-center">CONFIGURAÇÕES</figcaption>
                     </figure>
-
                 </div>
             @endcan
 
@@ -182,7 +181,7 @@
                 <div class="col-6 col-md-4 col-lg-3 text-center">
                     <div class="col bg-gray-100 sm:rounded-lg">
                         <figure class="figure">
-                            <a href='{{ url('mah_compdec') }}'>
+                            <a href='{{ url('ajuda') }}'>
                                 <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
                                     alt=""></a>
                             <figcaption class="figure-caption text-center">PEDIDO DE MAH</figcaption>

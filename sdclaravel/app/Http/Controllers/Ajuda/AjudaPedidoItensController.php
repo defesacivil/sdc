@@ -37,20 +37,24 @@ class AjudaPedidoItensController extends Controller
     public function store(Request $request)
     {
 
-        dd($request);
+        //dd($request);
 
         $itens = new AjudaPedidoItens();
-        $itens->codigo               = $request->codigo;
-        $itens->descricao_item       = $request->descricao_item;
+        $itens->codigo               = $request->material_id;
+        $itens->descricao_item       = $request->material;
         $itens->qtd                  = $request->qtd;
         $itens->familia_at           = $request->familia_at;
         $itens->pedido_id            = $request->pedido_id;
         $itens->tp_item              = $request->tp_item;
 
 
-        //dd($itens->save());
+        $itens->save();
 
-        return $itens->save();
+        return redirect()->back()->with(
+            [
+                'message' =>'Material Adicionado com Sucesso !', 
+                'active_tab' => '#-material_pedido-tab',
+            ]);
 
 
 
@@ -98,6 +102,13 @@ class AjudaPedidoItensController extends Controller
      */
     public function destroy(AjudaPedidoItens $pedidoItens)
     {
-        //
+
+        $pedidoItens->delete();
+
+        return redirect()->back()->with(
+            [
+                'message' =>'Material removido do Pedido !', 
+                'active_tab' => '#-material_pedido-tab',
+            ]);
     }
 }

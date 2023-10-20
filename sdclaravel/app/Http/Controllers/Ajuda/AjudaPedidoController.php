@@ -7,6 +7,7 @@ use App\Models\Ajuda\AjudaPedido;
 use App\Models\Ajuda\AjudaPedidoAnaliseTecnica;
 use App\Models\Ajuda\AjudaPedidoAnexo;
 use App\Models\Ajuda\AjudaPedidoItens;
+use App\Models\Cedec\CedecRdc;
 use App\Models\Compdec\Compdec;
 use App\Models\Compdec\CompdecEquipe;
 use App\Models\Decreto\Cobrade;
@@ -28,6 +29,29 @@ class AjudaPedidoController extends Controller
     {
         return view('ajuda/mah/index');
     }
+
+
+    public static function data()
+    {
+        
+        // /* municipios */
+        // $optionMunicipio = Municipio::all()->pluck('nome', 'id');
+
+        /* cobrade */
+        $cobradeCollection = collect();
+        $cobrades = Cobrade::all();
+        foreach ($cobrades as $key => $cobrade) {
+            $optionCobrade = $cobradeCollection->put($cobrade->id, $cobrade->codigo . "-" . $cobrade->descricao);
+        }
+        $optionCobrade[] = 'Outros ( Discriminar no Histórico )';
+
+
+        return [
+            // 'optionMunicipio' => $optionMunicipio,
+            'optionCobrade' => $optionCobrade
+        ];
+    }
+
 
 
     /**
@@ -160,7 +184,7 @@ class AjudaPedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
     }
 
     /**
@@ -208,19 +232,17 @@ class AjudaPedidoController extends Controller
         /* despacho */
         $status = 0;
 
-        if ($status == 0) {
-        } elseif ($status == 1) {
-        } elseif ($status == 2) {
-        } elseif ($status == 3) {
-        } elseif ($status == 4) {
-        } elseif ($status == 5) {
-        } elseif ($status == 6) {
-        } elseif ($status == 7) {
-        } elseif ($status == 8) {
-        } elseif ($status == 9) {
+        if ($status == 0) { # 0 Edição Compdec
+        } elseif ($status == 1) {# 1 Analise DLOG
+        } elseif ($status == 2) { # 2 Analise Diretor DLOG.
+        } elseif ($status == 3) { # 3 Aprovado
+        } elseif ($status == 4) { # 4 Aguardando Disponibilidade Mat.
+        } elseif ($status == 5) { # 5 Aguardando Retirada Mat.
+        } elseif ($status == 6) { # 6 Atendido
+        } elseif ($status == 7) { # 7 Cancelado
+        } elseif ($status == 8) { # 8 Pedido Reprovado
+        } elseif ($status == 9) { # 9 Processo Finalizado
         }
-
-
 
         $secao_parecer_list = [
             'Analise Dlog' => 'Analise Dlog',
@@ -232,16 +254,11 @@ class AjudaPedidoController extends Controller
 
         $materiais = AjudaPedidoItens::where('pedido_id', $pedido->id)->get();
 
-        //dd($materiais);
-
-        //$documentos = AjudaPedidoAnexo::All()->where('pedido_id', $pedido->id);
         $documentos = Storage::allFiles('pedido/' . $pedido->id);
-
-        //dd($documentos);
 
         $despachos = AjudaPedidoAnaliseTecnica::where('pedido_id', $pedido->id)->get();
 
-        //dd($despachos);
+        //$rdc = CedecRdc::all();
 
         return view(
             'ajuda/mah/edit',
@@ -253,6 +270,9 @@ class AjudaPedidoController extends Controller
                 'materiais_list' => $pluck,
                 'materiais' => $materiais,
                 'secao_tramitar' => $secao_parecer_list,
+                //'optionMunicipio' => self::data()['optionMunicipio'],
+                'optionCobrade' => self::data()['optionCobrade'],
+                //'rdc' => $rdc,
             ]
         );
     }
@@ -266,7 +286,22 @@ class AjudaPedidoController extends Controller
      */
     public function update(Request $request, AjudaPedido $pedido)
     {
-        //
+
+        $pedido->cobrade_id         = $request->cobrade_id;
+        $pedido->pop_atendida       = $request->pop_atendida;
+        $pedido->decreto_se_ecp_vig = $request->decreto_se_ecp_vig;
+        $pedido->numero_decreto     = $request->numero_decreto;
+        $pedido->tipo_decreto       = $request->tipo_decreto;
+        $pedido->data_vigencia      = $request->data_vigencia;
+        $pedido->esforcos_realizados= $request->esforcos_realizados;
+
+
+        $pedido->update();
+
+        return redirect()->back()->with([
+            'message' => 'Registro atualizado com Sucesso',
+            'active_tab' => '#-dados_pedidos-tab',
+        ]);
     }
 
 
@@ -280,17 +315,29 @@ class AjudaPedidoController extends Controller
     public function upload(Request $request, AjudaPedido $pedido)
     {
 
+        $request->validate(
+            [
+                'anexoDoc' => 'required|mimes:pdf|max:2000',
+            ],
+            [
+                'required'  => 'Obrigatório anexar um arquivo !',
+                'max'    => 'Arquivo muito grande, Tamanho Máximo permitido : 2Mb',
+                'mimes' => 'Tipo de Arquivos permitidos : pdf',
+            ]
+        );
+
         $file = $request->file('anexoDoc');
 
-        $fileName = $request->id . "-pedid-" . time() . '_.' . $file->getClientOriginalExtension();
+        $fileName = $request->pedido_id . "-pedid-" . time() . '_.' . $file->getClientOriginalExtension();
 
+        $file->storeAs('pedido/' . $request->pedido_id, $fileName, 'public');
 
-        $file->storeAs('pedido/' . $request->id, $fileName, 'public');
-
-        return response()->json([
-            'message' => 'Registro Gravado com Sucesso',
-            'status' => true
+        return redirect()->back()->with([
+            'message' => 'Arquivo Enviado com sucesso !',
+            'active_tab' => '#-documentos-tab',
         ]);
+
+       
     }
 
     /**
@@ -310,15 +357,92 @@ class AjudaPedidoController extends Controller
      * @param  \App\Models\Compdec\Pedido  $rat
      * @return \Illuminate\Http\Response
      */
-    public function deletedoc(Request $request)
+    public function deletedoc($id, $nome_file)
     {
 
-        //dd($request);
-        Storage::delete('pedido/' . $request->id . "/" . $request->file);
+        if(Storage::delete('pedido/' . $id . "/" . $nome_file)) {
 
-        return response()->json([
-            'message' => 'Registro Gravado com Sucesso',
-            'status' => true
+            return redirect()->back()->with([
+                'message' => 'Arquivo Apagado com Sucesso',
+                'active_tab' => '#-documentos-tab',
+            ]);
+        }else {
+            return redirect()->back()->with([
+                'error' => 'Ocorreu um erro ao remover o arquivo',
+                'active_tab' => '#-documentos-tab',
+            ]);
+
+        }
+
+    }
+
+
+    /* download de anexo do pedido */
+    public function download($id, $nome_file) {
+
+        return Storage::download('pedido/37/'.$nome_file);
+    }
+
+    /*
+        mudança de status do pedido
+    */
+
+    public function status(AjudaPedido $pedido, $status) {
+
+        # 0 Edição Compdec
+        # 1 Analise DLOG
+        # 2 Analise Diretor DLOG.
+        # 3 Aprovado
+        # 4 Aguardando Disponibilidade Mat.
+        # 5 Aguardando Retirada Mat.
+        # 6 Atendido
+        # 7 Cancelado
+        # 8 Pedido Reprovado
+        # 9 Processo Finalizado
+
+        $tramit = "";
+
+        switch ($status) {
+            case '0':
+                $tramit = 'edicao_compdec';
+                break;
+            case '1':
+                $tramit = 'analise_dlog';
+                break;
+            case '2':
+                $tramit = 'analise_coord';
+                break;
+            case '3':
+                $tramit = 'aprovado';
+                break;
+            case '4':
+                $tramit = 'aguard_disp';
+                break;
+            case '5':
+                $tramit = 'aguard_ret';
+                break;
+            case '6':
+                $tramit = 'atendido';
+                break;
+            case '7':
+                $tramit = 'cancelado';
+                break;
+            
+            default:
+                $tramit = 'Código Inválido';
+                break;
+        }
+
+        $pedido->status = $status;
+        $pedido->tramit = $tramit;
+
+        $pedido->save();
+
+        return redirect('mah_compdec')->with([
+            'message' => "Pedido Enviado para Análise !",
+            'active_tab' => "#-dados-pedidos-tab",
         ]);
+
+
     }
 }

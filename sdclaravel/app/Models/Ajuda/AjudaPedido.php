@@ -48,4 +48,7 @@ class AjudaPedido extends Model
     {
         return $this->hasOne(CedecMeso::class, 'id', 'regiao_id');
     }
+
+
+   
 }

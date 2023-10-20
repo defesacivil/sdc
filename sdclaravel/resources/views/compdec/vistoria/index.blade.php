@@ -25,7 +25,7 @@
                     <a class='btn btn-warning btn-sm' href={{ url('vistoria/exportVistoria') }}  title="Criar novo Registro">Exportar Excel ({{$vistorias->total()}}} - Registros)</a>
                 </p>
 
-                <legend class="p-4">Laudo de Vistoria</legend>
+                <legend class="p-4">Relatório de Vistoria</legend>
 
                 {{ Form::open(['url' => 'vistoria/search']) }}
 

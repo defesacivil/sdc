@@ -25,7 +25,7 @@
                 <p class=''>
                     <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}' title="Voltar para a página anterior">Voltar</a>
                     <a class='btn btn-primary btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/pdf') }}' title='Salvar Documento em PDF'>Salvar PDF</a>
-                    <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/email') }}' title='Enviar Vistoria por E-mail'>Envio E-mail</a>
+                    {{-- <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/email') }}' title='Enviar Vistoria por E-mail'>Envio E-mail</a> --}}
                 </p><br>
                 @endif
 
@@ -577,9 +577,9 @@
                     <fieldset class="border p-2">
                         <legend class="w-auto"> Imagens Elementos Construtivos</legend>
                         <div class="row p-3">
-                            @foreach ($img_el_constrs as $img_el_contr)
+                            @foreach ($img_el_constrs as $img_el_constr)
                                 <div class="col-md-6 border text-center p-3">
-                                    <img width="320" src='{{ asset('storage/' . $img_el_contr) }}'>
+                                    <img width="320" src='{{ asset('storage/' . $img_el_constr) }}'>
                                 </div>
                             @endforeach
                         </div>

@@ -126,12 +126,15 @@ class VistoriaController extends Controller
     public function create()
     {
 
+        $optionMunicipio = Municipio::all()->pluck('nome', 'id');
+
         $num_vistoria = Vistoria::where('municipio_id', Auth::user()->municipio_id)->count();
         return view(
             'compdec/vistoria/create',
             [
                 'num_vistoria' => ($num_vistoria + 1),
                 'municipio_id' => Auth::user()->municipio_id,
+                'optionMunicipio' => $optionMunicipio,
             ]
         );
     }
@@ -145,7 +148,7 @@ class VistoriaController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate(
+       $request->validate(
             [
                 "dt_vistoria"   => "required|date",
                 "tp_ocorrencia" => "required|max:50",
@@ -201,6 +204,7 @@ class VistoriaController extends Controller
             ]
         );
 
+
         $vistoria = new Vistoria;
 
         $vistoria->municipio_id  = $request->municipio_id;
@@ -223,6 +227,7 @@ class VistoriaController extends Controller
         $vistoria->abast_agua   = $request->abast_agua;
         $vistoria->sist_drenag  = $request->sist_drenag;
         $vistoria->nr_moradias  = $request->nr_moradias;
+        $vistoria->operador_id  = auth()->user()->id;
 
         $vistoria->ck_esgo_sant_canalizado         = isset($request->ck_esgo_sant_canalizado)         ? $request->ck_esgo_sant_canalizado        : 0;
         $vistoria->ck_esgo_sant_fossa_similar      = isset($request->ck_esgo_sant_fossa_similar)      ? $request->ck_esgo_sant_fossa_similar     : 0;
@@ -292,7 +297,7 @@ class VistoriaController extends Controller
         $files_el_cons = $request->img_ck_el_constr;
         if (isset($files_el_cons)) {
             foreach ($files_el_cons as $key => $files_el_con) {
-                $fileName = 'el_cons_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_con->getClientOriginalExtension();
+                $fileName = 'el_constr_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_con->getClientOriginalExtension();
                 $files_el_con->storeAs('file_vistoria/' . $vistoria->id . '/', $fileName, 'public');
             }
         }
@@ -316,7 +321,7 @@ class VistoriaController extends Controller
         }
 
 
-        if ($vistoria->ck_vuln_muito_alta  == 1 || $vistoria->ck_clas_risc_muito_alta == 1) {
+        if ($vistoria->ck_clas_risc_muito_alta == 1) {
 
             // gerar interdica
             $num_interdicao = Interdicao::where('municipio_id', Auth::user()->municipio_id)->count();
@@ -358,6 +363,8 @@ class VistoriaController extends Controller
     public function show(Vistoria $vistoria, Request $request)
     {
 
+
+        //dd($vistoria->municipio);
         if( $vistoria->ck_clas_risc_muito_alta == 1 ) {
             $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
         }else {
@@ -366,9 +373,8 @@ class VistoriaController extends Controller
 
         //dd($interdicao);
 
-
+        // Imagens elementos estruturais
         $img_el_estrs = [];
-
         $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
         foreach ($scan as $file) {
             if (substr(basename($file), 0, 8) == 'el_estr_') {
@@ -376,14 +382,42 @@ class VistoriaController extends Controller
             }
         }
 
-        //$imagens = Storage::allFiles(directory);
+        // Imagens elementos Construtivos
+        $img_el_constrs = [];
+        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        foreach ($scan as $file) {
+            if (substr(basename($file), 0, 8) == 'el_constr_') {
+                $img_el_constrs[] = $file;
+            }
+        }
+        // Imagens agentes potencializadoress
+        $img_ag_potens = [];
+        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        foreach ($scan as $file) {
+            if (substr(basename($file), 0, 8) == 'ag_pote_') {
+                $img_ag_potens[] = $file;
+            }
+        }
 
+        // Imagens processos geotecnicos
+        $img_proc_geos = [];
+        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        foreach ($scan as $file) {
+            if (substr(basename($file), 0, 8) == 'proc_ge_') {
+                $img_proc_geos[] = $file;
+            }
+        }
+
+        
         return view(
             'compdec/vistoria/show',
             [
                 'vistoria' => $vistoria,
                 'interdicao' => $interdicao,
                 'img_el_estrs' => $img_el_estrs,
+                'img_el_constrs' => $img_el_constrs,
+                'img_ag_potens' => $img_ag_potens,
+                'img_proc_geos' => $img_proc_geos,
             ]
         );
     }

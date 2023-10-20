@@ -64,7 +64,10 @@ class AjudaPedidoAnaliseTecnicaController extends Controller
 
         $parecer->save();
 
-        return redirect('mah/pedido/edit/'.$request->pedido_id)->with('message', 'Registro Gravado com Sucesso ');
+        return redirect()->back()->with([
+            'message' => 'Registro Gravado com Sucesso ',
+            'active_tab'=> '#-despachos_analise-tab',
+        ]);
     }
 
     /**

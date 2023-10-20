@@ -14,7 +14,6 @@ class PDFController extends Controller
     public function PDFVistoria($id, $tp)
     {
 
-        //dd($tp);
         $data["email"] = "krystal.reichel13@ethereal.email";
         $data["title"] = "From SDC Laravel";
         $data["body"] = "This is Demo";

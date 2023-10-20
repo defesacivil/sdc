@@ -66,6 +66,7 @@ class RatController extends Controller
             ->addSelect('cedec_municipio.nome as nome')
             ->addSelect('users.name as operador_nome')
             ->addSelect('dec_cobrade.descricao as cobrade')
+            ->orderBy('com_rat.dt_ocorrencia', 'asc')
             ->paginate(10);
         //->get();
 
@@ -110,6 +111,7 @@ class RatController extends Controller
                 'ratChuva'   => $ratChuva,
                 'chart_ocor_list_ano_corrente' => "[".$chart_ocor_list_ano_corrente."]",
                 //'chart_ocor_list_total' => "[".$chart_ocor_list_total."]",
+                'search' => false,
             ]
         );
     }
@@ -262,6 +264,7 @@ class RatController extends Controller
      */
     public function show(Rat $rat)
     {
+
         # ler todos arquivos da pasta rat_upload
         $all_rat_files = Storage::files('rat_uploads/' . $rat->id, true);
 
@@ -278,6 +281,7 @@ class RatController extends Controller
             }
         }
 
+        //dd($rat->cobrade);
         return view(
             'compdec/rat/show',
             [
@@ -549,13 +553,40 @@ class RatController extends Controller
         } else {
 
 
+           // dd($filter_all);
+
+            # chutas intensas 
+        $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
+
+        # estiagem 
+        $ratSeca = Rat::where('cobrade_id', '=', '31')
+                            ->whereRaw(DB::raw($filter_all))->count();
+
+         #Qtd por mes Ocorrencias
+         $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
+         ->groupBy('cobrade_id')
+         ->get()->toArray();      
+         
+         $chart_ocorrencias_array = $chart_ocor_corrente;
+         $chart_ocor_list_ano_corrente = "'";
+ 
+         foreach($chart_ocorrencias_array as $key=>$val) {
+             if(array_key_last($chart_ocorrencias_array) == $key) {
+                 $chart_ocor_list_ano_corrente .= $val['cobrade_count']."'";
+             }else {
+                 $chart_ocor_list_ano_corrente .= $val['cobrade_count']."','";
+             }
+         }
+
             $rats = DB::table('com_rat')
                 ->whereRaw(DB::raw($filter_all))
                 ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
                 ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
                 ->addSelect('com_rat.*')
                 ->addSelect('cedec_municipio.nome as nome')
                 ->addSelect('users.name as operador_nome')
+                ->addSelect('dec_cobrade.descricao as cobrade')
                 ->orderBy('com_rat.dt_ocorrencia', 'asc')
                 ->paginate(10);
             //->get();
@@ -570,6 +601,10 @@ class RatController extends Controller
                 'ratAlvo' => self::dataRat()['ratAlvo'],
                 'optionMunicipio' => self::dataRat()['optionMunicipio'],
                 'optionCobrade' => self::dataRat()['optionCobrade'],
+                'ratChuva' => $ratChuva,
+                'ratSeca' => $ratSeca,
+                'chart_ocor_list_ano_corrente' => "[".$chart_ocor_list_ano_corrente."]",
+                'search' => true,
             ]
         );
     }

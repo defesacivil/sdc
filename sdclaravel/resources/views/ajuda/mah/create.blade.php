@@ -55,9 +55,9 @@
             <ul id="treeDemo" class="ztree"></ul>
         </div> --}}
             <div class="col-md-12">
-                <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a></p>
-
-
+                <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a></p>
+                
+                {{-- ? --}}
                 @can('mah', $municipio->id)
                     <legend>Pedido Ajuda Humanitária - <i>Novo Registro</i></legend>
                     
@@ -128,7 +128,7 @@
                                     <fieldset class="border p-2">
                                         <legend class="w-auto">Dados Coordenador de Proteção e Defesa Civil</legend>
                                         <p class="alert alert-danger">
-                                                A alteração dos dados do Coordenador deve ser feito no Cadastro do Compdec, <a href='{{url('compdec/edit/'.$compdec_id)}}' onclick="return confirm('Os dados serão perdidos ! deseja sair desta página ?')"> Clique aqui para acessar o Cadastro de Compdec</a>
+                                                A alteração dos dados do Coordenador deve ser feito no Cadastro do Compdec, <a href='{{url('compdec/edit/'.$compdec_id)}}' onclick="return confirm('Os dados serão perdidos ! deseja sair desta página ?')"> CLIQUE AQUI PARA ACESSAR/ALTERAR OS DADOS DO CADASTRO DE COMPDEC</a>
 
                                         <div class="col p-3">
                                             {{ Form::label('nome_coordenador', 'Nome do Coordenador') }} :

@@ -526,7 +526,7 @@ Route::group(['middleware' => 'auth'], function () {
     # mah EDIT
     Route::get('mah/pedido/edit/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@edit')->name('pedido.edit');
     # mah UPDATE
-    Route::post('mah/pedido/update', 'App\Http\Controllers\Ajuda\AjudaPedidoController@update');
+    Route::post('mah/pedido/update/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@update');
     # mah VIEW
     Route::get('mah/pedido/show/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@show');
     # mah PRINT
@@ -538,7 +538,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('mah/pedido/upload', 'App\Http\Controllers\Ajuda\AjudaPedidoController@upload');
 
-    Route::post('mah/pedido/deletedoc', 'App\Http\Controllers\Ajuda\AjudaPedidoController@deletedoc')->name('mah/deletedoc');
+    Route::get('mah/pedido/deletedoc/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@deletedoc');
+
+    Route::get('mah/download/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@download');
+    
+    Route::get('mah/enviar/status/{pedido}/{status}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@status');
+
+    
 
     ################## ANEXO
     // # mah CREATE
@@ -600,7 +606,7 @@ Route::group(['middleware' => 'auth'], function () {
     # mah STORE
     Route::post('mah/pedidoitem/store', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@store')->name('mah.item.store');
     # mah DESTROY
-    Route::get('mah/pedidoitem/destroy', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@destroy');
+    Route::get('mah/pedidoitem/destroy/{pedidoItens}', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@destroy');
 
     ################## PRESTAÇÃO DE CONTAS
     # mah CREATE
