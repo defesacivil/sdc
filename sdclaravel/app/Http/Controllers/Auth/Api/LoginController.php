@@ -46,6 +46,8 @@ class LoginController extends Controller
         ->where('cpf', null)
         ->where('tipo', $tipo)->count();
 
+        //dd($cpf);
+
         if ($cpf == 1) {
 
             try{
@@ -67,19 +69,32 @@ class LoginController extends Controller
 
             if (!auth()->attempt(['cpf'=> $credentials['cpf'], 'password'=> $credentials['password']]) ) {
                 
-                #enviar email
-                $dadossdc = [
-                    'dados' => $credentials   
-                ];
+                // #enviar email
+                // $dadossdc = [
+                //     'dados' => $credentials   
+                // ];
 
-                $dadoslara = [
-                    'id_cedec_user' =>'',
-                    'email' => '',
-                    'password' =>'',
-                    'cpf' => '',
-                    'login' => '',
+                // $text = 
+                // Mail::send('Html.view', $data, function ($message) {
+                //     $message->from('john@johndoe.com', 'John Doe');
+                //     $message->sender('john@johndoe.com', 'John Doe');
+                //     $message->to('john@johndoe.com', 'John Doe');
+                //     $message->cc('john@johndoe.com', 'John Doe');
+                //     $message->bcc('john@johndoe.com', 'John Doe');
+                //     $message->replyTo('john@johndoe.com', 'John Doe');
+                //     $message->subject('Subject');
+                //     $message->priority(3);
+                //     $message->attach('pathToFile');
+                // });(
 
-                ]
+                // $dadoslara = [
+                //     'id_cedec_user' =>'',
+                //     'email' => '',
+                //     'password' =>'',
+                //     'cpf' => '',
+                //     'login' => '',
+
+                // ]
                 return response()->json([
                     'result' => 'Nao Autorizado',
 

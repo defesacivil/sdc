@@ -120,7 +120,7 @@
             <div class="col p-2">
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>{{ $rats->total() }}</h3>
+                        <h3>{{ (!is_null($rats)) ? $rats->total() : 0 }}</h3>
                         <h3>Total Ocorrências</h3>
                         <p>Total Registros</p>
                     </div>
@@ -134,8 +134,8 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ $ratChuva }} Registro(s)</h3>
-                        @if ($ratChuva > 0) 
-                            <h3>{{ number_format(($ratChuva / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
+                        @if ($ratChuva > 0 ) 
+                            <h3>{{ $percent_chuva }} % das Ocorrências</h3>
                         @else
                             0
                         @endif
@@ -151,8 +151,8 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ $ratSeca }} Registro(s)</h3>
-                        @if ($ratSeca > 0)
-                            <h3>{{ number_format(($ratSeca / $rats->total()) * 100, 2) }} % das Ocorrências</h3>
+                        @if($ratSeca > 0)
+                            <h3>{{ $percent_seca }} % das Ocorrências</h3>
                         @else
                             0
                         @endif
@@ -165,6 +165,7 @@
                 </div>
             </div>
         </div>
+
 
         <br><!-- RESUMO CHARTS -->
         <div class="row p-2" id="chart1">

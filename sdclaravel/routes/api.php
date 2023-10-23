@@ -22,5 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('auth')->group(function(){
     Route::post('login', [\App\Http\Controllers\Auth\Api\LoginController::class, 'login']);  
+    Route::get('user', [\App\Http\Controllers\Auth\Api\UserController::class, 'listAll']);  
 });
 

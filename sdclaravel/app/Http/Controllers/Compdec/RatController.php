@@ -12,6 +12,7 @@ use App\Models\Municipio\Municipio;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,7 +25,9 @@ class RatController extends Controller
     {
         /* Cod ocorrencia */
         $ratCodOcorrencia = RatOcorrencia::select(
-            DB::raw("CONCAT(cod,' - ',descricao) as descricao_full"), 'id')
+            DB::raw("CONCAT(cod,' - ',descricao) as descricao_full"),
+            'id'
+        )
             ->orderBy('descricao')
             ->pluck('descricao_full', 'id');
 
@@ -55,10 +58,30 @@ class RatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
+
     {
 
-        $rats = DB::table('com_rat')
+       
+        //dd(session('user')['municipio_id'], $request->user()->can('cedec'));
+        if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
+
+            $rats = DB::table('com_rat')
+                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                ->addSelect('com_rat.*')
+                ->addSelect('cedec_municipio.nome as nome')
+                ->addSelect('users.name as operador_nome')
+                ->addSelect('dec_cobrade.descricao as cobrade')
+                ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                ->where('com_rat.municipio_id', '=', 1)
+                ->paginate(10);
+
+            
+
+        } else {
+            $rats = DB::table('com_rat')
             ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
             ->join('users', 'users.id', '=', 'com_rat.operador_id')
             ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
@@ -67,37 +90,52 @@ class RatController extends Controller
             ->addSelect('users.name as operador_nome')
             ->addSelect('dec_cobrade.descricao as cobrade')
             ->orderBy('com_rat.dt_ocorrencia', 'asc')
+            ->where('com_rat.municipio_id', '=', 1)
             ->paginate(10);
-        //->get();
+        }
 
         # chutas intensas 
         $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
+        //dd($ratChuva);
 
         # estiagem 
         $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
 
         #Qtd por mes Ocorrencias
         $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
-        ->groupBy('cobrade_id')
-        ->get()->toArray();
+            ->groupBy('cobrade_id')
+            ->get()->toArray();
 
 
         #Qtd por Tipo de desastre Chuva/Seca
         $chart_ocor_list_total = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
-        ->whereIn('cobrade_id', ['26','31'])
-        ->groupBy('cobrade_id')
-        ->get()->toArray();
+            ->whereIn('cobrade_id', ['26', '31'])
+            ->groupBy('cobrade_id')
+            ->get()->toArray();
 
         $chart_ocorrencias_array = $chart_ocor_corrente;
         $chart_ocor_list_ano_corrente = "'";
 
-        foreach($chart_ocorrencias_array as $key=>$val) {
-            if(array_key_last($chart_ocorrencias_array) == $key) {
-                $chart_ocor_list_ano_corrente .= $val['cobrade_count']."'";
-            }else {
-                $chart_ocor_list_ano_corrente .= $val['cobrade_count']."','";
+        foreach ($chart_ocorrencias_array as $key => $val) {
+            if (array_key_last($chart_ocorrencias_array) == $key) {
+                $chart_ocor_list_ano_corrente .= $val['cobrade_count'] . "'";
+            } else {
+                $chart_ocor_list_ano_corrente .= $val['cobrade_count'] . "','";
             }
         }
+
+        if($ratSeca >0 && $rats->total() >0) {
+            $percent_seca = number_format(($ratSeca / $rats->total()) * 100, 2);
+        }else {
+            $percent_seca = 0;
+        }
+
+        if($ratChuva >0 && $rats->total() >0) {
+            $percent_chuva = number_format(($ratChuva / $rats->total()) * 100, 2);
+        }else {
+            $percent_chuva = 0;
+        }
+        //dd($ratSeca, $rats->total());
 
         return view(
             'compdec/rat/index',
@@ -109,9 +147,11 @@ class RatController extends Controller
                 'optionCobrade' => self::dataRat()['optionCobrade'],
                 'ratSeca'   => $ratSeca,
                 'ratChuva'   => $ratChuva,
-                'chart_ocor_list_ano_corrente' => "[".$chart_ocor_list_ano_corrente."]",
+                'chart_ocor_list_ano_corrente' => "[" . $chart_ocor_list_ano_corrente . "]",
                 //'chart_ocor_list_total' => "[".$chart_ocor_list_total."]",
                 'search' => false,
+                'percent_seca' => $percent_seca,
+                'percent_chuva' => $percent_chuva,
             ]
         );
     }
@@ -415,12 +455,12 @@ class RatController extends Controller
 
         //dd(isset($files));
 
-        if ( isset($files) ) {
+        if (isset($files)) {
 
             foreach ($files as $key => $file) {
 
                 $fileName = $rat->id . "-" . time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('rat_uploads/'.$rat->id, $fileName, 'public');
+                $file->storeAs('rat_uploads/' . $rat->id, $fileName, 'public');
             }
         }
         // return response()->json([
@@ -454,13 +494,13 @@ class RatController extends Controller
      */
     public function deleteImagem(Request $request)
     {
-        if(Storage::delete($request->file)) {
+        if (Storage::delete($request->file)) {
             return response()->json(
                 [
                     'id' => $request->id,
                     'result' => true,
                 ]
-                );
+            );
         };
     }
 
@@ -553,30 +593,30 @@ class RatController extends Controller
         } else {
 
 
-           // dd($filter_all);
+            // dd($filter_all);
 
             # chutas intensas 
-        $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
+            $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
 
-        # estiagem 
-        $ratSeca = Rat::where('cobrade_id', '=', '31')
-                            ->whereRaw(DB::raw($filter_all))->count();
+            # estiagem 
+            $ratSeca = Rat::where('cobrade_id', '=', '31')
+                ->whereRaw(DB::raw($filter_all))->count();
 
-         #Qtd por mes Ocorrencias
-         $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
-         ->groupBy('cobrade_id')
-         ->get()->toArray();      
-         
-         $chart_ocorrencias_array = $chart_ocor_corrente;
-         $chart_ocor_list_ano_corrente = "'";
- 
-         foreach($chart_ocorrencias_array as $key=>$val) {
-             if(array_key_last($chart_ocorrencias_array) == $key) {
-                 $chart_ocor_list_ano_corrente .= $val['cobrade_count']."'";
-             }else {
-                 $chart_ocor_list_ano_corrente .= $val['cobrade_count']."','";
-             }
-         }
+            #Qtd por mes Ocorrencias
+            $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
+                ->groupBy('cobrade_id')
+                ->get()->toArray();
+
+            $chart_ocorrencias_array = $chart_ocor_corrente;
+            $chart_ocor_list_ano_corrente = "'";
+
+            foreach ($chart_ocorrencias_array as $key => $val) {
+                if (array_key_last($chart_ocorrencias_array) == $key) {
+                    $chart_ocor_list_ano_corrente .= $val['cobrade_count'] . "'";
+                } else {
+                    $chart_ocor_list_ano_corrente .= $val['cobrade_count'] . "','";
+                }
+            }
 
             $rats = DB::table('com_rat')
                 ->whereRaw(DB::raw($filter_all))
@@ -603,14 +643,15 @@ class RatController extends Controller
                 'optionCobrade' => self::dataRat()['optionCobrade'],
                 'ratChuva' => $ratChuva,
                 'ratSeca' => $ratSeca,
-                'chart_ocor_list_ano_corrente' => "[".$chart_ocor_list_ano_corrente."]",
+                'chart_ocor_list_ano_corrente' => "[" . $chart_ocor_list_ano_corrente . "]",
                 'search' => true,
             ]
         );
     }
 
     /* Todos Relatorios de Atividade */
-    public function exportRats(Request $request){
-        return Excel::download(new ExportRat, 'Rat_Todos_'.date('d_m_Y_H.i.s').'.xlsx');
+    public function exportRats(Request $request)
+    {
+        return Excel::download(new ExportRat, 'Rat_Todos_' . date('d_m_Y_H.i.s') . '.xlsx');
     }
 }
