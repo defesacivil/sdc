@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -196,7 +197,7 @@ class RatController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate(
+        $val = Validator::make($request->all(),
             [
                 "num_ocorrencia" => "required|numeric",
                 "dt_ocorrencia" => "required|date",
@@ -217,43 +218,42 @@ class RatController extends Controller
 
             ],
             [
-                "num_ocorrencia.required" => "O Campo :attribute é obrigatório !",
+                "num_ocorrencia.required" => "O Campo NÚMERO DA OCORRENCIA é obrigatório !",
                 "num_ocorrencia.numeric" => "Este Campos aceita somente números !",
 
-                "dt_ocorrencia.required" => "O Campo :attribute é obrigatório !",
+                "dt_ocorrencia.required" => "O Campo DATA DA OCORRÊNCIA é obrigatório !",
                 "dt_ocorrencia.date" => "Data da Ocorrência Inválida !",
 
-                "municipio_id.required" => "O Campo :attribute é obrigatório !",
+                "municipio_id.required" => "O Campo MUNICÍPIO é obrigatório !",
                 "municipio_id.numeric" => "Este Campos aceita somente números !",
 
-                "ocorrencia_id.required" => "O Campo :attribute é obrigatório !",
+                "ocorrencia_id.required" => "O Campo CÓDIGO OCORRENCIA é obrigatório !",
                 "ocorrencia_id.numeric" => "Este Campos aceita somente números",
 
                 "operador_id.required" => "O Campo :attribute é obrigatório !",
                 "operador_id.numeric" => "Este Campos aceita somente números",
 
-                "alvo_id.required" => "O Campo :attribute é obrigatório !",
+                "alvo_id.required" => "O Campo ALVO é obrigatório !",
                 "alvo_id.numeric" => "Este Campos aceita somente números !",
 
-                "cobrade_id.required" => "O Campo :attribute é obrigatório !",
-                "cobrade_id.numeric" => "Este Campos aceita somente números !",
+                "cobrade_id.required" => "O Campo CÓDIGO COBRADE é obrigatório !",
+                "cobrade_id.numeric" => "O Campo CÓDIGO COBRADE SÓ aceita números !",
 
-                "envolvidos.max" => "O campo :field aceita no máximo 255 caracteres !",
-                "nome_operacao.required" => "O Campo :attribute é obrigatório !",
-                "nome_operacao.max" => "O campo :field aceita no máximo 110 caracteres !",
-                "cep.max" => "O campo :field aceita no máximo 9 caracteres !",
-                "endereco.max" => "O campo :field aceita no máximo 100 caracteres !",
-                "numero.max" => "O campo :field aceita no máximo 10 caracteres !",
-                "bairro.max" => "O campo :field aceita no máximo 50 caracteres !",
-                "estado.max" => "O campo :field aceita no máximo 20 caracteres !",
-                "referencia.max" => "O campo :field aceita no máximo 100 caracteres !",
-                "acoes.max" => 'O campo :field aceita no máximo 65530 caracteres !',
+                "envolvidos.max" => "O campo ENVOLVIDOS aceita no máximo 255 caracteres !",
+                "nome_operacao.required" => "O Campo NOME DA OPERAÇÃO é obrigatório !",
+                "nome_operacao.max" => "O campo NOME DA OPERAÇÃO aceita no máximo 110 caracteres !",
+                "cep.max" => "O campo CEP aceita no máximo 9 caracteres !",
+                "endereco.max" => "O campo ENDEREÇO aceita no máximo 100 caracteres !",
+                "numero.max" => "O campo NÚMERO DO ENDEREÇO aceita no máximo 10 caracteres !",
+                "bairro.max" => "O campo BAIRRO aceita no máximo 50 caracteres !",
+                "estado.max" => "O campo ESTADO aceita no máximo 20 caracteres !",
+                "referencia.max" => "O campo REFERÊNCIA aceita no máximo 100 caracteres !",
+                "acoes.max" => 'O campo TEXTO DA OCORRENCIA aceita no máximo 65530 caracteres !',
 
 
             ]
         );
-
-
+  
         $rat = new Rat;
 
         $rat->num_ocorrencia = $request->num_ocorrencia;
@@ -273,36 +273,27 @@ class RatController extends Controller
         $rat->referencia    = $request->referencia;
         $rat->acoes         = $request->acoes;
 
-        try {
-            $rat->save();
-        }catch (Exception $e) {
-            Log::error($e);
-        }
-
-        /* img */
-        $images = $request->file;
-        if (isset($images)) {
-            foreach ($images as $key => $image) {
-                $fileName = $rat->id . "-" . time() . $key . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('rat_uploads/' . $rat->id . '/', $fileName, 'public');
+        if($val->fails()){
+            return response()->json([
+                'error' => $val->errors(),
+            ]);
+        }else {
+            $rat->save(); 
+            /* img */
+            $images = $request->file;
+            if (isset($images)) {
+                foreach ($images as $key => $image) {
+                    $fileName = $rat->id . "-" . time() . $key . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('rat_uploads/' . $rat->id . '/', $fileName, 'public');
+                }
             }
+            return response()->json([
+                'view' => 'show/' . $rat->id,
+                'message' => 'Registro Gravado com Sucesso',
+                'status' => true
+            ]);
         }
-
-        // if(isset($request->anexo)){
-        //     $fileName = $rat->id."-".time().'_'.$request->anexo->getClientOriginalName();
-        //     $request->file('anexo')->storeAs('uploads', $fileName, 'public');
-        // }
-
-
-        return response()->json([
-            'view' => 'show/' . $rat->id,
-            'message' => 'Registro Gravado com Sucesso',
-            'status' => true
-        ]);
-
-        // return redirect('rat')->with('message', 'Registro Gravado com Sucesso ');
-
-
+        
     }
 
 
@@ -390,7 +381,7 @@ class RatController extends Controller
 
         $files = $request->file('file');
 
-        $request->validate(
+        $val = Validator::make($request->all(),
             [
                 "dt_ocorrencia" => "required|date",
                 "municipio_id"  => "required|numeric",
@@ -461,27 +452,27 @@ class RatController extends Controller
         $rat->referencia    = $request->referencia;
         $rat->acoes         = $request->acoes;
 
-        $rat->update();
 
-        //dd(isset($files));
+        if($val->fails()){
+            return response()->json([
+                'error' => $val->errors(),
+            ]);
+        }else {
+            $rat->update();
 
-        if (isset($files)) {
-
-            foreach ($files as $key => $file) {
-
-                $fileName = $rat->id . "-" . time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('rat_uploads/' . $rat->id, $fileName, 'public');
+            if (isset($files)) {
+                foreach ($files as $key => $file) {
+                    $fileName = $rat->id . "-" . time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('rat_uploads/' . $rat->id, $fileName, 'public');
+                }
             }
+            
+            return response()->json([
+                'view' => '../show/' . $rat->id,
+                'message' => 'Registro Gravado com Sucesso',
+                'status' => true,
+            ]);
         }
-        // return response()->json([
-        //     'view' => 'rat/show',
-        //     'message' => 'Registro Gravado com Sucesso'
-        // ]);
-        return response()->json([
-            'view' => '../show/' . $rat->id,
-            'message' => 'Registro Gravado com Sucesso',
-            'status' => true
-        ]);
     }
 
     /**

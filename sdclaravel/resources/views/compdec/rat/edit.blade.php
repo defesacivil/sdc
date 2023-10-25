@@ -257,17 +257,13 @@
                             cache: false,
                             processData: false,
                         }).done(function(data) {
-                            //window.location = '{{ url('rat') }}';
-                            window.location.href = data.view;
-                            //console.log(data);
-                            // if (data.success == false) {
-                            //     if (data.errors.username) {
-                            //         $('#username').append('<span class="text-danger">' + data.errors.username + '</span>');
-                            //     }
-                            //     if (data.errors.file) {
-                            //         $('#file').append('<span class="text-danger">' + data.errors.file + '</span>');
-                            //     }
-                            // }
+                            if(data.error){
+                                    Object.values(data.error).forEach((x)=>{
+                                        toastr.error(x);    
+                                    });     
+                                }else {
+                                    window.location.href = data.view;
+                                } 
                         });
 
                         e.preventDefault();

@@ -41,13 +41,14 @@
             "progressBar": true,
             "showDuration": "800",
         }
+        
         toastr.success("{{ session('message') }}"); 
             // <div class = "alert alert-success" >
             //     {{ session('message') }}
             // </div>
     @endif
     @if ($errors->any())
-
+                alert();
         @foreach ($errors->all() as $error)
             toastr.error("{{ $error }}")
         @endforeach
