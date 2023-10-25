@@ -10,12 +10,16 @@ use App\Models\Compdec\RatOcorrencia;
 use App\Models\Decreto\Cobrade;
 use App\Models\Municipio\Municipio;
 use Carbon\Carbon;
+use DebugBar\DebugBar;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class RatController extends Controller
@@ -42,8 +46,8 @@ class RatController extends Controller
         foreach ($cobrades as $key => $cobrade) {
             $optionCobrade = $cobradeCollection->put($cobrade->id, $cobrade->codigo . "-" . $cobrade->descricao);
         }
-        $optionCobrade[] = 'Outros ( Discriminar no Histórico )';
 
+        $optionCobrade[] = "teste";
 
         return [
             'ratCodOcorrencia' => $ratCodOcorrencia,
@@ -62,8 +66,14 @@ class RatController extends Controller
 
     {
 
-       
+        $municipio_id = "";
+        if (isset(session('user')['municipio_id'])) {
+            $municipio_id = session('user')['municipio_id'];
+        }
+
         //dd(session('user')['municipio_id'], $request->user()->can('cedec'));
+
+
         if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
 
             $rats = DB::table('com_rat')
@@ -75,23 +85,19 @@ class RatController extends Controller
                 ->addSelect('users.name as operador_nome')
                 ->addSelect('dec_cobrade.descricao as cobrade')
                 ->orderBy('com_rat.dt_ocorrencia', 'asc')
-                ->where('com_rat.municipio_id', '=', 1)
                 ->paginate(10);
-
-            
-
         } else {
             $rats = DB::table('com_rat')
-            ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
-            ->join('users', 'users.id', '=', 'com_rat.operador_id')
-            ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
-            ->addSelect('com_rat.*')
-            ->addSelect('cedec_municipio.nome as nome')
-            ->addSelect('users.name as operador_nome')
-            ->addSelect('dec_cobrade.descricao as cobrade')
-            ->orderBy('com_rat.dt_ocorrencia', 'asc')
-            ->where('com_rat.municipio_id', '=', 1)
-            ->paginate(10);
+                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                ->addSelect('com_rat.*')
+                ->addSelect('cedec_municipio.nome as nome')
+                ->addSelect('users.name as operador_nome')
+                ->addSelect('dec_cobrade.descricao as cobrade')
+                ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                ->where('com_rat.municipio_id', '=', $municipio_id)
+                ->paginate(10);
         }
 
         # chutas intensas 
@@ -124,15 +130,15 @@ class RatController extends Controller
             }
         }
 
-        if($ratSeca >0 && $rats->total() >0) {
+        if ($ratSeca > 0 && $rats->total() > 0) {
             $percent_seca = number_format(($ratSeca / $rats->total()) * 100, 2);
-        }else {
+        } else {
             $percent_seca = 0;
         }
 
-        if($ratChuva >0 && $rats->total() >0) {
+        if ($ratChuva > 0 && $rats->total() > 0) {
             $percent_chuva = number_format(($ratChuva / $rats->total()) * 100, 2);
-        }else {
+        } else {
             $percent_chuva = 0;
         }
         //dd($ratSeca, $rats->total());
@@ -267,9 +273,13 @@ class RatController extends Controller
         $rat->referencia    = $request->referencia;
         $rat->acoes         = $request->acoes;
 
-        $rat->save();
+        try {
+            $rat->save();
+        }catch (Exception $e) {
+            Log::error($e);
+        }
 
-        /* img proc_geotermicos */
+        /* img */
         $images = $request->file;
         if (isset($images)) {
             foreach ($images as $key => $image) {
@@ -510,7 +520,13 @@ class RatController extends Controller
     {
 
         $filter = $request;
-        $filter_all = " com_rat.id > 1 ";
+
+        if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
+            $filter_all = " com_rat.id > 1 ";
+        } else {
+            $filter_all = " com_rat.id > 1 ";
+        }
+
 
         /**
          * 
@@ -618,19 +634,42 @@ class RatController extends Controller
                 }
             }
 
-            $rats = DB::table('com_rat')
-                ->whereRaw(DB::raw($filter_all))
-                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
-                ->join('users', 'users.id', '=', 'com_rat.operador_id')
-                ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
-                ->addSelect('com_rat.*')
-                ->addSelect('cedec_municipio.nome as nome')
-                ->addSelect('users.name as operador_nome')
-                ->addSelect('dec_cobrade.descricao as cobrade')
-                ->orderBy('com_rat.dt_ocorrencia', 'asc')
-                ->paginate(10);
-            //->get();
-            //->toSql();
+
+
+            $municipio_id = "";
+            if (isset(session('user')['municipio_id'])) {
+                $municipio_id = session('user')['municipio_id'];
+            }
+
+            if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
+
+                $rats = DB::table('com_rat')
+                    ->whereRaw(DB::raw($filter_all))
+                    ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                    ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                    ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                    ->addSelect('com_rat.*')
+                    ->addSelect('cedec_municipio.nome as nome')
+                    ->addSelect('users.name as operador_nome')
+                    ->addSelect('dec_cobrade.descricao as cobrade')
+                    ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                    ->paginate(10);
+                //->get();
+                //->toSql();
+            } else {
+                $rats = DB::table('com_rat')
+                    ->whereRaw(DB::raw($filter_all))
+                    ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                    ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                    ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                    ->addSelect('com_rat.*')
+                    ->addSelect('cedec_municipio.nome as nome')
+                    ->addSelect('users.name as operador_nome')
+                    ->addSelect('dec_cobrade.descricao as cobrade')
+                    ->where('com_rat.municipio_id', '=', $municipio_id)
+                    ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                    ->paginate(10);
+            }
         }
 
         return view(
