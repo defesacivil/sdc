@@ -12,16 +12,23 @@ use Laravel\Sanctum\PersonalAccessToken;
 class UserController extends Controller
 {
 
-    public function ListAll(Request $request) {
-    
-    $user = User::all()->where('tipo', '=', 'cedec')->toArray();
+    public function ListAll(Request $request)
+    {
 
-    return response()->json([
-        'data' => array_values($user),
-        JSON_FORCE_OBJECT,
-        
-    ]);
+        $user = User::all()->where('tipo', '=', 'cedec')->toArray();
 
-}
+        return response()->json([
+            'data' => array_values($user),
+            JSON_FORCE_OBJECT,
 
+        ]);
+    }
+
+    public function updatecpf(Request $request){
+
+        $dados = $request;
+
+        $user = User::where('id_user_cedec', '=', $request['id_usuario']);
+
+    }
 }
