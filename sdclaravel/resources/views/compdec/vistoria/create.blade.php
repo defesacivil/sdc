@@ -647,8 +647,13 @@
                             cache: false,
                             processData: false,
                             success: function(data) {
-                                console.log(data);
-                                window.location.href = data.view;
+                                id(data.errors) {
+                                    Object.values(data.error.forEach(element => {
+                                        toastr.error(element);
+                                    }));
+                                }else {
+                                    window.location.href = data.view;
+                                }
                             },
                             error: function(data) {
                                 console.log(data + "erro");
