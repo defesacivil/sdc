@@ -21,7 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('auth')->group(function(){
-    dd('opa');
     Route::post('login', [\App\Http\Controllers\Auth\Api\LoginController::class, 'login']);  
 });
 
