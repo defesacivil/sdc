@@ -40,5 +40,16 @@ class Municipio extends Model
     {
         return $this->hasOne(CedecRdc::class, 'id', 'rdc_id');
     }
+
+
+    /**
+     * Get the user associated with the AjudaPedido
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function regiao(): HasOne
+    {
+        return $this->hasOne(Regiao::class, 'id', 'regiao_id');
+    }
     
 }

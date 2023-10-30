@@ -524,7 +524,7 @@ Route::group(['middleware' => 'auth'], function () {
     # mah CREATE
     Route::get('mah/pedido/create', 'App\Http\Controllers\Ajuda\AjudaPedidoController@create');
     # mah EDIT
-    Route::get('mah/pedido/edit/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@edit')->name('pedido.edit');
+    Route::get('mah/pedido/edit/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@edit')->name('pedido/edit');
     # mah UPDATE
     Route::post('mah/pedido/update/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@update');
     # mah VIEW

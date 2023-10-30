@@ -44,16 +44,3 @@
 
     }
 </style>
-<!-- validadação -->
-{{-- @if (session('message'))
-<div class="alert alert-success">
-    {{ session('message') }}
-</div>
-@endif --}}
-{{-- @if ($errors->any())
-<ul class='errors'>
-    @foreach ($errors->all() as $error)
-        <li class='alert alert-danger'>{{ $error }}</li>
-    @endforeach
-</ul>
-@endif --}}

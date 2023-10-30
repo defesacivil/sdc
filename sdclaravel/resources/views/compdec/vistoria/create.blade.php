@@ -110,7 +110,7 @@
                             <div class="row p-2">
                                 <div class="col-md-8 p-2">
                                     {{ Form::label('municipio_id', 'Nome do Município') }}:
-                                    {{ Form::select('municipio_id', $optionMunicipio, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '']) }}
+                                    {{ Form::select('municipio_id', $optionMunicipio, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '', 'required' => 'required']) }}
                                     {{-- {{ Form::hidden('municipio_id', Auth()->user()->municipio_id, ['required maxlenght=6']) }} --}}
                                     
                                     {{-- {{ Form::text('nom_municipio', '', ['class' => 'form form-control', 'id' => 'nom_municipio', 'maxlength' => '70', 'placeholder' => 'Nome do Município da Vistoria']) }} --}}
@@ -647,8 +647,13 @@
                             cache: false,
                             processData: false,
                             success: function(data) {
-                                console.log(data);
-                                window.location.href = data.view;
+                                if(data.error){
+                                    Object.values(data.error).forEach((x)=>{
+                                        toastr.error(x);    
+                                    });     
+                                }else {
+                                    window.location.href = data.view;
+                                } 
                             },
                             error: function(data) {
                                 console.log(data + "erro");

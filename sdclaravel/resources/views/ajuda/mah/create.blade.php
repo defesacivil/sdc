@@ -27,7 +27,7 @@
             <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ url('/ajuda') }}">Ajuda Humanitária</a></li>
             <li class="breadcrumb-item"><a href="{{ url('/busca') }}">Pesquisa Pedido Ajuda Humanitária</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edição Pedido Ajuda Humanitária</li>
+            <li class="breadcrumb-item active" aria-current="page">Novo Pedido Ajuda Humanitária</li>
         </ol>
     </nav>
 
@@ -48,6 +48,7 @@
 
 @section('content')
 
+
     <div class="container">
         <div class="row flex-fill">
 
@@ -56,11 +57,11 @@
         </div> --}}
             <div class="col-md-12">
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a></p>
-                
+
                 {{-- ? --}}
-                @can('mah', $municipio->id)
+                @can('mah', $compdec->id_municipio)
                     <legend>Pedido Ajuda Humanitária - <i>Novo Registro</i></legend>
-                    
+
                     <ul class="nav nav-pills nav-fill" id="tab-mah" role="tablist">
 
                         <li class="nav-item">
@@ -75,8 +76,8 @@
                             <a class="nav-link" href="#documentos-tab" id="-documentos-tab" data-toggle="tab"
                                 role="tab">Documentos/Arquivos</a>
                         </li>
-                        
-                       
+
+
                     </ul>
                     <br>
 
@@ -84,39 +85,44 @@
                         {{-- Dados do pedido --}}
                         <div class="tab-pane fade show active" id="dados_pedidos-tab" role="tabpanel"
                             aria-labelledby="dados_pedidos-tab">
-                            {{ Form::open(['url' => 'mah/store']) }}
+                            {{ Form::open(['url' => 'mah/pedido/store']) }}
                             {{ Form::token() }}
-                            {{ Form::input('dateTime-local', 'data_entrada_sistema', '', ['class' => 'form form-control', 'value' => old('data_entrada_sistema'), 'id' => 'data_entrada_sistema']) }}
-
+                            
                             <div class="row">
                                 <div class="col">
                                     <fieldset class="border p-2">
                                         <legend class="w-auto">Dados Município</legend>
+                                        
+                                        <br>
+                                        <div class="col-6 p-3">
+                                            {{ Form::input('dateTime-local', 'data_entrada_sistema', '', ['class' => 'form form-control', 'value' => old('data_entrada_sistema'), 'id' => 'data_entrada_sistema', 'required' =>'required']) }}
+                                        </div>
                                         <div class="col p-3">
                                             {{ Form::label('municipio_id', 'Município') }} :
-                                            {{ Form::text('nome_municicpio', $municipio->nome . ' - ' . $municipio->id, ['class' => 'form form-control', 'maxlength' => '110', 'readonly' => 'readonly']) }}
-                                            {{ Form::hidden('municipio_id', $municipio->id, ['maxlength' => '11', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('nome_municicpio', $compdec->municipio->nome . ' - ' . $compdec->municipio->id, ['class' => 'form form-control', 'maxlength' => '110', 'readonly' => 'readonly']) }}
+                                            {{ Form::hidden('municipio_id', $compdec->municipio->id, ['maxlength' => '11', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('regiao_id', 'Região') }} :
-                                            {{ Form::select('regiao_id', $regiaos, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'regiao_id', 'placeholder' => 'Regiao de Desenvolvimento', 'data-regiao_id' => '']) }}
-                                        
+                                            {{ Form::text('regiao_nome', $compdec->regiao->nome, ['class' => 'form form-control', 'id' => 'regiao_nome', 'readonly' => 'readonly']) }}
+                                            {{ Form::hidden('regiao_id', $compdec->regiao->id, ['class' => 'form form-control', 'id' => 'regiao_id', 'readonly' => 'readonly']) }}
+                                            {{-- {{ Form::select('regiao_id', $regiaos, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'regiao_id', 'placeholder' => 'Regiao de Desenvolvimento', 'data-regiao_id' => '']) }} --}}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('nome_prefeito', 'Nome do Prefeito') }} :
-                                            {{ Form::text('nome_prefeito', $municipio->nome_prefeito, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('nome_prefeito', $compdec->municipio->nome_prefeito, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('email_prefeito', 'Email do Prefeito') }} :
-                                            {{ Form::text('email_prefeito', $municipio->email_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('email_prefeito', $compdec->municipio->email_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('tel_prefeito', 'Telefone do Prefeito') }} :
-                                            {{ Form::text('tel_prefeito', $municipio->tel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('tel_prefeito', $compdec->municipio->tel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('cel_prefeito', 'Celular do Prefeito') }} :
-                                            {{ Form::text('cel_prefeito', $municipio->cel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('cel_prefeito', $compdec->municipio->cel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                     </fieldset>
                                 </div>
@@ -128,23 +134,24 @@
                                     <fieldset class="border p-2">
                                         <legend class="w-auto">Dados Coordenador de Proteção e Defesa Civil</legend>
                                         <p class="alert alert-danger">
-                                                A alteração dos dados do Coordenador deve ser feito no Cadastro do Compdec, <a href='{{url('compdec/edit/'.$compdec_id)}}' onclick="return confirm('Os dados serão perdidos ! deseja sair desta página ?')"> CLIQUE AQUI PARA ACESSAR/ALTERAR OS DADOS DO CADASTRO DE COMPDEC</a>
+                                            A alteração dos dados do Coordenador deve ser feito no Cadastro do Compdec, <a href='{{ url('compdec/edit/' . $compdec['id']) }}' onclick="return confirm('Os dados serão perdidos ! deseja sair desta página ?')"> CLIQUE AQUI PARA ACESSAR/ALTERAR OS DADOS DO CADASTRO DE
+                                                COMPDEC</a>
 
                                         <div class="col p-3">
                                             {{ Form::label('nome_coordenador', 'Nome do Coordenador') }} :
-                                            {{ Form::text('nome_coordenador', $coordenador->nome, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '110', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('nome_coordenador', $coordenador['nome'], ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '110', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('email_coordenador', 'Email do Coordenador') }} :
-                                            {{ Form::text('email_coordenador', $coordenador->email, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('email_coordenador', $coordenador['email'], ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('tel_coordenador', 'Telefone do Coordenador') }} :
-                                            {{ Form::text('tel_coordenador', $coordenador->tel, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('tel_coordenador', $coordenador['telefone'], ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('cel_coordenador', 'Celular do Coordenador') }} :
-                                            {{ Form::text('cel_coordenador', $coordenador->cel, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                            {{ Form::text('cel_coordenador', $coordenador['celular'], ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
                                         </div>
                                     </fieldset>
                                 </div>
@@ -157,8 +164,8 @@
                                         <legend class="w-auto">Dados Sobre o Desastre</legend>
 
                                         <div class="col p-3">
-                                            {{ Form::label('id_cobrade', 'Nome do Desastre do Cobrade') }} :
-                                            {{ Form::select('id_cobrade', $cobrades, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'id_cobrade', 'placeholder' => 'Código Cobrade', 'data-id_cobrade' => '']) }}
+                                            {{ Form::label('cobrade_id', 'Nome do Desastre do Cobrade') }} :
+                                            {{ Form::select('cobrade_id', $cobrades, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'id_cobrade', 'placeholder' => 'Código Cobrade', 'data-id_cobrade' => '', 'required' => 'required']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('pop_atendida', 'População Atendida') }} :
@@ -237,7 +244,7 @@
                             <div class="modal fade" id="material-pedido-modal" aria-modal="true" role="dialog" data-backdrop="static">
                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                     <div class="modal-content">
-                                        
+
                                         {{ Form::open(['url' => 'mah/pedidoitem/store']) }}
                                         {{ Form::token() }}
 
@@ -278,7 +285,7 @@
                                         </div>
                                         <div class="modal-footer justify-content-between">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            {{ Form::submit('Adicionar', ['class' => 'btn btn-primary',  'id'=>'add_material']) }}
+                                            {{ Form::submit('Adicionar', ['class' => 'btn btn-primary', 'id' => 'add_material']) }}
                                         </div>
 
                                         {{ Form::close() }}
@@ -335,10 +342,10 @@
 
                         </div>
 
-                        
 
-                       
-                       
+
+
+
                     </div>
                 @endcan
             </div>
@@ -380,7 +387,6 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-
             $('#parecer').keydown(function(event) {
                 var carac_rest = 255 - $(this).val().length;
                 $("#carac_rest").text(carac_rest);
@@ -415,7 +421,7 @@
 
             // ADICIONAR MATERIAIS NO PEDIDO
             $('.js-example-basic-single').select2();
-        
+
 
             var zTreeObj;
             // zTree configuration information, refer to API documentation (setting details)
@@ -496,7 +502,6 @@
                 }
             });
         })
-
     </script>
 
 @endsection

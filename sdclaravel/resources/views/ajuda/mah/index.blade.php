@@ -22,6 +22,28 @@
                 <div class="row">
 
                     <!-- menu opções - novo | pesquisa |voltar-->
+
+                    Prezado Coordendor,
+
+                    Para continuar a usar o sistema é necessário fazer as atualizações necessárias abaixo
+                    <div class="table-responsive table-bordered">
+                        <table class="table table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"><img=''></th>
+                                    <th class="text-center">X</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="">
+                                    <th class="text-center">Atualização DocumentosX</th>
+                                    <th class="text-center">A equipe do compdec não tem um funcionário com a função Coordenador</th>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
                     <ul class="nav">
                         <!-- ####### Acesso COMPDEC ###### -->
                         @can('compdec')
