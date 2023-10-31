@@ -261,7 +261,9 @@ class AjudaPedidoController extends Controller
      */
     public function show(AjudaPedido $pedido)
     {
-        return view('ajuda/mah/show');
+        return view('ajuda/mah/show', [
+            'pedido' => $pedido,
+        ]);
     }
 
     /**
@@ -412,7 +414,13 @@ class AjudaPedidoController extends Controller
      */
     public function destroy(AjudaPedido $pedido)
     {
-        //
+        $pedido->delete();
+
+        return redirect()->back()->with([
+            'message' => 'Arquivo Apagado com Sucesso',
+        ]);
+
+
     }
 
     /**

@@ -214,8 +214,8 @@
                                     <td>
 
                                         @if($pedido->status == 0)
-                                            <a href="{{ url('mah/pedido/edit/' . $pedido->id) }}"><img src='{{ asset('imagem/icon/editar.png') }}'></a>
-                                            <a href="#"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
+                                            <a href="{{ route('pedido/edit', [$pedido->id]) }}"><img src='{{ asset('imagem/icon/editar.png') }}'></a>
+                                            <a href="{{route('pedido/delete', [$pedido->id])}}" onclick="return confirm('Deseja Excluir esse Pedido Nº {{$pedido->numero}}/{{substr($pedido->data_entrada_sistema, 0, 4)}} ?')"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
                                         @elseif($pedido->status == 1)
 
                                         @elseif($pedido->status == 2)
@@ -229,7 +229,7 @@
                                         @elseif($pedido->status == 9)
 
                                         @endif
-                                        <a href="#"><img src='{{ asset('imagem/icon/view.png') }}'></a>
+                                        <a href="{{route('pedido/show', [$pedido->id])}}"><img src='{{ asset('imagem/icon/view.png') }}'></a>
                                     </td>
 
                                 </tr>
