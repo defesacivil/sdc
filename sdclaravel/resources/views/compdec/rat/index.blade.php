@@ -20,6 +20,8 @@
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('/dashboard') }}>Voltar</a>
                     <a class='btn btn-info btn-sm' href={{ url('rat/create') }} title="Criar novo Registro">+ Novo</a>
                     <a class='btn btn-primary btn-sm' id='btnSearch' title="Criar novo Registro">Pesquisa</a>
+                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }}  title="Criar novo Registro">Exportar Excel</a>
                 </p>
 
                 <legend class="p-4">Rat - Relatório de Atividades de Defesa Civil</legend>
@@ -35,7 +37,7 @@
                     <div class='col-md-6'>
                         {{ Form::token() }}
                         {{ Form::label('ano', 'Ano') }} :
-                        {{ Form::text('ano', '', ['class' => 'form form-control', 'maxlenght=4', 'id' => 'ano', 'name' => 'ano']) }}
+                        {{ Form::number('ano', '', ['class' => 'form form-control', 'maxlenght=4', 'id' => 'ano', 'name' => 'ano']) }}
                     </div>
                     <div class='col-md-6'>
                         {{ Form::label('num_ocorrencia', 'Número da Ocorrência') }} :
@@ -108,11 +110,13 @@
             </div>
             <div class="col-md-12 p-2">
                 {{ Form::submit('Busca', ['class' => 'btn btn-primary']) }}
-                {{ Form::close() }}
+    {{ Form::close() }}
             </div>
         </div>
+
+
         <br>
-        Total Registros : {{$rats->total()}}
+        Total Registros : {{ $rats->total() }}
         <div class="table table-responsive table-sm border p-3">
             <h5 class="text-center bolder">Registro das Ocorrências</h5>
             @if (count($rats) > 0)
@@ -126,6 +130,7 @@
                         <tr>
                             <th class="p-2">Número</th>
                             <th class="p-2">Município</th>
+                            <th class="p-2">Cobrade</th>
                             <th class="p-2">Endereço</th>
                             <th class="p-2">Data Ocorrencia</th>
                             <th class="p-2">Operador</th>
@@ -137,6 +142,7 @@
                             <tr class="table-primary">
                                 <td scope="row">{{ $rat->num_ocorrencia }}</td>
                                 <td>{{ $rat->nome }}</td>
+                                <td>{{ $rat->cobrade }}</td>
                                 <td>{{ $rat->endereco }}</td>
                                 <td>{{ \Carbon\Carbon::parse($rat->dt_ocorrencia)->format('d/m/Y H:i:s') }}</td>
                                 <td>{{ $rat->operador_nome }}</td>
@@ -158,12 +164,10 @@
                     </tfoot>
                 </table>
 
-              
-                @if (count($rats) >0)
-                    {{$rats->links() }}
-                @endif
-                    
 
+                @if (count($rats) > 0)
+                    {{ $rats->links() }}
+                @endif
             @else
                 <p class="alert alert-danger">Sua pesquisa não encontrou nenhum registro</p>
             @endif
@@ -172,7 +176,7 @@
         <div class="row">
 
             <div class="col">
-                
+
             </div>
 
         </div>
@@ -191,19 +195,21 @@
 
     <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            
+
+           
             $('.js-example-basic-single').select2();
 
+            /* busca*/
             $("#search2").hide();
 
-            $("#btnSearch").click(function(){
+            $("#btnSearch").click(function() {
                 $("#search2").toggle('slow');
+                $('#btnSearch').css('display', 'none');
 
             });
-
-
 
             $('#btnPesquisa').click(function() {
 
@@ -222,5 +228,6 @@
 
         })
     </script>
+
 
 @endsection

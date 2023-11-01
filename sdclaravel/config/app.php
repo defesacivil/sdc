@@ -17,6 +17,8 @@ return [
 
     'version' => env('APP_VERSION', '2.1.1.0 - 17/08/2023'),
 
+    'public_path' => '/o',
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -182,6 +184,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         
 
     ],
@@ -242,6 +245,7 @@ return [
         'Html' => Collective\Html\HtmlFacde::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/ztreeview/css/zTreeStyle/zTreeStyle.css') }}" />
 <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('vendor/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
+{{-- <link href="{{ asset('vendor/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" /> --}}
 <style>
     .navbar {
         background-color: #FE9A2E;

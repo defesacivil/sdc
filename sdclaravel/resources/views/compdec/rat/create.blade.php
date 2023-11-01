@@ -23,7 +23,7 @@
     </div>
     <div class="container border p-2">
         <div class="">
-
+            
             <legend>RELATÓRIO DE ATIVIDADES DE DEFESA CIVIL</legend>
             <br>
             <div class="row p-2">
@@ -252,7 +252,13 @@
                         cache: false,
                         processData: false,
                         success: function(data) {
-                                window.location.href = data.view;
+                                if(data.error){
+                                    Object.values(data.error).forEach((x)=>{
+                                        toastr.error(x);    
+                                    });     
+                                }else {
+                                    window.location.href = data.view;
+                                } 
                             },
                             error: function(data) {
                                 console.log(data + "erro");

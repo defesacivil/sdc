@@ -27,7 +27,6 @@
 
                 {{ Form::open(['url' => '/vistoria/store', 'files' => true, 'id' => 'form_vistoria']) }}
                 {{ Form::token() }}
-                {{ Form::hidden('municipio_id', $municipio_id, ['required maxlenght=6']) }}
                 {{ Form::hidden('numero', $num_vistoria, ['required maxlenght=15']) }}
 
 
@@ -110,8 +109,11 @@
 
                             <div class="row p-2">
                                 <div class="col-md-8 p-2">
-                                    {{ Form::label('nom_municipio', 'Município') }} :
-                                    {{ Form::text('nom_municipio', '', ['class' => 'form form-control', 'id' => 'nom_municipio', 'maxlength' => '70', 'placeholder' => 'Nome do Município da Vistoria']) }}
+                                    {{ Form::label('municipio_id', 'Nome do Município') }}:
+                                    {{ Form::select('municipio_id', $optionMunicipio, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '']) }}
+                                    {{-- {{ Form::hidden('municipio_id', Auth()->user()->municipio_id, ['required maxlenght=6']) }} --}}
+                                    
+                                    {{-- {{ Form::text('nom_municipio', '', ['class' => 'form form-control', 'id' => 'nom_municipio', 'maxlength' => '70', 'placeholder' => 'Nome do Município da Vistoria']) }} --}}
                                 </div>
                                 <div class="col-md-4 p-2">
                                     {{ Form::label('cep', 'Cep') }} :
@@ -411,7 +413,7 @@
                                                 {{ Form::label('ck_ag_pot_aterr_bot_fora', 'Aterro/Bota Fora') }} :
                                                 &nbsp;&nbsp;&nbsp;
                                                 {{ Form::checkbox('ck_ag_pot_veg_inadeq', 1, '', ['id' => 'ck_ag_pot_veg_inadeq']) }}
-                                                {{ Form::label('ck_ag_pot_veg_inadeq', 'Vegeração Inadequada') }} :
+                                                {{ Form::label('ck_ag_pot_veg_inadeq', 'Vegetação Inadequada') }} :
 
                                                 <br>
                                                 <br>
@@ -495,7 +497,7 @@
                                     {{ Form::checkbox('ck_vuln_alta', 1, '', ['id' => 'ck_vuln_alta']) }}
                                     {{ Form::label('ck_vuln_alta', 'Alta') }}
                                 </div>
-                                <div class="col-md-9">Danos Estruturais esperados com excessivas deformacoes das estruturas, colapso parcial dos domicílios</div>
+                                <div class="col-md-9">Danos Estruturais esperados com excessivas deformações das estruturas, colapso parcial dos domicílios</div>
                             </div>
                             <div class="row align-items-center" style="background-color: #DF3A01">
                                 <div class="col-md-3 p-2">
@@ -524,7 +526,7 @@
                                     {{ Form::checkbox('ck_clas_risc_media', 1, '', ['id' => 'ck_clas_risc_media']) }}
                                     {{ Form::label('ck_clas_risc_media', 'Média') }}
                                 </div>
-                                <div class="col-md-9">Necessidade obras de restauração</div>
+                                <div class="col-md-9">Necessidade de obras de restauração</div>
                             </div>
                             <div class="row align-items-center" style="background-color: #FE642E">
                                 <div class="col-md-3 p-2">
@@ -561,6 +563,7 @@
         @section('code')
             <script type="text/javascript">
                 $(document).ready(function() {
+                    $('.js-example-basic-single').select2();
 
                     /* el_estr */
                     $('.img_ck_el_str_').filepond({
@@ -644,7 +647,13 @@
                             cache: false,
                             processData: false,
                             success: function(data) {
-                                window.location.href = data.view;
+                                id(data.errors) {
+                                    Object.values(data.error.forEach(element => {
+                                        toastr.error(element);
+                                    }));
+                                }else {
+                                    window.location.href = data.view;
+                                }
                             },
                             error: function(data) {
                                 console.log(data + "erro");

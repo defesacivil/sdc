@@ -156,7 +156,11 @@ class CedecUsuarioController extends \App\Http\Controllers\Controller
         return view('usuario.index');
     }
 
+    public function updateCPF($dat){
 
+        print $dat;
+
+    }
 
 
 }

@@ -182,13 +182,17 @@
             <script type="text/javascript">
                 $(document).ready(function() {
 
+
+                    /* delete */
                     $(".btnRemove").click(function(e) {
 
                         var formdata = new FormData();
 
                         var file = $(this).data('file');
+                        var id = '{{$rat->id}}';
 
-                        formdata.append('file', file)
+                        formdata.append('file', file);
+                        formdata.append('id', id);
                         formdata.append('_token', "{{ csrf_token() }}");
 
                         var url = '{{ url('rat/deleteImagem') }}';
@@ -203,7 +207,7 @@
                             processData: false,
                             success: function(data) {
                                 //console.log(data);
-                                //window.location.href = data.view;
+                                window.location.href = "{{url('rat/edit/'.$rat->id)}}";
                             },
                             error: function(data) {
                                 console.log(data + "erro");
@@ -253,17 +257,13 @@
                             cache: false,
                             processData: false,
                         }).done(function(data) {
-                            //window.location = '{{ url('rat') }}';
-                            window.location.href = data.view;
-                            //console.log(data);
-                            // if (data.success == false) {
-                            //     if (data.errors.username) {
-                            //         $('#username').append('<span class="text-danger">' + data.errors.username + '</span>');
-                            //     }
-                            //     if (data.errors.file) {
-                            //         $('#file').append('<span class="text-danger">' + data.errors.file + '</span>');
-                            //     }
-                            // }
+                            if(data.error){
+                                    Object.values(data.error).forEach((x)=>{
+                                        toastr.error(x);    
+                                    });     
+                                }else {
+                                    window.location.href = data.view;
+                                } 
                         });
 
                         e.preventDefault();

@@ -26,16 +26,19 @@
     @endif-->
 </head>
 
-<body class="body">
+<body class="body" style="background-color: rgb(215, 217, 219)">
 
-    <!-- nav -->
-    <div class="row">
-        @include('layouts/includes/nav')
-    </div>
+    {{-- Impressao do header no PDF --}}
+    @if(!isset($pdf))
+        <!-- nav -->
+        <div class="row">
+            @include('layouts/includes/nav')
+        </div>
 
-    {{-- header --}}
-    @yield('header')
+        {{-- header --}}
+        @yield('header')
 
+    @endif
 
     {{-- conteudo container corpo --}}
     <div class="min-vh-100">
@@ -43,9 +46,11 @@
 
     </div>
 
-
-    {{-- Rodape --}}
-    @include('layouts/includes/footer')
+    {{-- Impressao do header no PDF --}}
+    @if(!isset($pdf))
+        {{-- Rodape --}}
+        @include('layouts/includes/footer')
+    @endif
 
 
     

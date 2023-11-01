@@ -15,6 +15,8 @@
 <script src="{{ asset('vendor/filePond/filepond-plugin-file-validate-size.min.js') }}"></script>
 <script src="{{ asset('vendor/filePond/filepond-plugin-file-rename.js') }}"></script>
 <script type='modulo' src="{{ asset('vendor/filePond/locale/pt-br.js') }}"></script>
+{{-- <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" /> --}}
+<script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
 
 
 <script>
@@ -33,20 +35,20 @@
         "progressBar": true,
         "showDuration": "800",
     }
-    @if (session('message'))
+    @if (Session::has('message'))
         toastr.options = {
             "closeButton": true,
             "progressBar": true,
             "showDuration": "800",
         }
-        toastr.success("{{ session('message') }}"); <
-        div class = "alert alert-success" >
-        {{ session('message') }}
-            <
-            /div>
+        
+        toastr.success("{{ session('message') }}"); 
+            // <div class = "alert alert-success" >
+            //     {{ session('message') }}
+            // </div>
     @endif
     @if ($errors->any())
-
+                alert();
         @foreach ($errors->all() as $error)
             toastr.error("{{ $error }}")
         @endforeach

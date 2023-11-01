@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers\Compdec;
 
+use App\Exports\ExportVistoria;
 use App\Http\Controllers\Controller;
 use App\Models\Compdec\Interdicao;
 use App\Models\Compdec\Vistoria;
+use App\Models\Municipio\Municipio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VistoriaController extends Controller
 {
+
+    public static function dataVistoria() {
+    
+        $optionMunicipio = Municipio::all()->pluck('nome', 'id');
+        $tp_imovel = ['Casa' => 'Casa', 'Apartamento' => 'Apartamento', 'Predio' => 'Predio', 'Galpão' => 'Galpão', 'Lote' => 'Lote', 'Praça' => 'Praça'];
+
+        return [
+            'optionMunicipio' => $optionMunicipio,
+            //'optionCobrade' => $optionCobrade
+            'tp_imovel' => $tp_imovel,
+        ];
+
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +57,8 @@ class VistoriaController extends Controller
             'compdec/vistoria/index',
             [
                 'vistorias' => $vistorias,
+                'optionMunicipio' => self::dataVistoria()['optionMunicipio'],
+                'tp_imovel' => self::dataVistoria()['tp_imovel'],
             ]
         );
     }
@@ -107,12 +126,15 @@ class VistoriaController extends Controller
     public function create()
     {
 
+        $optionMunicipio = Municipio::all()->pluck('nome', 'id');
+
         $num_vistoria = Vistoria::where('municipio_id', Auth::user()->municipio_id)->count();
         return view(
             'compdec/vistoria/create',
             [
                 'num_vistoria' => ($num_vistoria + 1),
                 'municipio_id' => Auth::user()->municipio_id,
+                'optionMunicipio' => $optionMunicipio,
             ]
         );
     }
@@ -126,7 +148,7 @@ class VistoriaController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate(
+       $request->validate(
             [
                 "dt_vistoria"   => "required|date",
                 "tp_ocorrencia" => "required|max:50",
@@ -182,6 +204,7 @@ class VistoriaController extends Controller
             ]
         );
 
+
         $vistoria = new Vistoria;
 
         $vistoria->municipio_id  = $request->municipio_id;
@@ -204,6 +227,7 @@ class VistoriaController extends Controller
         $vistoria->abast_agua   = $request->abast_agua;
         $vistoria->sist_drenag  = $request->sist_drenag;
         $vistoria->nr_moradias  = $request->nr_moradias;
+        $vistoria->operador_id  = auth()->user()->id;
 
         $vistoria->ck_esgo_sant_canalizado         = isset($request->ck_esgo_sant_canalizado)         ? $request->ck_esgo_sant_canalizado        : 0;
         $vistoria->ck_esgo_sant_fossa_similar      = isset($request->ck_esgo_sant_fossa_similar)      ? $request->ck_esgo_sant_fossa_similar     : 0;
@@ -273,7 +297,7 @@ class VistoriaController extends Controller
         $files_el_cons = $request->img_ck_el_constr;
         if (isset($files_el_cons)) {
             foreach ($files_el_cons as $key => $files_el_con) {
-                $fileName = 'el_cons_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_con->getClientOriginalExtension();
+                $fileName = 'el_constr_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_con->getClientOriginalExtension();
                 $files_el_con->storeAs('file_vistoria/' . $vistoria->id . '/', $fileName, 'public');
             }
         }
@@ -297,7 +321,7 @@ class VistoriaController extends Controller
         }
 
 
-        if ($vistoria->ck_vuln_muito_alta  == 1 || $vistoria->ck_clas_risc_muito_alta == 1) {
+        if ($vistoria->ck_clas_risc_muito_alta == 1) {
 
             // gerar interdica
             $num_interdicao = Interdicao::where('municipio_id', Auth::user()->municipio_id)->count();
@@ -339,11 +363,18 @@ class VistoriaController extends Controller
     public function show(Vistoria $vistoria, Request $request)
     {
 
-        $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
 
+        //dd($vistoria->municipio);
+        if( $vistoria->ck_clas_risc_muito_alta == 1 ) {
+            $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
+        }else {
+            $interdicao = false;
+        }
 
+        //dd($interdicao);
+
+        // Imagens elementos estruturais
         $img_el_estrs = [];
-
         $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
         foreach ($scan as $file) {
             if (substr(basename($file), 0, 8) == 'el_estr_') {
@@ -351,14 +382,42 @@ class VistoriaController extends Controller
             }
         }
 
-        //$imagens = Storage::allFiles(directory);
+        // Imagens elementos Construtivos
+        $img_el_constrs = [];
+        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        foreach ($scan as $file) {
+            if (substr(basename($file), 0, 8) == 'el_constr_') {
+                $img_el_constrs[] = $file;
+            }
+        }
+        // Imagens agentes potencializadoress
+        $img_ag_potens = [];
+        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        foreach ($scan as $file) {
+            if (substr(basename($file), 0, 8) == 'ag_pote_') {
+                $img_ag_potens[] = $file;
+            }
+        }
 
+        // Imagens processos geotecnicos
+        $img_proc_geos = [];
+        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        foreach ($scan as $file) {
+            if (substr(basename($file), 0, 8) == 'proc_ge_') {
+                $img_proc_geos[] = $file;
+            }
+        }
+
+        
         return view(
             'compdec/vistoria/show',
             [
                 'vistoria' => $vistoria,
                 'interdicao' => $interdicao,
                 'img_el_estrs' => $img_el_estrs,
+                'img_el_constrs' => $img_el_constrs,
+                'img_ag_potens' => $img_ag_potens,
+                'img_proc_geos' => $img_proc_geos,
             ]
         );
     }
@@ -531,7 +590,7 @@ class VistoriaController extends Controller
 
         $existeLaudo = Interdicao::where('ids_vistoria', $request->id)->count();
 
-        dd($existeLaudo, $request);
+        //dd($existeLaudo, $request);
 
         if ($vistoria->ck_vuln_muito_alta  == 1 || $vistoria->ck_clas_risc_muito_alta == 1 && ($existeLaudo == 0)) {
 
@@ -565,5 +624,110 @@ class VistoriaController extends Controller
     public function destroy(Vistoria $vistoria)
     {
         //
+    }
+
+
+    public function search(Request $request)
+    {
+
+        $filter = $request;
+        $filter_all = " com_vistorias.id > 0 ";
+
+        /**
+         * 
+         *  tratar dos dados sql
+         * 
+         */
+
+        //dd($filter->ano);
+        if ($filter->ano) {
+            $filter_all .= ' and year(com_vistorias.dt_vistoria) = "' . $filter->ano . '" ';
+        }
+
+        if ($filter->numero) {
+            $filter_all .= ' and com_vistorias.numero = "' . $filter->numero . '" ';
+        }
+
+        // municipio
+        if ($filter->municipio_id) {
+            $filter_all .= ' and com_vistorias.municipio_id = "' . $filter->municipio_id . '" ';
+        }
+
+        // data inicial
+        if ($filter->data_inicio and is_null($filter->data_final)) {
+            $filter_all .= ' and com_vistorias.dt_vistoria >= cast("' . $filter->data_inicio . '" as date) ';
+        }
+
+        // data final
+        if ($filter->data_final and is_null($filter->data_inicio)) {
+            $filter_all .= ' and com_vistorias.dt_vistoria <= "' . $filter->data_final . '" ';
+        }
+
+        // data inicial e final
+        if ($filter->data_inicio and $filter->data_final) {
+            $filter_all .= ' and cast(com_vistorias.dt_vistoria as date) between "' . $filter->data_inicio . '" and "' . $filter->data_final . '" ';
+        }
+
+        // Tipo Imóvel
+        if ($filter->tp_imovel) {
+            $filter_all .= ' and com_vistorias.tp_imovel like "%' . $filter->tp_imovel . '%" ';
+        }
+
+        // endereco
+        if ($filter->endereco) {
+            $filter_all .= ' and com_vistorias.endereco like "%' . $filter->endereco . '%" ';
+        }
+
+        // // historico
+        // if ($filter->historico) {
+        //     $filter_all .= ' and com_vistorias.acoes like "%' . $filter->historico . '%" ';
+        // }
+
+
+        // Vistorias com Interdição 
+        // if ($filter->interdicao) {
+        //     $filter_all .= ' and com_rat.alvo_id = "' . $filter->alvo_id . '" ';
+        // }
+
+       
+        /* pesquisa sem parametro retorna sem dados**/
+        if ($filter_all == ' com_vistorias.id > "0" ') {
+            $rats = array();
+        } else {
+
+
+            $vistorias = DB::table('com_vistorias')
+                ->whereRaw(DB::raw($filter_all))
+                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
+                ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
+                ->addSelect('com_vistorias.*')
+                ->addSelect('cedec_municipio.nome as municipio')
+                ->addSelect('users.name as operador_nome')
+                ->orderBy('com_vistorias.dt_vistoria', 'asc')
+                ->paginate(10);
+            //->get();
+            //->toSql();
+        }
+
+        //$vistorias
+        /* municipios */
+
+        //dd($vistorias);
+        
+
+        return view(
+            'compdec/vistoria/index',
+            [
+                'vistorias' => $vistorias,
+                'optionMunicipio' => self::dataVistoria()['optionMunicipio'],
+                //'optionCobrade' => self::dataRat()['optionCobrade'],
+                'tp_imovel' => self::dataVistoria()['tp_imovel'],
+            ]
+        );
+    }
+
+    /* Todos Relatorios de Vistorias */
+    public function exportVistoria(Request $request){
+        return Excel::download(new ExportVistoria, 'Vistoria_registros'.date('d_m_Y_H.i.s').'.xlsx');
     }
 }
