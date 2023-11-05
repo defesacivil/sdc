@@ -47,10 +47,12 @@
             //     {{ session('message') }}
             // </div>
     @endif
-    @if ($errors->any())
-                alert();
-        @foreach ($errors->all() as $error)
-            toastr.error("{{ $error }}")
+
+    @if(count($errors) > 0)
+        @foreach($errors->all() as $error)
+            toastr.error("{{ $error }}");
         @endforeach
     @endif
+
+    
 </script>

@@ -22,6 +22,28 @@
                 <div class="row">
 
                     <!-- menu opções - novo | pesquisa |voltar-->
+
+                    Prezado Coordendor,
+
+                    Para continuar a usar o sistema é necessário fazer as atualizações necessárias abaixo
+                    <div class="table-responsive table-bordered">
+                        <table class="table table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"><img=''></th>
+                                    <th class="text-center">X</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="">
+                                    <th class="text-center">Atualização DocumentosX</th>
+                                    <th class="text-center">A equipe do compdec não tem um funcionário com a função Coordenador</th>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
                     <ul class="nav">
                         <!-- ####### Acesso COMPDEC ###### -->
                         @can('compdec')
@@ -192,8 +214,8 @@
                                     <td>
 
                                         @if($pedido->status == 0)
-                                            <a href="{{ url('mah/pedido/edit/' . $pedido->id) }}"><img src='{{ asset('imagem/icon/editar.png') }}'></a>
-                                            <a href="#"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
+                                            <a href="{{ route('pedido/edit', [$pedido->id]) }}"><img src='{{ asset('imagem/icon/editar.png') }}'></a>
+                                            <a href="{{route('pedido/delete', [$pedido->id])}}" onclick="return confirm('Deseja Excluir esse Pedido Nº {{$pedido->numero}}/{{substr($pedido->data_entrada_sistema, 0, 4)}} ?')"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
                                         @elseif($pedido->status == 1)
 
                                         @elseif($pedido->status == 2)
@@ -207,7 +229,7 @@
                                         @elseif($pedido->status == 9)
 
                                         @endif
-                                        <a href="#"><img src='{{ asset('imagem/icon/view.png') }}'></a>
+                                        <a href="{{route('pedido/show', [$pedido->id])}}"><img src='{{ asset('imagem/icon/view.png') }}'></a>
                                     </td>
 
                                 </tr>

@@ -524,17 +524,17 @@ Route::group(['middleware' => 'auth'], function () {
     # mah CREATE
     Route::get('mah/pedido/create', 'App\Http\Controllers\Ajuda\AjudaPedidoController@create');
     # mah EDIT
-    Route::get('mah/pedido/edit/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@edit')->name('pedido.edit');
+    Route::get('mah/pedido/edit/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@edit')->name('pedido/edit');
     # mah UPDATE
     Route::post('mah/pedido/update/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@update');
     # mah VIEW
-    Route::get('mah/pedido/show/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@show');
+    Route::get('mah/pedido/show/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@show')->name('pedido/show');
     # mah PRINT
     Route::get('mah/pedido/print/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@print');
     # mah STORE
     Route::post('mah/pedido/store', 'App\Http\Controllers\Ajuda\AjudaPedidoController@store');
     # mah DESTROY
-    Route::get('mah/pedido/destroy/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@destroy');
+    Route::get('mah/pedido/destroy/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@destroy')->name('pedido/delete');
 
     Route::post('mah/pedido/upload', 'App\Http\Controllers\Ajuda\AjudaPedidoController@upload');
 

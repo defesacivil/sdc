@@ -5,6 +5,7 @@ namespace App\Models\Compdec;
 
 use App\Models\Municipio\Municipio;
 use App\Models\Compdec\CompdecUploadPlano;
+use App\Models\Municipio\Regiao;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,7 +38,7 @@ class Compdec extends Model
      */
     public function regiao()
     {
-        return $this->hasOne(ComRegiao::class, 'regiao_id', 'id');
+        return $this->hasOne(ComRegiao::class, 'id', 'regiao_id');
     }
 
     /**

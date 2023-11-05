@@ -46,7 +46,7 @@
                                     <h5>Nome do Município : </h5>
                                 </div>
                                 <div class="col border p-3">
-                                    {{ $vistoria->mon_municipio }}
+                                    {{ $vistoria->municipio->nome }}
                                 </div>
                             </div>
 
