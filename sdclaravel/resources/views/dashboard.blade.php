@@ -1,13 +1,21 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+@extends('layouts.pagina_master')
 
-        </h2>
-    </x-slot>
+{{-- header --}}
+@section('header')
 
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+        </ol>
+    </nav>
 
-    <div class="container-fluid d-flex border">
-        <div class="row align-items-center flex-fill">
+@endsection
+
+@section('content')
+
+    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
+        <div class="row flex-fill">
 
             @can('cedec')
                 {{-- AJUDA HUMANITÁRIA --}}
@@ -96,10 +104,10 @@
                     </div>
                 @endcan
 
-                
+
                 {{-- CONFIGURAÇÕES --}}
                 <div class="col-6 col-md-4 col-lg-3 text-center">
-                    
+
                     <figure class="figure">
                         <a href='config'><img class="figure-img img-fluid rounded"
                                 src='{{ asset('/imagem/icon/config.png') }}' alt=""></a>
@@ -149,7 +157,6 @@
 
             {{-- COMPDEC EDIT --}}
             @can('compdec')
-
                 <div class="col-6 col-md-4 col-lg-3 text-center">
                     <div class="col bg-gray-100 sm:rounded-lg">
                         <figure class="figure">
@@ -210,4 +217,20 @@
 
 
 
-</x-app-layout>
+@stop
+
+@section('css')
+@stop
+
+@section('code')
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+
+        })
+    </script>
+
+@endsection

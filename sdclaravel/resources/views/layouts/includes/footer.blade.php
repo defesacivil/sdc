@@ -1,6 +1,6 @@
 <div class="row justify-content-center print" id="footer">
     <div class="col"></div>
-    <div class="col-md-auto">
+    <div class="col-md-auto p-3">
         <div class="float-right d-none d-sm-block">
             <b>Version</b> 3.2.0
         </div>

@@ -14,10 +14,12 @@
 @endsection
 
 @section('content')
+
+<div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
     <div class="row flex-fill">
 
         <div class="col-md-12">
-            <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('dashboard') }}>Voltar</a></p>
+            <p class="p-4 text-center"><a class='btn btn-success btn-sm' href={{ url('dashboard') }}>Voltar</a></p>
             <div class="row">
                 <div class="col-6 col-md-2 col-lg-3">
                     <div class="col bg-gray-100 sm:rounded-lg text-center">
@@ -43,5 +45,24 @@
         </div>
 
     </div>
+</div>
 
 
+
+@stop
+
+@section('css')
+@stop
+
+@section('code')
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+
+        })
+    </script>
+
+@endsection

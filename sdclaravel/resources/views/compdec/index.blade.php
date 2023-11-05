@@ -26,8 +26,7 @@
             @endforeach
         </ul>
     @endif
-    <div class="container">
-    <div class="row flex-fill">
+    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
 
         <div class="col-md-12">
 
@@ -36,7 +35,7 @@
                 {{ Form::open(['url' => 'compdec']) }}
                 {{ Form::token() }}
 
-                {{ Form::label('txtBusca', 'Busca Compdec') }} :
+                {{ Form::label('txtBusca', 'Buscar Município Compdec') }} :
                 {{ Form::text('txtBusca', '', ['class' => 'form form-control form-control-sm']) }}
                 <br>
 
@@ -47,13 +46,13 @@
                 <br>
 
                 @if (isset($compdecs))
-                    <table class='table table-bordered table-sm'>
+                    <table class='table table-bordered table-sm table-striped'>
                         <tr>
-                            <th>Cod</th>
-                            <th>Municipio</th>
-                            <th>Situação</th>
-                            <th>Ultima Atualização</th>
-                            <th>Opções</th>
+                            <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Cod<br><br></th>
+                            <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Municipio</th>
+                            <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Situação</th>
+                            <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Ultima Atualização</th>
+                            <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Opções</th>
                         </tr>
                         @foreach ($compdecs as $compdec)
                             <tr>
@@ -63,7 +62,7 @@
 
                                 <td>{{ \Carbon\Carbon::parse($compdec->ultimo_atualiza)->format('d/m/Y H:i:s') }}</td>
                                 <td>
-                                    <a href='{{ url('compdec/edit', ['id' => $compdec->id]) }}'><img
+                                    <a href='{{ url('compdec/edit', ['id' => $compdec->id]) }}' title="Clique aqui para editar o Registro !"><img
                                             src='{{ asset('/imagem/icon/editar.png') }}' alt=""></a>
                                 </td>
                             </tr>
@@ -73,8 +72,8 @@
             @endcan
 
         </div>
+
     </div>
-    <div class="container">
 
 @stop
 
@@ -84,10 +83,10 @@
 
 @section('js')
 
-<script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function() {
 
         })
     </script>
-    
+
 @stop

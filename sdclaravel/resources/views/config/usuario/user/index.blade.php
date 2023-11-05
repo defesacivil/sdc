@@ -1,114 +1,121 @@
 @extends('layouts.pagina_master')
 
-@section('title', 'SDC - Sistema de Defesa Civil')
+{{-- header --}}
+@section('header')
 
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/config') }}">Configurações</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/config/usuario') }}">Usuários</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Cadastro Usuários</li>
+        </ol>
+    </nav>
 
-@section('content_header')
+@endsection
 
-
-@stop
-
-<!-- conteudo -->
 @section('content')
 
-    <div class="row">
-        <div class="col text-center p-3">
-            <a href='{{ url('config/usuario') }}' class="btn btn-success">Voltar</a>
+    <div class="container border p-3 minmin-vh-100" style="background-color:#e9ecef;">
+
+        <div class="row">
+            <div class="col text-center p-3">
+                <a href='{{ url('config/usuario') }}' class="btn btn-success">Voltar</a>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-9">
-            <legend>Cadastro Usuario</legend>
+        <div class="row">
+            <div class="col">
+                <legend>Cadastro Usuario</legend>
 
-            <table class="table table-bordered table-sm data-table">
-                <tr>
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>CPF</th>
-                    <th>Situacao</th>
-                    <th>Tipo</th>
-                    <th>Perfis</th>
-                    <th>Ações</th>
-                </tr>
-                @foreach ($users as $user)
+                <table class="table table-bordered table-sm data-table table-striped">
                     <tr>
-                        <td scope="row">{{ $user->id }}</td>
-                        <td scope="row">{{ $user->name }}</td>
-                        <td scope="row">{{ $user->email }}</td>
-                        <td scope="row">{{ $user->cpf }}</td>
-                        <td scope="row">{{ $user->ativo == 0 ? 'Inativo' : 'Ativo' }}</td>
-                        <td scope="row">{{ $user->tipo }}</td>
-                        <td scope="row">
-                            @if (count($user->roles) > 0)
-                                @foreach ($user->roles as $role)
-                                    <a href='{{ url('role/' . $role->id) }}' class='badge badge-success' title='Clique para ver as permissões deste Perfil !'>{{ $role->name }}</a>
-                                @endforeach
-                            @else
-                                <span class="badge badge-danger">No role</span>
-                            @endif
-                        </td>
-
-                        <td scope="row">
-                            <a href='{{ url('role_add_user/' . $user->id) }}'><img
-                                    src='{{ asset('imagem/icon/editar.png') }}'></a>
-                            <a onclick="return confirm('Deseja realmente apagar esse Registro !')"
-                                href='{{ url('config/permissao/delete/' . $user->id) }}'><img
-                                    src='{{ asset('imagem/icon/delete.png') }}'></a>
-                            <a href='#'><img src='{{ asset('imagem/icon/view.png') }}'></a>
-                        </td>
-
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">#<br><br></th>
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Nome</th>
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Email</th>
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">CPF</th>
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Situacao</th>
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Tipo</th>
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Perfis</th>
+                        <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Ações</th>
                     </tr>
-                @endforeach
-            </table>
-        </div>
-        <div class="col-3">
-            <legend>Permissões</legend>
+                    @foreach ($users as $user)
+                        <tr>
+                            <td scope="row">{{ $user->id }}</td>
+                            <td scope="row">{{ $user->name }}</td>
+                            <td scope="row">{{ $user->email }}</td>
+                            <td scope="row">{{ $user->cpf }}</td>
+                            <td scope="row">{{ $user->ativo == 0 ? 'Inativo' : 'Ativo' }}</td>
+                            <td scope="row">{{ $user->tipo }}</td>
+                            <td scope="row">
+                                @if (count($user->roles) > 0)
+                                    @foreach ($user->roles as $role)
+                                        <a href='{{ url('role/' . $role->id) }}' class='badge badge-success' title='Clique para ver as permissões deste Perfil !'>{{ $role->name }}</a>
+                                    @endforeach
+                                @else
+                                    <span class="badge badge-danger">No role</span>
+                                @endif
+                            </td>
 
-            <table class="table table-bordered table-sm data-table">
-                <tr>
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Permissos</th>
-                    <th>Ações</th>
-                </tr>
-                @foreach ($roles as $role)
-                    <tr>
-                        <td scope="row">{{ $role->id }}</td>
-                        <td scope="row">{{ $role->name }}</td>
-                        <td scope="row">
-                            @if (count($role->permissions) > 0)
-                                @foreach ($role->permissions as $permission)
-                                    <span class='badge badge-success'>{{ $permission->name }}</span>
-                                @endforeach
-                            @else
-                                <span class="badge badge-danger">Sem Permissão</span>
-                            @endif
-                        </td>
+                            <td scope="row">
+                                <a href='{{ url('role_add_user/' . $user->id) }}'><img
+                                        src='{{ asset('imagem/icon/editar.png') }}'></a>
+                                <a onclick="return confirm('Deseja realmente apagar esse Registro !')"
+                                    href='{{ url('config/permissao/delete/' . $user->id) }}'><img
+                                        src='{{ asset('imagem/icon/delete.png') }}'></a>
+                                <a href='#'><img src='{{ asset('imagem/icon/view.png') }}'></a>
+                            </td>
 
-                        <td scope="row">
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="7">
+                                <!-- PERMISSOES INICIO-->
 
-                            <a href='{{ url('permission/role/create/' . $role->id."/".$user->id) }}'><img src='{{ asset('imagem/icon/editar.png') }}'></a>
+                                <legend>Permissões</legend>
 
-                            <a href='{{ url('permission_role/delete/' . $user->id) }}' onclick="return confirm('Deseja realmente apagar esse Registro !')"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
+                                <table class="table table-bordered table-sm data-table">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nome</th>
+                                        <th>Permissos</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                    @foreach ($roles as $role)
+                                        <tr>
+                                            <td scope="row">{{ $role->id }}</td>
+                                            <td scope="row">{{ $role->name }}</td>
+                                            <td scope="row">
+                                                @if (count($role->permissions) > 0)
+                                                    @foreach ($role->permissions as $permission)
+                                                        <span class='badge badge-success'>{{ $permission->name }}</span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="badge badge-danger">Sem Permissão</span>
+                                                @endif
+                                            </td>
 
-                            <a href='#'><img src='{{ asset('imagem/icon/view.png') }}'></a>
+                                            <td scope="row">
 
-                        </td>
+                                                <a href='{{ url('permission/role/create/' . $role->id . '/' . $user->id) }}'><img src='{{ asset('imagem/icon/editar.png') }}'></a>
 
-                    </tr>
-                @endforeach
-            </table>
+                                                <a href='{{ url('permission_role/delete/' . $user->id) }}' onclick="return confirm('Deseja realmente apagar esse Registro !')"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
 
+                                                <a href='#'><img src='{{ asset('imagem/icon/view.png') }}'></a>
 
-        </div>
-    </div>
+                                            </td>
 
-
-    <div class="row">
-        <div class="col">
-
+                                        </tr>
+                                    @endforeach
+                                </table>
+                                <!-- PERMISSOES FIM-->
+                                <hr class="pt-3">
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
         </div>
     </div>
 

@@ -28,58 +28,60 @@ index processos - editar / visualizar / mensagem / enviar */
 ?>
 
 @section('content')
-    <div class="row flex-fill">
+    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
+        <div class="row flex-fill">
 
-        <div class="col-md-12">
-            <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('ajuda') }}>Voltar</a></p>
+            <div class="col-md-12">
+                <p class="p-4 text-center"><a class='btn btn-success btn-sm' href={{ url('ajuda') }}>Voltar</a></p>
 
 
-            <div class="row text-center">
+                <div class="row text-center">
 
-                {{-- MODULO PMDA CEDEC --}}
-                @can('cedec')
-                    <div class="col">
-                        <div class="col bg-gray-100 sm:rounded-lg">
-                            <figure class="figure">
-                                <a href='{{ url('pmda') }}'>
-                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pmda.png') }}'
-                                        alt=""></a>
-                                <figcaption class="figure-caption text-center">PMDA</figcaption>
+                    {{-- MODULO PMDA CEDEC --}}
+                    @can('cedec')
+                        <div class="col">
+                            <div class="col bg-gray-100 sm:rounded-lg">
+                                <figure class="figure">
+                                    <a href='{{ url('pmda') }}'>
+                                        <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pmda.png') }}'
+                                            alt=""></a>
+                                    <figcaption class="figure-caption text-center">PMDA</figcaption>
+                            </div>
                         </div>
-                    </div>
-                @endcan
+                    @endcan
 
-                {{-- MODULO CONTROLE DE ESTOQUE --}}
-                @can('cedec')
-                    <div class="col">
-                        <div class="col bg-gray-100 sm:rounded-lg">
-                            <figure class="figure">
-                                <a href='#'>
-                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/conformidade.png') }}'
-                                        alt=""></a>
-                                <figcaption class="figure-caption text-center">COMFORMIDADE</figcaption>
+                    {{-- MODULO CONTROLE DE ESTOQUE --}}
+                    @can('cedec')
+                        <div class="col">
+                            <div class="col bg-gray-100 sm:rounded-lg">
+                                <figure class="figure">
+                                    <a href='#'>
+                                        <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/conformidade.png') }}'
+                                            alt=""></a>
+                                    <figcaption class="figure-caption text-center">COMFORMIDADE</figcaption>
+                            </div>
                         </div>
-                    </div>
-                @endcan
+                    @endcan
+                </div>
+
             </div>
-
         </div>
     </div>
 
-    @stop
+@stop
 
-    @section('css')
-    @stop
+@section('css')
+@stop
 
-    @section('code')
-
-
-        <script type="text/javascript">
-            $(document).ready(function() {
+@section('code')
 
 
+    <script type="text/javascript">
+        $(document).ready(function() {
 
-            })
-        </script>
 
-    @endsection
+
+        })
+    </script>
+
+@endsection

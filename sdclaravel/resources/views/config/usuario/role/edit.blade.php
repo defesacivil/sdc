@@ -1,10 +1,19 @@
 @extends('layouts.pagina_master')
 
-@section('title', 'SDC - Sistema de Defesa Civil')
+{{-- header --}}
+@section('header')
 
-@section('content_header')
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/config') }}">Configurações</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/config') }}">Usuários</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Cadastro Perfil</li>
+        </ol>
+    </nav>
 
-@stop
+@endsection
 
 <!-- conteudo -->
 @section('content')

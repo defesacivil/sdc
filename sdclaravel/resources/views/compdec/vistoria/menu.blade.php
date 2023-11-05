@@ -14,7 +14,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div style="background-color:#e9ecef;" class="container p-3">
         <div class="col-md-12 text-center">
             <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('/dashboard') }}>Voltar</a>
                 {{-- <a class='btn btn-info btn-sm' href={{ url('compdec/vistoria/create') }} title="Criar novo Registro">+ Novo</a> --}}

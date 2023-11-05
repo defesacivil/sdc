@@ -31,7 +31,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
         <div class="row flex-fill">
 
             <div class="col-md-12">
@@ -58,14 +58,14 @@
                     <br>
 
                     @if (isset($pedidos))
-                        <table class='table table-bordered table-sm'>
+                        <table class='table table-bordered table-sm table-striped'>
                             <tr>
-                                <th>Num</th>
-                                <th>Data Entrada</th>
-                                <th>Municipio</th>
-                                <th>Cobrade</th>
-                                <th>Status</th>
-                                <th>Opções</th>
+                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Num<br><br></th>
+                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Data Entrada</th>
+                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Municipio</th>
+                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Cobrade</th>
+                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Status</th>
+                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Opções</th>
                             </tr>
                             @foreach ($pedidos as $pedido)
                                 <tr>

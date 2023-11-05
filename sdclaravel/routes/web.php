@@ -34,6 +34,7 @@ Route::get('/', function () {
 });
 
 
+//Auth::user()->tokens();
 
 #################################   CONFIG   ##################################
 
@@ -41,6 +42,7 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
 
+    
     Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
 
     # configurações 

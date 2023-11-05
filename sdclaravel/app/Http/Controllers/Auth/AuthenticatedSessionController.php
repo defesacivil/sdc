@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
 
        // return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
 
-        $request->authenticate();
+        dd($request->authenticate());
         
         $usuario = Auth::user();
         

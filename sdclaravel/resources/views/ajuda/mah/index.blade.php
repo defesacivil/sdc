@@ -14,15 +14,18 @@
 @endsection
 
 @section('content')
-    <div class="container">
-        <div class="row flex-fill">
-
+<div class="container border p-3 min-vh-100"  style="background-color:#e9ecef;">
+    <div class="row flex-fill">
+        
             <div class="col-md-12">
-
+                
                 <div class="row">
-
+                    
                     <!-- menu opções - novo | pesquisa |voltar-->
                     <ul class="nav">
+                        <li class="nav-item mr-1">
+                            <a class="btn btn-success btn-sm" href="{{ url('ajuda') }}">Voltar</a>
+                        </li>
                         <!-- ####### Acesso COMPDEC ###### -->
                         @can('compdec')
                             <li class="nav-item mr-1">
@@ -54,9 +57,6 @@
                                     title="Configurações do Módulo">Configurações do Módulo</a>
                             </li>
                         @endcan
-                        <li class="nav-item mr-1">
-                            <a class="btn btn-success btn-sm" href="{{ url('ajuda') }}">Voltar</a>
-                        </li>
                     </ul>
 
                 </div>

@@ -13,22 +13,21 @@
 @endsection
 
 @section('content')
-    <div class="container min-vh-100">
+    <div style="background-color:#e9ecef;" class="container min-vh-100">
         <div class="row">
-
-            <div class="col-md-12 p-2">
+            <div class="col-md-12 border p-3">
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('/dashboard') }}>Voltar</a>
                     <a class='btn btn-info btn-sm' href={{ url('rat/create') }} title="Criar novo Registro">+ Novo</a>
                     <a class='btn btn-primary btn-sm' id='btnSearch' title="Criar novo Registro">Pesquisa</a>
                     <span>&nbsp;&nbsp;&nbsp;</span>
                     <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }}  title="Criar novo Registro">Exportar Excel</a>
                 </p>
+            </div>
+        </div>
 
                 <legend class="p-4">Rat - Relatório de Atividades de Defesa Civil</legend>
 
 
-            </div>
-        </div>
         {{ Form::open(['url' => 'rat/search']) }}
 
         <div class="row" id="search2">
@@ -116,14 +115,15 @@
 
 
         <br>
-        Total Registros : {{ $rats->total() }}
-        <div class="table table-responsive table-sm border p-3">
+        <p class="p-2">Registros : {{ $rats->total() }}</p>
+
+        <div class="table table-responsive border p-3">
             <h5 class="text-center bolder">Registro das Ocorrências</h5>
             @if (count($rats) > 0)
                 <table class="table table-striped
+                table-bordered
+                table-sm
                 table-hover	
-                table-borderless
-                table-primary
                 align-middle">
                     <thead class="table-light">
                         <caption></caption>
@@ -139,7 +139,7 @@
                     </thead>
                     <tbody class="table-group-divider">
                         @foreach ($rats as $key => $rat)
-                            <tr class="table-primary">
+                            <tr class="">
                                 <td scope="row">{{ $rat->num_ocorrencia }}</td>
                                 <td>{{ $rat->nome }}</td>
                                 <td>{{ $rat->cobrade }}</td>
@@ -174,14 +174,9 @@
         </div>
         <br>
         <div class="row">
-
             <div class="col">
-
             </div>
-
         </div>
-
-
     </div>
     </div>
 

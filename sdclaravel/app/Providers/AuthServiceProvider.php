@@ -38,7 +38,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(Request $request)
     {
         if ($autor = PersonalAccessToken::findToken($request->token)) {
-            $usuario = auth()->loginUsingId($autor->tokenable_id);          
+            $usuario = auth()->loginUsingId($autor->tokenable_id);  
+            auth()->user()->tokens()->delete();        
 
             # usuario ativo
         if(Auth::check() && $usuario['ativo'] == 1){

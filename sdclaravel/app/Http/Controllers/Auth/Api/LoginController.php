@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -24,8 +25,8 @@ class LoginController extends Controller
         }else {
             #localhost insomnia
             $credentials = $request;
-        }     
-
+        }   
+        
         $tipo = null;
 
         # REDEC
@@ -97,22 +98,13 @@ class LoginController extends Controller
                 // ]
                 return response()->json([
                     'result' => 'Nao Autorizado',
-
-
-                    //abort(401, 'Credendiais Inválidas')
                 ]);
             } else {
 
-                //dd($token = auth()->user()->token());
-                //dd(auth()->getAccessToken());
                 $token = auth()->user()->createToken(
                         'teste',
                         ['*'],
                         Carbon::now()->addHours(24));
-
-                //$token = PersonalAccessToken::findToken($token);
-
-                //dd($token);
             }
 
             return response()->json([

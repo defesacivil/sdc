@@ -64,9 +64,7 @@ class RatController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-
     {
-
         $municipio_id = "";
         if (isset(session('user')['municipio_id'])) {
             $municipio_id = session('user')['municipio_id'];

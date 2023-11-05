@@ -14,31 +14,38 @@
 @endsection
 
 @section('content')
-    <div class="row flex-fill">
 
-        <div class="col-md-12">
-            <p class="pt-4"><a class='btn btn-success btn-sm' href='dashboard'>Voltar</a></p>
+    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
+        <div class="row flex-fill">
 
-            <legend>Configurações</legend>
-            <br>
-            <div class="row">
-                <div class="col text-center">
-                    <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/users.png') }}" title="Usuários"></a>
+            <div class="col-md-12">
+                <p class="p-4 text-center"><a class='btn btn-success btn-sm' href='dashboard'>Voltar</a></p>
+
+                <p class="text-center"><legend>Configurações</legend></p>
+                <br>
+                <div class="row">
+                    <div class="col text-center">
+                        <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/users.png') }}" title="Usuários"></a><br>
+                        Usuários
+                    </div>
+                    <div class="col text-center">
+                        <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a><br>
+                        Configurações
+                    </div>
+                    <div class="col text-center">
+                        <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
+                        <br>
+                        Relatórios e Log's
+                    </div>
                 </div>
-                <div class="col text-center">
-                    <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a>
-                </div>
-                <div class="col text-center">
-                    <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
-                </div>
+                <br>
+                <br>
+
+
+
             </div>
-            <br>
-            <br>
-
-
 
         </div>
-
     </div>
 @stop
 

@@ -1,10 +1,21 @@
 @extends('layouts.pagina_master')
 
-@section('title', 'SDC - Sistema de Defesa Civil')
+{{-- header --}}
+@section('header')
 
-@section('content_header')
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/config') }}">Configurações</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/config/usuarios') }}">Usuários</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/usuario') }}">Cadastro Usuários</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Adicionar Permissão ao Usuário</li>
+        </ol>
+    </nav>
 
-@stop
+@endsection
+
 
 <!-- conteudo -->
 @section('content')
@@ -22,71 +33,78 @@
             @endforeach
         </ul>
     @endif
-    <div class="col-md-12">
+
+
+    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
         <div class="row">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $user->name }}</h5>
-                    <p class="card-text">{{ $user->email }}</p>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nome: {{ $user->name }}
+                            <p class="card-text">E-mail: {{ $user->email }}</p>
+                        </h5>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class='col-md-12'>
-        {{ Form::open(['url' => 'role_add_user/store']) }}
-        {{ Form::token() }}
-        <div class='row'>
-            <div class="col">
-                {{ Form::label('Situacao', '') }}:
-                {{ Form::select('ativo', ['1'=>'Ativo', '0'=>'Inativo'], $user->ativo, ['id'=>'ativo', 'placeholder'=> 'Situação do Usuario', 'class' => 'form form-control']) }}
-            </div>
-            <div class='col'>
-                {{ Form::label('Perfil', '') }}:
-                {{ Form::hidden('user_id', $user->id ) }}
-                {{ Form::select('role_id', $roles, '', ['id'=>'sel_role', 'placeholder'=> 'Selecione o Perfill', 'class' => 'form form-control']) }}
-            </div>
-
-        </div>
-        <div class='row'>
-            <div class='col p-2'>
-                {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
-            </div>{{ Form::close() }}
-
-        </div>
-        
-
         <div class="row">
-            <div class="col">
-                <table class='table table-bordered table-condensed'>
-                    <tr>
-                        <th>#</th>
-                        <th>Código</th>
-                        <th>Nome</th>
-                        <th>Opções</th>
+            <div class='col-md-12'>
+                {{ Form::open(['url' => 'role_add_user/store']) }}
+                {{ Form::token() }}
+                <div class='row'>
+                    <div class="col-12">
+                        {{ Form::label('Situacao', '') }}:
+                        {{ Form::select('ativo', ['1' => 'Ativo', '0' => 'Inativo'], $user->ativo, ['id' => 'ativo', 'placeholder' => 'Situação do Usuario', 'class' => 'form form-control']) }}
+                    </div>
+                    <div class='col-12'>
+                        {{ Form::label('Perfil', '') }}:
+                        {{ Form::hidden('user_id', $user->id) }}
+                        {{ Form::select('role_id', $roles, '', ['id' => 'sel_role', 'placeholder' => 'Selecione o Perfill', 'class' => 'form form-control']) }}
+                    </div>
 
-                    </tr>
-                    @foreach ($user->roles as $key=>$role)
-                        <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$role->id}}</td>
-                            <td>{{ $role->name }}</td>
-                            <td><a href='{{ url('role_add_user/delete') }}'><img
-                                src='{{ asset('imagem/icon/delete.png') }}'></a></td>
-                        </tr>
-                    @endforeach
+                </div>
+                <div class='row'>
+                    <div class='col p-2'>
+                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
+                    </div>{{ Form::close() }}
 
-                </table>
-
+                </div>
 
             </div>
         </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class='table table-bordered table-condensed table-sm'>
+                        <tr>
+                            <th>#</th>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Opções</th>
 
-        <br>
-        <div class='row'>
-            <div class="col text-center">
-                <a href='{{ url('config/usuario') }}' class="btn btn-success">Voltar</a>
+                        </tr>
+                        @foreach ($user->roles as $key => $role)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $role->id }}</td>
+                                <td>{{ $role->name }}</td>
+                                <td><a href='{{ url('role_add_user/delete') }}'><img
+                                            src='{{ asset('imagem/icon/delete.png') }}'></a></td>
+                            </tr>
+                        @endforeach
+
+                    </table>
+
+
+                </div>
             </div>
+
+            <br>
+            <div class='row'>
+                <div class="col text-center">
+                    <a href='{{ url('config/usuario') }}' class="btn btn-success">Voltar</a>
+                </div>
+            </div>
+
         </div>
 
 

@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    <div class="row flex-fill">
+    <div style="background-color:#e9ecef;" class="row flex-fill">
 
         <div class="col-md-12">
             <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('/dashboard') }}>Voltar</a>

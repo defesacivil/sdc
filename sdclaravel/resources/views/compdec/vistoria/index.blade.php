@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div style="background-color:#e9ecef;" class="container border p-3">
         <div class="row flex-fill">
 
             <div class="col-md-12">
@@ -106,23 +106,22 @@
                 <div class="table table-responsive table-sm">
                     <table class="table table-striped
                 table-hover	
-                table-borderless
-                table-primary
+                table-bordered
                 align-middle">
                         <thead class="table-light">
                             <caption></caption>
                             <tr>
-                                <th>Número</th>
-                                <th>Município</th>
-                                <th>Tipo Ocorrência</th>
-                                <th>Endereço</th>
-                                <th>Data Registro</th>
-                                <th>Ações</th>
+                                <th style="font-weight:bold">Número<br><br></th>
+                                <th style="font-weight:bold">Município</th>
+                                <th style="font-weight:bold">Tipo Ocorrência</th>
+                                <th style="font-weight:bold">Endereço</th>
+                                <th style="font-weight:bold">Data Registro</th>
+                                <th style="font-weight:bold">Ações</th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
                             @foreach ($vistorias as $key => $vistoria)
-                                <tr class="table-primary">
+                                <tr class="">
                                     <td scope="row">{{ $vistoria->numero }}</td>
                                     <td>{{ $vistoria->municipio }}</td>
                                     <td>{{ $vistoria->tp_ocorrencia }}</td>
