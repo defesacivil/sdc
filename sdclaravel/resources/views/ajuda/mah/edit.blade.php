@@ -20,7 +20,7 @@
         @endphp
     @endif
 
-   
+
 
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
@@ -55,11 +55,19 @@
             {{-- <div class="col-md-3">
             <ul id="treeDemo" class="ztree"></ul>
         </div> --}}
-            <div class="col-md-12">
-                <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a>
-                    <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/'.$pedido->id.'/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
-                </p>
 
+            <div class="col-md-12">
+                    @can('cedec')
+                        <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a>
+                        <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
+                    @endcan
+
+                    <!-- Acesso COMPDEC -->
+                    @can('compdec')
+                        <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
+                    @endcan
+                    
+                </p>
 
                 @can('mah', $pedido->municipio_id)
                     <legend>Edição Pedido Ajuda Humanitária - <i>({{ $pedido->municipio->nome }})</i></legend>
@@ -84,7 +92,7 @@
                             <a class="nav-link" href="#despachos_analise-tab" id="-despachos_analise-tab" data-toggle="tab"
                                 role="tab">Despachos/Analises</a>
                         </li>
-                       
+
                     </ul>
                     <br>
 
@@ -92,7 +100,7 @@
                         {{-- Dados do pedido --}}
                         <div class="tab-pane fade show active" id="dados_pedidos-tab" role="tabpanel"
                             aria-labelledby="dados_pedidos-tab">
-                            {{ Form::open(['url' => 'mah/pedido/update/'.$pedido->id]) }}
+                            {{ Form::open(['url' => 'mah/pedido/update/' . $pedido->id]) }}
                             {{ Form::token() }}
                             {{ Form::hidden('numero', $pedido->numero . '-' . substr($pedido->data_entrada_sistema, 0, 4), ['class' => 'form form-control', 'readonly' => 'readonly']) }}
                             {{ Form::hidden('data_entrada_sistema', $pedido->data_entrada_sistema, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => '6']) }}
@@ -171,8 +179,8 @@
 
                                         <div class="col p-3">
                                             {{ Form::label('id_cobrade', 'Nome do Desastre do Cobrade') }} :
-                                                {{ Form::label('cobrade_id', 'Código Cobrade') }}:
-                                                {{ Form::select('cobrade_id', $optionCobrade, $pedido->cobrade_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'cobrade_id', 'placeholder' => 'Código Brasileiro de Desastre', 'data-cobrade_id' => '']) }}
+                                            {{ Form::label('cobrade_id', 'Código Cobrade') }}:
+                                            {{ Form::select('cobrade_id', $optionCobrade, $pedido->cobrade_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'cobrade_id', 'placeholder' => 'Código Brasileiro de Desastre', 'data-cobrade_id' => '']) }}
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('pop_atendida', 'População Atendida') }} :
@@ -240,14 +248,14 @@
 
                                         </tr>
 
-                                        @foreach ($materiais as $key=>$material)
+                                        @foreach ($materiais as $key => $material)
                                             <tr>
-                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ $key + 1 }}</td>
                                                 {{-- <td>{{ $material->codigo }}</td> --}}
-                                                <td>{{ $material->codigo."-".$material->descricao_item }}</td>
+                                                <td>{{ $material->codigo . '-' . $material->descricao_item }}</td>
                                                 <td>{{ $material->qtd }}</td>
                                                 <td>{{ $material->familia_at }}</td>
-                                                <td><a href="{{url('mah/pedidoitem/destroy/'.$material->id)}}"  onclick="return confirm('Deseja Apagar o Registro !')"><img src={{ asset('imagem/icon/delete.png') }}></a></td>
+                                                <td><a href="{{ url('mah/pedidoitem/destroy/' . $material->id) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src={{ asset('imagem/icon/delete.png') }}></a></td>
 
                                             </tr>
                                         @endforeach
@@ -262,7 +270,7 @@
                             <div class="modal fade" id="material-pedido-modal" aria-modal="true" role="dialog" data-backdrop="static">
                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                     <div class="modal-content">
-                                        
+
                                         {{ Form::open(['url' => 'mah/pedidoitem/store']) }}
                                         {{ Form::token() }}
                                         {{ Form::hidden('pedido_id', $pedido->id, ['readonly' => 'readonly']) }}
@@ -304,7 +312,7 @@
                                         </div>
                                         <div class="modal-footer justify-content-between">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            {{ Form::submit('Adicionar', ['class' => 'btn btn-primary',  'id'=>'add_material']) }}
+                                            {{ Form::submit('Adicionar', ['class' => 'btn btn-primary', 'id' => 'add_material']) }}
                                         </div>
 
                                         {{ Form::close() }}
@@ -339,12 +347,12 @@
                                                 $nome = substr(basename($documento), 7 + strlen($pedido->id));
                                                 $pos = strpos($nome, '_');
                                                 $nome1 = \Carbon\Carbon::createFromTimestamp(substr($nome, 0, $pos))->format('d/m/Y H:i:s');
-                                                
+
                                             @endphp
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $nome1 }}</td>
-                                            <td><a href='{{ url('mah/download/'.$pedido->id."/".basename($documento)) }}'>{{basename($documento)}}</a></td>
-                                            <td><a href="{{ url('mah/pedido/deletedoc/'.$pedido->id.'/'.basename($documento)) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src='{{ asset('imagem/icon/delete.png') }}'></a></td>
+                                            <td><a href='{{ url('mah/download/' . $pedido->id . '/' . basename($documento)) }}'>{{ basename($documento) }}</a></td>
+                                            <td><a href="{{ url('mah/pedido/deletedoc/' . $pedido->id . '/' . basename($documento)) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src='{{ asset('imagem/icon/delete.png') }}'></a></td>
                                         </tr>
                                         {{-- <tr>
                                             <td>{{ $key + 1 }}</td>
@@ -365,11 +373,11 @@
                         <div class="tab-pane fade" id="despachos_analise-tab" role="tabpanel" aria-labelledby="despachos_analise-tab">
 
                             @can('cedec')
-                            <p>
-                                <button class="btn btn-success btn-sm" value="Envio Documentos Anexo" data-toggle="modal" data-target="#parecer_tec">
-                                    Análise /Despacho
-                                </button>
-                            </p>
+                                <p>
+                                    <button class="btn btn-success btn-sm" value="Envio Documentos Anexo" data-toggle="modal" data-target="#parecer_tec">
+                                        Análise /Despacho
+                                    </button>
+                                </p>
                             @endcan
                             <div class="col-12 back">
                                 <table class="table table-sm">
@@ -384,7 +392,9 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $despacho->data_parecer }}</td>
-                                            <td><p name="lk_parecer"> {{$despacho->parecer }}...</p></td>
+                                            <td>
+                                                <p name="lk_parecer"> {{ $despacho->parecer }}...</p>
+                                            </td>
                                             <td>{{ $despacho->tramit_parecer }}</td>
                                             <td>
                                                 @can('cedec')
@@ -398,7 +408,7 @@
                             </div>
                         </div>
 
-                       
+
                         {{-- MODAL DESPACHOS PARECER --}}
                         <div class="modal fade" id="parecer_tec" tabindex="-1" role="dialog" aria-labelledby="parecer_tecTitle" aria-hidden="true" data-backdrop="static">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -455,7 +465,7 @@
                 </div>
                 <div class="modal-body">
                     <div class='col-md-6' id='form_anexo_doc'>
-                        {{ Form::open(['url' => 'mah/pedido/upload', 'files' => true, 'id'=>'frm' ])}}
+                        {{ Form::open(['url' => 'mah/pedido/upload', 'files' => true, 'id' => 'frm']) }}
                         {{ Form::token() }}
                         {{ Form::file('anexoDoc', ['accept' => '.pdf', 'required', 'id' => 'anexoDoc', 'required']) }}
                         {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
@@ -480,7 +490,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            $('#material_id').change(function(){
+            $('#material_id').change(function() {
                 $('#material').val($('#material_id option:selected').text());
             });
 
@@ -549,7 +559,7 @@
             //             window.location.href = '{{ url('mah/pedido/edit/' . $pedido->id) }}';
             //         },
             //         error: function(e) {
-                        
+
             //         }
             //     });
             //     e.preventDefault();
@@ -593,7 +603,7 @@
 
             // });
 
-            
+
             /* UPLOAD DOCUMENTO PEDIDO */
             // $("#btnUpAnexo").click(function(e) {
 
@@ -704,7 +714,6 @@
                 }
             });
         })
-
     </script>
 
 @endsection

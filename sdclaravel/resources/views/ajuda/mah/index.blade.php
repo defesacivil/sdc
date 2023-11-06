@@ -207,7 +207,7 @@
                                         @elseif($pedido->status == 9)
 
                                         @endif
-                                        <a href="#"><img src='{{ asset('imagem/icon/view.png') }}'></a>
+                                        <a href="{{url('mah/pedido/show/'.$pedido->id)}}"><img src='{{ asset('imagem/icon/view.png') }}'></a>
                                     </td>
 
                                 </tr>

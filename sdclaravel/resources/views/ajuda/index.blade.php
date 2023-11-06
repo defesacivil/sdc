@@ -68,8 +68,8 @@
                         {{-- PMDA --}}
                         <div class="col-6 col-md-4 col-lg-3 text-center">
                             <figure class="figure">
-                                <a href='#'>
-                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
+                                <a href='#' title="Plano Municipal de Distribuição de Água Potável">
+                                    <img class="figure-img img-fluid rounded" width="128" src='{{ asset('/imagem/icon/pmda_n.png') }}'
                                         alt=""></a>
                                 <figcaption class="figure-caption text-center">PMDA</figcaption>
                         </div>
@@ -78,7 +78,7 @@
                         <div class="col-6 col-md-4 col-lg-3 text-center">
                             <figure class="figure">
                                 <a href='mah_compdec'>
-                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
+                                    <img class="figure-img img-fluid rounded" width="128" src='{{ asset('/imagem/icon/tdap.png') }}'
                                         alt=""></a>
                                 <figcaption class="figure-caption text-center">TDAP</figcaption>
                         </div>
@@ -87,7 +87,7 @@
                         <div class="col-6 col-md-4 col-lg-3 text-center">
                             <figure class="figure">
                                 <a href='mah_compdec'>
-                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
+                                    <img class="figure-img img-fluid rounded" width="128" src='{{ asset('/imagem/icon/pedido_cesta.png') }}'
                                         alt=""></a>
                                 <figcaption class="figure-caption text-center">PEDIDO MAH</figcaption>
                         </div>
