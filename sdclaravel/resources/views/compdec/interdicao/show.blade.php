@@ -55,7 +55,7 @@
                     <div class="col-md-12 border p-3">
                         <p class="fs-3" style="font-size: 15pt">
                             Vistoria realizada em <strong>{{ \Carbon\Carbon::parse($interdicao->dt_registro)->format('d/m/Y') }} </strong> equipe de Proteção e Defesa Civil de <strong>{{ $interdicao->municipio->nome }}/MG</strong>, relacionado com o Relatório de Vistoria nº
-                            <strong>{{ $interdicao->ids_vistoria }}/{{ \Carbon\Carbon::parse($interdicao->dt_registr)->year }}</strong>.
+                            <strong>{{ $interdicao->numero }}/{{ \Carbon\Carbon::parse($interdicao->dt_registr)->year }}</strong>.
                         </p>
                     </div>
                 </div>

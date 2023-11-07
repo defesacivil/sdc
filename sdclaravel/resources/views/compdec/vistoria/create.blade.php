@@ -23,12 +23,9 @@
                 <p class="text-center">
                     <legend>RELATÓRIO DE VISTORIA DE ATENDIMENTO</legend>
                 </p>
-                <h4>Nº {{ $num_vistoria }}/<?= date('Y') ?></h4>
 
                 {{ Form::open(['url' => '/vistoria/store', 'files' => true, 'id' => 'form_vistoria']) }}
                 {{ Form::token() }}
-                {{ Form::hidden('numero', $num_vistoria, ['required maxlenght=15']) }}
-
 
                 <br>
                 <div class="row">
@@ -109,11 +106,11 @@
 
                             <div class="row p-2">
                                 <div class="col-md-8 p-2">
-                                    {{ Form::label('municipio_id', 'Nome do Município') }}:
-                                    {{ Form::select('municipio_id', $optionMunicipio, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '', 'required' => 'required']) }}
+                                    {{ Form::label('municipio_id', 'Nome do Município da Ocorrência') }}:
+                                    {{ Form::select('municipio_id', $optionMunicipio, Auth::user()->municipio_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '', 'required' => 'required']) }}
                                     {{-- {{ Form::hidden('municipio_id', Auth()->user()->municipio_id, ['required maxlenght=6']) }} --}}
                                     
-                                    {{-- {{ Form::text('nom_municipio', '', ['class' => 'form form-control', 'id' => 'nom_municipio', 'maxlength' => '70', 'placeholder' => 'Nome do Município da Vistoria']) }} --}}
+                                    
                                 </div>
                                 <div class="col-md-4 p-2">
                                     {{ Form::label('cep', 'Cep') }} :

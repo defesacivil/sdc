@@ -25,4 +25,14 @@ class Vistoria extends Model
         return $this->hasOne(Municipio::class, 'id', 'municipio_id');
     }
 
+    /**
+     * Get the user associated with the Vistoria
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function municipio_dono(): HasOne
+    {
+        return $this->hasOne(Municipio::class, 'id', 'municipio_id_dono');
+    }
+
 }
