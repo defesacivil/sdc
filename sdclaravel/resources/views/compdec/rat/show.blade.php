@@ -28,6 +28,8 @@
 
     <div class="container">
 
+
+        
         {{-- <div class="row flex-fill m-4">
             <div class="flex-fill logo"></div>
             <div class="flex-fill logo">
@@ -82,12 +84,12 @@
                     <label>Cobrade</label> : <span class="h5">{{ $rat->cobrade->codigo }} / {{ $rat->cobrade->descricao }}</span>
                 </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-md-12 border p-2">
                     <label>Descrição do Lugar</label> :<br>
                     <span class="h5">{{ $rat->lugar_descricao }}</span>
                 </div>
-            </div>
+            </div> --}}
             <div class="row">
                 <div class="col-md-12 border p-2">
                     <label>Envolvidos</label> : <span class="h5">{{ $rat->envolvidos }}</span>

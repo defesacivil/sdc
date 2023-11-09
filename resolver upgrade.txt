@@ -1,0 +1,1 @@
+Package laravelcollective/html is abandoned, you should avoid using it. Use spatie/laravel-html instead.

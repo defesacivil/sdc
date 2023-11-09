@@ -48,7 +48,7 @@ class RatController extends Controller
             $optionCobrade = $cobradeCollection->put($cobrade->id, $cobrade->codigo . "-" . $cobrade->descricao);
         }
 
-        $optionCobrade[] = "teste";
+        //$optionCobrade[] = "teste";
 
         return [
             'ratCodOcorrencia' => $ratCodOcorrencia,
