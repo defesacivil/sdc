@@ -308,7 +308,7 @@
                                 var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
                                 e.preventDefault();
                                 var all = t + bufferText;
-                                document.execCommand('insertText', false, all.trim().substring(0, 400));
+                                document.execCommand('insertText', false, all.trim().substring(0, 15000));
                                 if (typeof callbackMax == 'function') {
                                     callbackMax(max - t.length);
                                 }
