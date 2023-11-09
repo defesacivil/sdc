@@ -258,7 +258,7 @@
                                     toastr.error(x);
                                 });
                             } else {
-                                //window.location.href = data.view;
+                                window.location.href = data.view;
                                 
                             }
                         },
