@@ -24,7 +24,6 @@ class UserController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
 
     public function ListCompdec(Request $request)
     {
@@ -36,13 +35,5 @@ class UserController extends Controller
             JSON_FORCE_OBJECT,
 
         ]);
-=======
-    public function updatecpf(Request $request){
-
-        $dados = $request;
-
-        $user = User::where('id_user_cedec', '=', $request['id_usuario']);
-
->>>>>>> bf734878a76002c4b69be49a8889f0c1ee91d54d
     }
 }
