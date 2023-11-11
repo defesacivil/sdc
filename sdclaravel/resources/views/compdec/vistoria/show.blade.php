@@ -159,10 +159,10 @@
 
                             <div class="row p-2">
                                 <div class="col-md-3 border p-3">
-                                    <h5>Município : </h5>
+                                    <h5>Município da Vistoria : </h5>
                                 </div>
                                 <div class="col border p-3">
-                                    {{ $vistoria->nom_municipio }}
+                                    {{ $vistoria->municipio_dono->nome }}
                                 </div>
                                 <div class="col-md-3 border p-3">
                                     <h5>Cep : </h5>

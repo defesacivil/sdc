@@ -48,8 +48,6 @@ class RatController extends Controller
             $optionCobrade = $cobradeCollection->put($cobrade->id, $cobrade->codigo . "-" . $cobrade->descricao);
         }
 
-        $optionCobrade[] = "teste";
-
         return [
             'ratCodOcorrencia' => $ratCodOcorrencia,
             'ratAlvo' => $ratAlvo,
@@ -287,6 +285,8 @@ class RatController extends Controller
                     $image->storeAs('rat_uploads/' . $rat->id . '/', $fileName, 'public');
                 }
             }
+
+            
             return response()->json([
                 'view' => 'show/' . $rat->id,
                 'message' => 'Registro Gravado com Sucesso',

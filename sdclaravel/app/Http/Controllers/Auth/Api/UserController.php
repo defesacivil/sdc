@@ -24,6 +24,7 @@ class UserController extends Controller
         ]);
     }
 
+
     public function ListCompdec(Request $request)
     {
 

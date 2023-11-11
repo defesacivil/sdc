@@ -23,7 +23,7 @@
     </div>
     <div class="container border p-2">
         <div class="">
-            
+
             <legend>RELATÓRIO DE ATIVIDADES DE DEFESA CIVIL</legend>
             <br>
             <div class="row p-2">
@@ -42,7 +42,7 @@
                 </div>
 
 
-                {{ Form::open(['url' => 'rat/store', 'id'=> 'form_rat']) }}
+                {{ Form::open(['url' => 'rat/store', 'id' => 'form_rat']) }}
                 {{ Form::token() }}
 
             </div>
@@ -129,8 +129,8 @@
 
                 <div class="row p-3">
                     <div class="col p-2 h-100">
-                        {{ Form::label('acoes', 'Histórico da Ocorrência') }}:
-                        {{ Form::textarea('acoes', '', ['class' => 'form form-control', 'id' => 'acoes']) }}
+                        {{ Form::label('acoes', 'Histórico da Ocorrência') }}: ( <span>Caracteres Restantes: </span> <span id='caracteres'>0</span> )
+                        {{ Form::textarea('acoes', '', ['class' => 'form form-control', 'id' => 'acoes', 'maxlength' => '15000']) }}
                     </div>
                 </div>
 
@@ -180,10 +180,11 @@
         <link rel="stylesheet" href="{{ asset('summernote/summernote-lite.css') }}" />
         <script src="{{ asset('summernote/summernote-lite.js') }}"></script>
 
-        
+
 
         <script type="text/javascript">
             $(document).ready(function() {
+
 
                 $("#btnEditar").hover(function() {
 
@@ -252,17 +253,18 @@
                         cache: false,
                         processData: false,
                         success: function(data) {
-                                if(data.error){
-                                    Object.values(data.error).forEach((x)=>{
-                                        toastr.error(x);    
-                                    });     
-                                }else {
-                                    window.location.href = data.view;
-                                } 
-                            },
-                            error: function(data) {
-                                console.log(data + "erro");
+                            if (data.error) {
+                                Object.values(data.error).forEach((x) => {
+                                    toastr.error(x);
+                                });
+                            } else {
+                                window.location.href = data.view;
+                                
                             }
+                        },
+                        error: function(data) {
+                            console.log(data + "erro");
+                        }
                     });
 
                     e.preventDefault();
@@ -270,35 +272,59 @@
 
                 $('.js-example-basic-single').select2();
 
-                $('#acoes').summernote({
-                    height: 400,
-                    toolbar: [
-                        // [groupName, [list of button]]
-                        //['style', ['style']],
-                        //['font', ['bold', 'italic', 'underline', 'clear']],
-                        //['fontsize', ['12']],
-                        //['color', ['color']],
-                        //['para', ['ul', 'ol', 'paragraph']],
-                        //['height', ['height']],
-                        //['table', ['table']],
-                        //['insert', ['link']],
-                    ],
-                    styleTags: [
-                        'p',
-                        {
-                            title: 'Blockquote',
-                            tag: 'blockquote',
-                            className: 'blockquote',
-                            value: 'blockquote'
-                        },
-                        'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-                    ], 
+
+                // $("#acoes").keyup(function() {
+                //     alert();
+                //     var leng = $("#acoes").text();
+                //     $("#caracteres").text(leng);
+                // });
+
+
+                function registerSummernote(element, placeholder, max, callbackMax) {
+                    $(element).summernote({
+                        height: 400,
+                        toolbar: [
+                            ['style', ['bold', 'italic', 'underline', 'clear']]
+                        ],
+                        placeholder,
+                        callbacks: {
+                            onKeydown: function(e) {
+                                var t = e.currentTarget.innerText;
+                                if (t.length >= max) {
+                                    //delete key
+                                    if (e.keyCode != 8)
+                                        e.preventDefault();
+                                    // add other keys ...
+                                }
+                            },
+                            onKeyup: function(e) {
+                                var t = e.currentTarget.innerText;
+                                if (typeof callbackMax == 'function') {
+                                    callbackMax(max - t.length);
+                                }
+                            },
+                            onPaste: function(e) {
+                                var t = e.currentTarget.innerText;
+                                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                                e.preventDefault();
+                                var all = t + bufferText;
+                                document.execCommand('insertText', false, all.trim().substring(0, 15000));
+                                if (typeof callbackMax == 'function') {
+                                    callbackMax(max - t.length);
+                                }
+                            }
+                        }
+                    });
+                }
+
+                $(function() {
+                    registerSummernote('#acoes', 'Digite o Histórico da Ocorrência', 15000, function(max) {
+                        $('#caracteres').text(max)
+                    });
                 });
 
+            
                 $("#cep").inputmask('99999-999');
-
-                
             })
-
         </script>
     @endsection
