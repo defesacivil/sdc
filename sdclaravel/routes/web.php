@@ -722,6 +722,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('rat/deleteImagem', 'App\Http\Controllers\Compdec\RatController@deleteImagem');
 
     Route::get('rat/exportRats', [RatController::class, 'exportRats']);
+    
+    Route::get('rat/print/{rat}', [RatController::class, 'RatPdfPrint']);
 
 
     ############## OCORRENCIA

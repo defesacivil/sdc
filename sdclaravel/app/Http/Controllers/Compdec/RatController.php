@@ -9,6 +9,7 @@ use App\Models\Compdec\RatAlvo;
 use App\Models\Compdec\RatOcorrencia;
 use App\Models\Decreto\Cobrade;
 use App\Models\Municipio\Municipio;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use DebugBar\DebugBar;
 use Exception;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Illuminate\Support\Str;
 
 class RatController extends Controller
 {
@@ -195,7 +197,8 @@ class RatController extends Controller
     public function store(Request $request)
     {
 
-        $val = Validator::make($request->all(),
+        $val = Validator::make(
+            $request->all(),
             [
                 "num_ocorrencia" => "required|numeric",
                 "dt_ocorrencia" => "required|date",
@@ -251,7 +254,7 @@ class RatController extends Controller
 
             ]
         );
-  
+
         $rat = new Rat;
 
         $rat->num_ocorrencia = $request->num_ocorrencia;
@@ -271,12 +274,12 @@ class RatController extends Controller
         $rat->referencia    = $request->referencia;
         $rat->acoes         = $request->acoes;
 
-        if($val->fails()){
+        if ($val->fails()) {
             return response()->json([
                 'error' => $val->errors(),
             ]);
-        }else {
-            $rat->save(); 
+        } else {
+            $rat->save();
             /* img */
             $images = $request->file;
             if (isset($images)) {
@@ -291,7 +294,6 @@ class RatController extends Controller
                 'status' => true
             ]);
         }
-        
     }
 
 
@@ -320,7 +322,6 @@ class RatController extends Controller
             }
         }
 
-        //dd($rat->cobrade);
         return view(
             'compdec/rat/show',
             [
@@ -379,7 +380,8 @@ class RatController extends Controller
 
         $files = $request->file('file');
 
-        $val = Validator::make($request->all(),
+        $val = Validator::make(
+            $request->all(),
             [
                 "dt_ocorrencia" => "required|date",
                 "municipio_id"  => "required|numeric",
@@ -451,11 +453,11 @@ class RatController extends Controller
         $rat->acoes         = $request->acoes;
 
 
-        if($val->fails()){
+        if ($val->fails()) {
             return response()->json([
                 'error' => $val->errors(),
             ]);
-        }else {
+        } else {
             $rat->update();
 
             if (isset($files)) {
@@ -464,7 +466,7 @@ class RatController extends Controller
                     $file->storeAs('rat_uploads/' . $rat->id, $fileName, 'public');
                 }
             }
-            
+
             return response()->json([
                 'view' => '../show/' . $rat->id,
                 'message' => 'Registro Gravado com Sucesso',
@@ -681,5 +683,43 @@ class RatController extends Controller
     public function exportRats(Request $request)
     {
         return Excel::download(new ExportRat, 'Rat_Todos_' . date('d_m_Y_H.i.s') . '.xlsx');
+    }
+
+
+    /**
+     * PDF impressao
+     */
+    public function RatPdfPrint(Rat $rat)
+    {
+
+        # ler todos arquivos da pasta rat_upload
+        $all_rat_files = Storage::files('rat_uploads/' . $rat->id, true);
+
+        //dd($all_rat_files);
+
+        $files = null;
+
+        /* verifica quais arquivos é da ocorrencia */
+        if ($all_rat_files) {
+            foreach ($all_rat_files as $key => $file) {
+                if (substr(basename($file), 0, (strpos(basename($file), "-") - 0)) == $rat->id) {
+                    $files[] = $file;
+                }
+            }
+        }
+
+        Pdf::setOption([
+            'debugCss' => true,
+        ]);
+
+        $pdf = Pdf::loadView('compdec/rat/show', [
+            'rat' => $rat,
+            'files' => $files,
+            'pdf' => true,
+        ])->setPaper('a4');
+
+        $name_pdf = 'Rat_' . Str::slug($rat->municipio['nome']) . date('ymdHis') . '.pdf';
+
+        return $pdf->stream($name_pdf);
     }
 }

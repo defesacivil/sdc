@@ -189,22 +189,22 @@
 
                 });
 
-                $("#cep1").blur(function() {
-                    var cep = '31870440';
-                    $.ajax({
-                        url: 'http://h-apigateway.conectagov.estaleiro.serpro.gov.br/api-cep/v1/consulta/cep/' + cep,
-                        type: 'GET',
-                        dataType: 'JSON',
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                    }).done(function(data) {
-                        console.log(data);
-                    });
+                // $("#cep1").blur(function() {
+                //     var cep = '31870440';
+                //     $.ajax({
+                //         url: 'http://h-apigateway.conectagov.estaleiro.serpro.gov.br/api-cep/v1/consulta/cep/' + cep,
+                //         type: 'GET',
+                //         dataType: 'JSON',
+                //         contentType: false,
+                //         cache: false,
+                //         processData: false,
+                //     }).done(function(data) {
+                //         console.log(data);
+                //     });
 
 
 
-                });
+                // });
 
 
                 // Turn input element into a pond with configuration options
