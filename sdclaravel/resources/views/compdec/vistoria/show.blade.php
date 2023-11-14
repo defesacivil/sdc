@@ -31,6 +31,7 @@
 
                 <p class="h2 text-center">
                     RELATÓRIO DE VISTORIA DE ATENDIMENTO
+
                 </p>
                 <h4>Nº : {{ $vistoria->numero }}</h4>
                 <h4>Município : {{ $vistoria->municipio->nome }}</h4>
