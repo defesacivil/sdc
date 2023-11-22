@@ -18,16 +18,16 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         
-        //dd($request);
-
         # servidor Casa
-        if($_SERVER['HTTP_HOST'] != "sdc.net") {
+        if($_SERVER['HTTP_HOST'] == "sdc.net") {
             $credentials = $request->json('content');
         }else {
+            
             #localhost insomnia
             $credentials = $request;
         }   
         
+        //dd($credentials);
         $tipo = null;
 
         # REDEC
@@ -47,8 +47,6 @@ class LoginController extends Controller
         $cpf = User::where('id_user_cedec', $credentials['id_usuario'])
         ->where('cpf', null)
         ->where('tipo', $tipo)->count();
-
-        //dd($cpf);
 
         if ($cpf == 1) {
 
@@ -99,6 +97,8 @@ class LoginController extends Controller
                 // ]
                 return response()->json([
                     'result' => 'Nao Autorizado',
+                    'cpf' => $credentials['cpf'],
+                    'password'=> $credentials['password']
                 ]);
             } else {
 

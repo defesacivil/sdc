@@ -18,19 +18,19 @@
 @endsection
 
 @section('content')
-    <div class="text-center p-2">
+    <div class="p-2 text-center">
         <p class=''><a class='btn btn-success btn-sm' href='{{ url('rat') }}'>Voltar</a></p>
     </div>
-    <div class="container border p-2">
+    <div class="container p-2 border">
         <div class="">
 
             <legend>RELATÓRIO DE ATIVIDADES DE DEFESA CIVIL</legend>
             <br>
-            <div class="row p-2">
-                <div class="col-md-6 text-left">
+            <div class="p-2 row">
+                <div class="text-left col-md-6">
                     <h4 class=""> Número : {{ $numero . ' / ' . date('Y') }}</h4>
                 </div>
-                <div class="col-md-6 text-left">
+                <div class="text-left col-md-6">
                     <h5>Operador : @if (isset(Session::get('user')['usuario']->nome))
                             {{ Session::get('user')['usuario']->nome }}
                         @elseif (isset(Session::get('user')['municipio']))
@@ -47,47 +47,47 @@
 
             </div>
             <div class="col-md-12 bg-light">
-                <fieldset class="border p-2">
+                <fieldset class="p-2 border">
                     <legend class="w-auto">Data/Município</legend>
 
-                    <div class="col-3 p-2">
+                    <div class="p-2 col-3">
                         {{ Form::label('dt_ocorrencia', 'Data da Ocorrência') }}:
                         {{ Form::input('dateTime-local', 'dt_ocorrencia', '', ['class' => 'form form-control', 'value' => old('dt_ocorrencia'), 'id' => 'dt_ocorrencia']) }}
                         {{ Form::hidden('operador_id', Auth::user()->id, ['class' => '', 'value' => old('dt_ocorrencia'), 'id' => 'operador_id']) }}
                         {{ Form::hidden('num_ocorrencia', $numero, ['class' => '', 'id' => 'num_ocorrencia']) }}
                     </div>
 
-                    <div class="col-md-12 p-2">
+                    <div class="p-2 col-md-12">
                         {{ Form::label('municipio_id', 'Nome do Município') }}:
                         {{ Form::select('municipio_id', $optionMunicipio, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '']) }}
                     </div>
                 </fieldset>
                 <br>
-                <fieldset class="border p-2">
+                <fieldset class="p-2 border">
                     <legend class="w-auto">Natureza</legend>
 
                     <div class="row">
-                        <div class="col-md-6 p-3">
+                        <div class="p-3 col-md-6">
                             {{ Form::label('ocorrencia_id', 'Código Ocorrência') }}:
                             {{ Form::select('ocorrencia_id', $optionOcorrencia, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'ocorrencia_id', 'placeholder' => 'Código da Ocorrência', 'data-ocorrencia_id' => '']) }}
                         </div>
 
-                        <div class="col-md-6 p-3">
+                        <div class="p-3 col-md-6">
                             {{ Form::label('alvo_id', 'Alvo do Evento') }}:
                             {{ Form::select('alvo_id', $ratAlvo, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'alvo_id', 'placeholder' => 'Alvo da Ocorrencia', 'data-alvo_id' => '']) }}
                         </div>
 
-                        <div class="col-md-6 p-3">
+                        <div class="p-3 col-md-6">
                             {{ Form::label('cobrade_id', 'Código Cobrade') }}:
                             {{ Form::select('cobrade_id', $optionCobrade, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'cobrade_id', 'placeholder' => 'Código Brasileiro de Desastre', 'data-cobrade_id' => '']) }}
                         </div>
 
-                        <div class="col-md-6 p-3">
+                        <div class="p-3 col-md-6">
                             {{ Form::label('nome_operacao', 'Nome da Operação') }}:
                             {{ Form::text('nome_operacao', '', ['class' => 'form form-control', 'id' => 'nome_operacao', 'placeholder' => 'Nome da Operação', 'maxlength' => '110']) }}
                         </div>
 
-                        <div class="col-md-12 p-3">
+                        <div class="p-3 col-md-12">
                             {{ Form::label('envolvidos', 'Envolvidos (Opcional - pessoas, empresas, etc)') }}:
                             {{ Form::textarea('envolvidos', '', ['class' => 'form form-control', 'id' => 'envolvidos', 'placeholder' => 'Envolvidos (Opcional - Pessoas, Empresas, Etc.)', 'rows' => '4', 'maxlength' => '255']) }}
                         </div>
@@ -96,46 +96,46 @@
                 </fieldset>
 
                 <br>
-                <fieldset class="border p-2">
+                <fieldset class="p-2 border">
                     <legend class="w-auto">Local</legend>
                     <div class="row">
-                        <div class="col-md-3 p-3">
+                        <div class="p-3 col-md-3">
                             {{ Form::label('cep', 'Cep') }}:
                             {{ Form::text('cep', '', ['class' => 'form form-control', 'id' => 'cep', 'placeholder' => 'Cep', 'maxlength' => '10']) }}
                         </div>
-                        <div class="col-md-8 p-3">
+                        <div class="p-3 col-md-8">
                             {{ Form::label('endereco', 'Endereço da Ocorrência') }}:
                             {{ Form::text('endereco', '', ['class' => 'form form-control', 'id' => 'endereco', 'placeholder' => 'Endereço da Ocorrência', 'maxlength' => '100']) }}
                         </div>
-                        <div class="col-md-2 p-3">
+                        <div class="p-3 col-md-2">
                             {{ Form::label('numero', 'Número') }}:
                             {{ Form::text('numero', '', ['class' => 'form form-control', 'id' => 'numero', 'placeholder' => 'Número', 'maxlength' => '10']) }}
                         </div>
-                        <div class="col-md-5 p-3">
+                        <div class="p-3 col-md-5">
                             {{ Form::label('bairro', 'Bairro') }}:
                             {{ Form::text('bairro', '', ['class' => 'form form-control', 'id' => 'bairro', 'placeholder' => 'Bairro', 'maxlength' => '50']) }}
                         </div>
-                        <div class="col-md-5 p-3">
+                        <div class="p-3 col-md-5">
                             {{ Form::label('estado', 'Estado') }}:
                             {{ Form::text('estado', '', ['class' => 'form form-control', 'id' => 'estado', 'placeholder' => 'Estado', 'maxlength' => '20']) }}
                         </div>
 
-                        <div class="col-md-12 p-3">
+                        <div class="p-3 col-md-12">
                             {{ Form::label('referencia', 'Ponto de Referência') }}:
                             {{ Form::text('referencia', '', ['class' => 'form form-control', 'id' => 'referencia', 'placeholder' => 'Ponto de Referência', 'maxlength' => '100']) }}
                         </div>
                     </div>
                 </fieldset>
 
-                <div class="row p-3">
-                    <div class="col p-2 h-100">
+                <div class="p-3 row">
+                    <div class="p-2 col h-100">
                         {{ Form::label('acoes', 'Histórico da Ocorrência') }}: ( <span>Caracteres Restantes: </span> <span id='caracteres'>0</span> )
                         {{ Form::textarea('acoes', '', ['class' => 'form form-control', 'id' => 'acoes', 'maxlength' => '15000']) }}
                     </div>
                 </div>
 
-                <div class="row p-3">
-                    <div class="col-md-12 p-2">
+                <div class="p-3 row">
+                    <div class="p-2 col-md-12">
                         <label>Upload de Imagens</label>
                         <input type="file"
                             class="filepond img_rat"
@@ -166,9 +166,9 @@
     @stop
     @section('code')
 
-        <link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
-        <script src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>
-
+        <link href="{{ asset('vendor/select2/dist/css/select2.css') }}" rel="stylesheet" />
+        <script src="{{ asset('vendor/select2/dist/js/select2.full.js') }}"></script>
+        
         <link rel="stylesheet" href="{{ asset('summernote/summernote-bs4.css') }}" />
         <script src="{{ asset('summernote/summernote-bs4.js') }}"></script>
 
@@ -271,7 +271,8 @@
                 });
 
                 $('.js-example-basic-single').select2();
-
+                
+                $('input.select2-search__field').focus();
 
                 // $("#acoes").keyup(function() {
                 //     alert();

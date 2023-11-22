@@ -20,12 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
 
     if ($_SERVER['HTTP_HOST'] == 'sdc.net') {
-        dd(Auth::user());
+        //dd(Auth::user());
         return view('dashboard');
     } else if (null != session()->get('routeInicio')) {
         return redirect()->away(session()->get('routeInicio'));
     } else {
-        return redirect()->away('http://sistema.defesacivil.mg.gov.br');
+        //return redirect()->away('http://sistema.defesacivil.mg.gov.br');
     }
 
     //inicio com tela para login
@@ -759,8 +759,9 @@ Route::group(['middleware' => 'auth'], function () {
     ##############################  DASHBOARD ##############################
     Route::get('/dashboard', function () {
 
-        if ($_SERVER['HTTP_HOST'] == 'localhost:8081') {
-            return view('dashboard');
+        if ($_SERVER['HTTP_HOST'] == 'sdc.net') {
+            //return view('dashboard');
+            return redirect()->away('http://sdcold.net/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         } elseif (null != session()->get('routeInicio')) {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
         } else {
