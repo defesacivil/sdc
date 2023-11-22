@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if ($_SERVER['HTTP_HOST'] == 'localhost:8082') {
+
+    if ($_SERVER['HTTP_HOST'] == 'sdc.net') {
+        dd(Auth::user());
         return view('dashboard');
     } else if (null != session()->get('routeInicio')) {
         return redirect()->away(session()->get('routeInicio'));
@@ -36,7 +38,7 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
 
-    
+
     Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
 
     # configurações 
@@ -537,10 +539,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('mah/pedido/deletedoc/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@deletedoc');
 
     Route::get('mah/download/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@download');
-    
+
     Route::get('mah/enviar/status/{pedido}/{status}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@status');
 
-    
+
 
     ################## ANEXO
     // # mah CREATE
@@ -716,7 +718,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('rat/deleteImagem', 'App\Http\Controllers\Compdec\RatController@deleteImagem');
 
     Route::get('rat/exportRats', [RatController::class, 'exportRats']);
-    
+
     Route::get('rat/print/{rat}', [RatController::class, 'RatPdfPrint']);
 
 
