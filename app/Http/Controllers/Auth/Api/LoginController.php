@@ -18,15 +18,16 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         
-
-        # servidorI online
-        if($_SERVER['HTTP_HOST'] != "localhost:8082") {
+        # servidor Casa
+        if($_SERVER['HTTP_HOST'] == "sdc.net") {
             $credentials = $request->json('content');
         }else {
+            
             #localhost insomnia
             $credentials = $request;
         }   
         
+        //dd($credentials);
         $tipo = null;
 
         # REDEC
@@ -47,8 +48,6 @@ class LoginController extends Controller
         ->where('cpf', null)
         ->where('tipo', $tipo)->count();
 
-        //dd($cpf);
-
         if ($cpf == 1) {
 
             try{
@@ -60,8 +59,8 @@ class LoginController extends Controller
             }catch(Exception $e) {
                 if( preg_match('/Duplicate/', $e->getMessage()) ) {
 
-                    print "<div class='col-md-12 text-center'><br><br>";
-                    print "<span class='alert alert-danger p-3'>CPF já utilizado no Sistema \n Contate o Administrador \n sdc@defesacivil.mg.gov.br</span>";
+                    print "<div class='text-center col-md-12'><br><br>";
+                    print "<span class='p-3 alert alert-danger'>CPF já utilizado no Sistema \n Contate o Administrador \n sdc@defesacivil.mg.gov.br</span>";
                     print "<br><br><br><br><a class='btn btn-success' href='".url('dashboard')."'>Voltar</a>";
                     print "</div>";
                 }
@@ -98,6 +97,8 @@ class LoginController extends Controller
                 // ]
                 return response()->json([
                     'result' => 'Nao Autorizado',
+                    'cpf' => $credentials['cpf'],
+                    'password'=> $credentials['password']
                 ]);
             } else {
 

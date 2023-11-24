@@ -15,7 +15,7 @@
 @section('content')
     <div style="background-color:#e9ecef;" class="container min-vh-100">
         <div class="row">
-            <div class="col-md-12 border p-3">
+            <div class="p-3 border col-md-12">
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('/dashboard') }}>Voltar</a>
                     <a class='btn btn-info btn-sm' href={{ url('rat/create') }} title="Criar novo Registro">+ Novo</a>
                     <a class='btn btn-primary btn-sm' id='btnSearch' title="Criar novo Registro">Pesquisa</a>
@@ -31,8 +31,8 @@
         {{ Form::open(['url' => 'rat/search']) }}
 
         <div class="row" id="search2">
-            <div class="col-md-6 border p-1">
-                <div class='row p-2'>
+            <div class="p-1 border col-md-6">
+                <div class='p-2 row'>
                     <div class='col-md-6'>
                         {{ Form::token() }}
                         {{ Form::label('ano', 'Ano') }} :
@@ -43,12 +43,12 @@
                         {{ Form::text('num_ocorrencia', '', ['class' => 'form form-control', 'maxlenght=12']) }}
                     </div>
                 </div>
-                <div class='row p-2'>
+                <div class='p-2 row'>
                     <div class="col">
                         {{ Form::label('municipio_id', 'Nome do Município') }}:
                         {{ Form::select('municipio_id', $optionMunicipio, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '']) }}
                     </div>
-                    {{-- <div class='col-md-6 p-2'>
+                    {{-- <div class='p-2 col-md-6'>
                         {{ Form::label('ocorr_ass', 'Buscar Ocorrências Relacionadas') }} :
                         <div class='form-check'>
                             {{ Form::checkbox('ocorr_ass') }}
@@ -59,55 +59,55 @@
                     </div> --}}
                 </div>
 
-                <div class='row p-2'>
+                <div class='p-2 row'>
                     <div class='col-md-6'>
-                        {{ Form::label('-', 'Período Inicial') }}:
+                        {{ Form::label('data_inicio', 'Período Inicial') }}:
                         {{ Form::date('data_inicio', '', ['class' => 'form form-control', 'name' => 'data_inicio', 'id' => 'data_inicio']) }}
                     </div>
                     <div class='col-md-6'>
-                        {{ Form::label('-', 'Período Final') }}
+                        {{ Form::label('data_final', 'Período Final') }}
                         {{ Form::date('data_final', '', ['class' => 'form form-control', 'name' => 'data_final', 'id' => 'data_final']) }}
                     </div>
                 </div>
-                <div class="row p-2">
+                <div class="p-2 row">
                     <div class="col-md-12">
                         {{ Form::label('endereco', 'Endereço da Ocorrência') }}:
                         {{ Form::text('endereco', '', ['class' => 'form form-control', 'id' => 'endereco', 'placeholder' => 'Endereço da Ocorrência', 'maxlength' => '100']) }}
                     </div>
                 </div>
-                <div class="row p-2">
+                <div class="p-2 row">
                     <div class="col-md-12">
                         {{ Form::label('historico', 'Parte do Texto da Ocorrência') }}:
                         {{ Form::text('historico', '', ['class' => 'form form-control', 'id' => 'historico', 'placeholder' => 'Parte do Texto da Ocorrência', 'maxlength' => '110']) }}
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 p-1 border">
-                <div class="col-md-12 p-3">
+            <div class="p-1 border col-md-6">
+                <div class="p-3 col-md-12">
                     {{ Form::label('ocorrencia_id', 'Código Ocorrência') }}:
                     {{ Form::select('ocorrencia_id', $optionOcorrencia, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'ocorrencia_id', 'placeholder' => 'Código da Ocorrência', 'data-ocorrencia_id' => '']) }}
                 </div>
 
-                <div class="col-md-12 p-3">
+                <div class="p-3 col-md-12">
                     {{ Form::label('alvo_id', 'Alvo do Evento') }}:
                     {{ Form::select('alvo_id', $ratAlvo, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'alvo_id', 'placeholder' => 'Alvo da Ocorrencia', 'data-alvo_id' => '']) }}
                 </div>
 
-                <div class="col-md-12 p-3">
+                <div class="p-3 col-md-12">
                     {{ Form::label('cobrade_id', 'Código Cobrade') }}:
                     {{ Form::select('cobrade_id', $optionCobrade, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'cobrade_id', 'placeholder' => 'Código Brasileiro de Desastre', 'data-cobrade_id' => '']) }}
                 </div>
-                <div class="col-md-12 p-3">
+                <div class="p-3 col-md-12">
                     {{ Form::label('envolvidos', 'Envolvidos (Opcional - pessoas, empresas, etc)') }}:
                     {{ Form::text('envolvidos', '', ['class' => 'form form-control', 'id' => 'envolvidos', 'placeholder' => 'Envolvidos (Opcional - Pessoas, Empresas, Etc.)', 'maxlength' => '70']) }}
                 </div>
 
-                <div class="col-md-12 p-3">
+                <div class="p-3 col-md-12">
                     {{ Form::label('nome_operacao', 'Nome da Operação') }}:
                     {{ Form::text('nome_operacao', '', ['class' => 'form form-control', 'id' => 'nome_operacao', 'placeholder' => 'Nome da Operação', 'maxlength' => '110']) }}
                 </div>
             </div>
-            <div class="col-md-12 p-2">
+            <div class="p-2 col-md-12">
                 {{ Form::submit('Busca', ['class' => 'btn btn-primary']) }}
     {{ Form::close() }}
             </div>
@@ -117,14 +117,10 @@
         <br>
         <p class="p-2">Registros : {{ $rats->total() }}</p>
 
-        <div class="table table-responsive border p-3">
+        <div class="table p-3 border table-responsive">
             <h5 class="text-center bolder">Registro das Ocorrências</h5>
             @if (count($rats) > 0)
-                <table class="table table-striped
-                table-bordered
-                table-sm
-                table-hover	
-                align-middle">
+                <table class="table align-middle table-striped table-bordered table-sm table-hover">
                     <thead class="table-light">
                         <caption></caption>
                         <tr>
