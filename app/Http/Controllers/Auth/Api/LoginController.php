@@ -19,7 +19,7 @@ class LoginController extends Controller
     {
         
         # servidor Casa
-        if($_SERVER['HTTP_HOST'] == "sdc.net") {
+        if($_SERVER['HTTP_HOST'] == "sdc.net:8081") {
             $credentials = $request->json('content');
         }else {
             
@@ -98,7 +98,7 @@ class LoginController extends Controller
                 return response()->json([
                     'result' => 'Nao Autorizado',
                     'cpf' => $credentials['cpf'],
-                    'password'=> $credentials['password']
+                    'password'=> $credentials['password'],
                 ]);
             } else {
 
