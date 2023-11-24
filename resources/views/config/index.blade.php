@@ -15,7 +15,7 @@
 
 @section('content')
 
-    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
+    <div class="container p-3 border min-vh-100" style="background-color:#e9ecef;">
         <div class="row flex-fill">
 
             <div class="col-md-12">
@@ -24,15 +24,15 @@
                 <p class="text-center"><legend>Configurações</legend></p>
                 <br>
                 <div class="row">
-                    <div class="col text-center">
+                    <div class="text-center col">
                         <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/users.png') }}" title="Usuários"></a><br>
                         Usuários
                     </div>
-                    <div class="col text-center">
+                    <div class="text-center col">
                         <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a><br>
                         Configurações
                     </div>
-                    <div class="col text-center">
+                    <div class="text-center col">
                         <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
                         <br>
                         Relatórios e Log's
@@ -41,6 +41,29 @@
                 <br>
                 <br>
 
+                <table class="table p-3">
+                    <tr>
+                        <td>app_path:</td><td>{{ app_path() }}</td>
+                    </tr>
+                    <tr>
+                        <td>base_path:</td><td>{{ base_path() }}</td>
+                    </tr>
+                    <tr>
+                        <td>config_path:</td><td>{{ config_path() }}</td>
+                    </tr>
+                    <tr>
+                        <td>database_path:</td><td>{{ database_path() }}</td>
+                    </tr>
+                    <tr>
+                        <td>public_path:</td><td>{{ public_path() }}</td>
+                    </tr>
+                    <tr>
+                        <td>resource_path:</td><td>{{ resource_path() }}</td>
+                    </tr>
+                    <tr>
+                        <td>storage_path:</td><td>{{ storage_path() }}</td>
+                    </tr>
+                </table>
 
 
             </div>

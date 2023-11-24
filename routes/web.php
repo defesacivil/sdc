@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if ($_SERVER['HTTP_HOST'] == 'localhost:8082') {
+    if ($_SERVER['HTTP_HOST'] == 'localhost:8081') {
         return view('dashboard');
     } else if (null != session()->get('routeInicio')) {
         return redirect()->away(session()->get('routeInicio'));
@@ -128,6 +128,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     # update
     Route::put('config/permissao/update/{id}', 'App\Http\Controllers\Usuario\PermissionController@update');
+
+
 
 
 
@@ -757,7 +759,7 @@ Route::group(['middleware' => 'auth'], function () {
     ##############################  DASHBOARD ##############################
     Route::get('/dashboard', function () {
 
-        if ($_SERVER['HTTP_HOST'] == 'localhost:8081') {
+        if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
             return view('dashboard');
         } elseif (null != session()->get('routeInicio')) {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));

@@ -19,19 +19,19 @@
 
 @section('content')
 
-    <div class="container">
+    <div style="background-color:#e9ecef;" class="container p-3 border min-vh-100">
 
         <div class="row flex-fill">
 
-            <div class="col-md-12">
+            <div class="p-2 border col-md-12">
 
-                <legend class="text-center">
-                    <h1>Edição COMPDEC - <i>{{ $compdec->municipio->nome }}</i></h1>
+                <legend class="text-center alert alert-primary">
+                    <h2>DADOS CADASTRAIS COMPDEC / {{ $compdec->municipio->nome }}</h2>
                 </legend>
 
                 @php
                     $tab = isset($active_tab) ? $active_tab : 'municipio-tab';
-                    
+
                 @endphp
 
                 <!-- ATIVAR TAB APOS RELOAD -->
@@ -49,13 +49,13 @@
                 <div class='row'>
                     <div class='col-md-6'>
                         <!-- FOTO DO PREFEITO -->
-                        <div class='d-flex justify-content-center p-2' id='alt_foto_prefeito'>
-                            <div class="col-md-6 border-dark text-center mb-3" style="max-width: 18rem; max-height: 18rem; min-height: 16rem;">
+                        <div class='p-2 d-flex justify-content-center' id='alt_foto_prefeito'>
+                            <div class="mb-3 text-center col-md-6 border-dark" style="max-width: 18rem; max-height: 18rem; min-height: 16rem;">
                                 Prefeito<br>
                                 <img class="figure img-thumbnail" style='width: 150px; height:150px'
-                                    src='{{ asset('storage/prefeito/' . $compdec->prefeitura->fotoPref) }}'>
+                                    src='{{ url('storage/prefeito/' . $compdec->prefeitura->fotoPref) }}'>
 
-                                <p class="text-center p-2">{{ Str::upper($compdec->prefeitura->prefeito) }}</p>
+                                <p class="p-2 text-center">{{ Str::upper($compdec->prefeitura->prefeito) }}</p>
                                 <p class="text-center">
                                     <button type="link" class="btn btn-link" id="btnPref">Alterar</button>
                                 </p>
@@ -72,15 +72,15 @@
                             <br>
                         </div>
                     </div>
-                    <div class='col-md-6 text-center'>
+                    <div class='text-center col-md-6'>
                         <!-- FOTO DO COORDENADOR -->
-                        <div class="d-flex justify-content-center p-2" id='alt_foto_compdec'>
-                            <div class="col-md-6 border-dark text-center mb-3" style="max-width: 18rem; max-height: 18rem; min-height: 16rem;">
+                        <div class="p-2 d-flex justify-content-center" id='alt_foto_compdec'>
+                            <div class="mb-3 text-center col-md-6 border-dark" style="max-width: 18rem; max-height: 18rem; min-height: 16rem;">
                                 Coordenador<br>
                                 <img class="figure img-thumbnail" style='width: 150px; height:150px; '
-                                    src='{{ asset('storage/compdec/' . $compdec->fotoCompdec) }}' width='100'
+                                    src='{{ url('storage/compdec/' . $compdec->fotoCompdec) }}' width='100'
                                     min-heigth='100'>
-                                <p class="text-center p-2">
+                                <p class="p-2 text-center">
                                     @php
                                         $compdec->equipes->each(function ($item, $key) {
                                             if ($item['funcao'] == 'Coordenador') {
@@ -137,249 +137,249 @@
                         <!-- FORM INFORMAÇÕES MUNICIPIO -->
                         <div class="tab-pane fade show active" id="municipio-tab" role="tabpanel" aria-labelledby="municipio-tab">
                             {{ Form::open(['url' => 'municipio/update/' . $compdec->municipio->id]) }}
-                            {{ Form::token() }}<div class='col'>
-                                {{ Form::hidden('id', $compdec->municipio->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+                            {{ Form::token() }}
+                            {{ Form::hidden('id', $compdec->municipio->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
 
-                                <br>
-                                <legend class="alert alert-info">Dados Prefeito</legend>
-                                <div class="row">
-                                    <div class='col'>
-                                        {{ Form::label('prefeito', 'Nome do Prefeito') }}:
-                                        {{ Form::text('prefeito', $compdec->municipio->nome_prefeito, ['class' => 'form form-control', 'maxlength' => 70]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('tel_prefeito', 'Telefone Prefeito') }}:
-                                        {{ Form::text('tel_prefeito', $compdec->municipio->tel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
-                                        <br>
-                                    </div>
+                            <br>
+                            <legend class="alert alert-info">Dados Prefeito</legend>
+                            <div class="row">
+                                <div class='col'>
+                                    {{ Form::label('prefeito', 'Nome do Prefeito') }}:
+                                    {{ Form::text('prefeito', $compdec->municipio->nome_prefeito, ['class' => 'form form-control', 'maxlength' => 70]) }}
+                                    <br>
                                 </div>
-
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('cel_prefeito', 'Celular Prefeito') }}:
-                                        {{ Form::text('cel_prefeito', $compdec->municipio->cel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
-                                        <br>
-                                    </div>
-                                    <div class="col">
-                                        {{ Form::label('email_prefeito', 'Email do Prefeito') }}:
-                                        {{ Form::email('email_prefeito', $compdec->municipio->email_prefeito, ['class' => 'form form-control', 'maxlength' => 110]) }}
-
-                                    </div>
+                                <div class='col'>
+                                    {{ Form::label('tel_prefeito', 'Telefone Prefeito') }}:
+                                    {{ Form::text('tel_prefeito', $compdec->municipio->tel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    <br>
                                 </div>
-
-                                <legend class="alert alert-info">Informações</legend>
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('nome', '') }}:
-                                        {{ Form::text('nome', $compdec->municipio->nome, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => 70]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('macroregiao', '') }}:
-                                        {{ Form::select(
-                                            'macroregiao',
-                                            [
-                                                'ALTO PARANAIBA' => 'ALTO PARANAIBA',
-                                                'CENTRAL' => 'CENTRAL',
-                                                'CENTRO OESTE' => 'CENTRO OESTE',
-                                                'JEQUITINHONHA MUCURI' => 'JEQUITINHONHA MUCURI',
-                                                'JEQUITINHONHAMUCURI' => 'JEQUITINHONHAMUCURI',
-                                                'NOROESTE DE MINAS' => 'NOROESTE DE MINAS',
-                                                'NORTE DE MINAS' => 'NORTE DE MINAS',
-                                                'SUL DE MINAS' => 'SUL DE MINAS',
-                                                'TRIANGULO' => 'TRIANGULO',
-                                                'VALE DO RIO DOCE' => 'VALE DO RIO DOCE',
-                                                'ZONA DA MATA' => 'ZONA DA MATA',
-                                            ],
-                                            $compdec->municipio->macroregiao,
-                                            ['class' => 'form form-control', 'placeholder' => 'Selecione a Macroregiao'],
-                                        ) }}
-                                        <br>
-                                    </div>
-                                </div>
-
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('latitude', '') }}:
-                                        {{ Form::text('latitude', $compdec->municipio->latitude, ['class' => 'form form-control', 'maxlength' => 13]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('longitude', '') }}:
-                                        {{ Form::text('longitude', $compdec->municipio->longitude, ['class' => 'form form-control', 'maxlength' => 13]) }}
-                                        <br>
-                                    </div>
-                                </div>
-
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('latitude_dec', 'Latitude Formato Decimal') }}:
-                                        {{ Form::text('latitude_dec', $compdec->municipio->latitude_dec, ['class' => 'form form-control', 'maxlength' => 15]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('longitude_dec', 'Longitude Formato Decimal') }}:
-                                        {{ Form::text('longitude_dec', $compdec->municipio->longitude_dec, ['class' => 'form form-control', 'maxlength' => 15]) }}
-                                        <br>
-                                    </div>
-                                </div>
-
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('distancia_bh', 'Distância de BH em KM') }}:
-                                        {{ Form::number('distancia_bh', $compdec->municipio->distancia_bh, ['class' => 'form form-control', 'maxlength' => 15]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('populacao', 'Número de Habitantes (População)') }}:
-                                        {{ Form::number('populacao', $compdec->municipio->populacao, ['class' => 'form form-control', 'maxlength' => 20]) }}
-                                        <br>
-                                    </div>
-                                </div>
-
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('territorio_desenv', 'Território de Desenvolvimento') }}:
-                                        {{ Form::select(
-                                            'territorio_desenv',
-                                            [
-                                                'Alto Jequitinhonh' => 'Alto Jequitinhonha',
-                                                'Caparao' => 'Caparao',
-                                                'Central' => 'Central',
-                                                'Mata' => 'Mata',
-                                                'Medio e Baixo Jequitinhonha' => 'Medio e Baixo Jequitinhonha',
-                                                'Metropolitana' => 'Metropolitana',
-                                                'Mucuri' => 'Mucuri',
-                                                'Noroeste' => 'Noroeste',
-                                                'Norte' => 'Norte',
-                                                'Oeste' => 'Oeste',
-                                                'Sudoeste' => 'Sudoeste',
-                                                'Sul' => 'Sul',
-                                                'Triangulo Norte' => 'Triangulo Norte',
-                                                'Triangulo Sul' => 'Triangulo Sul',
-                                                'Vale do Aco' => 'Vale do Aco',
-                                                'Vale do Rio Doce' => 'Vale do Rio Doce',
-                                                'Vertentes' => 'Vertentes',
-                                            ],
-                                            $compdec->municipio->territorio_desenv,
-                                            ['class' => 'form form-control', 'placeholder' => 'Selecione o Território de Desenvolvimento'],
-                                        ) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('area', 'Area Territorio KM²') }}:
-                                        {{ Form::text('area', $compdec->municipio->area, ['class' => 'form form-control', 'maxlength' => 45]) }}
-                                        <br>
-                                    </div>
-                                </div>
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('id_meso', 'Mesorregiao') }}:
-                                        {{ Form::select('id_meso', $mesorregiao, $compdec->municipio->id_meso, ['class' => 'form form-control']) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('id_micro', 'Microrregiao') }}:
-                                        {{ Form::select('id_micro', $microrregiao, $compdec->municipio->id_micro, ['class' => 'form form-control']) }}
-                                        <br>
-                                    </div>
-
-                                </div>
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('pop_rural', 'Populacao Rural') }}:
-                                        {{ Form::text('pop_rural', $compdec->municipio->pop_rural, ['class' => 'form form-control', 'maxlength' => 11]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('qtd_pipa', 'Quantidade de Pipa Contratados ou de Propriedade Prefeitura') }}:
-                                        {{ Form::text('qtd_pipa', $compdec->municipio->qtd_pipa, ['class' => 'form form-control', 'maxlength' => 11]) }}
-                                        <br>
-                                    </div>
-
-                                </div>
-
-
-                                <legend class="alert alert-info">Endereço e Contatos da Prefeitura</legend>
-
-
-                                <div class="row">
-                                    <div class='col'>
-                                        {{ Form::label('endereco', 'Endereço Prefeitura') }}:
-                                        {{ Form::text('endereco', $compdec->municipio->endereco, ['class' => 'form form-control', 'maxlength' => 110]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('bairro', 'Bairro Prefeitura') }}:
-                                        {{ Form::text('bairro', $compdec->municipio->bairro, ['class' => 'form form-control', 'maxlength' => 70]) }}
-                                        <br>
-                                    </div>
-
-                                </div>
-
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('cep', 'Cep prefeitura') }}:
-                                        {{ Form::text('cep', $compdec->municipio->cep, ['class' => 'form form-control', 'maxlength' => 15]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('email_prefeitura', 'Email Prefeitura') }}:
-                                        {{ Form::email('email_prefeitura', $compdec->municipio->email_prefeitura, ['class' => 'form form-control', 'maxlength' => 110]) }}
-                                        <br>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class='col'>
-                                        {{ Form::label('fax_prefeitura', 'Fax Prefeitura') }}:
-                                        {{ Form::text('fax_prefeitura', $compdec->municipio->fax_prefeitura, ['class' => 'form form-control', 'maxlength' => 20]) }}
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('tel_prefeitura', 'Telefone Prefeitura') }}:
-                                        {{ Form::text('tel_prefeitura', $compdec->municipio->tel_prefeitura, ['class' => 'form form-control', 'maxlength' => 20]) }}
-                                        <br>
-                                    </div>
-
-                                </div>
-
-                                <legend class="alert alert-info">Informações ISS</legend>
-                                <div class="row">
-                                    <div class='col'>
-                                        {{ Form::label('cobra_iss', 'Isenção de ISS') }}:
-                                        {{ Form::select('cobra_iss', ['SIM' => 'SIM', 'NAO' => 'NAO'], $compdec->municipio->cobra_iss, ['class' => 'form form-control', 'placeholder' => 'Selecione a Opção']) }}
-
-                                        <br>
-                                    </div>
-                                    <div class='col'>
-                                        {{ Form::label('aliquota_iss', 'Aliquota Iss %') }}:
-                                        {{ Form::text('aliquota_iss', $compdec->municipio->aliquota_iss, ['class' => 'form form-control', 'maxlength' => 20]) }}
-                                        <br>
-                                    </div>
-                                </div>
-                                <div class='row'>
-                                    <div class='col'>
-                                        {{ Form::label('num_lei_iss', 'Número Lei Cobranca Iss') }}:
-                                        {{ Form::text('num_lei_iss', $compdec->municipio->num_lei_iss, ['class' => 'form form-control', 'maxlength' => 30]) }}
-                                        <br>
-                                    </div>
-
-                                    <div class='col'>
-                                        {{ Form::label('resp_cob_iss', 'Quem é responsável pela cobranca do ISS') }}:
-                                        {{ Form::select('resp_cob_iss', ['Inexistente' => 'Inexistente', 'Prestador' => 'Prestador', 'Município' => 'Municipio'], $compdec->municipio->resp_cob_iss, [
-                                            'class' => 'form form-control',
-                                            'placeholder' => 'Selecione a Responsabilidade Cobrança Iss',
-                                        ]) }}
-                                        <br>
-                                    </div>
-                                </div>
-
-
-                                <div class='row'>
-                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
-                                </div>{{ Form::close() }}
                             </div>
+
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('cel_prefeito', 'Celular Prefeito') }}:
+                                    {{ Form::text('cel_prefeito', $compdec->municipio->cel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    <br>
+                                </div>
+                                <div class="col">
+                                    {{ Form::label('email_prefeito', 'Email do Prefeito') }}:
+                                    {{ Form::email('email_prefeito', $compdec->municipio->email_prefeito, ['class' => 'form form-control', 'maxlength' => 110]) }}
+
+                                </div>
+                            </div>
+
+                            <legend class="alert alert-info">Informações</legend>
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('nome', '') }}:
+                                    {{ Form::text('nome', $compdec->municipio->nome, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => 70]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('macroregiao', '') }}:
+                                    {{ Form::select(
+                                        'macroregiao',
+                                        [
+                                            'ALTO PARANAIBA' => 'ALTO PARANAIBA',
+                                            'CENTRAL' => 'CENTRAL',
+                                            'CENTRO OESTE' => 'CENTRO OESTE',
+                                            'JEQUITINHONHA MUCURI' => 'JEQUITINHONHA MUCURI',
+                                            'JEQUITINHONHAMUCURI' => 'JEQUITINHONHAMUCURI',
+                                            'NOROESTE DE MINAS' => 'NOROESTE DE MINAS',
+                                            'NORTE DE MINAS' => 'NORTE DE MINAS',
+                                            'SUL DE MINAS' => 'SUL DE MINAS',
+                                            'TRIANGULO' => 'TRIANGULO',
+                                            'VALE DO RIO DOCE' => 'VALE DO RIO DOCE',
+                                            'ZONA DA MATA' => 'ZONA DA MATA',
+                                        ],
+                                        $compdec->municipio->macroregiao,
+                                        ['class' => 'form form-control', 'placeholder' => 'Selecione a Macroregiao'],
+                                    ) }}
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('latitude', '') }}:
+                                    {{ Form::text('latitude', $compdec->municipio->latitude, ['class' => 'form form-control', 'maxlength' => 13]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('longitude', '') }}:
+                                    {{ Form::text('longitude', $compdec->municipio->longitude, ['class' => 'form form-control', 'maxlength' => 13]) }}
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('latitude_dec', 'Latitude Formato Decimal') }}:
+                                    {{ Form::text('latitude_dec', $compdec->municipio->latitude_dec, ['class' => 'form form-control', 'maxlength' => 15]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('longitude_dec', 'Longitude Formato Decimal') }}:
+                                    {{ Form::text('longitude_dec', $compdec->municipio->longitude_dec, ['class' => 'form form-control', 'maxlength' => 15]) }}
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('distancia_bh', 'Distância de BH em KM') }}:
+                                    {{ Form::number('distancia_bh', $compdec->municipio->distancia_bh, ['class' => 'form form-control', 'maxlength' => 15]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('populacao', 'Número de Habitantes (População)') }}:
+                                    {{ Form::number('populacao', $compdec->municipio->populacao, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('territorio_desenv', 'Território de Desenvolvimento') }}:
+                                    {{ Form::select(
+                                        'territorio_desenv',
+                                        [
+                                            'Alto Jequitinhonh' => 'Alto Jequitinhonha',
+                                            'Caparao' => 'Caparao',
+                                            'Central' => 'Central',
+                                            'Mata' => 'Mata',
+                                            'Medio e Baixo Jequitinhonha' => 'Medio e Baixo Jequitinhonha',
+                                            'Metropolitana' => 'Metropolitana',
+                                            'Mucuri' => 'Mucuri',
+                                            'Noroeste' => 'Noroeste',
+                                            'Norte' => 'Norte',
+                                            'Oeste' => 'Oeste',
+                                            'Sudoeste' => 'Sudoeste',
+                                            'Sul' => 'Sul',
+                                            'Triangulo Norte' => 'Triangulo Norte',
+                                            'Triangulo Sul' => 'Triangulo Sul',
+                                            'Vale do Aco' => 'Vale do Aco',
+                                            'Vale do Rio Doce' => 'Vale do Rio Doce',
+                                            'Vertentes' => 'Vertentes',
+                                        ],
+                                        $compdec->municipio->territorio_desenv,
+                                        ['class' => 'form form-control', 'placeholder' => 'Selecione o Território de Desenvolvimento'],
+                                    ) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('area', 'Area Territorio KM²') }}:
+                                    {{ Form::text('area', $compdec->municipio->area, ['class' => 'form form-control', 'maxlength' => 45]) }}
+                                    <br>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('id_meso', 'Mesorregiao') }}:
+                                    {{ Form::select('id_meso', $mesorregiao, $compdec->municipio->id_meso, ['class' => 'form form-control']) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('id_micro', 'Microrregiao') }}:
+                                    {{ Form::select('id_micro', $microrregiao, $compdec->municipio->id_micro, ['class' => 'form form-control']) }}
+                                    <br>
+                                </div>
+
+                            </div>
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('pop_rural', 'Populacao Rural') }}:
+                                    {{ Form::text('pop_rural', $compdec->municipio->pop_rural, ['class' => 'form form-control', 'maxlength' => 11]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('qtd_pipa', 'Quantidade de Pipa Contratados ou de Propriedade Prefeitura') }}:
+                                    {{ Form::text('qtd_pipa', $compdec->municipio->qtd_pipa, ['class' => 'form form-control', 'maxlength' => 11]) }}
+                                    <br>
+                                </div>
+
+                            </div>
+
+
+                            <legend class="alert alert-info">Endereço e Contatos da Prefeitura</legend>
+
+
+                            <div class="row">
+                                <div class='col'>
+                                    {{ Form::label('endereco', 'Endereço Prefeitura') }}:
+                                    {{ Form::text('endereco', $compdec->municipio->endereco, ['class' => 'form form-control', 'maxlength' => 110]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('bairro', 'Bairro Prefeitura') }}:
+                                    {{ Form::text('bairro', $compdec->municipio->bairro, ['class' => 'form form-control', 'maxlength' => 70]) }}
+                                    <br>
+                                </div>
+
+                            </div>
+
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('cep', 'Cep prefeitura') }}:
+                                    {{ Form::text('cep', $compdec->municipio->cep, ['class' => 'form form-control', 'maxlength' => 15]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('email_prefeitura', 'Email Prefeitura') }}:
+                                    {{ Form::email('email_prefeitura', $compdec->municipio->email_prefeitura, ['class' => 'form form-control', 'maxlength' => 110]) }}
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col'>
+                                    {{ Form::label('fax_prefeitura', 'Fax Prefeitura') }}:
+                                    {{ Form::text('fax_prefeitura', $compdec->municipio->fax_prefeitura, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('tel_prefeitura', 'Telefone Prefeitura') }}:
+                                    {{ Form::text('tel_prefeitura', $compdec->municipio->tel_prefeitura, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    <br>
+                                </div>
+
+                            </div>
+
+                            <legend class="alert alert-info">Informações ISS</legend>
+                            <div class="row">
+                                <div class='col'>
+                                    {{ Form::label('cobra_iss', 'Isenção de ISS') }}:
+                                    {{ Form::select('cobra_iss', ['SIM' => 'SIM', 'NAO' => 'NAO'], $compdec->municipio->cobra_iss, ['class' => 'form form-control', 'placeholder' => 'Selecione a Opção']) }}
+
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('aliquota_iss', 'Aliquota Iss %') }}:
+                                    {{ Form::text('aliquota_iss', $compdec->municipio->aliquota_iss, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    <br>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('num_lei_iss', 'Número Lei Cobranca Iss') }}:
+                                    {{ Form::text('num_lei_iss', $compdec->municipio->num_lei_iss, ['class' => 'form form-control', 'maxlength' => 30]) }}
+                                    <br>
+                                </div>
+
+                                <div class='col'>
+                                    {{ Form::label('resp_cob_iss', 'Quem é responsável pela cobranca do ISS') }}:
+                                    {{ Form::select('resp_cob_iss', ['Inexistente' => 'Inexistente', 'Prestador' => 'Prestador', 'Município' => 'Municipio'], $compdec->municipio->resp_cob_iss, [
+                                        'class' => 'form form-control',
+                                        'placeholder' => 'Selecione a Responsabilidade Cobrança Iss',
+                                    ]) }}
+                                    <br>
+                                </div>
+                            </div>
+
+
+                            <div class='row'>
+                                {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
+                            </div>{{ Form::close() }}
+
                         </div>
 
                         <!---------- FORM DADOS GERAIS ----------->
@@ -395,22 +395,19 @@
                             <legend class="alert alert-info">Dados Divisão Política</legend>
 
                             <div class="row">
-
                                 <div class='col'>
-                                    <br>
                                     {{ Form::label('regiao', 'Regiao de Desenvolvimento do Estado') }}:
                                     {{ Form::select('regiao_id', $regioes, '', ['class' => 'form form-control']) }}
-
                                     <br>
                                 </div>
                                 <div class='col'>
-                                    <br>
+
                                     {{ Form::label('associacao', 'Associação de Municípios') }}:
                                     {{ Form::select('associacao_id', $associacoes, '', ['class' => 'form form-control']) }}
                                     <br>
                                 </div>
                                 <div class='col'>
-                                    <br>
+
                                     {{ Form::label('id_territorio', 'Territorio Desenvolvimento') }}:
                                     {{ Form::select('territorio_id', $territorios, '', ['class' => 'form form-control']) }}
                                     <br>
@@ -418,9 +415,9 @@
                             </div>
 
 
+                            <legend class="alert alert-info">Informações Leis/Decretos</legend>
                             <div class="row">
-                                <br>
-                                <legend class="alert alert-info">Informações Leis/Decretos</legend>
+
                                 <div class='col'>
                                     {{ Form::label('num_lei', 'Núnero da Lei') }}:
                                     {{ Form::number('num_lei', $compdec->num_lei, ['class' => 'form form-control', 'max' => 20000]) }}
@@ -458,9 +455,10 @@
                                     <br>
                                 </div>
                             </div>
+
+                            <legend class="alert alert-info">Informações de Localização da Coordenadoria Municipal de Defesa Civil</legend>
                             <div class="row">
                                 <br>
-                                <legend class="alert alert-info">Informações de Localização da Coordenadoria Municipal de Defesa Civil</legend>
                                 <div class='col'>
                                     {{ Form::label('endereco', 'Endereco') }}:
                                     {{ Form::text('endereco', $compdec->endereco, ['class' => 'form form-control', 'maxlength' => 150]) }}
@@ -501,13 +499,11 @@
                             </div>
 
 
-                            <div class='row p-2'>
-                                <br>
-                                <legend class="alert alert-info">Informações sobre estrutura funcional da COMPDEC</legend>
-
-                                <div class='col-md-12 border border-secondary rounded'>
-                                    <div class='row p-2'>
-                                        <div class="col p-2">
+                            <legend class="alert alert-info">Informações sobre estrutura funcional da COMPDEC</legend>
+                            <div class='p-2 row'>
+                                <div class='col-md-12'>
+                                    <div class='p-2 row'>
+                                        <div class="p-2 border col border-secondary">
                                             {{ Form::label('efetivo', 'Funcionários Efetivos') }}:
                                             <div class='form-check'>
                                                 {{ Form::radio('efetivo', 1, $compdec->efetivo == 1 ? true : false) }}
@@ -959,7 +955,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col text-center">
+                                <div class="text-center col">
                                     {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
                                     {{ Form::close() }}
                                 </div>
