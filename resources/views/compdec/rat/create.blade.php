@@ -168,7 +168,7 @@
 
         <link href="{{ asset('vendor/select2/dist/css/select2.css') }}" rel="stylesheet" />
         <script src="{{ asset('vendor/select2/dist/js/select2.full.js') }}"></script>
-        
+
         <link rel="stylesheet" href="{{ asset('summernote/summernote-bs4.css') }}" />
         <script src="{{ asset('summernote/summernote-bs4.js') }}"></script>
 
@@ -216,6 +216,10 @@
                     maxParallelUploads: '2',
                     credits: 'CEDEC-MG',
                     labelIdle: 'Para Adicionar, Arraste o arquivo e solte aqui ou <span class="filepond--label-action"> Clique Aqui </span>',
+                    allowImageResize: true,
+                    imageResizeTargetWidth: 640,
+                    imageResizeTargetHeight: 480,
+                    imageResizeMode: 'cover',
                 });
 
                 // Set allowMultiple property to true
@@ -259,7 +263,7 @@
                                 });
                             } else {
                                 window.location.href = data.view;
-                                
+
                             }
                         },
                         error: function(data) {
@@ -271,7 +275,7 @@
                 });
 
                 $('.js-example-basic-single').select2();
-                
+
                 $('input.select2-search__field').focus();
 
                 // $("#acoes").keyup(function() {
@@ -324,7 +328,7 @@
                     });
                 });
 
-            
+
                 $("#cep").inputmask('99999-999');
             })
         </script>

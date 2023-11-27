@@ -14,6 +14,8 @@
 <script src="{{ asset('vendor/filePond/filepond-plugin-image-preview.min.js') }}"></script>
 <script src="{{ asset('vendor/filePond/filepond-plugin-file-validate-size.min.js') }}"></script>
 <script src="{{ asset('vendor/filePond/filepond-plugin-file-rename.js') }}"></script>
+<script src="{{ asset('vendor/filePond/filepond-plugin-image-resize.js') }}"></script>
+<script src="{{ asset('vendor/filePond/filepond-plugin-image-transform.min.js') }}"></script>
 <script type='modulo' src="{{ asset('vendor/filePond/locale/pt-br.js') }}"></script>
 {{-- <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" /> --}}
 <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
@@ -24,6 +26,8 @@
     //$.fn.filepond.registerPlugin(FilePondPluginImageValidateSize);
     $.fn.filepond.registerPlugin(FilePondPluginFileValidateSize);
     //$.fn.filepond.registerPlugin(FilePondPluginFileRename);
+    $.fn.filepond.registerPlugin(FilePondPluginImageTransform);
+    $.fn.filepond.registerPlugin(FilePondPluginImageResize);
 
     $.fn.filepond.setDefaults({
         maxFileSize: '3MB',
