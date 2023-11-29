@@ -716,7 +716,7 @@ class VistoriaController extends Controller
             $rats = array();
         } else {
 
-
+            if (Auth::user()->tipo == 'cedec') {
             $vistorias = DB::table('com_vistorias')
                 ->whereRaw(DB::raw($filter_all))
                 ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
@@ -728,6 +728,20 @@ class VistoriaController extends Controller
                 ->paginate(10);
             //->get();
             //->toSql();
+            }else if (Auth::user()->tipo == 'compdec') {
+                $vistorias = DB::table('com_vistorias')
+                ->whereRaw(DB::raw($filter_all))
+                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
+                ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
+                ->addSelect('com_vistorias.*')
+                ->addSelect('cedec_municipio.nome as municipio')
+                ->addSelect('users.name as operador_nome')
+                ->orderBy('com_vistorias.dt_vistoria', 'asc')
+                ->where('com_vistorias.municipio_id', Auth::user()->municipio_id)
+                ->paginate(10);
+            //->get();
+            //->toSql();
+            }
         }
 
         //$vistorias

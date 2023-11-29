@@ -11,6 +11,7 @@ use App\Models\Compdec\ComTerritorio;
 use App\Models\Municipio\Municipio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -93,6 +94,9 @@ class CompdecController extends \App\Http\Controllers\Controller
      */
     public function edit($id = null)
     {
+        
+        dd(Log::stack(['db'])->info('opa'));
+
         $active_tab = "";
 
         $compdec_id_session = isset(Session::get('user')['compdec_id']) ? Session::get('user')['compdec_id'] : null;
@@ -136,6 +140,7 @@ class CompdecController extends \App\Http\Controllers\Controller
      */
     public function update(Request $request, $id)
     {
+        dd(Log::channel('db')->debug('opa'));
 
         try {
 
@@ -146,6 +151,8 @@ class CompdecController extends \App\Http\Controllers\Controller
             $compdec->fill($input);
 
             $compdec->save();
+            
+            
         } catch (\Exception $ex) {
             $ex->getMessage();
         }

@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
-        return view('dashboard');
+        //return view('dashboard');
     } else if (null != session()->get('routeInicio')) {
         return redirect()->away(session()->get('routeInicio'));
     } else {
@@ -30,13 +30,27 @@ Route::get('/', function () {
     //return view('welcome');
 });
 
+
 #################################   CONFIG   ##################################
 
 # http://localhost:8081/drrd1?token=16|zuC7Mdwo8XAn3CzfOnzt5i4xsTefgjRF1AhfFBRI
 
 Route::group(['middleware' => 'auth'], function () {
 
-    
+    ##############################  DASHBOARD ##############################
+    Route::get('/dashboard', function () {
+
+        if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
+            return view('dashboard');
+        } elseif (null != session()->get('routeInicio')) {
+            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
+        } else {
+            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
+        }
+    })->name('dashboard');
+
+
+
     Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
 
     # configurações 
@@ -539,10 +553,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('mah/pedido/deletedoc/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@deletedoc');
 
     Route::get('mah/download/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@download');
-    
+
     Route::get('mah/enviar/status/{pedido}/{status}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@status');
 
-    
+
 
     ################## ANEXO
     // # mah CREATE
@@ -718,7 +732,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('rat/deleteImagem', 'App\Http\Controllers\Compdec\RatController@deleteImagem');
 
     Route::get('rat/exportRats', [RatController::class, 'exportRats']);
-    
+
     Route::get('rat/print/{rat}', [RatController::class, 'RatPdfPrint']);
 
 
@@ -754,19 +768,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     # Prepara SEARCH
     Route::match(['GET', 'POST'], 'prepara/search', 'App\Http\Controllers\Compdec\PreparaController@search');
-
-
-    ##############################  DASHBOARD ##############################
-    Route::get('/dashboard', function () {
-
-        if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
-            return view('dashboard');
-        } elseif (null != session()->get('routeInicio')) {
-            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
-        } else {
-            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
-        }
-    })->name('dashboard');
 });
 
 Route::get('autentica/{token}', 'App\Http\Controllers\Cedec\ApiController@autentica');

@@ -21,13 +21,16 @@ class LoginController extends Controller
         # servidor Casa
         if($_SERVER['HTTP_HOST'] == "sdc.net:8081") {
             $credentials = $request->json('content');
-        }else {
             
+        }elseif($_SERVER['HTTP_HOST'] == 'www.sdc.mg.gov.br') {
+            $credentials = $request->json('content');
+            
+        }else {
             #localhost insomnia
             $credentials = $request;
         }   
         
-        //dd($credentials);
+        //dd($credentials, $_SERVER['HTTP_HOST']);
         $tipo = null;
 
         # REDEC
