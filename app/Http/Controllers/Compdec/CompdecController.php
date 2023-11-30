@@ -95,8 +95,6 @@ class CompdecController extends \App\Http\Controllers\Controller
     public function edit($id = null)
     {
         
-        dd(Log::stack(['db'])->info('opa'));
-
         $active_tab = "";
 
         $compdec_id_session = isset(Session::get('user')['compdec_id']) ? Session::get('user')['compdec_id'] : null;
@@ -140,7 +138,6 @@ class CompdecController extends \App\Http\Controllers\Controller
      */
     public function update(Request $request, $id)
     {
-        dd(Log::channel('db')->debug('opa'));
 
         try {
 

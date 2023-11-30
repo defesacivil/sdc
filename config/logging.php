@@ -3,6 +3,7 @@
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
+use App\Logging\DatabaseLogger;
 
 return [
 
@@ -50,7 +51,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily', 'db'],
+            'channels' => ['daily'],
             'ignore_exceptions' => false,
         ],
 
@@ -117,14 +118,8 @@ return [
             'handler' => NullHandler::class,
         ],
 
-        'emergency' => [
-            'path' => storage_path('logs/laravel_emergencia.log'),
-        ],
         
-        'db' => [
-            'driver' => 'custom',
-            'via' => App\Logging\CreateCustomLogger::class,
-        ],
+        
     ],
 
 ];
