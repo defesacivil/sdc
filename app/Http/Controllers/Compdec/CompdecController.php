@@ -10,6 +10,7 @@ use App\Models\Compdec\ComRegiao;
 use App\Models\Compdec\ComTerritorio;
 use App\Models\Municipio\Municipio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -94,14 +95,14 @@ class CompdecController extends \App\Http\Controllers\Controller
      */
     public function edit($id = null)
     {
-        
+
         $active_tab = "";
 
         $compdec_id_session = isset(Session::get('user')['compdec_id']) ? Session::get('user')['compdec_id'] : null;
-        
-        if(!is_null($id)){
+
+        if (!is_null($id)) {
             $compdec_id = $id;
-        }else if(!is_null($compdec_id_session)) {
+        } else if (!is_null($compdec_id_session)) {
             $compdec_id = $compdec_id_session;
         }
 
@@ -113,6 +114,12 @@ class CompdecController extends \App\Http\Controllers\Controller
         $microrregiao = CedecMicro::orderBy('nome')->pluck('nome', 'id');
         $mesorregiao = CedecMeso::orderBy('nome')->pluck('nome', 'id');
 
+        /* */
+        Log::channel('navegacao')->info("Acesso view editar", [
+            'table' => $compdec->getTable(),
+            'id' => $id,
+            'user_id' => Auth::user()->id
+        ]);
 
         return view(
             'compdec.edit',
@@ -148,14 +155,11 @@ class CompdecController extends \App\Http\Controllers\Controller
             $compdec->fill($input);
 
             $compdec->save();
-            
-            
         } catch (\Exception $ex) {
             $ex->getMessage();
         }
 
         return back()->with('message', 'Registro Atualizado com Sucesso !');
-        
     }
 
     /**
@@ -316,7 +320,7 @@ class CompdecController extends \App\Http\Controllers\Controller
                 'id_micro.required'     => 'O Campo Microrregião é Obrigatório',
                 'pop_rural.required'    => 'O Campo População Rural é Obrigatório',
                 'pop_rural.numeric'     => 'O Campo População Rural deve ser numérico',
-                'pop_rural.digits_between'=> 'O Campo População Rural deve ter no máximo 11 Caracteres',
+                'pop_rural.digits_between' => 'O Campo População Rural deve ter no máximo 11 Caracteres',
                 'qtd_pipa.required'     => 'O Campo Quantidade de Caminhões Pipa é Obrigatório',
                 'qtd_pipa.numeric'      => 'O Campo Quantidade de Caminhões Pipa deve ser numérico',
                 'qtd_pipa.max'          => 'rO Campo Quantidade de Caminhões Pipa deve ter no máximo 3 Caracteres',
@@ -373,9 +377,7 @@ class CompdecController extends \App\Http\Controllers\Controller
         $municipio->resp_cob_iss = $request->input('resp_cob_iss');
 
         $municipio->update();
-        
-        return redirect()->back()->with('message','Registro Atualizado com Sucesso');
 
-
+        return redirect()->back()->with('message', 'Registro Atualizado com Sucesso');
     }
 }

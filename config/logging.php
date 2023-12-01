@@ -3,7 +3,6 @@
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
-use App\Logging\DatabaseLogger;
 
 return [
 
@@ -51,7 +50,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['db'],
             'ignore_exceptions' => false,
         ],
 
@@ -61,12 +60,14 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
-        'usuario' => [
+        # navegação do usuário
+        'navegacao' => [
             'driver' => 'single',
-            'path' => storage_path('logs/usuario.log'),
+            'path' => storage_path('logs/navegacao.log'),
             'level' => 'info',
         ],
 
+        # diario da aplicação
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel_diario.log'),
@@ -118,8 +119,14 @@ return [
             'handler' => NullHandler::class,
         ],
 
-        
-        
+        // Log to MySQL
+        'db' => [
+            'driver' => 'custom',
+            'handler' => App\Models\Logging\LogHandler::class,
+            'via' => App\Logging\LogCustomMessage::class,
+            'level' => 'debug',
+        ],
+
     ],
 
 ];

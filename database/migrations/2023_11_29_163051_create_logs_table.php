@@ -15,11 +15,15 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
+            $table->string('message', 110)->nullable();
             $table->enum('level', ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug']);
-            $table->integer('iteration')->nullable();
-            $table->text('message')->nullable();
-            $table->text('user_id')->nullable();
-            $table->integer('job_id')->nullable();
+            $table->string('channel', 15)->nullable();
+            $table->string('user_id', 11)->nullable();
+            $table->string('remote_addr', 30);
+            $table->text('user_agent');
+            $table->string('instance', 40);
+            $table->string('context', 255);
+            $table->text('formatted');
             $table->timestamps();
         });
     }
