@@ -168,12 +168,20 @@
                                 </div>
                             </div>
 
+                            <!-- INFORMAÇÕES GERAIS -->
                             <legend class="alert alert-info">Informações</legend>
                             <div class='row'>
                                 <div class='col'>
                                     {{ Form::label('nome', '') }}:
                                     {{ Form::text('nome', $compdec->municipio->nome, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => 70]) }}
                                     <br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{  Form::label('dc_regiao', '', ['class' => 'text-blue']) }}:
+                                    {{ Form::select('id_meso', $mesorregiao, $compdec->municipio->id_meso, ['class' => 'form form-control']) }}
+
                                 </div>
                                 <div class='col'>
                                     {{ Form::label('macroregiao', '') }}:
@@ -197,6 +205,19 @@
                                     ) }}
                                     <br>
                                 </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col'>
+                                    {{ Form::label('id_meso', 'Mesorregiao') }}:
+                                    {{ Form::select('id_meso', $mesorregiao, $compdec->municipio->id_meso, ['class' => 'form form-control']) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('id_micro', 'Microrregiao') }}:
+                                    {{ Form::select('id_micro', $microrregiao, $compdec->municipio->id_micro, ['class' => 'form form-control']) }}
+                                    <br>
+                                </div>
+
                             </div>
 
                             <div class='row'>
@@ -272,19 +293,6 @@
                                     {{ Form::text('area', $compdec->municipio->area, ['class' => 'form form-control', 'maxlength' => 45]) }}
                                     <br>
                                 </div>
-                            </div>
-                            <div class='row'>
-                                <div class='col'>
-                                    {{ Form::label('id_meso', 'Mesorregiao') }}:
-                                    {{ Form::select('id_meso', $mesorregiao, $compdec->municipio->id_meso, ['class' => 'form form-control']) }}
-                                    <br>
-                                </div>
-                                <div class='col'>
-                                    {{ Form::label('id_micro', 'Microrregiao') }}:
-                                    {{ Form::select('id_micro', $microrregiao, $compdec->municipio->id_micro, ['class' => 'form form-control']) }}
-                                    <br>
-                                </div>
-
                             </div>
                             <div class='row'>
                                 <div class='col'>
