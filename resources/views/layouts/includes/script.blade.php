@@ -45,18 +45,28 @@
             "progressBar": true,
             "showDuration": "800",
         }
-        
-        toastr.success("{{ session('message') }}"); 
-            // <div class = "alert alert-success" >
-            //     {{ session('message') }}
-            // </div>
+
+        toastr.success("{{ session('message') }}");
+        // <div class = "alert alert-success" >
+        //     {{ session('message') }}
+        // </div>
     @endif
 
-    @if(count($errors) > 0)
-        @foreach($errors->all() as $error)
+    @if (count($errors) > 0)
+        @foreach ($errors->all() as $error)
             toastr.error("{{ $error }}");
         @endforeach
     @endif
 
-    
+</script>
+<script>
+
+
+// $(window).on("load", function(){
+//         $("input").each(function() {        
+//         $("#"+$(this).attr('id')).addClass("is_invalid");
+//         $(this).append("<div class='invalid-feedback'>Campo Obrigatório !</div>");
+//         console.log($(this).addClass('is_invalid'));
+//     });
+// });
 </script>

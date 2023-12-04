@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Config;
+use Illuminate\Support\Facades\App;
 
 class VistoriaController extends Controller
 {
@@ -129,7 +131,7 @@ class VistoriaController extends Controller
 
         $optionMunicipio = Municipio::all()->pluck('nome', 'id');
 
-               return view(
+        return view(
             'compdec/vistoria/create',
             [
                 'municipio_id' => Auth::user()->municipio_id,
@@ -207,7 +209,7 @@ class VistoriaController extends Controller
         );
 
         # numero quantidade de vistorias que o municipio tem
-         $num_vistoria = (Vistoria::where('municipio_id',  $request->municipio_id)->count()+1);
+        $num_vistoria = (Vistoria::where('municipio_id',  $request->municipio_id)->count() + 1);
 
         $vistoria = new Vistoria;
 
@@ -365,12 +367,11 @@ class VistoriaController extends Controller
                         'status' => true
                     ]);
                 }
-            }else {
+            } else {
 
                 return response()->json([
                     'error' => $val->errors(),
                 ]);
-
             }
         }
     }
@@ -384,7 +385,6 @@ class VistoriaController extends Controller
     public function show(Vistoria $vistoria, Request $request)
     {
 
-
         //dd($vistoria->municipio);
         if ($vistoria->ck_clas_risc_muito_alta == 1) {
             $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
@@ -392,11 +392,10 @@ class VistoriaController extends Controller
             $interdicao = false;
         }
 
-        //dd($interdicao);
-
         // Imagens elementos estruturais
         $img_el_estrs = [];
-        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+
+        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
         foreach ($scan as $file) {
             if (substr(basename($file), 0, 8) == 'el_estr_') {
                 $img_el_estrs[] = $file;
@@ -405,7 +404,7 @@ class VistoriaController extends Controller
 
         // Imagens elementos Construtivos
         $img_el_constrs = [];
-        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
         foreach ($scan as $file) {
             if (substr(basename($file), 0, 8) == 'el_constr_') {
                 $img_el_constrs[] = $file;
@@ -413,22 +412,25 @@ class VistoriaController extends Controller
         }
         // Imagens agentes potencializadoress
         $img_ag_potens = [];
-        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
+
+
         foreach ($scan as $file) {
             if (substr(basename($file), 0, 8) == 'ag_pote_') {
                 $img_ag_potens[] = $file;
             }
         }
 
+        //dd($img_ag_potens);
+
         // Imagens processos geotecnicos
         $img_proc_geos = [];
-        $scan = Storage::allFiles('file_vistoria/' . $vistoria->id);
+        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
         foreach ($scan as $file) {
             if (substr(basename($file), 0, 8) == 'proc_ge_') {
                 $img_proc_geos[] = $file;
             }
         }
-
 
         return view(
             'compdec/vistoria/show',
@@ -717,30 +719,30 @@ class VistoriaController extends Controller
         } else {
 
             if (Auth::user()->tipo == 'cedec') {
-            $vistorias = DB::table('com_vistorias')
-                ->whereRaw(DB::raw($filter_all))
-                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
-                ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
-                ->addSelect('com_vistorias.*')
-                ->addSelect('cedec_municipio.nome as municipio')
-                ->addSelect('users.name as operador_nome')
-                ->orderBy('com_vistorias.dt_vistoria', 'asc')
-                ->paginate(10);
-            //->get();
-            //->toSql();
-            }else if (Auth::user()->tipo == 'compdec') {
                 $vistorias = DB::table('com_vistorias')
-                ->whereRaw(DB::raw($filter_all))
-                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
-                ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
-                ->addSelect('com_vistorias.*')
-                ->addSelect('cedec_municipio.nome as municipio')
-                ->addSelect('users.name as operador_nome')
-                ->orderBy('com_vistorias.dt_vistoria', 'asc')
-                ->where('com_vistorias.municipio_id', Auth::user()->municipio_id)
-                ->paginate(10);
-            //->get();
-            //->toSql();
+                    ->whereRaw(DB::raw($filter_all))
+                    ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
+                    ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
+                    ->addSelect('com_vistorias.*')
+                    ->addSelect('cedec_municipio.nome as municipio')
+                    ->addSelect('users.name as operador_nome')
+                    ->orderBy('com_vistorias.dt_vistoria', 'asc')
+                    ->paginate(10);
+                //->get();
+                //->toSql();
+            } else if (Auth::user()->tipo == 'compdec') {
+                $vistorias = DB::table('com_vistorias')
+                    ->whereRaw(DB::raw($filter_all))
+                    ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
+                    ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
+                    ->addSelect('com_vistorias.*')
+                    ->addSelect('cedec_municipio.nome as municipio')
+                    ->addSelect('users.name as operador_nome')
+                    ->orderBy('com_vistorias.dt_vistoria', 'asc')
+                    ->where('com_vistorias.municipio_id', Auth::user()->municipio_id)
+                    ->paginate(10);
+                //->get();
+                //->toSql();
             }
         }
 

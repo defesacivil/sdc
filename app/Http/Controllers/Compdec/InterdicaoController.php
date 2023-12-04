@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Compdec;
 
 use App\Http\Controllers\Controller;
 use App\Models\Compdec\Interdicao;
+use Exception;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\Return_;
 
@@ -55,7 +56,8 @@ class InterdicaoController extends Controller
      */
     public function show($id_vistoria)
     {
-        $interdicao = Interdicao::where('ids_vistoria', $id_vistoria)->first();
+        
+        $interdicao = Interdicao::where('ids_vistoria', $id_vistoria)->firstOrFail();
 
         return view(
             'compdec/interdicao/show',

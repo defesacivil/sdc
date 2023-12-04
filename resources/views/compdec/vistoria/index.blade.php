@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    <div style="background-color:#e9ecef;" class="container border p-3">
+    <div style="background-color:#e9ecef;" class="container p-3 border">
         <div class="row flex-fill">
 
             <div class="col-md-12">
@@ -30,8 +30,8 @@
                 {{ Form::open(['url' => 'vistoria/search']) }}
 
                 <div class="row" id="search2">
-                    <div class="col-md-6 border p-1">
-                        <div class='row p-3'>
+                    <div class="p-1 border col-md-6">
+                        <div class='p-3 row'>
                             <div class='col-md-6'>
                                 {{ Form::token() }}
                                 {{ Form::label('ano', 'Ano') }} :
@@ -42,7 +42,7 @@
                                 {{ Form::text('num_vistoria', '', ['class' => 'form form-control', 'maxlength'=>'12']) }}
                             </div>
                         </div>
-                        <div class='row p-3'>
+                        <div class='p-3 row'>
                             <div class="col">
                                 {{ Form::label('municipio_id', 'Nome do Município') }}:
                                 {{ Form::select('municipio_id', $optionMunicipio, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '']) }}
@@ -50,7 +50,7 @@
 
                         </div>
         
-                        <div class='row p-3'>
+                        <div class='p-3 row'>
                             <div class='col-md-6'>
                                 {{ Form::label('-', 'Período Inicial') }}:
                                 {{ Form::date('data_inicio', '', ['class' => 'form form-control', 'name' => 'data_inicio', 'id' => 'data_inicio']) }}
@@ -61,42 +61,42 @@
                             </div>
                         </div>
                         
-                        {{-- <div class="row p-2">
+                        {{-- <div class="p-2 row">
                             <div class="col-md-12">
                                 {{ Form::label('historico', 'Parte do Texto da Ocorrência') }}:
                                 {{ Form::text('historico', '', ['class' => 'form form-control', 'id' => 'historico', 'placeholder' => 'Parte do Texto da Ocorrência', 'maxlength' => '110']) }}
                             </div>
                         </div> --}}
                     </div>
-                    <div class="col-md-6 p-1 border">
-                        {{-- <div class="col-md-12 p-3">
+                    <div class="p-1 border col-md-6">
+                        {{-- <div class="p-3 col-md-12">
                             {{ Form::label('ocorrencia_id', 'Tipo da Ocorrência') }}:
                             {{ Form::select('ocorrencia_id', $optionOcorrencia, '-', ['class' => 'js-example-basic-single form form-control', 'id' => 'ocorrencia_id', 'placeholder' => 'Código da Ocorrência', 'data-ocorrencia_id' => '']) }}
                         </div> --}}
 
-                        <div class="col-md-12 p-3">
+                        <div class="p-3 col-md-12">
                             {{ Form::label('tp_imovel', 'Tipo do Imóvel') }}:
                             {{ Form::select('tp_imovel', $tp_imovel, '-', ['class' => 'form form-control', 'id' => 'tp_imovel', 'placeholder' => 'Tipo do Imóvel', 'data-tp_imovel' => '']) }}
                         </div>
 
-                        <div class="col-md-12 p-3">
+                        <div class="p-3 col-md-12">
                             {{ Form::label('interdicao', 'Vistorias com Interdições ?') }}:
                             {{ Form::select('interdicao', ['Não', 'Sim'], '-', ['class' => 'form form-control', 'id' => 'interdicao', 'data-interdicao' => '']) }}
                         </div>
 
-                        <div class="col-md-12 p-3">
+                        <div class="p-3 col-md-12">
                             {{ Form::label('endereco', 'Endereço da Vistoria/Interdição') }}:
                             {{ Form::text('endereco', '', ['class' => 'form form-control', 'id' => 'endereco', 'placeholder' => 'Endereço da Ocorrência', 'maxlength' => '100']) }}
                         </div>
                
-                        {{-- <div class="col-md-12 p-3">
+                        {{-- <div class="p-3 col-md-12">
                             {{ Form::label('cobrade_id', 'Código Cobrade') }}:
                             {{ Form::select('cobrade_id', $optionCobrade, '', ['class' => 'js-example-basic-single form form-control', 'id' => 'cobrade_id', 'placeholder' => 'Código Brasileiro de Desastre', 'data-cobrade_id' => '']) }}
                         </div> --}}
                        
                         
                     </div>
-                    <div class="col-md-12 p-2">
+                    <div class="p-2 col-md-12">
                         {{ Form::submit('Busca', ['class' => 'btn btn-primary']) }}
                         {{ Form::close() }}
                     </div>
@@ -104,10 +104,7 @@
 
 
                 <div class="table table-responsive table-sm">
-                    <table class="table table-striped
-                table-hover	
-                table-bordered
-                align-middle">
+                    <table class="table align-middle table-striped table-hover table-bordered">
                         <thead class="table-light">
                             <caption></caption>
                             <tr>
@@ -132,6 +129,7 @@
                                             <a href="{{ url('vistoria/edit/' . $vistoria->id) }}"><img width="25" src={{ asset('/imagem/icon/editar.png') }}></a>
                                         @endcan
                                             @if ($vistoria->ck_clas_risc_muito_alta == 1)
+                                                
                                                 <a href="{{ url('interdicao/show/'.$vistoria->id) }}" title='Termo de Interdição'><img width="25" src={{ asset('/imagem/icon/relatorio.png') }} ></a>
                                             @endif
                                         <a href="{{ url('vistoria/show/' . $vistoria->id) }}"><img width="25" src={{ asset('/imagem/icon/view.png') }}></a>

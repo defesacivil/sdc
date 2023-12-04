@@ -14,7 +14,6 @@
     @endsection
 
 @section('content')
-
     <div class="container">
 
         <div class="row">
@@ -24,12 +23,12 @@
                 @if(!isset($pdf))
                 <p class=''>
                     <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}' title="Voltar para a página anterior">Voltar</a>
-                    <a class='btn btn-primary btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/pdf') }}' title='Salvar Documento em PDF'>Salvar PDF</a>
+                    {{-- <a class='btn btn-primary btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/pdf') }}' title='Salvar Documento em PDF'>Salvar PDF</a> --}}
                     {{-- <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/email') }}' title='Enviar Vistoria por E-mail'>Envio E-mail</a> --}}
                 </p><br>
                 @endif
 
-                <p class="h2 text-center">
+                <p class="text-center h2">
                     RELATÓRIO DE VISTORIA DE ATENDIMENTO
 
                 </p>
@@ -39,38 +38,38 @@
                 <br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERIZAÇÃO DA VISTORIA</legend>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Nome do Município : </h5>
                                 </div>
-                                <div class="col border p-3">
+                                <div class="p-3 border col">
                                     {{ $vistoria->municipio->nome }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Data da vistoria : </h5>
                                 </div>
-                                <div class="col border p-3">
+                                <div class="p-3 border col">
                                     {{ \Carbon\Carbon::parse($vistoria->dt_vistoria)->format('d/m/Y H:1:s') }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Tipo da Ocorrência : </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->tp_ocorrencia }}
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Tipo de Imóvel : </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->tp_imovel }}
                                 </div>
                             </div>
@@ -82,50 +81,50 @@
                 <br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERIZAÇÃO DOS MORADORES</legend>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Proprietário/Morador : </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->prop }}
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Contato/Telefone : </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->cel }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Número de Moradores : </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->num_morador }}
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Há Idosos ?: </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->idosos == 0 ? 'Não' : 'Sim' }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Há Crianças ? : </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->criancas == 0 ? 'Não' : 'Sim' }}
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Há Pessoas com Dificuldade de Locomoção ?: </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->pess_dif_loc == 0 ? 'Não' : 'Sim' }}
                                 </div>
                             </div>
@@ -137,53 +136,53 @@
 
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">LOCALIZAÇÃO DO IMÓVEL</legend>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Endereço do Imóvel : </h5>
                                 </div>
-                                <div class="col border p-3">
+                                <div class="p-3 border col">
                                     {{ $vistoria->endereco }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Bairro : </h5>
                                 </div>
-                                <div class="col border p-3">
+                                <div class="p-3 border col">
                                     {{ $vistoria->bairro }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Município da Vistoria : </h5>
                                 </div>
-                                <div class="col border p-3">
+                                <div class="p-3 border col">
                                     {{ $vistoria->municipio_dono->nome }}
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Cep : </h5>
                                 </div>
-                                <div class="col border p-3">
+                                <div class="p-3 border col">
                                     {{ $vistoria->cep }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-3 border p-3">
+                            <div class="p-2 row">
+                                <div class="p-3 border col-md-3">
                                     <h5>Latitude : </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->latitude }}
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Longitude: </h5>
                                 </div>
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     {{ $vistoria->longitude }}
                                 </div>
                             </div>
@@ -196,23 +195,23 @@
 
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-3">
+                        <fieldset class="p-3 border">
                             <legend class="w-auto">CARACTERÍSTICA DO TERRENO E INFRAESTRUTURA</legend>
 
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Abastecimento de Água ? : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3">
+                                <div class="p-3 border col-md-9">
                                     {{ $vistoria->abast_agua }}
                                 </div>
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Esgotamento Sanitário : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3 text-center">
+                                <div class="p-3 text-center border col-md-9">
                                     <ul class="list-group">
                                         @if ($vistoria->ck_esgo_sant_canalizado == 1)
                                             <li class="list-group-item"><img width='20' src='{{ url('imagem/icon/check.png') }}'> Canalizado</li>
@@ -229,20 +228,20 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Sistema Drenagem Superficial ? : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3">
+                                <div class="p-3 border col-md-9">
                                     {{ $vistoria->sist_drenag }}
                                 </div>
                             </div>
                             <br>
 
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Sistema Viário e de Acesso : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3 text-center">
+                                <div class="p-3 text-center border col-md-9">
                                     <ul class="list-group">
                                         @if ($vistoria->ck_sis_viar_acesso_estrada == 1)
                                             <li class="list-group-item"><img width='20' src='{{ url('imagem/icon/check.png') }}'> Estrada</li>
@@ -263,10 +262,10 @@
                             <br>
 
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Tipo de Revestimentos : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3 text-center">
+                                <div class="p-3 text-center border col-md-9">
                                     <ul class="list-group">
                                         @if ($vistoria->ck_tp_revest_via_asfaldo == 1)
                                             <li class="list-group-item"><img width='20' src='{{ url('imagem/icon/check.png') }}'> Asfalto</li>
@@ -284,10 +283,10 @@
 
                             <br>
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Condições de Acesso : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3 text-center">
+                                <div class="p-3 text-center border col-md-9">
                                     <ul class="list-group">
                                         @if ($vistoria->ck_cond_acesso_veicular == 1)
                                             <li class="list-group-item"><img width='20' src='{{ url('imagem/icon/check.png') }}'> Veicular</li>
@@ -307,20 +306,20 @@
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Número de Moradias no Terreno : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3">
+                                <div class="p-3 border col-md-9">
                                     {{ $vistoria->nr_moradias }}
                                 </div>
                             </div>
 
                             <br>
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Distância da Encosta : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3 text-center">
+                                <div class="p-3 text-center border col-md-9">
                                     <ul class="list-group">
                                         @if ($vistoria->ck_dist_encosta_menor_2_m == 1)
                                             <li class="list-group-item"><img width='20' src='{{ url('imagem/icon/check.png') }}'> Menor que 2 metros</li>
@@ -342,10 +341,10 @@
                             <br>
 
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Material Construtivo : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3 text-center">
+                                <div class="p-3 text-center border col-md-9">
                                     <ul class="list-group">
                                         @if ($vistoria->ck_mat_constr_alvenaria == 1)
                                             <li class="list-group-item"><img width='20' src='{{ url('imagem/icon/check.png') }}'> Alvenaria</li>
@@ -365,10 +364,10 @@
 
 
                             <div class="row">
-                                <div class="col-md-3 border p-3">
+                                <div class="p-3 border col-md-3">
                                     <h5>Conservação Estrutural : </h5>
                                 </div>
-                                <div class="col-md-9 border p-3 text-center">
+                                <div class="p-3 text-center border col-md-9">
                                     <ul class="list-group">
 
                                         @if ($vistoria->ck_cons_estr_baixa == 1)
@@ -394,16 +393,16 @@
                 <br><br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERÍSTICA DAS ANOMALIAS ESTRUTURAIS E PROCESSOS GEODINÂMICOS</legend>
-                            <div class="row p-2">
+                            <div class="p-2 row">
                                 <div class="col">
-                                    <div class="row p-2">
+                                    <div class="p-2 row">
 
-                                        <div class="col-md-3 border p-3">
+                                        <div class="p-3 border col-md-3">
                                             <h5>Elementos Estruturais : </h5>
                                         </div>
-                                        <div class="col-md-9 border p-3 text-center">
+                                        <div class="p-3 text-center border col-md-9">
                                             <ul class="list-group">
                                                 <li class="list-group-item">{!! $vistoria->ck_el_str_trinc_pilar == 1 ? " <img width='20' src='" . url('imagem/icon/check.png') . "'> Trincas nos Pilares |" : '' !!}
                                                     {!! $vistoria->ck_el_str_trinc_viga == 1 ? "<img width='20' src='" . url('imagem/icon/check.png') . "'> Trinca em Vigas |" : '' !!}
@@ -423,10 +422,10 @@
                                     <br>
 
                                     <div class="row">
-                                        <div class="col-md-3 border p-3">
+                                        <div class="p-3 border col-md-3">
                                             <h5>Elementos Construtivos : </h5>
                                         </div>
-                                        <div class="col-md-9 border p-3 text-center">
+                                        <div class="p-3 text-center border col-md-9">
                                             <ul class="list-group">
                                                 <li class="list-group-item">{!! $vistoria->ck_el_constr_trinc_parede == 1 ? " <img width='20' src='" . url('imagem/icon/check.png') . "'> Trincas nas Paredes |" : '' !!}
                                                     {!! $vistoria->ck_el_constr_trinc_piso == 1 ? "<img width='20' src='" . url('imagem/icon/check.png') . "'> Trinca no Piso |" : '' !!}
@@ -439,10 +438,10 @@
 
 
                                     <div class="row">
-                                        <div class="col-md-3 border p-3">
+                                        <div class="p-3 border col-md-3">
                                             <h5>Agentes Potencializadores : </h5>
                                         </div>
-                                        <div class="col-md-9 border p-3 text-center">
+                                        <div class="p-3 text-center border col-md-9">
                                             <ul class="list-group">
                                                 <li class="list-group-item">{!! $vistoria->ck_ag_pot_lixo_entulho == 1 ? " <img width='20' src='" . url('imagem/icon/check.png') . "'> Lixo/Entulho |" : '' !!}
                                                     {!! $vistoria->ck_ag_pot_aterr_bot_fora == 1 ? "<img width='20' src='" . url('imagem/icon/check.png') . "'> Aterro/Bota Fora |" : '' !!}
@@ -458,10 +457,10 @@
                                     <br>
 
                                     <div class="row">
-                                        <div class="col-md-3 border p-3">
+                                        <div class="p-3 border col-md-3">
                                             <h5>Processos Geodinámicos : </h5>
                                         </div>
-                                        <div class="col-md-9 border p-3 text-center">
+                                        <div class="p-3 text-center border col-md-9">
                                             <ul class="list-group">
                                                 <li class="list-group-item">{!! $vistoria->ck_proc_geo_desliza == 1 ? " <img width='20' src='" . url('imagem/icon/check.png') . "'> Deslizamento |" : '' !!}
                                                     {!! $vistoria->ck_proc_geo_qued_rolam_bloc == 1 ? "<img width='20' src='" . url('imagem/icon/check.png') . "'> Queda Rolamento de Blocos |" : '' !!}
@@ -482,30 +481,30 @@
         <br><br>
         <div class="row">
             <div class="col">
-                <fieldset class="border p-2">
+                <fieldset class="p-2 border">
                     <legend class="w-auto">VULNERABILIDADE</legend>
 
                     @if ($vistoria->ck_vuln_baixa == 1)
                         <div class="row align-items-center" style="background-color: #CEF6CE;">
-                            <div class="col-md-3 p-2 text-center">Baixa</div>
+                            <div class="p-2 text-center col-md-3">Baixa</div>
                             <div class="col-md-9">Danos Estruturais não previsíveis</div>
                         </div>
                     @endif
                     @if ($vistoria->ck_vuln_media == 1)
                         <div class="row align-items-center" style="background-color: #F3F781;">
-                            <div class="col-md-3 p-2 text-center">Média</div>
+                            <div class="p-2 text-center col-md-3">Média</div>
                             <div class="col-md-9">Danos esperados relacionados a trincas e colapso nas paredes</div>
                         </div>
                     @endif
                     @if ($vistoria->ck_vuln_alta == 1)
-                        <div class="row  align-items-center" style="background-color: #FE642E">
-                            <div class="col-md-3 p-2 text-center">Alta</div>
+                        <div class="row align-items-center" style="background-color: #FE642E">
+                            <div class="p-2 text-center col-md-3">Alta</div>
                             <div class="col-md-9">Danos Estruturais esperados com excessivas deformacoes das estruturas, colapso parcial dos domicílios</div>
                         </div>
                     @endif
                     @if ($vistoria->ck_vuln_muito_alta == 1)
                         <div class="row align-items-center" style="background-color: #DF3A01">
-                            <div class="col-md-3 p-2 text-center">Muito Alta</div>
+                            <div class="p-2 text-center col-md-3">Muito Alta</div>
                             <div class="col-md-9">Danos estruturais esperados com comprometimento integral estrutural e possibilidade de colapso total dos domicílios</div>
                         </div>
                     @endif
@@ -516,30 +515,30 @@
         <br><br>
         <div class="row">
             <div class="col">
-                <fieldset class="border p-2">
+                <fieldset class="p-2 border">
                     <legend class="w-auto">CLASSIFICAÇÃO DE RISCO</legend>
 
                     @if ($vistoria->ck_clas_risc_baixa == 1)
                         <div class="row align-items-center" style="background-color: #CEF6CE;">
-                            <div class="col-md-3 p-2 text-center">Baixa</div>
+                            <div class="p-2 text-center col-md-3">Baixa</div>
                             <div class="col-md-9">Manutenção do uso e ocupação</div>
                         </div>
                     @endif
                     @if ($vistoria->ck_clas_risc_media == 1)
                         <div class="row align-items-center" style="background-color: #F3F781;">
-                            <div class="col-md-3 p-2 text-center">Média</div>
+                            <div class="p-2 text-center col-md-3">Média</div>
                             <div class="col-md-9">Necessidade obras de restauração</div>
                         </div>
                     @endif
                     @if ($vistoria->ck_clas_risc_alta == 1)
                         <div class="row align-items-center" style="background-color: #FE642E">
-                            <div class="col-md-3 p-2 text-center">Alta</div>
+                            <div class="p-2 text-center col-md-3">Alta</div>
                             <div class="col-md-9">Interdição temporária/Necessidade de obras emergênciais</div>
                         </div>
                     @endif
                     @if ($vistoria->ck_clas_risc_muito_alta == 1)
                         <div class="row align-items-center" style="background-color: #DF3A01">
-                            <div class="col-md-3 p-2 text-center">Muito Alta</div>
+                            <div class="p-2 text-center col-md-3">Muito Alta</div>
                             <div class="col-md-9">Interdição/Condenação</div>
                         </div>
                     @endif
@@ -551,16 +550,17 @@
 
     <div class="container">
         <br>
+
         {{-- Imagens Elementos Estruturais --}}
-        @if (@isset($img_el_estrs))
+        @if (count($img_el_estrs))
             <div class="row">
                 <div class="col">
-                    <fieldset class="border p-2">
+                    <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Elementos Estruturais</legend>
 
-                        <div class="row p-3">
+                        <div class="p-3 row">
                             @foreach ($img_el_estrs as $img_el_estr)
-                                <div class="col-md-6 border text-center p-3">
+                                <div class="p-3 text-center border col-md-6">
                                     <img width="320" src='{{ asset('storage/' . $img_el_estr) }}'>
                                 </div>
                             @endforeach
@@ -572,14 +572,14 @@
 
         <br>
         {{-- Imagens Elementos Construtivos --}}
-        @if (@isset($img_el_constrs))
+        @if (count($img_el_constrs))
             <div class="row">
                 <div class="col">
-                    <fieldset class="border p-2">
+                    <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Elementos Construtivos</legend>
-                        <div class="row p-3">
+                        <div class="p-3 row">
                             @foreach ($img_el_constrs as $img_el_constr)
-                                <div class="col-md-6 border text-center p-3">
+                                <div class="p-3 text-center border col-md-6">
                                     <img width="320" src='{{ asset('storage/' . $img_el_constr) }}'>
                                 </div>
                             @endforeach
@@ -591,16 +591,17 @@
 
         <br>
         {{-- Imagens Agentes Potencializadores --}}
-        @if (@isset($img_ag_potens))
+        @if (count($img_ag_potens))
             <div class="row">
                 <div class="col">
-                    <fieldset class="border p-2">
+                    <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Agentes Potencializadores</legend>
 
-                        <div class="row p-3">
+                        
+                        <div class="p-3 row">
                             @foreach ($img_ag_potens as $img_ag_poten)
-                                <div class="col-md-6 border text-center p-3">
-                                    <img width="320" src='{{ asset('storage/' . $img_ag_poten) }}'>
+                                <div class="p-3 text-center border col-md-6">
+                                    <img width="320" src='{{ asset('storage/'. $img_ag_poten) }}'>
                                 </div>
                             @endforeach
                         </div>
@@ -612,16 +613,16 @@
 
         <br>
         {{-- Imagens Processos Geondinâmicos --}}
-        @if (@isset($img_proc_geos))
+        @if (count($img_proc_geos))
             <div class="row">
                 <div class="col">
-                    <fieldset class="border p-2">
+                    <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Processos Geondinâmicos</legend>
 
-                        <div class="row p-3">
+                        <div class="p-3 row">
                             @foreach ($img_proc_geos as $img_proc_geo)
-                                <div class="col-md-6 border text-center p-3">
-                                    <img width="320" src='{{ asset('storage/' . $img_proc_geo) }}'>
+                                <div class="p-3 text-center border col-md-6">
+                                    <img width="320" src='{{ asset('storage/'. $img_proc_geo) }}'>
                                 </div>
                             @endforeach
                         </div>
@@ -642,13 +643,13 @@
             <br> <br>
 
             @if ($interdicao)
-                <p class="h2 text-center m-4">
+                <p class="m-4 text-center h2">
                     TERMO DE INTERDIÇÃO
                         Nº 0{{ $interdicao->numero }} 
                 </p>
 
                 <div class="row">
-                    <div class="col-md-12 border p-3">
+                    <div class="p-3 border col-md-12">
                         <p class="fs-3" style="font-size: 15pt">
                             Vistoria realizada em <strong>{{ \Carbon\Carbon::parse($interdicao->dt_registro)->format('d/m/Y') }} </strong> equipe de Proteção e Defesa Civil de <strong>{{ $interdicao->municipio->nome }}/MG</strong>, relacionado com o Relatório de Vistoria nº
                             <strong>{{ $interdicao->ids_vistoria }}/{{ \Carbon\Carbon::parse($interdicao->dt_registr)->year }}</strong>.
@@ -658,7 +659,7 @@
                 <br>
                 <div class="row">
 
-                    <div class="col-md-12 border p-3">
+                    <div class="p-3 border col-md-12">
                         <p class="text-center">
                             <legend>Local de Vistoria</legend>
                         </p>
@@ -692,7 +693,7 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-12 border p-3 text-center">
+                    <div class="p-3 text-center border col-md-12">
                         <p class="text-center">
                             <legend>Indentificação do Notificado</legend>
                         </p>
@@ -705,9 +706,9 @@
                 </div>
 
                 <br>
-                <div class="row border">
+                <div class="border row">
                     <div class="col-md-2"></div>
-                    <div class="col-md-8 text-justify">
+                    <div class="text-justify col-md-8">
                         <p class="text-center">
                             <legend>Motivo da Interdição</legend>
                         </p>
