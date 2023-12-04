@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
-        //return view('dashboard');
+        return view('dashboard');
     } else if (null != session()->get('routeInicio')) {
         return redirect()->away(session()->get('routeInicio'));
     } else {
