@@ -65,6 +65,8 @@
                     </tr>
                 </table>
 
+                {{ dd(env('DIR_FOTO_COMPDEC')) }}
+
 
             </div>
 

@@ -210,7 +210,7 @@ class CompdecController extends \App\Http\Controllers\Controller
     }
 
     /**
-     *  upload arquivo
+     *  upload foto prefeito
      * 
      */
     public function upload(Request $request, $id)

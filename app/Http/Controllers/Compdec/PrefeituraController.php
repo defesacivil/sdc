@@ -102,12 +102,12 @@ class PrefeituraController extends \App\Http\Controllers\Controller
 
         $fileName = 'Prefeito-'.$id."-".time().'.'.$request->file('fotoPref')->extension();
 
-        $request->file('fotoPref')->storeAs('prefeito', $fileName);
+        $request->file('fotoPref')->storeAs(env('DIR_FOTO_PREFEITO'), $fileName);
       
         $prefeitura = Prefeitura::where('id_municipio', $id)->firstOrFail();
 
-        if(Storage::exists('prefeito/'.$prefeitura->fotoPref)){
-            Storage::delete('prefeito/'.$prefeitura->fotoPref);
+        if(Storage::exists(env('DIR_FOTO_PREFEITO').'/'.$prefeitura->fotoPref)){
+            Storage::delete(env('DIR_FOTO_PREFEITO').'/'.$prefeitura->fotoPref);
         }
         
         $prefeitura->fotoPref = $fileName;

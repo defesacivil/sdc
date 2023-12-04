@@ -53,7 +53,7 @@
                             <div class="mb-3 text-center col-md-6 border-dark" style="max-width: 18rem; max-height: 18rem; min-height: 16rem;">
                                 Prefeito<br>
                                 <img class="figure img-thumbnail" style='width: 150px; height:150px'
-                                    src='{{ url('storage/prefeito/' . $compdec->prefeitura->fotoPref) }}'>
+                                    src='{{ url('storage/'.env("DIR_FOTO_PREFEITO", null).'/' . $compdec->prefeitura->fotoPref) }}'>
 
                                 <p class="p-2 text-center">{{ Str::upper($compdec->prefeitura->prefeito) }}</p>
                                 <p class="text-center">
@@ -78,7 +78,7 @@
                             <div class="mb-3 text-center col-md-6 border-dark" style="max-width: 18rem; max-height: 18rem; min-height: 16rem;">
                                 Coordenador<br>
                                 <img class="figure img-thumbnail" style='width: 150px; height:150px; '
-                                    src='{{ url('storage/compdec/' . $compdec->fotoCompdec) }}' width='100'
+                                    src='{{ url('storage/'.env('DIR_FOTO_COMPDEC').'/' . $compdec->fotoCompdec) }}' width='100'
                                     min-heigth='100'>
                                 <p class="p-2 text-center">
                                     @php
