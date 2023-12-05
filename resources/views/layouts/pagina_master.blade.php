@@ -29,15 +29,18 @@
 
 <body class="body" style="background-color: rgb(215, 217, 219)">
 
+    
     {{-- Impressao do header no PDF --}}
     @if(!isset($pdf))
         <!-- nav -->
-        <div class="row">
+        <div class="row print">
             @include('layouts/includes/nav')
         </div>
 
+        <div class="row p-2">
         {{-- header --}}
         @yield('header')
+        </div>
 
     @endif
 

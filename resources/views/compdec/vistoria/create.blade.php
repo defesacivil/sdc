@@ -30,17 +30,17 @@
                 <br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERIZAÇÃO DA VISTORIA</legend>
-                            <div class="col p-2">
+                            <div class="p-2 col-3">
                                 {{ Form::label('dt_vistoria', 'Data da vistoria') }} :
                                 {{ Form::input('dateTime-local', 'dt_vistoria', '', ['class' => 'form form-control', 'value' => old('dt_vistoria'), 'id' => 'dt_vistoria']) }}
                             </div>
-                            <div class="col p-2">
+                            <div class="p-2 col">
                                 {{ Form::label('tp_ocorrencia', 'Tipo da Ocorrência') }} :
                                 {{ Form::select('tp_ocorrencia', ['Normal' => 'Normal', 'Emergencial' => 'Emergencial'], '', ['class' => 'form form-control', 'id' => 'tp_ocorrencia', 'maxlength' => '50', 'required']) }}
                             </div>
-                            <div class="col p-2">
+                            <div class="p-2 col">
                                 {{ Form::label('tp_imovel', 'Tipo de Imóvel') }} :
                                 {{ Form::select('tp_imovel', ['Casa' => 'Casa', 'Apartamento' => 'Apartamento', 'Predio' => 'Predio', 'Galpão' => 'Galpão', 'Lote' => 'Lote', 'Praça' => 'Praça'], '', ['class' => 'form form-control', 'id' => 'tp_imovel', 'required', 'placeholder' => '']) }}
                             </div>
@@ -51,36 +51,36 @@
                 <br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERIZAÇÃO DOS MORADORES</legend>
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('prop', 'Proprietário/Morador') }} :
                                 {{ Form::text('prop', '', ['class' => 'form form-control', 'required maxlenght=70']) }}
                             </div>
-                            <div class="row p-2">
-                                <div class="col p-2">
+                            <div class="p-2 row">
+                                <div class="p-2 col">
                                     {{ Form::label('cel', 'Contato/Telefone') }}:
                                     {{ Form::text('cel', '', ['class' => 'form form-control', 'id' => 'tel', 'required', 'maxlength' => '15', 'placehold' => 'Telefone de Contato']) }}
                                 </div>
 
                             </div>
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('num_morador', 'Número de Moradores') }} :
                                 {{ Form::number('num_morador', '', ['class' => 'form form-control', 'required maxlenght=4']) }}
 
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('idosos', 'Há Idosos ?') }} :
                                 {{ Form::select('idosos', ['1' => 'Sim', '0' => 'Não'], '', ['class' => 'form form-control', 'id' => 'idosos', 'placeholder' => '']) }}
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('criancas', 'Há Crianças ?') }} :
-                                {{ Form::select('criancas', ['1' => 'Sim', '0' => 'Não'], '', ['class' => 'form form-control', 'id' => 'idosos', 'placeholder' => '']) }}
+                                {{ Form::select('criancas', ['1' => 'Sim', '0' => 'Não'], '', ['class' => 'form form-control', 'id' => 'criancas', 'placeholder' => '']) }}
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('pess_dif_loc', 'Há Pessoas com Dificuldade de Locomoção ?') }} :
                                 {{ Form::select('pess_dif_loc', ['1' => 'Sim', '0' => 'Não'], '', ['class' => 'form form-control', 'id' => 'pess_dif_loc', 'placeholder' => '']) }}
                             </div>
@@ -92,38 +92,38 @@
 
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">LOCALIZAÇÃO DO IMÓVEL</legend>
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('endereco', 'Endereço do Imóvel') }} :
                                 {{ Form::text('endereco', '', ['class' => 'form form-control', 'id' => 'endereco', 'maxlength' => '110', 'placeholder' => 'Endereço do Imóvel']) }}
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('bairro', 'Bairro') }} :
                                 {{ Form::text('bairro', '', ['class' => 'form form-control', 'id' => 'bairro', 'maxlength' => '50', 'placeholder' => 'Bairro']) }}
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-8 p-2">
+                            <div class="p-2 row">
+                                <div class="p-2 col-md-8">
                                     {{ Form::label('municipio_id', 'Nome do Município da Ocorrência') }}:
-                                    {{ Form::select('municipio_id', $optionMunicipio, Auth::user()->municipio_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '', 'required' => 'required']) }}
+                                    {{ Form::select('municipio_id', $optionMunicipio, Auth::user()->municipio_id == 1 ? '' : Auth::user()->municipio_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '', 'required' => 'required']) }}
                                     {{-- {{ Form::hidden('municipio_id', Auth()->user()->municipio_id, ['required maxlenght=6']) }} --}}
-                                    
-                                    
+
+
                                 </div>
-                                <div class="col-md-4 p-2">
+                                <div class="p-2 col-md-4">
                                     {{ Form::label('cep', 'Cep') }} :
                                     {{ Form::text('cep', '', ['class' => 'form form-control', 'id' => 'cep', 'maxlength' => '15', 'placeholder' => 'Cep']) }}
                                 </div>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col-md-6 p-2">
+                            <div class="p-2 row">
+                                <div class="p-2 col-md-6">
                                     {{ Form::label('latitude', 'Latitude') }} :
                                     {{ Form::text('latitude', '', ['class' => 'form form-control', 'id' => 'latitude', 'maxlength' => '10', 'placeholder' => 'Latitude']) }}
                                 </div>
-                                <div class="col-md-6 p-2">
+                                <div class="p-2 col-md-6">
                                     {{ Form::label('longitude', 'Longitude') }} :
                                     {{ Form::text('longitude', '', ['class' => 'form form-control', 'id' => 'longitude', 'maxlength' => '10', 'placeholder' => 'Longitude']) }}
                                 </div>
@@ -138,15 +138,15 @@
 
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERÍSTICA DO TERRENO E INFRAESTRUTURA</legend>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('abast_agua', 'Abastecimento de Água ?') }} :
-                                {{ Form::select('abast_agua', ['Existente' => 'Existente', 'Inexistente' => 'Inexistente'], '', ['class' => 'form form-control', 'id' => 'abast_agua', 'placeholder' => '']) }}
+                                {{ Form::select('abast_agua', ['Existente' => 'Existente', 'Inexistente' => 'Inexistente'], '', ['class' => 'form form-control', 'id' => 'abast_agua', 'placeholder' => '', 'required' => 'required']) }}
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('sist_drenag', 'Sistema de Drenagem Superficial') }} :
                                 {{ Form::select(
                                     'sist_drenag',
@@ -156,15 +156,15 @@
                                         'Inexistente' => 'Inexistente',
                                     ],
                                     '',
-                                    ['class' => 'form form-control', 'id' => 'sist_drenag', 'placeholder' => ''],
+                                    ['class' => 'form form-control', 'id' => 'sist_drenag', 'placeholder' => '', 'required' => 'required'],
                                 ) }}
                             </div>
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 border p-2">
+                                    <div class="p-2 border col-md-3">
                                         <label>Esgotamento Sanitário</label>
                                     </div>
-                                    <div class="col-md-9 text-center border p-2">
+                                    <div class="p-2 text-center border col-md-9">
                                         {{ Form::checkbox('ck_esgo_sant_canalizado', 1, '', ['id' => 'ck_esgo_sant_canalizado']) }}
                                         {{ Form::label('ck_esgo_sant_canalizado', 'Canalizado') }} :
                                         &nbsp;&nbsp;&nbsp;
@@ -177,12 +177,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 border p-2">
+                                    <div class="p-2 border col-md-3">
                                         <label>Sistema Viário e de Acesso</label>
                                     </div>
-                                    <div class="col-md-9 text-center border p-2">
+                                    <div class="p-2 text-center border col-md-9">
                                         {{ Form::checkbox('ck_sis_viar_acesso_estrada', 1, '', ['id' => 'ck_sis_viar_acesso_estrada']) }}
                                         {{ Form::label('ck_sis_viar_acesso_estrada', 'Estrada') }} :
                                         &nbsp;&nbsp;&nbsp;
@@ -198,12 +198,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 border p-2">
+                                    <div class="p-2 border col-md-3">
                                         <label>Tipo de Revestimentos</label>
                                     </div>
-                                    <div class="col-md-9 text-center border p-2">
+                                    <div class="p-2 text-center border col-md-9">
                                         {{ Form::checkbox('ck_tp_revest_via_asfaldo', 1, '', ['id' => 'ck_tp_revest_via_asfaldo']) }}
                                         {{ Form::label('ck_tp_revest_via_asfaldo', 'Asfalto') }} :
                                         &nbsp;&nbsp;&nbsp;
@@ -217,12 +217,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 border p-2">
+                                    <div class="p-2 border col-md-3">
                                         <label>Condições de Acesso</label>
                                     </div>
-                                    <div class="col-md-9 text-center border p-2">
+                                    <div class="p-2 text-center border col-md-9">
                                         {{ Form::checkbox('ck_cond_acesso_veicular', 1, '', ['id' => 'ck_cond_acesso_veicular']) }}
                                         {{ Form::label('ck_cond_acesso_veicular', 'Veicular') }} :
                                         &nbsp;&nbsp;&nbsp;
@@ -239,17 +239,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 {{ Form::label('nr_moradias', 'Número de Moradias no Terreno') }} :
                                 {{ Form::number('nr_moradias', '', ['class' => 'form form-control', 'maxlenght' => '4', 'id' => 'nr_moradias']) }}
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 border p-2">
+                                    <div class="p-2 border col-md-3">
                                         <label>Distância da Encosta</label>
                                     </div>
-                                    <div class="col-md-9 text-center border p-2">
+                                    <div class="p-2 text-center border col-md-9">
                                         {{ Form::checkbox('ck_dist_encosta_menor_2_m', 1, '', ['id' => 'ck_dist_encosta_menor_2_m']) }}
                                         {{ Form::label('ck_dist_encosta_menor_2_m', '< 2m') }} :
                                         &nbsp;&nbsp;&nbsp;
@@ -266,12 +266,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 border p-2">
+                                    <div class="p-2 border col-md-3">
                                         <label>Material Construtivo</label>
                                     </div>
-                                    <div class="col-md-9 text-center border p-2">
+                                    <div class="p-2 text-center border col-md-9">
                                         {{ Form::checkbox('ck_mat_constr_alvenaria', 1, '', ['id' => 'ck_mat_constr_alvenaria']) }}
                                         {{ Form::label('ck_mat_constr_alvenaria', 'Alvenaria') }} :
                                         &nbsp;&nbsp;&nbsp;
@@ -285,12 +285,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 p-2">
+                            <div class="p-2 col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 border p-2">
+                                    <div class="p-2 border col-md-3">
                                         <label>Conservação Estrutural</label>
                                     </div>
-                                    <div class="col-md-9 text-center border p-2">
+                                    <div class="p-2 text-center border col-md-9">
                                         {{ Form::checkbox('ck_cons_estr_baixa', 1, '', ['id' => 'ck_cons_estr_baixa']) }}
                                         {{ Form::label('ck_cons_estr_baixa', 'Baixa') }} :
                                         &nbsp;&nbsp;&nbsp;
@@ -311,15 +311,15 @@
                 <br><br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERÍSTICA DAS ANOMALIAS ESTRUTURAIS E PROCESSOS GEODINÂMICOS</legend>
-                            <div class="row p-2">
+                            <div class="p-2 row">
                                 <div class="col">
-                                    <div class="row p-2">
-                                        <div class="col-md-3 border">
-                                            <label class=" align-middle">Elementos Estruturais</label>
+                                    <div class="p-2 row">
+                                        <div class="border col-md-3">
+                                            <label class="align-middle ">Elementos Estruturais</label>
                                         </div>
-                                        <div class="col-md-6 text-center border">
+                                        <div class="text-center border col-md-6">
                                             {{ Form::checkbox('ck_el_str_trinc_pilar', 1, '', ['id' => 'ck_el_str_trinc_pilar']) }}
                                             {{ Form::label('ck_el_str_trinc_pilar', 'Trincas nos Pilares') }} :
                                             &nbsp;&nbsp;&nbsp;
@@ -353,7 +353,7 @@
 
                                         </div>
                                         <!-- upload imagem el_estr -->
-                                        <div class="col-md-3 border">
+                                        <div class="border col-md-3">
                                             <input type="file"
                                                 name="img_ck_el_str[]"
                                                 class="filepond img_ck_el_str_"
@@ -368,10 +368,10 @@
                                     <br>
                                     <div class="col-md-12">
                                         <div class="row">
-                                            <div class="col-md-3 border">
+                                            <div class="border col-md-3">
                                                 <label>Elementos Construtivos</label>
                                             </div>
-                                            <div class="col-md-6 text-center border p-2">
+                                            <div class="p-2 text-center border col-md-6">
                                                 {{ Form::checkbox('ck_el_constr_trinc_parede', 1, '', ['id' => 'ck_el_constr_trinc_parede']) }}
                                                 {{ Form::label('ck_el_constr_trinc_parede', 'Trincas nas Paredes') }} :
                                                 &nbsp;&nbsp;&nbsp;
@@ -384,7 +384,7 @@
                                             </div>
 
                                             <!-- upload imagem el_constr -->
-                                            <div class="col-md-3 border">
+                                            <div class="border col-md-3">
                                                 <input type="file"
                                                     name="img_ck_el_constr[]"
                                                     class="filepond img_ck_el_constr"
@@ -397,12 +397,12 @@
                                     </div>
 
                                     <br>
-                                    <div class="col-md-12 p-2">
+                                    <div class="p-2 col-md-12">
                                         <div class="row">
-                                            <div class="col-md-3 border p-2">
+                                            <div class="p-2 border col-md-3">
                                                 <label>Agentes Potencializadores</label>
                                             </div>
-                                            <div class="col-md-6 text-center border p-2">
+                                            <div class="p-2 text-center border col-md-6">
                                                 {{ Form::checkbox('ck_ag_pot_lixo_entulho', 1, '', ['id' => 'ck_ag_pot_lixo_entulho']) }}
                                                 {{ Form::label('ck_ag_pot_lixo_entulho', 'Lixo/Entulho') }} :
                                                 &nbsp;&nbsp;&nbsp;
@@ -424,7 +424,7 @@
                                                 {{ Form::label('ck_ag_pot_conc_flux_superfic', 'Concentração de Fluxo Superficial') }} :
                                             </div>
                                             <!-- upload imagem ag_pot -->
-                                            <div class="col-md-3 border">
+                                            <div class="border col-md-3">
                                                 <input type="file"
                                                     name="img_ck_ag_pote[]"
                                                     class="filepond img_ck_ag_pote"
@@ -437,12 +437,12 @@
                                     </div>
 
                                     <br>
-                                    <div class="col-md-12 p-2">
+                                    <div class="p-2 col-md-12">
                                         <div class="row">
-                                            <div class="col-md-3 border p-2">
+                                            <div class="p-2 border col-md-3">
                                                 <label>Processos Geodinámicos</label>
                                             </div>
-                                            <div class="col-md-6 text-center border p-2">
+                                            <div class="p-2 text-center border col-md-6">
                                                 {{ Form::checkbox('ck_proc_geo_desliza', 1, '', ['id' => 'ck_proc_geo_desliza']) }}
                                                 {{ Form::label('ck_proc_geo_desliza', 'Deslizamento') }} :
                                                 &nbsp;&nbsp;&nbsp;
@@ -453,7 +453,7 @@
                                                 {{ Form::label('ck_proc_geo_inundac', 'Inundações') }} :
                                             </div>
                                             <!-- upload imagem proc_geo -->
-                                            <div class="col-md-3 border">
+                                            <div class="border col-md-3">
                                                 <input type="file"
                                                     name="img_ck_proc_geo[]"
                                                     class="filepond img_ck_proc_geo"
@@ -472,32 +472,32 @@
                 <br><br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">VULNERABILIDADE</legend>
 
                             <div class="row align-items-center" style="background-color: #CEF6CE;">
-                                <div class="col-md-3 p-2">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_vuln_baixa', 1, '', ['id' => 'ck_vuln_baixa']) }}
                                     {{ Form::label('ck_vuln_baixa', 'Baixa') }}
                                 </div>
                                 <div class="col-md-9">Danos Estruturais não previsíveis</div>
                             </div>
                             <div class="row align-items-center" style="background-color: #F3F781;">
-                                <div class="col-md-3 p-2">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_vuln_media', 1, '', ['id' => 'ck_vuln_media']) }}
                                     {{ Form::label('ck_vuln_media', 'Média') }}
                                 </div>
                                 <div class="col-md-9">Danos esperados relacionados a trincas e colapso nas paredes</div>
                             </div>
-                            <div class="row  align-items-center" style="background-color: #FE642E">
-                                <div class="col-md-3 p-2">
+                            <div class="row align-items-center" style="background-color: #FE642E">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_vuln_alta', 1, '', ['id' => 'ck_vuln_alta']) }}
                                     {{ Form::label('ck_vuln_alta', 'Alta') }}
                                 </div>
                                 <div class="col-md-9">Danos Estruturais esperados com excessivas deformações das estruturas, colapso parcial dos domicílios</div>
                             </div>
                             <div class="row align-items-center" style="background-color: #DF3A01">
-                                <div class="col-md-3 p-2">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_vuln_muito_alta', 1, '', ['id' => 'ck_vuln_muito_alta']) }}
                                     {{ Form::label('ck_vuln_muito_alta', 'Muito Alta') }}
                                 </div>
@@ -509,31 +509,31 @@
                 <br><br>
                 <div class="row">
                     <div class="col">
-                        <fieldset class="border p-2">
+                        <fieldset class="p-2 border">
                             <legend class="w-auto">CLASSIFICAÇÃO DE RISCO</legend>
                             <div class="row align-items-center" style="background-color: #CEF6CE;">
-                                <div class="col-md-3 p-2">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_clas_risc_baixa', 1, '', ['id' => 'ck_clas_risc_baixa']) }}
                                     {{ Form::label('ck_clas_risc_baixa', 'Baixa') }}
                                 </div>
                                 <div class="col-md-9">Manutenção do uso e ocupação</div>
                             </div>
                             <div class="row align-items-center" style="background-color: #F3F781;">
-                                <div class="col-md-3 p-2">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_clas_risc_media', 1, '', ['id' => 'ck_clas_risc_media']) }}
                                     {{ Form::label('ck_clas_risc_media', 'Média') }}
                                 </div>
                                 <div class="col-md-9">Necessidade de obras de restauração</div>
                             </div>
                             <div class="row align-items-center" style="background-color: #FE642E">
-                                <div class="col-md-3 p-2">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_clas_risc_alta', 1, '', ['id' => 'ck_clas_risc_alta']) }}
                                     {{ Form::label('ck_clas_risc_alta', 'Alta') }}
                                 </div>
                                 <div class="col-md-9">Interdição temporária/Necessidade de obras emergênciais</div>
                             </div>
                             <div class="row align-items-center" style="background-color: #DF3A01">
-                                <div class="col-md-3 p-2">
+                                <div class="p-2 col-md-3">
                                     {{ Form::checkbox('ck_clas_risc_muito_alta', 1, '', ['id' => 'ck_clas_risc_muito_alta']) }}
                                     {{ Form::label('ck_clas_risc_muito_alta', 'Muito Alta') }}
                                 </div>
@@ -545,7 +545,7 @@
 
                 <div class='row'>
                     <div class="col-12">
-                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
+                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnGravar']) }}
                     </div>
                 </div>
                 {{ Form::close() }}
@@ -560,6 +560,25 @@
         @section('code')
             <script type="text/javascript">
                 $(document).ready(function() {
+
+                    $('#aviso').hide();
+                    $('#btnGravar').hover(function() {
+                        if ($('#ck_vuln_baixa').is(':checked') || $('#ck_vuln_media').is(':checked') || $('#ck_vuln_alta').is(':checked') || $('#ck_vuln_muito_alta').is(':checked')) {
+                            $('#btnGravar').removeAttr('disabled');
+                        } else {
+                            $('#btnGravar').attr('disabled', true);
+                            $('#aviso').show();
+                            swal.fire(
+                                'Prezado Operador, \n É necessário marcar o nível de Vulnerabilidade e a Classificação de Risco de sua vistoria !'
+                            ).then(function(){
+                                $('#btnGravar').removeAttr('disabled');
+                            });
+                        }
+                    })
+
+
+
+
                     $('.js-example-basic-single').select2();
 
                     /* el_estr */
@@ -618,7 +637,7 @@
                         for (var i = 0; i < img_ck_el_str_.length; i++) {
                             formdata.append('img_ck_el_str_[]', img_ck_el_str_[i].file);
                         }
-                        
+
                         var img_ck_el_constr = $('.img_ck_el_constr').filepond('getFiles');
                         for (var i = 0; i < img_ck_el_constr.length; i++) {
                             formdata.append('img_ck_el_constr[]', img_ck_el_constr[i].file);
@@ -633,7 +652,7 @@
                         for (var i = 0; i < img_ck_proc_geo.length; i++) {
                             formdata.append('img_ck_proc_geo[]', img_ck_proc_geo[i].file);
                         }
-                        
+
 
                         $.ajax({
                             url: '{{ url('vistoria/store') }}',
@@ -644,7 +663,7 @@
                             cache: false,
                             processData: false,
                             success: function(data) {
-                                console.log(data);
+                                //console.log(data);
                                 window.location.href = data.view;
                             },
                             error: function(data) {

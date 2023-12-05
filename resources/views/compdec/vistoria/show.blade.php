@@ -547,12 +547,11 @@
         </div>
     </div>
 
-
     <div class="container">
-        <br>
-
+        
         {{-- Imagens Elementos Estruturais --}}
-        @if (count($img_el_estrs))
+        @if (count($img_el_estrs) > 0)
+            <div class="page-break"><hr></div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
@@ -560,7 +559,7 @@
 
                         <div class="p-3 row">
                             @foreach ($img_el_estrs as $img_el_estr)
-                                <div class="p-3 text-center border col-md-6">
+                                <div class="p-3 text-center border col-md-6 img-rel">
                                     <img width="320" src='{{ asset('storage/' . $img_el_estr) }}'>
                                 </div>
                             @endforeach
@@ -570,16 +569,16 @@
             </div>
         @endif
 
-        <br>
         {{-- Imagens Elementos Construtivos --}}
-        @if (count($img_el_constrs))
+        @if (count($img_el_constrs) > 0)
+            <div class="page-break"><hr></div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Elementos Construtivos</legend>
                         <div class="p-3 row">
                             @foreach ($img_el_constrs as $img_el_constr)
-                                <div class="p-3 text-center border col-md-6">
+                                <div class="p-3 text-center border col-md-6 img-rel">
                                     <img width="320" src='{{ asset('storage/' . $img_el_constr) }}'>
                                 </div>
                             @endforeach
@@ -589,9 +588,9 @@
             </div>
         @endif
 
-        <br>
         {{-- Imagens Agentes Potencializadores --}}
-        @if (count($img_ag_potens))
+        @if (count($img_ag_potens) >0)
+            <div class="page-break"><hr></div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
@@ -600,7 +599,7 @@
                         
                         <div class="p-3 row">
                             @foreach ($img_ag_potens as $img_ag_poten)
-                                <div class="p-3 text-center border col-md-6">
+                                <div class="p-3 text-center border col-md-6 img-rel">
                                     <img width="320" src='{{ asset('storage/'. $img_ag_poten) }}'>
                                 </div>
                             @endforeach
@@ -611,9 +610,9 @@
             </div>
         @endif
 
-        <br>
         {{-- Imagens Processos Geondinâmicos --}}
-        @if (count($img_proc_geos))
+        @if (count($img_proc_geos) >0)
+            <div class="page-break"><hr></div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
@@ -621,7 +620,7 @@
 
                         <div class="p-3 row">
                             @foreach ($img_proc_geos as $img_proc_geo)
-                                <div class="p-3 text-center border col-md-6">
+                                <div class="p-3 text-center border col-md-6 img-rel">
                                     <img width="320" src='{{ asset('storage/'. $img_proc_geo) }}'>
                                 </div>
                             @endforeach
@@ -632,17 +631,12 @@
         @endif
     </div>
 
-
-    <div class="page-break">
-        <hr>
-    </div>
-
+    
     <!-- interdicao -->
-    <div class="container">
+    <div class="container interdicao-text">
         <div class="col-md-12">
-            <br> <br>
-
             @if ($interdicao)
+            <div class="page-break"></div>
                 <p class="m-4 text-center h2">
                     TERMO DE INTERDIÇÃO
                         Nº 0{{ $interdicao->numero }} 
@@ -665,55 +659,54 @@
                         </p>
                         <div class="row">
                             <div class="col-md-3">
-                                <h4>Logradouro:</h4>
+                                <h5>Logradouro:</h5>
                             </div>
                             <div class="col-md-9">
-                                <h4>{{ $interdicao->endereco }}</h4>
+                                <h5>{{ $interdicao->endereco }}</h5>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-3">
-                                <h4>Bairro : </h4>
+                                <h5>Bairro : </h5>
                             </div>
                             <div class="col-md-9">
-                                <h4>{{ $interdicao->bairro }}</h4>
+                                <h5>{{ $interdicao->bairro }}</h5>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-3">
-                                <h4>Municipio : </h4>
+                                <h4>Municipio : </h5>
                             </div>
                             <div class="col-md-9">
-                                <h4>{{ $interdicao->municipio_id }}</h4>
+                                <h5>{{ $interdicao->municipio_id }}</h5>
                             </div>
                         </div>
                     </div>
                 </div>
                 <br>
                 <div class="row">
-                    <div class="p-3 text-center border col-md-12">
+                    <div class="p-3 border col-md-12">
                         <p class="text-center">
                             <legend>Indentificação do Notificado</legend>
                         </p>
-                        <h4>Nome:____________________________________________________________ RG:____________________________</h4>
-                        <h4>Endereço:_________________________________________________________________________ Nº:____________</h4>
-                        <h4>Complemento:___________________________________ Bairro:__________________________________________</h4>
-                        <h4>Cidade:________________________________________ Contato/Telefone:_________________________________</h4>
+                        <h5>Nome:_______________________________________________ RG:______________________________</h5>
+                        <h5>Endereço:________________________________________________________________ Nº:_________</h5>
+                        <h5>Complemento:___________________________ Bairro:_______________________________________</h5>
+                        <h5>Cidade:____________________________________ Contato/Telefone:_________________________</h5>
 
                     </div>
                 </div>
 
                 <br>
                 <div class="border row">
-                    <div class="col-md-2"></div>
-                    <div class="text-justify col-md-8">
+                    <div class="text-justify col-md-12 p-0">
                         <p class="text-center">
                             <legend>Motivo da Interdição</legend>
                         </p>
 
-                        <p class="fs-3" style="font-size: 15pt">Em decorrência das anomalias constatadas na edificação/solo pelo vistoriador de Proteção e
+                        <p class="pl-3 p-2" style="font-size: 10pt; text-align: justify;">Em decorrência das anomalias constatadas na edificação/solo pelo vistoriador de Proteção e
                             Defesa Civil e relatadas no relatório de vistoria nº <strong>{{ $interdicao->ids_vistoria }}/{{ \Carbon\Carbon::parse($interdicao->dt_registr)->year }}</strong>, fica INTERDITADO o imóvel da
                             <strong>{{ $interdicao->endereco . ' ' . $interdicao->bairro }} </strong> manifestações
                             patológicas comprometem o desempenho da construção e colocam em risco à vida de seus
@@ -728,13 +721,11 @@
                             § 2o A incerteza quanto ao risco de desastre não constituirá óbice para a adoção das medidas
                             preventivas e mitigadoras da situação de risco.</h4>
                     </div>
-                    <div class="col-md-2"></div>
                 </div>
                 <div class="row">
                     <div class="col-md-4"></div>
                     <div class="col"><br><br><br>
-                        <p class="">_________________________________________________________
-                        <p>
+                        <p class="">_________________________________________________________</p>
                             <span class="m-50">Nome:</span>
                     </div>
                     <div class="col-md-4"></div>

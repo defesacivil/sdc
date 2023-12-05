@@ -34,6 +34,23 @@
     }
 
     @media print {
+
+
+        * {
+            font-size: 10pt;
+        }
+
+        /* imagens do relatorio de vistoria */
+        div img-rel {
+            width: 200px;
+        }
+
+        div container .interdicao-text {
+            font-size: 9pt;
+        }
+
+        
+        
         .print {
             display: none;
         }

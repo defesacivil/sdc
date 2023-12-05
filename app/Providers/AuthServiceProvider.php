@@ -72,20 +72,21 @@ class AuthServiceProvider extends ServiceProvider
 
                 }
             
+            # cedec  REDEC
             }elseif( ($usuario['tipo'] == 'cedec') || ($usuario['tipo'] == 'redec') ){
 
                 Log::channel('usuario')->info('Login Usuário CEDEC', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
                 # Dados Cedec_usuario
-                //$cedecUsuario = CedecUsuario::find($usuario['id_user_cedec']);
-                
-                //$cedecFuncionario = CedecFuncionario::find($cedecUsuario['id_funcionario']);
+                $cedecUsuario = CedecUsuario::find($usuario['id_user_cedec']);
+   
+                $cedecFuncionario = CedecFuncionario::find($cedecUsuario['id_funcionario'])->toArray();
                 
                 # Dados Sessao
                 $dadosSession = [
                                     'admin' => $usuario['ativo'],
                                     //'usuario' => $cedecUsuario,
                                     'usuario' => Auth::user()->name,
-                                    //'funcionario' => $cedecFuncionario,
+                                    'funcionario' => $cedecFuncionario,
                                 ];
                                 
                 Session()->regenerate();

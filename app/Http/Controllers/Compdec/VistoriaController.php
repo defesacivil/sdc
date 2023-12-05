@@ -214,8 +214,9 @@ class VistoriaController extends Controller
         $vistoria = new Vistoria;
 
 
-        # municipio dono da vistoria
-        $vistoria->municipio_id_dono = Auth::user()->municipio_id;
+        
+        
+
         # municipio onde aconteceu a vistoria
         $vistoria->municipio_id  = $request->municipio_id;
         $vistoria->numero  = $num_vistoria;
@@ -237,6 +238,12 @@ class VistoriaController extends Controller
         $vistoria->sist_drenag  = $request->sist_drenag;
         $vistoria->nr_moradias  = $request->nr_moradias;
         $vistoria->operador_id  = auth()->user()->id;
+
+        # municipio dono da vistoria
+        # caso o municipio do usuario seja 1(municipio padrao do usuario cedec), seja atribuido o municipio da vistoria
+        $vistoria->municipio_id_dono = (Auth::user()->municipio_id != 1) ? Auth::user()->municipio_id : $vistoria->municipio_id;
+
+        //dd($vistoria->municipio_id_dono, $vistoria->municipio_id, $vistoria);
 
         $vistoria->ck_esgo_sant_canalizado         = isset($request->ck_esgo_sant_canalizado)         ? $request->ck_esgo_sant_canalizado        : 0;
         $vistoria->ck_esgo_sant_fossa_similar      = isset($request->ck_esgo_sant_fossa_similar)      ? $request->ck_esgo_sant_fossa_similar     : 0;
@@ -298,6 +305,10 @@ class VistoriaController extends Controller
         } else {
 
             if ($vistoria->save()) {
+            //if (true) {
+
+                //dd($vistoria->save());
+
 
 
                 /* img el estr prefix=8caract*/
@@ -305,7 +316,7 @@ class VistoriaController extends Controller
                 if (isset($files_el_estrs)) {
                     foreach ($files_el_estrs as $key => $files_el_estr) {
                         $fileName = 'el_estr_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_estr->getClientOriginalExtension();
-                        $files_el_estr->storeAs('file_vistoria/' . $vistoria->id . '/', $fileName, 'public');
+                        $files_el_estr->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
                     }
                 }
 
@@ -314,7 +325,7 @@ class VistoriaController extends Controller
                 if (isset($files_el_cons)) {
                     foreach ($files_el_cons as $key => $files_el_con) {
                         $fileName = 'el_constr_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_con->getClientOriginalExtension();
-                        $files_el_con->storeAs('file_vistoria/' . $vistoria->id . '/', $fileName, 'public');
+                        $files_el_con->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
                     }
                 }
 
@@ -323,7 +334,7 @@ class VistoriaController extends Controller
                 if (isset($files_ag_potens)) {
                     foreach ($files_ag_potens as $key => $files_ag_pote) {
                         $fileName = 'ag_pote_' . $vistoria->id . "-" . time() . $key . '.' . $files_ag_pote->getClientOriginalExtension();
-                        $files_ag_pote->storeAs('file_vistoria/' . $vistoria->id . '/', $fileName, 'public');
+                        $files_ag_pote->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
                     }
                 }
 
@@ -332,11 +343,11 @@ class VistoriaController extends Controller
                 if (isset($files_proc_geos)) {
                     foreach ($files_proc_geos as $key => $files_proc_geo) {
                         $fileName = 'proc_ge_' . $vistoria->id . "-" . time() . $key . '.' . $files_proc_geo->getClientOriginalExtension();
-                        $files_proc_geo->storeAs('file_vistoria/' . $vistoria->id . '/', $fileName, 'public');
+                        $files_proc_geo->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
                     }
                 }
 
-                if ($vistoria->ck_clas_risc_muito_alta == 1) {
+            if ($vistoria->ck_clas_risc_muito_alta == 1) {
 
                     // gerar interdicao
                     $num_interdicao = Interdicao::where('municipio_id', $vistoria->municipio_id)->count();
@@ -385,44 +396,44 @@ class VistoriaController extends Controller
     public function show(Vistoria $vistoria, Request $request)
     {
 
-        //dd($vistoria->municipio);
+        //dd($vistoria);
+
         if ($vistoria->ck_clas_risc_muito_alta == 1) {
             $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
         } else {
             $interdicao = false;
         }
-
+        
         // Imagens elementos estruturais
         $img_el_estrs = [];
-
         $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
         foreach ($scan as $file) {
             if (substr(basename($file), 0, 8) == 'el_estr_') {
                 $img_el_estrs[] = $file;
             }
         }
-
+        
         // Imagens elementos Construtivos
         $img_el_constrs = [];
         $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
+
         foreach ($scan as $file) {
-            if (substr(basename($file), 0, 8) == 'el_constr_') {
+            if (substr(basename($file), 0, 10) == 'el_constr_') {
                 $img_el_constrs[] = $file;
             }
         }
+
         // Imagens agentes potencializadoress
         $img_ag_potens = [];
-        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
-
-
+        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);       
         foreach ($scan as $file) {
+
             if (substr(basename($file), 0, 8) == 'ag_pote_') {
                 $img_ag_potens[] = $file;
             }
         }
-
-        //dd($img_ag_potens);
-
+        
+       
         // Imagens processos geotecnicos
         $img_proc_geos = [];
         $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
@@ -431,7 +442,8 @@ class VistoriaController extends Controller
                 $img_proc_geos[] = $file;
             }
         }
-
+        
+        //dd($vistoria->municipio, count($img_el_estrs), $img_el_constrs, $img_ag_potens, $img_proc_geos, $interdicao);
         return view(
             'compdec/vistoria/show',
             [
