@@ -262,6 +262,8 @@
                                     toastr.error(x);
                                 });
                             } else {
+                                
+                                {{ Session::flash('message', 'Registro gravado com Sucesso'); }}''
                                 window.location.href = data.view;
 
                             }

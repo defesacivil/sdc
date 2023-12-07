@@ -28,6 +28,7 @@ class CompdecController extends \App\Http\Controllers\Controller
         $method = request()->method();
         $active_tab = "";
 
+        print $method;
         if ($method == 'GET') {
             return view('compdec.index');
         } elseif ($method == 'POST') {

@@ -39,7 +39,7 @@
                             <legend class="w-auto">CARACTERIZAÇÃO DA VISTORIA</legend>
                             <div class="col p-2">
                                 {{ Form::label('dt_vistoria', 'Data da vistoria') }} :
-                                {{ Form::input('dateTime-local', 'dt_vistoria', $vistoria->dt_vistoria, ['class' => 'form form-control', 'value' => old('dt_vistoria'), 'id' => 'dt_vistoria']) }}
+                                {{ Form::input('dateTime-local', 'dt_vistoria', $vistoria->dt_vistoria, ['class' => 'form form-control', 'value' => old('dt_vistoria'), 'id' => 'dt_vistoria', 'required']) }}
                             </div>
                             <div class="col p-2">
                                 {{ Form::label('tp_ocorrencia', 'Tipo da Ocorrência') }} :
@@ -81,7 +81,7 @@
                             </div>
                             <div class="col-md-12 p-2">
                                 {{ Form::label('num_morador', 'Número de Moradores') }} :
-                                {{ Form::number('num_morador', $vistoria->num_morador, ['class' => 'form form-control', 'required maxlenght=4']) }}
+                                {{ Form::number('num_morador', $vistoria->num_morador, ['class' => 'form form-control', 'required max=4']) }}
 
                             </div>
 

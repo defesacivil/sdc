@@ -43,7 +43,6 @@
         </div>
 
     @endif
-
     {{-- conteudo container corpo --}}
     <div class="min-vh-100">
         @yield('content')
@@ -63,10 +62,6 @@
     
     {{-- js local --}}
     @yield('code')
-
-
-
-
 
 </body>
 

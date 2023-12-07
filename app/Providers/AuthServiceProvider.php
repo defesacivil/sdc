@@ -79,7 +79,8 @@ class AuthServiceProvider extends ServiceProvider
                 # Dados Cedec_usuario
                 $cedecUsuario = CedecUsuario::find($usuario['id_user_cedec']);
    
-                $cedecFuncionario = CedecFuncionario::find($cedecUsuario['id_funcionario'])->toArray();
+                //$cedecFuncionario = CedecFuncionario::find($cedecUsuario['id_funcionario'])->toArray();
+                $cedecFuncionario = 'secao';
                 
                 # Dados Sessao
                 $dadosSession = [

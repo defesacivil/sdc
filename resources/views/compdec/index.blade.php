@@ -40,6 +40,7 @@
         <div class="row" id='divbuscar'>
             <div class="col-md-12">
 
+
                 @can('cedec')
 
                     {{ Form::open(['url' => 'compdec']) }}
@@ -113,7 +114,7 @@
 @stop
 
 @section('code')
-<script src="{{ url('../node_modules/chart.js/dist/Chart.min.js')}}"></script>
+<script src="{{ url('js/chart/Chart.js')}}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {

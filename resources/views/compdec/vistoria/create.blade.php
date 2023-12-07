@@ -38,11 +38,11 @@
                             </div>
                             <div class="p-2 col">
                                 {{ Form::label('tp_ocorrencia', 'Tipo da Ocorrência') }} :
-                                {{ Form::select('tp_ocorrencia', ['Normal' => 'Normal', 'Emergencial' => 'Emergencial'], '', ['class' => 'form form-control', 'id' => 'tp_ocorrencia', 'maxlength' => '50', 'required']) }}
+                                {{ Form::select('tp_ocorrencia', ['Normal' => 'Normal', 'Emergencial' => 'Emergencial'], '', ['class' => 'form form-control', 'id' => 'tp_ocorrencia', 'maxlength' => '50']) }}
                             </div>
                             <div class="p-2 col">
                                 {{ Form::label('tp_imovel', 'Tipo de Imóvel') }} :
-                                {{ Form::select('tp_imovel', ['Casa' => 'Casa', 'Apartamento' => 'Apartamento', 'Predio' => 'Predio', 'Galpão' => 'Galpão', 'Lote' => 'Lote', 'Praça' => 'Praça'], '', ['class' => 'form form-control', 'id' => 'tp_imovel', 'required', 'placeholder' => '']) }}
+                                {{ Form::select('tp_imovel', ['Casa' => 'Casa', 'Apartamento' => 'Apartamento', 'Predio' => 'Predio', 'Galpão' => 'Galpão', 'Lote' => 'Lote', 'Praça' => 'Praça'], '', ['class' => 'form form-control', 'id' => 'tp_imovel', 'placeholder' => '']) }}
                             </div>
                         </fieldset>
                     </div>
@@ -55,18 +55,18 @@
                             <legend class="w-auto">CARACTERIZAÇÃO DOS MORADORES</legend>
                             <div class="p-2 col-md-12">
                                 {{ Form::label('prop', 'Proprietário/Morador') }} :
-                                {{ Form::text('prop', '', ['class' => 'form form-control', 'required maxlenght=70']) }}
+                                {{ Form::text('prop', '', ['class' => 'form form-control', 'maxlenght' => '70']) }}
                             </div>
                             <div class="p-2 row">
                                 <div class="p-2 col">
                                     {{ Form::label('cel', 'Contato/Telefone') }}:
-                                    {{ Form::text('cel', '', ['class' => 'form form-control', 'id' => 'tel', 'required', 'maxlength' => '15', 'placehold' => 'Telefone de Contato']) }}
+                                    {{ Form::text('cel', '', ['class' => 'form form-control', 'id' => 'tel', 'maxlength' => '15', 'placehold' => 'Telefone de Contato']) }}
                                 </div>
 
                             </div>
                             <div class="p-2 col-md-12">
                                 {{ Form::label('num_morador', 'Número de Moradores') }} :
-                                {{ Form::number('num_morador', '', ['class' => 'form form-control', 'required maxlenght=4']) }}
+                                {{ Form::number('num_morador', '', ['class' => 'form form-control', 'maxlength' => '4']) }}
 
                             </div>
 
@@ -107,8 +107,8 @@
                             <div class="p-2 row">
                                 <div class="p-2 col-md-8">
                                     {{ Form::label('municipio_id', 'Nome do Município da Ocorrência') }}:
-                                    {{ Form::select('municipio_id', $optionMunicipio, Auth::user()->municipio_id == 1 ? '' : Auth::user()->municipio_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '', 'required' => 'required']) }}
-                                    {{-- {{ Form::hidden('municipio_id', Auth()->user()->municipio_id, ['required maxlenght=6']) }} --}}
+                                    {{ Form::select('municipio_id', $optionMunicipio, Auth::user()->municipio_id == 1 ? '' : Auth::user()->municipio_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '']) }}
+                                    {{-- {{ Form::hidden('municipio_id', Auth()->user()->municipio_id, ['maxlenght=6']) }} --}}
 
 
                                 </div>
@@ -143,7 +143,7 @@
 
                             <div class="p-2 col-md-12">
                                 {{ Form::label('abast_agua', 'Abastecimento de Água ?') }} :
-                                {{ Form::select('abast_agua', ['Existente' => 'Existente', 'Inexistente' => 'Inexistente'], '', ['class' => 'form form-control', 'id' => 'abast_agua', 'placeholder' => '', 'required' => 'required']) }}
+                                {{ Form::select('abast_agua', ['Existente' => 'Existente', 'Inexistente' => 'Inexistente'], '', ['class' => 'form form-control', 'id' => 'abast_agua', 'placeholder' => '']) }}
                             </div>
 
                             <div class="p-2 col-md-12">
@@ -156,7 +156,7 @@
                                         'Inexistente' => 'Inexistente',
                                     ],
                                     '',
-                                    ['class' => 'form form-control', 'id' => 'sist_drenag', 'placeholder' => '', 'required' => 'required'],
+                                    ['class' => 'form form-control', 'id' => 'sist_drenag', 'placeholder' => ''],
                                 ) }}
                             </div>
                             <div class="p-2 col-md-12">
@@ -577,8 +577,6 @@
                     })
 
 
-
-
                     $('.js-example-basic-single').select2();
 
                     /* el_estr */
@@ -663,8 +661,13 @@
                             cache: false,
                             processData: false,
                             success: function(data) {
-                                //console.log(data);
-                                window.location.href = data.view;
+                                if (data.error) {
+                                Object.values(data.error).forEach((x) => {
+                                    toastr.error(x);
+                                });
+                            } else {
+                                //window.location.href = data.view;
+                            }
                             },
                             error: function(data) {
                                 console.log(data + "erro");

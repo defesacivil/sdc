@@ -106,9 +106,9 @@
             </div>
 
             <div class="row p-3">
-                <div class="col p-2 h-100" id="acoesOcorrencia">
-                    {{ Form::label('acoes', 'Histórico da Ocorrência') }}:
-                    {{ Form::textarea('acoes', $rat->acoes, ['class' => 'form form-control', 'id' => 'acoes']) }}
+                <div class="p-2 col h-100">
+                    {{ Form::label('acoes', 'Histórico da Ocorrência') }}: ( <span>Caracteres Restantes: </span> <span id='caracteres'>0</span> )
+                    {{ Form::textarea('acoes', $rat->acoes, ['class' => 'form form-control', 'id' => 'acoes', 'maxlength' => '15000']) }}
                 </div>
             </div>
 
@@ -182,6 +182,25 @@
             <script type="text/javascript">
                 $(document).ready(function() {
 
+                    $('#caracteres').text($('#acoes').val().length);
+
+                    $('#acoes').summernote({
+                        height: 400,
+                        toolbar: [
+                            ['style', ['bold', 'italic', 'underline', 'clear']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                        ]
+                    });
+
+                    $('#acoes').keyup(function(){
+                        var qtd = $(this).val().length;
+                        $('#caracteres').text(14800 -qtd);
+                        //console.log(qtd);
+                        if(qtd > 14800) {
+                            swal.fire('Prezado operador, \n você atingiu o número máximo de caracteres do campo Histórico da Ocorrência !');
+                        }
+                    });
+
 
                     /* delete */
                     $(".btnRemove").click(function(e) {
@@ -189,7 +208,7 @@
                         var formdata = new FormData();
 
                         var file = $(this).data('file');
-                        var id = '{{$rat->id}}';
+                        var id = '{{ $rat->id }}';
 
                         formdata.append('file', file);
                         formdata.append('id', id);
@@ -207,7 +226,7 @@
                             processData: false,
                             success: function(data) {
                                 //console.log(data);
-                                window.location.href = "{{url('rat/edit/'.$rat->id)}}";
+                                window.location.href = "{{ url('rat/edit/' . $rat->id) }}";
                             },
                             error: function(data) {
                                 console.log(data + "erro");
@@ -257,13 +276,13 @@
                             cache: false,
                             processData: false,
                         }).done(function(data) {
-                            if(data.error){
-                                    Object.values(data.error).forEach((x)=>{
-                                        toastr.error(x);    
-                                    });     
-                                }else {
-                                    window.location.href = data.view;
-                                } 
+                            if (data.error) {
+                                Object.values(data.error).forEach((x) => {
+                                    toastr.error(x);
+                                });
+                            } else {
+                                window.location.href = data.view;
+                            }
                         });
 
                         e.preventDefault();
@@ -271,30 +290,6 @@
 
                     $('.js-example-basic-single').select2();
 
-                    $('#acoes').summernote({
-                        height: 400,
-                        toolbar: [
-                            // [groupName, [list of button]]
-                            //['style', ['style']],
-                            //['font', ['bold', 'italic', 'underline', 'clear']],
-                            //['fontsize', ['fontsize']],
-                            //['color', ['color']],
-                            // ['para', ['ul', 'ol', 'paragraph']],
-                            //['height', ['height']],
-                            //['table', ['table']],
-                            //['insert', ['link']],
-                        ],
-                        styleTags: [
-                            'p',
-                            {
-                                title: 'Blockquote',
-                                tag: 'blockquote',
-                                className: 'blockquote',
-                                value: 'blockquote'
-                            },
-                            'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-                        ],
-                    });
 
                     $("#cep").inputmask('99999-999');
 

@@ -10,12 +10,12 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "@popperjs/core": "^2.10.2",
+        "@popperjs/core": "^2.11.8",
         "admin-lte": "^3.2.0",
         "alpinejs": "^3.4.2",
         "autoprefixer": "^10.4.2",
         "axios": "^0.21",
-        "bootstrap": "^4.6.2 ",
+        "bootstrap": "^5.2.2",
         "jquery": "^3.6",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
