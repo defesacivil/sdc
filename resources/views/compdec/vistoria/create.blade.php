@@ -577,9 +577,7 @@
             <script type="text/javascript">
                 $(document).ready(function() {
 
-
-
-
+                    /* não gravar sem marcar a vulnerabilidade e risco */
                     $('#aviso').hide();
                     $('#btnGravar').hover(function() {
                         if ($('#ck_vuln_baixa').is(':checked') || $('#ck_vuln_media').is(':checked') || $('#ck_vuln_alta').is(':checked') || $('#ck_vuln_muito_alta').is(':checked')) {
@@ -675,8 +673,7 @@
                         if (isConfirmed) {
                             $.ajax({
 
-
-                                url: '{{ url('vistoria/store') }}',
+                               url: '{{ url('vistoria/store') }}',
                                 type: 'POST',
                                 data: formdata,
                                 dataType: 'JSON',

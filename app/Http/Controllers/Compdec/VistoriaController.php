@@ -230,7 +230,7 @@ class VistoriaController extends Controller
         $vistoria->municipio_id = $request->municipio_id;
         $vistoria->numero       = $num_vistoria;
         $vistoria->dt_vistoria  = $request->dt_vistoria;
-        $vistoria->tp_ocorrencia= $request->tp_ocorrencia;
+        $vistoria->tp_ocorrencia = $request->tp_ocorrencia;
         $vistoria->tp_imovel    = $request->tp_imovel;
         $vistoria->prop         = $request->prop;
         $vistoria->cel          = $request->cel;
@@ -484,7 +484,9 @@ class VistoriaController extends Controller
      */
     public function update(Request $request, Vistoria $vistoria)
     {
-        $request->validate(
+
+        $val = Validator::make(
+            $request->all,
             [
                 "dt_vistoria"   => "required|date",
                 "tp_ocorrencia" => "required|max:50",
@@ -631,39 +633,90 @@ class VistoriaController extends Controller
         $vistoria->ck_clas_risc_muito_alta         = isset($request->ck_clas_risc_muito_alta)         ? $request->ck_clas_risc_muito_alta        : 0;
 
 
-        $vistoria->save();
+        if ($val->fails()) {
 
-        // if(isset($request->anexo)){
-        //     $fileName = $rat->id."-".time().'_'.$request->anexo->getClientOriginalName();
-        //     $request->file('anexo')->storeAs('uploads', $fileName, 'public');
-        // }
-
-        $existeLaudo = Interdicao::where('ids_vistoria', $request->id)->count();
-
-        //dd($existeLaudo, $request);
-
-        if ($vistoria->ck_vuln_muito_alta  == 1 || $vistoria->ck_clas_risc_muito_alta == 1 && ($existeLaudo == 0)) {
-
-            // gerar interdica
-            $num_interdicao = Interdicao::where('municipio_id', Auth::user()->municipio_id)->count();
-
-            $interdicao = new Interdicao();
-            $interdicao->numero = ($num_interdicao + 1);
-            $interdicao->ids_vistoria = $vistoria->id;
-            $interdicao->municipio_id = $vistoria->municipio_id;
-            $interdicao->endereco = $vistoria->endereco;
-            $interdicao->bairro = $vistoria->bairro;
-            $interdicao->cep =  $vistoria->cep;
-            $interdicao->dt_registro = date('Y-m-d H:i:s');
-
-            $interdicao->save();
-
-            return redirect('interdicao/show/' . $interdicao->ids_vistoria)->with('message', 'Registro Gravado com Sucesso ');
+            return response()->json([
+                'error' => $val->errors(),
+                'keys' => $val->errors()->keys(),
+            ]);
         } else {
+            if ($vistoria->save()) {
 
-            return redirect('vistoria/show/' . $vistoria->id)->with('message', 'Registro Gravado com Sucesso ');
+                /* img el estr prefix=8caract*/
+                $files_el_estrs = $request->img_ck_el_str_;
+                if (isset($files_el_estrs)) {
+                    foreach ($files_el_estrs as $key => $files_el_estr) {
+                        $fileName = 'el_estr_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_estr->getClientOriginalExtension();
+                        $files_el_estr->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
+                    }
+                }
+
+
+                /* img el construtivos */
+                $files_el_cons = $request->img_ck_el_constr;
+                if (isset($files_el_cons)) {
+                    foreach ($files_el_cons as $key => $files_el_con) {
+                        $fileName = 'el_constr_' . $vistoria->id . "-" . time() . $key . '.' . $files_el_con->getClientOriginalExtension();
+                        $files_el_con->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
+                    }
+                }
+
+                /* img ag potenc */
+                $files_ag_potens = $request->img_ck_ag_pote;
+                if (isset($files_ag_potens)) {
+                    foreach ($files_ag_potens as $key => $files_ag_pote) {
+                        $fileName = 'ag_pote_' . $vistoria->id . "-" . time() . $key . '.' . $files_ag_pote->getClientOriginalExtension();
+                        $files_ag_pote->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
+                    }
+                }
+
+                /* img proc_geotermicos */
+                $files_proc_geos = $request->img_ck_proc_geo;
+                if (isset($files_proc_geos)) {
+                    foreach ($files_proc_geos as $key => $files_proc_geo) {
+                        $fileName = 'proc_ge_' . $vistoria->id . "-" . time() . $key . '.' . $files_proc_geo->getClientOriginalExtension();
+                        $files_proc_geo->storeAs('vistoria_foto/' . $vistoria->id . '/', $fileName, 'public');
+                    }
+                }
+
+                $existeLaudo = Interdicao::where('ids_vistoria', $request->id)->count();
+
+                if ($vistoria->ck_vuln_muito_alta  == 1 || $vistoria->ck_clas_risc_muito_alta == 1 && ($existeLaudo == 0)) {
+
+                    // gerar interdica
+                    $num_interdicao = Interdicao::where('municipio_id', Auth::user()->municipio_id)->count();
+
+                    $interdicao = new Interdicao();
+                    $interdicao->numero = ($num_interdicao + 1);
+                    $interdicao->ids_vistoria = $vistoria->id;
+                    $interdicao->municipio_id = $vistoria->municipio_id;
+                    $interdicao->endereco = $vistoria->endereco;
+                    $interdicao->bairro = $vistoria->bairro;
+                    $interdicao->cep =  $vistoria->cep;
+                    $interdicao->dt_registro = date('Y-m-d H:i:s');
+
+                    $interdicao->save();
+
+                    return response()->json([
+                        'view' => '/interdicao/show/' . $vistoria->id,
+                        'message' => 'Registro Gravado com Sucesso',
+                        'status' => true
+                    ]);
+                } else {
+                    return response()->json([
+                        'view' => '/vistoria/show/' . $vistoria->id,
+                        'success' => 'Registro Gravado com Sucesso',
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'error' => $val->errors(),
+                ]);
+            }
         }
     }
+
+
 
     /**
      * Remove the specified resource from storage.

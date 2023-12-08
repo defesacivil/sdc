@@ -2,6 +2,15 @@
 {{-- header --}}
 
     @section('header')
+
+    <style>
+        @page {
+            size: A4;
+            /* auto is the initial value */
+            margin: 5%;
+        }
+    </style>
+
         <!-- breadcrumb -->
         <nav aria-label="breadcrumb" class="print">
             <ol class="breadcrumb">
@@ -579,7 +588,7 @@
                         <div class="p-3 row">
                             @foreach ($img_el_constrs as $img_el_constr)
                                 <div class="p-3 text-center border col-md-6 img-rel">
-                                    <img width="320" src='{{ asset('storage/' . $img_el_constr) }}'>
+                                    <img class="img-fluid" width="400px" src='{{ asset('storage/' . $img_el_constr) }}'>
                                 </div>
                             @endforeach
                         </div>
