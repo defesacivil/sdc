@@ -670,35 +670,41 @@
                             formdata.append('img_ck_proc_geo[]', img_ck_proc_geo[i].file);
                         }
 
-                        $.ajax({
-                            url: '{{ url('vistoria/store') }}',
-                            type: 'POST',
-                            data: formdata,
-                            dataType: 'JSON',
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function(data) {
-                                if (data.keys) {
-                                    Object.values(data.keys).forEach((x) => {
-                                        $("#"+x).addClass('is-invalid');
-                                        $("#"+x).parent().append('<div class="invalid-feedback">Este campo é Obrigatório</div>');
-                                    });
+                        const isConfirmed = confirm('Deseja Gravar as Informações da Vistoria ?');
+
+                        if (isConfirmed) {
+                            $.ajax({
+
+
+                                url: '{{ url('vistoria/store') }}',
+                                type: 'POST',
+                                data: formdata,
+                                dataType: 'JSON',
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                success: function(data) {
+                                    if (data.keys) {
+                                        Object.values(data.keys).forEach((x) => {
+                                            $("#" + x).addClass('is-invalid');
+                                            $("#" + x).parent().append('<div class="invalid-feedback">Este campo é Obrigatório</div>');
+                                        });
+                                    }
+                                    if (data.error) {
+                                        Object.values(data.error).forEach((x) => {
+                                            toastr.error(x);
+                                        });
+                                    }
+
+                                    if (data.success) {
+                                        window.location.href = data.view;
+                                    }
+                                },
+                                error: function(data) {
+                                    console.log(data);
                                 }
-                                if (data.error) {
-                                    Object.values(data.error).forEach((x) => {
-                                        toastr.error(x);
-                                    });
-                                }
-                                
-                                if(data.success){
-                                    window.location.href = data.view;
-                                }
-                            },
-                            error: function(data) {
-                                console.log(data);
-                            }
-                        });
+                            });
+                        }
                         e.preventDefault();
 
                     });
