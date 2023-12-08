@@ -13,6 +13,22 @@
 @endsection
 @section('content')
 
+    @if (session()->has('message'))
+        @if (session()->has('success'))
+            <div class="alert alert-success">
+                @if (is_array(session('success')))
+                    <ul>
+                        @foreach (session('success') as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    {{ session('success') }}
+                @endif
+            </div>
+        @endif
+    @endif
+
     <div class="container">
 
         <div class="row">
@@ -24,7 +40,7 @@
                     <legend>RELATÓRIO DE VISTORIA DE ATENDIMENTO</legend>
                 </p>
 
-                {{ Form::open(['url' => '/vistoria/store', 'files' => true, 'id' => 'form_vistoria']) }}
+                {{ Form::open(['url' => '/vistoria/store', 'files' => true, 'id' => 'form_vistoria', 'novalidate']) }}
                 {{ Form::token() }}
 
                 <br>
@@ -33,15 +49,15 @@
                         <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERIZAÇÃO DA VISTORIA</legend>
                             <div class="p-2 col-3">
-                                {{ Form::label('dt_vistoria', 'Data da vistoria') }} :
+                                {{ Form::label('dt_vistoria', 'Data da vistoria', ['class' => '', 'title' => 'Campo Obrigatório']) }} :
                                 {{ Form::input('dateTime-local', 'dt_vistoria', '', ['class' => 'form form-control', 'value' => old('dt_vistoria'), 'id' => 'dt_vistoria']) }}
                             </div>
                             <div class="p-2 col">
-                                {{ Form::label('tp_ocorrencia', 'Tipo da Ocorrência') }} :
+                                {{ Form::label('tp_ocorrencia', 'Tipo da Ocorrência', ['class' => '', 'title' => 'Campo Obrigatório']) }} :
                                 {{ Form::select('tp_ocorrencia', ['Normal' => 'Normal', 'Emergencial' => 'Emergencial'], '', ['class' => 'form form-control', 'id' => 'tp_ocorrencia', 'maxlength' => '50']) }}
                             </div>
                             <div class="p-2 col">
-                                {{ Form::label('tp_imovel', 'Tipo de Imóvel') }} :
+                                {{ Form::label('tp_imovel', 'Tipo de Imóvel', ['class' => '', 'title' => 'Campo Obrigatório']) }} :
                                 {{ Form::select('tp_imovel', ['Casa' => 'Casa', 'Apartamento' => 'Apartamento', 'Predio' => 'Predio', 'Galpão' => 'Galpão', 'Lote' => 'Lote', 'Praça' => 'Praça'], '', ['class' => 'form form-control', 'id' => 'tp_imovel', 'placeholder' => '']) }}
                             </div>
                         </fieldset>
@@ -54,7 +70,7 @@
                         <fieldset class="p-2 border">
                             <legend class="w-auto">CARACTERIZAÇÃO DOS MORADORES</legend>
                             <div class="p-2 col-md-12">
-                                {{ Form::label('prop', 'Proprietário/Morador') }} :
+                                {{ Form::label('prop', 'Proprietário/Morador', ['class' => '', 'title' => 'Campo Obrigatório']) }} :
                                 {{ Form::text('prop', '', ['class' => 'form form-control', 'maxlenght' => '70']) }}
                             </div>
                             <div class="p-2 row">
@@ -561,6 +577,9 @@
             <script type="text/javascript">
                 $(document).ready(function() {
 
+
+
+
                     $('#aviso').hide();
                     $('#btnGravar').hover(function() {
                         if ($('#ck_vuln_baixa').is(':checked') || $('#ck_vuln_media').is(':checked') || $('#ck_vuln_alta').is(':checked') || $('#ck_vuln_muito_alta').is(':checked')) {
@@ -570,7 +589,7 @@
                             $('#aviso').show();
                             swal.fire(
                                 'Prezado Operador, \n É necessário marcar o nível de Vulnerabilidade e a Classificação de Risco de sua vistoria !'
-                            ).then(function(){
+                            ).then(function() {
                                 $('#btnGravar').removeAttr('disabled');
                             });
                         }
@@ -651,7 +670,6 @@
                             formdata.append('img_ck_proc_geo[]', img_ck_proc_geo[i].file);
                         }
 
-
                         $.ajax({
                             url: '{{ url('vistoria/store') }}',
                             type: 'POST',
@@ -661,16 +679,24 @@
                             cache: false,
                             processData: false,
                             success: function(data) {
+                                if (data.keys) {
+                                    Object.values(data.keys).forEach((x) => {
+                                        $("#"+x).addClass('is-invalid');
+                                        $("#"+x).parent().append('<div class="invalid-feedback">Este campo é Obrigatório</div>');
+                                    });
+                                }
                                 if (data.error) {
-                                Object.values(data.error).forEach((x) => {
-                                    toastr.error(x);
-                                });
-                            } else {
-                                //window.location.href = data.view;
-                            }
+                                    Object.values(data.error).forEach((x) => {
+                                        toastr.error(x);
+                                    });
+                                }
+                                
+                                if(data.success){
+                                    window.location.href = data.view;
+                                }
                             },
                             error: function(data) {
-                                console.log(data + "erro");
+                                console.log(data);
                             }
                         });
                         e.preventDefault();
@@ -678,34 +704,34 @@
                     });
 
 
-                    $("#ck_vuln_alta").change(function() {
+                    $("#ck_vuln_alta").click(function() {
                         if ($(this).is(':checked')) {
-                            $("#ck_clas_risc_alta").attr('checked', true);
+                            $("#ck_clas_risc_alta").prop('checked', true);
                         } else {
-                            $("#ck_clas_risc_alta").attr('checked', false);
+                            $("#ck_clas_risc_alta").prop('checked', false);
                         }
                     });
-                    $("#ck_vuln_muito_alta").change(function() {
+                    $("#ck_vuln_muito_alta").click(function() {
                         if ($(this).is(':checked')) {
-                            $("#ck_clas_risc_muito_alta").attr('checked', true);
+                            $("#ck_clas_risc_muito_alta").prop('checked', true);
                         } else {
-                            $("#ck_clas_risc_muito_alta").attr('checked', false);
-                        }
-                    });
-
-                    $("#ck_clas_risc_alta").change(function() {
-                        if ($(this).is(':checked')) {
-                            $("#ck_vuln_alta").attr('checked', true);
-                        } else {
-                            $("#ck_vuln_alta").attr('checked', false);
+                            $("#ck_clas_risc_muito_alta").prop('checked', false);
                         }
                     });
 
-                    $("#ck_clas_risc_muito_alta").change(function() {
+                    $("#ck_clas_risc_alta").click(function() {
                         if ($(this).is(':checked')) {
-                            $("#ck_vuln_muito_alta").attr('checked', true);
+                            $("#ck_vuln_alta").prop('checked', true);
                         } else {
-                            $("#ck_vuln_muito_alta").attr('checked', false);
+                            $("#ck_vuln_alta").prop('checked', false);
+                        }
+                    });
+
+                    $("#ck_clas_risc_muito_alta").click(function() {
+                        if ($(this).is(':checked')) {
+                            $("#ck_vuln_muito_alta").prop('checked', true);
+                        } else {
+                            $("#ck_vuln_muito_alta").prop('checked', false);
                         }
                     });
 

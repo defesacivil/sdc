@@ -190,9 +190,9 @@ class VistoriaController extends Controller
 
                 "num_morador.required" => "O Campo NÚMERO DE MORADORES é obrigatório !",
                 "num_morador.max"      => "O Campo NÚMERO DE MORADORES deve ter no máximo de 4 caracteres !",
-                
+
                 "municipio_id.required" => "O Campo :attribute é obrigatório !",
-                
+
                 "idosos.max"       => "O campo EXISTE IDOSOS deve ter no máximo 2 Caracteres",
                 "idosos.required" => "O campo EXISTE IDOSOS é Obrigatório",
 
@@ -208,16 +208,16 @@ class VistoriaController extends Controller
                 "cep.max"           => "O campo CEP deve ter no máximo 11 Caracteres",
                 "latitude.max"      => "O campo LATITUDE deve ter no máximo 10 Caracteres",
                 "longitude.max"     => "O campo LONGITUDE deve ter no máximo 10 Caracteres",
-                
+
                 "abast_agua.max"    => "O campo ABASTECIMENTO DE ÁGUA deve ter no máximo 15 Caracteres",
                 "abast_agua.required" => "O campo ABASTECIMENTO DE ÁGUA é Obrigatório",
 
                 "sist_drenag.max"   => "O campo SISTEMA DE DRENAGEM deve ter no máximo 15 Caracteres",
                 "sist_drenag.required" => "O campo SISTEMA DE DRENAGEM é Obrigatório",
-                
+
                 "nr_moradias.max"   => "O campo NÚMERO DE MORADIAS deve ter no máximo 4 Caracteres",
-                "nr_moradias.required"   => "O campo NÚMERO DE MORADIAS é Obrigatório" ,
-                
+                "nr_moradias.required"   => "O campo NÚMERO DE MORADIAS é Obrigatório",
+
 
             ]
         );
@@ -227,13 +227,10 @@ class VistoriaController extends Controller
 
         $vistoria = new Vistoria;
 
-
-
-        # municipio onde aconteceu a vistoria
-        $vistoria->municipio_id  = $request->municipio_id;
-        $vistoria->numero  = $num_vistoria;
+        $vistoria->municipio_id = $request->municipio_id;
+        $vistoria->numero       = $num_vistoria;
         $vistoria->dt_vistoria  = $request->dt_vistoria;
-        $vistoria->tp_ocorrencia = $request->tp_ocorrencia;
+        $vistoria->tp_ocorrencia= $request->tp_ocorrencia;
         $vistoria->tp_imovel    = $request->tp_imovel;
         $vistoria->prop         = $request->prop;
         $vistoria->cel          = $request->cel;
@@ -310,12 +307,14 @@ class VistoriaController extends Controller
         $vistoria->ck_clas_risc_alta               = isset($request->ck_clas_risc_alta)               ? $request->ck_clas_risc_alta              : 0;
         $vistoria->ck_clas_risc_muito_alta         = isset($request->ck_clas_risc_muito_alta)         ? $request->ck_clas_risc_muito_alta        : 0;
 
-if ($val->fails()) {
+
+        if ($val->fails()) {
+
             return response()->json([
                 'error' => $val->errors(),
+                'keys' => $val->errors()->keys(),
             ]);
         } else {
-
             if ($vistoria->save()) {
 
                 /* img el estr prefix=8caract*/
@@ -327,7 +326,7 @@ if ($val->fails()) {
                     }
                 }
 
-                
+
                 /* img el construtivos */
                 $files_el_cons = $request->img_ck_el_constr;
                 if (isset($files_el_cons)) {
@@ -355,9 +354,9 @@ if ($val->fails()) {
                     }
                 }
 
-                
-                
-            if ($vistoria->ck_clas_risc_muito_alta == 1) {
+
+
+                if ($vistoria->ck_clas_risc_muito_alta == 1) {
 
                     // gerar interdicao
                     $num_interdicao = Interdicao::where('municipio_id', $vistoria->municipio_id)->count();
@@ -379,15 +378,12 @@ if ($val->fails()) {
                         'status' => true
                     ]);
                 } else {
-
                     return response()->json([
-                        'view' => 'show/' . $vistoria->id,
-                        'message' => 'Registro Gravado com Sucesso',
-                        'status' => true
+                        'view' => '/vistoria/show/' . $vistoria->id,
+                        'success' => 'Registro Gravado com Sucesso',
                     ]);
                 }
             } else {
-
                 return response()->json([
                     'error' => $val->errors(),
                 ]);
@@ -404,14 +400,12 @@ if ($val->fails()) {
     public function show(Vistoria $vistoria, Request $request)
     {
 
-        //dd($vistoria);
-
         if ($vistoria->ck_clas_risc_muito_alta == 1) {
             $interdicao = Interdicao::where('ids_vistoria', $vistoria->id)->first();
         } else {
             $interdicao = false;
         }
-        
+
         // Imagens elementos estruturais
         $img_el_estrs = [];
         $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
@@ -420,7 +414,7 @@ if ($val->fails()) {
                 $img_el_estrs[] = $file;
             }
         }
-        
+
         // Imagens elementos Construtivos
         $img_el_constrs = [];
         $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
@@ -433,15 +427,15 @@ if ($val->fails()) {
 
         // Imagens agentes potencializadoress
         $img_ag_potens = [];
-        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);       
+        $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
         foreach ($scan as $file) {
 
             if (substr(basename($file), 0, 8) == 'ag_pote_') {
                 $img_ag_potens[] = $file;
             }
         }
-        
-       
+
+
         // Imagens processos geotecnicos
         $img_proc_geos = [];
         $scan = Storage::allFiles('vistoria_foto/' . $vistoria->id);
@@ -450,7 +444,7 @@ if ($val->fails()) {
                 $img_proc_geos[] = $file;
             }
         }
-        
+
         //dd($vistoria->municipio, count($img_el_estrs), $img_el_constrs, $img_ag_potens, $img_proc_geos, $interdicao);
         return view(
             'compdec/vistoria/show',
@@ -496,53 +490,66 @@ if ($val->fails()) {
                 "tp_ocorrencia" => "required|max:50",
                 "tp_imovel"     => "required|max:15",
                 "prop"          => "required|max:70",
-                "cel"           => "required|max:15",
+                "cel"           => "max:15",
                 "num_morador"   => "required|max:4",
-
-                "idosos"        => "max:2",
-                "criancas"      => "max:2",
-                "pess_dif_loc"  => "max:2",
+                "municipio_id"  => "required:integer",
+                "idosos"        => "required|max:2",
+                "criancas"      => "required|max:2",
+                "pess_dif_loc"  => "required|max:2",
                 "endereco"      => "max:110",
                 "bairro"        => "max:50",
-                "nom_municipio"     => "max:70",
+                "municipio"     => "max:70",
                 "cep"           => "max:11",
                 "latitude"      => "max:10",
                 "longitude"     => "max:10",
-                "abast_agua"    => "max:15",
-                "sist_drenag"   => "max:15",
-                "nr_moradias"   => "max:4",
+                "abast_agua"    => "required|max:15",
+                "sist_drenag"   => "required|max:15",
+                "nr_moradias"   => "required|max:4",
             ],
             [
-                "dt_vistoria.required"  => "O Campo :attribute é obrigatório !",
-                "dt_vistoria.date"      => "O Campo :attribute deve ser uma data válida !",
+                "dt_vistoria.required"  => "O Campo DATA DA VISTORIA é obrigatório !",
+                "dt_vistoria.date"      => "O Campo DATA DA VISTORIA deve ser uma data válida !",
 
-                "tp_ocorrencia.required" => "O Campo :attribute é obrigatório !",
-                "tp_ocorrencia.max"     => "O Campo :attribute deve ter no máximo de 50 caracteres !",
+                "tp_ocorrencia.required" => "O Campo TIPO DA OCORRÊNCIA é obrigatório !",
+                "tp_ocorrencia.max"     => "O Campo TIPO DA OCORRÊNCIA deve ter no máximo de 50 caracteres !",
 
-                "tp_imovel.required" => "O Campo :attribute é obrigatório !",
-                "tp_imovel.max"     => "O Campo :attribute deve ter no máximo de 15 caracteres !",
+                "tp_imovel.required" => "O Campo TIPO DO IMÓVEL é obrigatório !",
+                "tp_imovel.max"     => "O Campo TIPO DO IMÓVEL deve ter no máximo de 15 caracteres !",
 
-                "prop.required" => "O Campo :attribute é obrigatório !",
-                "prop.max"     => "O Campo :attribute deve ter no máximo de 70 caracteres !",
+                "prop.required" => "O Campo PROPRIETÁRIO/MORADOR é obrigatório !",
+                "prop.max"     => "O Campo PROPRIETÁRIO/MORADOR deve ter no máximo de 70 caracteres !",
 
-                "cel.required" => "O Campo :attribute é obrigatório !",
-                "cel.max"     => "O Campo :attribute deve ter no máximo de 15 caracteres !",
+                "cel.max"     => "O Campo CONTATO/TELEFONE deve ter no máximo de 15 caracteres !",
 
-                "cel.required" => "O Campo :attribute é obrigatório !",
-                "cel.max"     => "O Campo :attribute deve ter no máximo de 4 caracteres !",
+                "num_morador.required" => "O Campo NÚMERO DE MORADORES é obrigatório !",
+                "num_morador.max"      => "O Campo NÚMERO DE MORADORES deve ter no máximo de 4 caracteres !",
 
-                "idosos"        => "O campo :attribute deve ter no máximo 2 Caracteres",
-                "criancas"      => "O campo :attribute deve ter no máximo 2 Caracteres",
-                "pess_dif_loc"  => "O campo :attribute deve ter no máximo 2 Caracteres",
-                "endereco"      => "O campo :attribute deve ter no máximo 110 Caracteres",
-                "bairro"        => "O campo :attribute deve ter no máximo 50 Caracteres",
-                "nom_municipio"     => "O campo :attribute deve ter no máximo 70 Caracteres",
-                "cep"           => "O campo :attribute deve ter no máximo 11 Caracteres",
-                "latitude"      => "O campo :attribute deve ter no máximo 10 Caracteres",
-                "longitude"     => "O campo :attribute deve ter no máximo 10 Caracteres",
-                "abast_agua"    => "O campo :attribute deve ter no máximo 15 Caracteres",
-                "sist_drenag"   => "O campo :attribute deve ter no máximo 15 Caracteres",
-                "nr_moradias"   => "O campo :attribute deve ter no máximo 4 Caracteres",
+                "municipio_id.required" => "O Campo :attribute é obrigatório !",
+
+                "idosos.max"       => "O campo EXISTE IDOSOS deve ter no máximo 2 Caracteres",
+                "idosos.required" => "O campo EXISTE IDOSOS é Obrigatório",
+
+                "criancas.max"      => "O campo EXISTE CRIANÇAS deve ter no máximo 2 Caracteres",
+                "criancas.required" => "O campo EXISTE CRIANÇAS é Obrigatório",
+
+                "pess_dif_loc.max"      => "O campo EXISTE PESSOAS COM DEFICIÊNCIA DE LOCOMOÇÃO deve ter no máximo 2 Caracteres",
+                "pess_dif_loc.required" => "O campo EXISTE PESSOAS COM DEFICIÊNCIA DE LOCOMOÇÃO é Obrigatório",
+
+                "endereco.max"      => "O campo ENDEREÇO deve ter no máximo 110 Caracteres",
+                "bairro.max"        => "O campo BAIRRO deve ter no máximo 50 Caracteres",
+                "municipio.max"     => "O campo :attribute deve ter no máximo 70 Caracteres",
+                "cep.max"           => "O campo CEP deve ter no máximo 11 Caracteres",
+                "latitude.max"      => "O campo LATITUDE deve ter no máximo 10 Caracteres",
+                "longitude.max"     => "O campo LONGITUDE deve ter no máximo 10 Caracteres",
+
+                "abast_agua.max"    => "O campo ABASTECIMENTO DE ÁGUA deve ter no máximo 15 Caracteres",
+                "abast_agua.required" => "O campo ABASTECIMENTO DE ÁGUA é Obrigatório",
+
+                "sist_drenag.max"   => "O campo SISTEMA DE DRENAGEM deve ter no máximo 15 Caracteres",
+                "sist_drenag.required" => "O campo SISTEMA DE DRENAGEM é Obrigatório",
+
+                "nr_moradias.max"   => "O campo NÚMERO DE MORADIAS deve ter no máximo 4 Caracteres",
+                "nr_moradias.required"   => "O campo NÚMERO DE MORADIAS é Obrigatório",
             ]
         );
 

@@ -14,7 +14,7 @@
     @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container" style="background-color: #edf1ed">
 
         <div class="row">
             <div class="col">
@@ -743,6 +743,7 @@
 @section('code')
     <script type="text/javascript">
         $(document).ready(function() {
+
 
 
 

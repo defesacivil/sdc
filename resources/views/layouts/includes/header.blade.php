@@ -33,6 +33,11 @@
 
     }
 
+    .required:after {
+        content: " *";
+        color: red;
+    }
+
     @media print {
 
 
@@ -49,8 +54,8 @@
             font-size: 9pt;
         }
 
-        
-        
+
+
         .print {
             display: none;
         }
@@ -61,4 +66,3 @@
 
     }
 </style>
-

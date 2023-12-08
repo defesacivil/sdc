@@ -128,11 +128,11 @@
 
                                         {{-- Tempo para edição  15 dias com aviso: --}}
                                         {{-- @can('compdec') --}}
-                                            <a href="{{ url('vistoria/edit/' . $vistoria->id) }}"><img width="25" src={{ asset('/imagem/icon/editar.png') }}></a>
+                                            {{-- <a href="{{ url('vistoria/edit/' . $vistoria->id) }}"><img width="25" src={{ asset('/imagem/icon/editar.png') }}></a> --}}
                                         {{-- @endcan --}}
                                             @if ($vistoria->ck_clas_risc_muito_alta == 1)
                                                 
-                                                <a href="{{ url('interdicao/show/'.$vistoria->id) }}" title='Termo de Interdição'><img width="25" src={{ asset('/imagem/icon/relatorio.png') }} ></a>
+                                                {{-- <a href="{{ url('interdicao/show/'.$vistoria->id) }}" title='Termo de Interdição'><img width="25" src={{ asset('/imagem/icon/relatorio.png') }} ></a> --}}
                                             @endif
                                         <a href="{{ url('vistoria/show/' . $vistoria->id) }}"><img width="25" src={{ asset('/imagem/icon/view.png') }}></a>
                                     </td>
