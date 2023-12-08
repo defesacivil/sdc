@@ -675,7 +675,6 @@
                         if (isConfirmed) {
                             $.ajax({
 
-
                                 url: '{{ url('vistoria/store') }}',
                                 type: 'POST',
                                 data: formdata,
