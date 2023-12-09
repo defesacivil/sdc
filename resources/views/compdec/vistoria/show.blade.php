@@ -51,6 +51,7 @@
                 @if (!isset($pdf))
                     <p class='text-center'>
                         <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}' title="Voltar para a página anterior">Voltar</a>
+                        <a class='btn btn-primary btn-sm print' onclick="window.print()" title="Imprimir Documento">Imprimir</a>
                         {{-- <a class='btn btn-success btn-sm print' href='{{ url('vistoria/edit'.$vistoria->id) }}' title="Editar Documento">Voltar</a> --}}
                         {{-- <a class='btn btn-primary btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/pdf') }}' title='Salvar Documento em PDF'>Salvar PDF</a> --}}
                         {{-- <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/email') }}' title='Enviar Vistoria por E-mail'>Envio E-mail</a> --}}
