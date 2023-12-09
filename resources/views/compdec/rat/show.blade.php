@@ -43,7 +43,7 @@
                 <p class="pt-4" id="btn">
                     <a class='btn btn-success btn-sm' href={{ url('rat') }} title="Voltar para página Index">Voltar</a>
                     <!--<a class='btn btn-warning btn-sm' href={{ url('rat/edit/' . $rat->id) }} onclick="return confirm('Deseja Editar o Relatório ?')" title="Imprimir Documento">Editar</a>-->
-                    <a class='btn btn-primary btn-sm' onclick="window.print()" title="Imprimir Documento">Imprimir</a>
+                    <a class='btn btn-primary btn-sm print' onclick="window.print()" title="Imprimir Documento">Imprimir</a>
                 </p>
             </div>
             <div class="col-md-12">

@@ -152,7 +152,7 @@
     <div id="message">
       <h4>{{ url()->current() }}</h4>
       <h4>{{ $message }}</h4>
-      <h4>{{ \Carbon\Carbon::now()->format('d/m/Y H:i:s')}}</h4>
+      <h4>{{ \Carbon\Carbon::now()->format('d/m/Y H:i:s')}} - {{ isset(Auth::user()->name) ? Auth::user()->name : 'sem_user' }}</h4>
     </div>
   </div>
 </body>
