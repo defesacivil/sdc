@@ -1,7 +1,7 @@
 @extends('layouts.pagina_master')
 {{-- header --}}
 
-    @section('header')
+@section('header')
 
     <style>
         @page {
@@ -9,18 +9,37 @@
             /* auto is the initial value */
             margin: 5%;
         }
+
+        .image-container {
+            position: relative;
+        }
+
+        .marca_dagua {
+            rotate: -35deg;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            -webkitrgba(255, 255, 255, 0.274)-stroke: 1px #F8F8F8;
+            text-shadow: 0px 1px 4px #23430C;
+            opacity: 0.5;
+        }
     </style>
 
-        <!-- breadcrumb -->
-        <nav aria-label="breadcrumb" class="print">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ url('/vistoria/menu') }}">Vistoria - Interdição</a></li>
-                <li class="breadcrumb-item"><a href="{{ url('vistoria') }}">Vistoria</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Cadastro Vistoria</li>
-            </ol>
-        </nav>
-    @endsection
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb" class="print">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/vistoria/menu') }}">Vistoria - Interdição</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('vistoria') }}">Vistoria</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Visualização</li>
+        </ol>
+    </nav>
+@endsection
 
 @section('content')
     <div class="container" style="background-color: #edf1ed">
@@ -29,12 +48,13 @@
             <div class="col">
 
                 {{-- Não impressao dos botoes em PDF --}}
-                @if(!isset($pdf))
-                <p class=''>
-                    <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}' title="Voltar para a página anterior">Voltar</a>
-                    {{-- <a class='btn btn-primary btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/pdf') }}' title='Salvar Documento em PDF'>Salvar PDF</a> --}}
-                    {{-- <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/email') }}' title='Enviar Vistoria por E-mail'>Envio E-mail</a> --}}
-                </p><br>
+                @if (!isset($pdf))
+                    <p class='text-center'>
+                        <a class='btn btn-success btn-sm print' href='{{ url('vistoria') }}' title="Voltar para a página anterior">Voltar</a>
+                        {{-- <a class='btn btn-success btn-sm print' href='{{ url('vistoria/edit'.$vistoria->id) }}' title="Editar Documento">Voltar</a> --}}
+                        {{-- <a class='btn btn-primary btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/pdf') }}' title='Salvar Documento em PDF'>Salvar PDF</a> --}}
+                        {{-- <a class='btn btn-warning btn-sm print' href='{{ url('send-email-vistoria/'.$vistoria->id.'/email') }}' title='Enviar Vistoria por E-mail'>Envio E-mail</a> --}}
+                    </p><br>
                 @endif
 
                 <p class="text-center h2">
@@ -64,7 +84,7 @@
                                     <h5>Data da vistoria : </h5>
                                 </div>
                                 <div class="p-3 border col">
-                                    {{ \Carbon\Carbon::parse($vistoria->dt_vistoria)->format('d/m/Y H:1:s') }}
+                                    {{ \Carbon\Carbon::parse($vistoria->dt_vistoria)->format('d/m/Y H:i:s') }}
                                 </div>
                             </div>
 
@@ -171,7 +191,7 @@
                                     <h5>Município da Vistoria : </h5>
                                 </div>
                                 <div class="p-3 border col">
-                                    {{ $vistoria->municipio_dono->nome }}
+                                    {{ isset($vistoria->municipio_dono->nome) ? $vistoria->municipio_dono->nome  : "" }}
                                 </div>
                                 <div class="p-3 border col-md-3">
                                     <h5>Cep : </h5>
@@ -557,19 +577,22 @@
     </div>
 
     <div class="container">
-        
+
         {{-- Imagens Elementos Estruturais --}}
         @if (count($img_el_estrs) > 0)
-            <div class="page-break"><hr></div>
+            <div class="page-break">
+                <hr>
+            </div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Elementos Estruturais</legend>
 
                         <div class="p-3 row">
-                            @foreach ($img_el_estrs as $img_el_estr)
-                                <div class="p-3 text-center border col-md-6 img-rel">
-                                    <img width="320" src='{{ asset('storage/' . $img_el_estr) }}'>
+                            @foreach ($img_el_estrs as $key => $img_el_estr)
+                                <div class="p-3 text-center border col-md-6 img-rel image-container">
+                                    <img class="" width="320" src='{{ asset('storage/' . $img_el_estr) }}'>
+                                    <div class='marca_dagua'>Relatório de Vistoria nº {{ $vistoria->numero }} </div>
                                 </div>
                             @endforeach
                         </div>
@@ -580,15 +603,18 @@
 
         {{-- Imagens Elementos Construtivos --}}
         @if (count($img_el_constrs) > 0)
-            <div class="page-break"><hr></div>
+            <div class="page-break">
+                <hr>
+            </div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Elementos Construtivos</legend>
                         <div class="p-3 row">
                             @foreach ($img_el_constrs as $img_el_constr)
-                                <div class="p-3 text-center border col-md-6 img-rel">
+                                <div class="p-3 text-center border col-md-6 img-rel image-container">
                                     <img class="img-fluid" width="400px" src='{{ asset('storage/' . $img_el_constr) }}'>
+                                    <div class='marca_dagua'>Relatório de Vistoria nº {{ $vistoria->numero }} </div>
                                 </div>
                             @endforeach
                         </div>
@@ -598,18 +624,21 @@
         @endif
 
         {{-- Imagens Agentes Potencializadores --}}
-        @if (count($img_ag_potens) >0)
-            <div class="page-break"><hr></div>
+        @if (count($img_ag_potens) > 0)
+            <div class="page-break">
+                <hr>
+            </div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
                         <legend class="w-auto"> Imagens Agentes Potencializadores</legend>
 
-                        
+
                         <div class="p-3 row">
                             @foreach ($img_ag_potens as $img_ag_poten)
-                                <div class="p-3 text-center border col-md-6 img-rel">
-                                    <img width="320" src='{{ asset('storage/'. $img_ag_poten) }}'>
+                                <div class="p-3 text-center border col-md-6 img-rel image-container">
+                                    <img width="320" src='{{ asset('storage/' . $img_ag_poten) }}'>
+                                    <div class='marca_dagua'>Relatório de Vistoria nº {{ $vistoria->numero }} </div>
                                 </div>
                             @endforeach
                         </div>
@@ -620,8 +649,10 @@
         @endif
 
         {{-- Imagens Processos Geondinâmicos --}}
-        @if (count($img_proc_geos) >0)
-            <div class="page-break"><hr></div>
+        @if (count($img_proc_geos) > 0)
+            <div class="page-break">
+                <hr>
+            </div>
             <div class="row">
                 <div class="col">
                     <fieldset class="p-2 border">
@@ -629,8 +660,9 @@
 
                         <div class="p-3 row">
                             @foreach ($img_proc_geos as $img_proc_geo)
-                                <div class="p-3 text-center border col-md-6 img-rel">
-                                    <img width="320" src='{{ asset('storage/'. $img_proc_geo) }}'>
+                                <div class="p-3 text-center border col-md-6 img-rel image-container">
+                                    <img width="320" src='{{ asset('storage/' . $img_proc_geo) }}'>
+                                    <div class='marca_dagua'>Relatório de Vistoria nº {{ $vistoria->numero }} </div>
                                 </div>
                             @endforeach
                         </div>
@@ -640,15 +672,15 @@
         @endif
     </div>
 
-    
+
     <!-- interdicao -->
     <div class="container interdicao-text">
         <div class="col-md-12">
             @if ($interdicao)
-            <div class="page-break"></div>
+                <div class="page-break"></div>
                 <p class="m-4 text-center h2">
                     TERMO DE INTERDIÇÃO
-                        Nº 0{{ $interdicao->numero }} 
+                    Nº 0{{ $interdicao->numero }}
                 </p>
 
                 <div class="row">
@@ -735,7 +767,7 @@
                     <div class="col-md-4"></div>
                     <div class="col"><br><br><br>
                         <p class="">_________________________________________________________</p>
-                            <span class="m-50">Nome:</span>
+                        <span class="m-50">Nome:</span>
                     </div>
                     <div class="col-md-4"></div>
                 </div>
@@ -753,7 +785,20 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "showDuration": "5000",
+            }
+            toastr.success("Para melhor impressão, altere nas configurações de Impressão do Google Ghrome a opção 'Margem' defina como nenhuma'<br><a href='#' id='print_info'>Clique aqui e veja como fazer</a>");
 
+            $('#print_info').click(function(){
+                Swal.fire({
+                    imageUrl: "/imagem/ajuda_impressao.png",
+                    imageHeight: 500,
+                    imageAlt: "A tall image"
+                });
+            });
 
 
         })

@@ -677,6 +677,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('send-email-vistoria/{vistoria}/{tp}', 'App\Http\Controllers\PDFController@PDFVistoria');
 
+    # delete imagem
+    Route::post('vistoria/deleteImagem', 'App\Http\Controllers\Compdec\VistoriaController@deleteImagem');
+
 
     ################## INTERDICAO
 

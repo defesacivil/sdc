@@ -12,7 +12,7 @@
     </nav>
 @endsection
 @section('content')
-    <div class="container interdicao-text">
+    <div class="container interdicao-text" style="background-color: #ece8e8">
 
         <div class="row">
             {{-- <div class="flex-fill logo"></div>
@@ -27,8 +27,9 @@
 
             <div class="col-md-12 print">
                 <p class="pt-4" id="btn">
-                    <a class='btn btn-success btn-sm' href={{ url('vistoria') }} title="Voltar para página Index">Voltar</a>
-                    <a class='btn btn-primary btn-sm' onclick="window.print()" title="Imprimir Documento">Imprimir</a>
+                    <a class='btn btn-success btn-sm' href="{{ url('vistoria') }}"" title="Voltar para página Index">Voltar</a>
+                    <a class='btn btn-primary btn-sm' onclick="window.print()" title="Impressão do Termo de Interdição">Imprimir Termo</a>
+                    <a class='btn btn-primary btn-sm' href="{{ url('vistoria/show/' . $interdicao->ids_vistoria) }}" title="Impressão de Vistoria Completa">Impressão Vistoria Completa</a>
                 </p>
             </div>
             <div class="col-md-12">
@@ -135,7 +136,24 @@
 @section('code')
 
     <script type="text/javascript">
-        $(document).ready(function() {})
+        $(document).ready(function() {
+
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "showDuration": "5000",
+            }
+            toastr.success("Para melhor impressão, altere nas configurações de Impressão do Google Ghrome a opção 'Margem' defina como nenhuma'<br><a href='#' id='print_info'>Clique aqui e veja como fazer</a>");
+
+            $('#print_info').click(function(){
+                Swal.fire({
+                    imageUrl: "/imagem/ajuda_impressao.png",
+                    imageHeight: 500,
+                    imageAlt: "A tall image"
+                });
+            });
+
+        })
     </script>
 
 @endsection

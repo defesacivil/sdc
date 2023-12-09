@@ -192,11 +192,11 @@
                         ]
                     });
 
-                    $('#acoes').keyup(function(){
+                    $('#acoes').keyup(function() {
                         var qtd = $(this).val().length;
-                        $('#caracteres').text(14800 -qtd);
+                        $('#caracteres').text(14800 - qtd);
                         //console.log(qtd);
-                        if(qtd > 14800) {
+                        if (qtd > 14800) {
                             swal.fire('Prezado operador, \n você atingiu o número máximo de caracteres do campo Histórico da Ocorrência !');
                         }
                     });
@@ -216,23 +216,28 @@
 
                         var url = '{{ url('rat/deleteImagem') }}';
 
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: formdata,
-                            dataType: 'JSON',
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function(data) {
-                                //console.log(data);
-                                window.location.href = "{{ url('rat/edit/' . $rat->id) }}";
-                            },
-                            error: function(data) {
-                                console.log(data + "erro");
-                            }
-                        });
-                        e.preventDefault();
+                        var confirm_delete = confirm('Deseja realmente apagar esta imagem ?');
+
+                        if (confirm_delete) {
+
+                            $.ajax({
+                                url: url,
+                                type: 'POST',
+                                data: formdata,
+                                dataType: 'JSON',
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                success: function(data) {
+                                    //console.log(data);
+                                    window.location.href = "{{ url('rat/edit/' . $rat->id) }}";
+                                },
+                                error: function(data) {
+                                    console.log(data + "erro");
+                                }
+                            });
+                            e.preventDefault();
+                        }
 
                     });
 

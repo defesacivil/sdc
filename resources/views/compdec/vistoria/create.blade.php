@@ -76,7 +76,7 @@
                             <div class="p-2 row">
                                 <div class="p-2 col">
                                     {{ Form::label('cel', 'Contato/Telefone') }}:
-                                    {{ Form::text('cel', '', ['class' => 'form form-control', 'id' => 'tel', 'maxlength' => '15', 'placehold' => 'Telefone de Contato']) }}
+                                    {{ Form::text('cel', '', ['class' => 'form form-control', 'id' => 'cel', 'maxlength' => '15', 'placehold' => 'Telefone de Contato']) }}
                                 </div>
 
                             </div>

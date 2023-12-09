@@ -138,11 +138,14 @@
  
 <body>
   <div id="notfound">
+    <br><br><br>  
+    <div style="text-align:center;">
+      <img src="{{ url('imagem/logo_sdc_1.png')}}">
+    </div>
     <div class="notfound">
-      <img src="{{ url('imagem/sdc_logo.png')}}">
       <div class="notfound-404">
         <h3>Oops! </h3>
-        <h1><span>5</span><span>0</span><span>0</span></h1>
+        <h1><span>4</span><span>0</span><span>4</span></h1>
       </div>
       <h2>Aconteceu algo inesperado !</h2>
     </div>

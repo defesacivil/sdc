@@ -25,9 +25,8 @@
                 </p>
                 <h4>Nº {{ $vistoria->numero }}/<?= date('Y') ?></h4>
 
-                {{ Form::open(['url' => '/vistoria/update']) }}
+                {{ Form::open(['url' => '/vistoria/update', 'files' => true, 'id' => 'form_vistoria', 'novalidate']) }}
                 {{ Form::token() }}
-                {{ Form::hidden('municipio_id', $vistoria->municipio_id, ['maxlenght' => '6']) }}
                 {{ Form::hidden('numero', $vistoria->numero, ['maxlenght' => '15']) }}
                 {{ Form::hidden('id', $vistoria->id, ['maxlenght' => '15']) }}
 
@@ -85,7 +84,7 @@
                             <div class="row p-2">
                                 <div class="col p-2">
                                     {{ Form::label('cel', 'Contato/Telefone') }}:
-                                    {{ Form::text('cel', $vistoria->cel, ['class' => 'form form-control', 'id' => 'tel', 'maxlength' => '15', 'placehold' => 'Telefone de Contato']) }}
+                                    {{ Form::text('cel', $vistoria->cel, ['class' => 'form form-control', 'id' => 'cel', 'maxlength' => '15', 'placehold' => 'Telefone de Contato']) }}
                                 </div>
 
                             </div>
@@ -131,8 +130,8 @@
 
                             <div class="row p-2">
                                 <div class="col-md-8 p-2">
-                                    {{ Form::label('nom_municipio', 'Município') }} :
-                                    {{ Form::text('nom_municipio', $vistoria->nom_municipio, ['class' => 'form form-control', 'id' => 'nom_municipio', 'maxlength' => '70', 'placeholder' => 'Município']) }}
+                                    {{ Form::label('municipio_id', 'Nome do Município da Ocorrência') }}:
+                                    {{ Form::select('municipio_id', $optionMunicipio, $vistoria->municipio_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'municipio_id', 'placeholder' => 'Nome do Município', 'data-municipio_id' => '']) }}
                                 </div>
                                 <div class="col-md-4 p-2">
                                     {{ Form::label('cep', 'Cep') }} :
@@ -382,7 +381,7 @@
                                                 multiple
                                                 data-allow-reorder="true"
                                                 data-max-file-size="3MB"
-                                                data-max-files="4">
+                                                data-max-files="{{ 4 - $qtd_files_el_estrs }}">
 
                                         </div>
 
@@ -412,7 +411,7 @@
                                                     multiple
                                                     data-allow-reorder="true"
                                                     data-max-file-size="3MB"
-                                                    data-max-files="4">
+                                                    data-max-files="{{ 4 - $qtd_files_el_cons }}">
                                             </div>
                                         </div>
                                     </div>
@@ -452,7 +451,7 @@
                                                     multiple
                                                     data-allow-reorder="true"
                                                     data-max-file-size="3MB"
-                                                    data-max-files="4">
+                                                    data-max-files="{{ 4 - $qtd_files_ag_potens }}">
                                             </div>
                                         </div>
                                     </div>
@@ -481,13 +480,77 @@
                                                     multiple
                                                     data-allow-reorder="true"
                                                     data-max-file-size="3MB"
-                                                    data-max-files="4">
+                                                    data-max-files="{{ 4 - $qtd_files_proc_geos }}">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                     </div>
+                </div>
+
+                <div class="container">
+
+                    {{-- Imagens Elementos Estruturais --}}
+                    <div class="row p-3 border">
+                        @if (count($files_el_estrs) > 0)
+                            <legend> Imagens Elementos Estruturais </legend>
+                            @foreach ($files_el_estrs as $file)
+                                @if ($file != '')
+                                    <div class="col text-center border p-2">
+                                        <img width="400" src="{{ asset('storage/vistoria_foto/' . $vistoria->id . '/' . basename($file)) }}">
+                                        <p class="text-center p-1"><button class="btn btn-danger btn-sm btnRemove" data-file="{{ $file }}" type="button">Remover</button></p>
+                                    </div>
+                                @endif
+                            @endForeach
+                        @endif
+                    </div>
+
+                    {{-- Imagens Elementos Construtivos --}}
+                    <div class="row p-3 border">
+                        @if (count($files_el_cons) > 0)
+                            <legend> Imagens Elementos Construtivos </legend>
+                            @foreach ($files_el_cons as $file)
+                                @if ($file != '')
+                                    <div class="col text-center border p-2">
+                                        <img width="400" src="{{ asset('storage/vistoria_foto/' . $vistoria->id . '/' . basename($file)) }}">
+                                        <p class="text-center p-1"><button class="btn btn-danger btn-sm btnRemove" data-file="{{ $file }}" type="button">Remover</button></p>
+                                    </div>
+                                @endif
+                            @endForeach
+                        @endif
+                    </div>
+
+                    {{-- Imagens Agentes Potencializadores --}}
+                    <div class="row p-3 border">
+                        @if (isset($files_ag_potens))
+                            <legend> Imagens Agentes Potencializadores</legend>
+                            @foreach ($files_ag_potens as $file)
+                                @if ($file != '')
+                                    <div class="col text-center border p-2">
+                                        <img width="400" src="{{ asset('storage/vistoria_foto/' . $vistoria->id . '/' . basename($file)) }}">
+                                        <p class="text-center p-1"><button class="btn btn-danger btn-sm btnRemove" data-file="{{ $file }}" type="button">Remover</button></p>
+                                    </div>
+                                @endif
+                            @endForeach
+                        @endif
+                    </div>
+
+                    {{-- Imagens Processos Geodinâmicos --}}
+                    <div class="row p-3 border">
+                        @if (count($files_proc_geos) > 0)
+                            <legend> Imagens Processos Geodinâmicos</legend>
+                            @foreach ($files_proc_geos as $file)
+                                @if ($file != '')
+                                    <div class="col text-center border p-2">
+                                        <img width="400" src="{{ asset('storage/vistoria_foto/' . $vistoria->id . '/' . basename($file)) }}">
+                                        <p class="text-center p-1"><button class="btn btn-danger btn-sm btnRemove" data-file="{{ $file }}" type="button">Remover</button></p>
+                                    </div>
+                                @endif
+                            @endForeach
+                        @endif
+                    </div>
+
                 </div>
 
                 <br><br>
@@ -566,7 +629,7 @@
 
                 <div class='row'>
                     <div class="col-12">
-                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
+                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnGravar']) }}
                     </div>
                 </div>
                 {{ Form::close() }}
@@ -655,7 +718,8 @@
                                     }
                                 },
                                 error: function(data) {
-                                    console.log(data);
+
+                                    console.log(data + 'opa');
                                 }
                             });
                         }
@@ -663,15 +727,16 @@
 
                     });
 
+
                     /* el_estr */
                     $('.img_ck_el_str_').filepond({
                         allowMultiple: true,
                         allowImagePreview: false,
-                        maxFiles: '4',
+                        maxFiles: {{ 4 - $qtd_files_el_estrs }},
                         locale: 'pt_BR',
                         maxParallelUploads: '2',
                         credits: 'CEDEC-MG',
-                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui </span><br> Max. 4 arquivos',
+                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui </span><br> Max. ' + {{ 4 - $qtd_files_el_estrs }} + ' arquivos',
                     })
 
 
@@ -680,33 +745,74 @@
                     $('.img_ck_el_constr').filepond({
                         allowMultiple: true,
                         allowImagePreview: false,
-                        maxFiles: '4',
+                        maxFiles: {{ 4 - $qtd_files_el_cons }},
                         locale: 'pt_BR',
                         maxParallelUploads: '2',
                         credits: 'CEDEC-MG',
-                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui </span><br> Max. 4 arquivos',
+                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui </span><br> Max. ' + {{ 4 - $qtd_files_el_cons }} + ' arquivos',
                     });
 
                     /* ag_pot */
                     $('.img_ck_ag_pote').filepond({
                         allowMultiple: true,
                         allowImagePreview: false,
-                        maxFiles: '4',
+                        maxFiles: {{ 4 - $qtd_files_ag_potens }},
                         locale: 'pt_BR',
                         maxParallelUploads: '2',
                         credits: 'CEDEC-MG',
-                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui</span><br> Max. 4 arquivos',
+                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui</span><br> Max. ' + {{ 4 - $qtd_files_ag_potens }} + ' arquivos',
                     });
 
                     // /* proce_geo */
                     $('.img_ck_proc_geo').filepond({
                         allowMultiple: true,
                         allowImagePreview: false,
-                        maxFiles: '4',
+                        maxFiles: {{ 4 - $qtd_files_proc_geos }},
                         locale: 'pt_BR',
                         maxParallelUploads: '2',
                         credits: 'CEDEC-MG',
-                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui </span><br> Max. 4 arquivos',
+                        labelIdle: 'Arraste o arquivo ou <span class="filepond--label-action"> Clique Aqui </span><br> Max. ' + {{ 4 - $qtd_files_proc_geos }} + ' arquivos',
+                    });
+
+
+                    /* delete */
+                    $(".btnRemove").click(function(e) {
+
+
+
+                        var formdata = new FormData();
+
+                        var file = $(this).data('file');
+                        var id = '{{ $vistoria->id }}';
+
+                        formdata.append('file', file);
+                        formdata.append('id', id);
+                        formdata.append('_token', "{{ csrf_token() }}");
+
+                        var url = '{{ url('vistoria/deleteImagem') }}';
+
+                        var confirm_delete = confirm('Deseja realmente apagar esta imagem ?');
+
+                        if (confirm_delete) {
+                            $.ajax({
+                                url: url,
+                                type: 'POST',
+                                data: formdata,
+                                dataType: 'JSON',
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                success: function(data) {
+                                    //console.log(data);
+                                    window.location.href = "{{ url('vistoria/edit/' . $vistoria->id) }}";
+                                },
+                                error: function(data) {
+                                    console.log(data + "erro");
+                                }
+                            });
+                            e.preventDefault();
+                        }
+
                     });
 
                     $("#ck_vuln_alta").click(function() {
@@ -744,6 +850,10 @@
                     $("#cep").inputmask('99999-999');
                     $("#latitude").inputmask('-99.999999');
                     $("#longitude").inputmask('-99.999999');
+
+
+
+
                 })
             </script>
         @endsection

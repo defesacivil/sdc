@@ -315,7 +315,8 @@ class VistoriaController extends Controller
                 'keys' => $val->errors()->keys(),
             ]);
         } else {
-            if ($vistoria->save()) {
+
+    if ($vistoria->save()) {
 
                 /* img el estr prefix=8caract*/
                 $files_el_estrs = $request->img_ck_el_str_;
@@ -374,8 +375,7 @@ class VistoriaController extends Controller
 
                     return response()->json([
                         'view' => '/interdicao/show/' . $vistoria->id,
-                        'message' => 'Registro Gravado com Sucesso',
-                        'status' => true
+                        'success' => 'Registro Gravado com Sucesso',
                     ]);
                 } else {
                     return response()->json([
@@ -383,6 +383,8 @@ class VistoriaController extends Controller
                         'success' => 'Registro Gravado com Sucesso',
                     ]);
                 }
+
+            # erro no metodo atualizar 
             } else {
                 return response()->json([
                     'error' => $val->errors(),
@@ -467,10 +469,73 @@ class VistoriaController extends Controller
      */
     public function edit(Vistoria $vistoria)
     {
+
+        $optionMunicipio = Municipio::all()->pluck('nome', 'id');
+
+        # ler arquivo da pasta com_vistoria
+        $files = Storage::files('vistoria_foto/' . $vistoria->id, true);
+
+        $files_el_estrs[] = "";
+        $files_el_cons[]   = "";
+        $files_ag_potens[] = "";
+        $files_proc_geos[] = "";
+
+        $qtd_files_el_estrs  = 0;
+        $qtd_files_el_cons   = 0;
+        $qtd_files_ag_potens = 0;
+        $qtd_files_proc_geos = 0;
+
+        /* arquivos  */
+        if ($files) {
+            foreach ($files as $key => $file) {
+
+                # imagens elementos estruturais
+                $file_name = substr(basename($file), 0 ,8);
+
+                //dd($file_name, $file);
+                
+                # imagens elementos estruturais
+                if($file_name == 'el_estr_') {
+                    $files_el_estrs[] = $file;
+                    $qtd_files_el_estrs++;
+                }
+
+                # imagens elementos construtivo
+                if(substr(basename($file), 0 ,10) == 'el_constr_') {
+                    $files_el_cons[] = $file;
+                    $qtd_files_el_cons++;
+                }
+
+                # imagens agentes potencializadores 
+                if($file_name == 'ag_pote_') {
+                    $files_ag_potens[] = $file;
+                    $qtd_files_ag_potens++;
+                }
+
+                # imagens procedos goedinamicos
+                if($file_name == 'proc_ge_') {
+                    $files_proc_geos[] = $file;
+                    $qtd_files_proc_geos++;
+                }
+                
+            }
+
+
+        }
+
         return view(
             'compdec/vistoria/edit',
             [
-                'vistoria' => $vistoria,
+                'vistoria'           => $vistoria,
+                'files_el_estrs'     => $files_el_estrs,
+                'files_el_cons'      => $files_el_cons,
+                'files_ag_potens'    => $files_ag_potens,
+                'files_proc_geos'    => $files_proc_geos,
+                'qtd_files_el_estrs' => $qtd_files_el_estrs,
+                'qtd_files_el_cons'  => $qtd_files_el_cons,
+                'qtd_files_ag_potens'=> $qtd_files_ag_potens,
+                'qtd_files_proc_geos'=> $qtd_files_proc_geos,
+                'optionMunicipio'    => $optionMunicipio,
             ]
         );
     }
@@ -486,7 +551,7 @@ class VistoriaController extends Controller
     {
 
         $val = Validator::make(
-            $request->all,
+            $request->all(),
             [
                 "dt_vistoria"   => "required|date",
                 "tp_ocorrencia" => "required|max:50",
@@ -578,6 +643,10 @@ class VistoriaController extends Controller
         $vistoria->sist_drenag  = $request->sist_drenag;
         $vistoria->nr_moradias  = $request->nr_moradias;
 
+        # municipio dono da vistoria
+        # caso o municipio do usuario seja 1(municipio padrao do usuario cedec), seja atribuido o municipio da vistoria
+        //$vistoria->municipio_id_dono = $request->municipio_id_dono(Auth::user()->municipio_id <= 1) ? Auth::user()->municipio_id : $vistoria->municipio_id;
+
         $vistoria->ck_esgo_sant_canalizado         = isset($request->ck_esgo_sant_canalizado)         ? $request->ck_esgo_sant_canalizado        : 0;
         $vistoria->ck_esgo_sant_fossa_similar      = isset($request->ck_esgo_sant_fossa_similar)      ? $request->ck_esgo_sant_fossa_similar     : 0;
         $vistoria->ck_esgo_sant_superficie         = isset($request->ck_esgo_sant_superficie)         ? $request->ck_esgo_sant_superficie        : 0;
@@ -633,13 +702,15 @@ class VistoriaController extends Controller
         $vistoria->ck_clas_risc_muito_alta         = isset($request->ck_clas_risc_muito_alta)         ? $request->ck_clas_risc_muito_alta        : 0;
 
 
-        if ($val->fails()) {
 
+        if ($val->fails()) {
+            
             return response()->json([
                 'error' => $val->errors(),
                 'keys' => $val->errors()->keys(),
             ]);
         } else {
+
             if ($vistoria->save()) {
 
                 /* img el estr prefix=8caract*/
@@ -699,8 +770,7 @@ class VistoriaController extends Controller
 
                     return response()->json([
                         'view' => '/interdicao/show/' . $vistoria->id,
-                        'message' => 'Registro Gravado com Sucesso',
-                        'status' => true
+                        'success' => 'Registro Gravado com Sucesso'
                     ]);
                 } else {
                     return response()->json([
@@ -847,5 +917,24 @@ class VistoriaController extends Controller
     public function exportVistoria(Request $request)
     {
         return Excel::download(new ExportVistoria, 'Vistoria_registros' . date('d_m_Y_H.i.s') . '.xlsx');
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Compdec\Vistoria  $vistoria
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteImagem(Request $request)
+    {
+        if (Storage::delete($request->file)) {
+            return response()->json(
+                [
+                    'id' => $request->id,
+                    'result' => true,
+                ]
+            );
+        };
     }
 }
