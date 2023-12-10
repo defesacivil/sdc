@@ -672,7 +672,7 @@
                         if (isConfirmed) {
                             $.ajax({
 
-                               url: '{{ url('vistoria/store') }}',
+                                url: '{{ url('vistoria/store') }}',
                                 type: 'POST',
                                 data: formdata,
                                 dataType: 'JSON',
@@ -680,19 +680,15 @@
                                 cache: false,
                                 processData: false,
                                 success: function(data) {
-                                    if (data.keys) {
-                                        Object.values(data.keys).forEach((x) => {
-                                            $("#" + x).addClass('is-invalid');
-                                            $("#" + x).parent().append('<div class="invalid-feedback">Este campo é Obrigatório</div>');
-                                        });
-                                    }
-                                    if (data.error) {
-                                        Object.values(data.error).forEach((x) => {
-                                            toastr.error(x);
-                                        });
-                                    }
 
-                                    if (data.success) {
+                                    if (data.error) {
+                                        Object.entries(data.error).forEach((x) => {
+                                            toastr.error(x[1]);
+                                            $("#" + x[0]).addClass('is-invalid');
+                                            $("#" + x[0]).parent().append('<div class="invalid-feedback">' + x[1] + '</div>');
+                                        });
+                                    }
+                                    else if(data.success) {
                                         window.location.href = data.view;
                                     }
                                 },

@@ -282,8 +282,10 @@
                             processData: false,
                         }).done(function(data) {
                             if (data.error) {
-                                Object.values(data.error).forEach((x) => {
-                                    toastr.error(x);
+                                Object.entries(data.error).forEach((x) => {
+                                    toastr.error(x[1]);
+                                    $("#" + x[0]).addClass('is-invalid');
+                                    $("#" + x[0]).parent().append('<div class="invalid-feedback">'+x[1]+'</div>');
                                 });
                             } else {
                                 window.location.href = data.view;

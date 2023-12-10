@@ -222,21 +222,6 @@
                     imageResizeMode: 'cover',
                 });
 
-                // Set allowMultiple property to true
-                //$('.my-pond').filepond('allowMultiple', true);
-
-                // Listen for addfile event
-                // $('.my-pond').on('FilePond:addfile', function(e) {
-                //     console.log('file added event', e);
-                // });
-
-                // Manually add a file using the addfile method
-                // $('.my-pond')
-                //     .filepond('addFile', 'index.html')
-                //     .then(function(file) {
-                //         console.log('file added', file);
-                //     });
-
                 $("#form_rat").on('submit', function(e) {
 
                     var formdata = new FormData(this);
@@ -258,14 +243,13 @@
                         processData: false,
                         success: function(data) {
                             if (data.error) {
-                                Object.values(data.error).forEach((x) => {
-                                    toastr.error(x);
+                                Object.entries(data.error).forEach((x) => {
+                                    toastr.error(x[1]);
+                                    $("#" + x[0]).addClass('is-invalid');
+                                    $("#" + x[0]).parent().append('<div class="invalid-feedback">'+x[1]+'</div>');
                                 });
                             } else {
-                                
-                                {{ Session::flash('message', 'Registro gravado com Sucesso'); }}''
                                 window.location.href = data.view;
-
                             }
                         },
                         error: function(data) {

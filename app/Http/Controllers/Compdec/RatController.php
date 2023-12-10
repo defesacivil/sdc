@@ -277,6 +277,7 @@ class RatController extends Controller
         if ($val->fails()) {
             return response()->json([
                 'error' => $val->errors(),
+                'keys' => $val->errors()->keys(),
             ]);
         } else {
             $rat->save();
@@ -292,7 +293,7 @@ class RatController extends Controller
             
             return response()->json([
                 'view' => 'show/' . $rat->id,
-                'message' => 'Registro Gravado com Sucesso',
+                //'message' => 'Registro Gravado com Sucesso',
                 'status' => true
             ]);
         }

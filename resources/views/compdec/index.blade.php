@@ -94,14 +94,15 @@
             <div class="col">
 
                 <select name="selChart" class="form-control form-control-lg col-5" id="selChart">
-                    <option>Municípios com Compdec Ativa</option>
+                    <option>Situação das Coordenadorias Municipais de Defesa Civil</option>
                     <option>Municípios com Plano de Contingência</option>
                     <option>Municípios com Mapeamento de Área de Risco</option>
                 </select>
-
+            </div>
+        </div>
+        <div class="p-3 row">
+            <div class="col">
                 <canvas id="myChart"></canvas>
-
-
             </div>
         </div>
 
@@ -114,14 +115,13 @@
 @stop
 
 @section('code')
-<script src="{{ url('js/chart/Chart.js')}}"></script>
+    <script src="{{ url('js/chart/Chart.js') }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
             $("#divbuscar").hide();
             $("#divrelatorio").hide();
         })
-
 
         $('#buscar').click(function() {
 
@@ -133,13 +133,18 @@
         const ctx = document.getElementById('myChart');
 
         new Chart(ctx, {
-            type: 'bar',
+            type: 'doughnut',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ['Ativa', 'Inativa'],
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
+                    label: '# Compdec Ativas',
+                    data: [{{ $ativa }}, {{ $inativa }}],
+                    borderWidth: 1,
+                    backgroundColor: [
+                        'rgb(107, 226, 164)',
+                        'rgb(255, 99, 132)',
+                    ],
+                    hoverOffset: 4
                 }]
             },
             options: {
@@ -147,7 +152,8 @@
                     y: {
                         beginAtZero: true
                     }
-                }
+                },
+                display: true,
             }
         });
     </script>

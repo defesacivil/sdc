@@ -28,9 +28,20 @@ class CompdecController extends \App\Http\Controllers\Controller
         $method = request()->method();
         $active_tab = "";
 
-        print $method;
-        if ($method == 'GET') {
-            return view('compdec.index');
+
+        $situacao = DB::table("com_comdec")
+        ->select(DB::raw('com_ativa, count(id) as qtd'))
+        ->groupBy("com_ativa")
+        ->get();
+
+  if ($method == 'GET') {
+            return view('compdec.index',[
+                'ativa' => $situacao[1]->qtd,
+                'inativa' => $situacao[0]->qtd,
+            ]);
+
+
+
         } elseif ($method == 'POST') {
 
             if (true) {
