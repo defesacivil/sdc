@@ -100,9 +100,38 @@
                 </select>
             </div>
         </div>
-        <div class="p-3 row">
+        <div class="row">
+
+            {{-- Com Compdec --}}
+            <div class="col text-center p-3 border border-dark">
+                <div class="col">
+                    <h class="text-primary">Municípios com COMPDEC</h>
+                    <h4 class="text-primary">{{ $ativa }} / {{ number_format(($ativa/853)*100,1) }}%</h4>
+                </div>
+                <div class="col">
+                    <h class="text-danger">Municípios Sem COMPDEC</h>
+                    <h4 class="text-danger">{{ $inativa }} / {{ number_format(($inativa/853)*100,1) }}%</h4>
+                </div>
+            </div>
+
+
+            {{-- Com Compdec --}}
+            <div class="col text-center p-3 border border-dark">
+                <h>Municípios com Compdec</h>
+                <h4>{{ $ativa }} <br> {{ number_format(($ativa/853)*100,1) }}%</h4>
+            </div>
+
+
+            
+
+            
+        </div>
+        <hr>
+        <div class="row">
             <div class="col">
-                <canvas id="myChart"></canvas>
+                <div class="col">
+                    <canvas id="myChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -116,46 +145,22 @@
 
 @section('code')
     <script src="{{ url('js/chart/Chart.js') }}"></script>
+    <script src="{{ url('js/chartjs-datalabels/chartjs-plugin-datalabels.js') }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
+
+
             $("#divbuscar").hide();
             $("#divrelatorio").hide();
-        })
+        
 
         $('#buscar').click(function() {
-
             $("#divbuscar").toggle();
-
         });
 
-
-        const ctx = document.getElementById('myChart');
-
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Ativa', 'Inativa'],
-                datasets: [{
-                    label: '# Compdec Ativas',
-                    data: [{{ $ativa }}, {{ $inativa }}],
-                    borderWidth: 1,
-                    backgroundColor: [
-                        'rgb(107, 226, 164)',
-                        'rgb(255, 99, 132)',
-                    ],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                display: true,
-            }
-        });
+        
+    });
     </script>
 
 @stop

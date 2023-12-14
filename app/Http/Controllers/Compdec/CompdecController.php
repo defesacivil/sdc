@@ -30,7 +30,8 @@ class CompdecController extends \App\Http\Controllers\Controller
 
 
         $situacao = DB::table("com_comdec")
-        ->select(DB::raw('com_ativa, count(id) as qtd'))
+        ->select(DB::raw('com_ativa, count(id) as qtd', 'municipio_id'))
+        ->where('id_municipio', '!=', '7221')
         ->groupBy("com_ativa")
         ->get();
 
