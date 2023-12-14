@@ -37,6 +37,25 @@ class AuthServiceProvider extends ServiceProvider
     // public function boot(Request $request)
     public function boot(Request $request)
     {
+
+        /* ACESSO COMPDEC */
+        Gate::define('compdec', function (User $user) {
+            return $user->tipo === 'compdec';
+          });
+  
+          
+          //ACESSO CEDEC
+          Gate::define('cedec', function (User $user) {
+              return $user->tipo === 'cedec';
+          });
+  
+          //ACESSO REDEC
+          Gate::define('redec', function (User $user) {
+              return $user->tipo === 'redec';
+          });
+
+          
+
         if ($autor = PersonalAccessToken::findToken($request->token)) {
             $usuario = auth()->loginUsingId($autor->tokenable_id);  
             auth()->user()->tokens()->delete();        
@@ -110,24 +129,9 @@ class AuthServiceProvider extends ServiceProvider
 
                 
         }
-        $this->registerPolicies();
         
-        /* ACESSO COMPDEC */
-        Gate::define('compdec', function (User $user) {
-            
-          return $user->tipo === 'compdec';
-        });
-
         
-        //ACESSO CEDEC
-        Gate::define('cedec', function (User $user) {
-            return $user->tipo === 'cedec';
-        });
-
-        //ACESSO REDEC
-        Gate::define('redec', function (User $user) {
-            return $user->tipo === 'redec';
-        });
+        
 
 
         //dd(Gate::abilities());
@@ -191,6 +195,8 @@ class AuthServiceProvider extends ServiceProvider
         // $gate->before(function(User $user, $ability){
         //    return $user->hasAnyRoles('cedec');
         //  });
+
+        $this->registerPolicies();
 
     }
 }

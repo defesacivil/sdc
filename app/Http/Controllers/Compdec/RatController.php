@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -74,7 +74,6 @@ class RatController extends Controller
 
         //dd(session('user')['municipio_id'], $request->user()->can('cedec'));
 
-
         if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
 
             $rats = DB::table('com_rat')
@@ -88,6 +87,7 @@ class RatController extends Controller
                 ->orderBy('com_rat.dt_ocorrencia', 'asc')
                 ->paginate(10);
         } else {
+
             $rats = DB::table('com_rat')
                 ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
                 ->join('users', 'users.id', '=', 'com_rat.operador_id')
@@ -103,7 +103,6 @@ class RatController extends Controller
 
         # chutas intensas 
         $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
-        //dd($ratChuva);
 
         # estiagem 
         $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
@@ -515,6 +514,8 @@ class RatController extends Controller
 
         $filter = $request;
 
+        
+
         if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
             $filter_all = " com_rat.id > 1 ";
         } else {
@@ -602,10 +603,7 @@ class RatController extends Controller
             $rats = array();
         } else {
 
-
-            // dd($filter_all);
-
-            # chutas intensas 
+   # chutas intensas 
             $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
 
             # estiagem 
@@ -665,6 +663,8 @@ class RatController extends Controller
                     ->paginate(10);
             }
         }
+
+
 
         return view(
             'compdec/rat/index',

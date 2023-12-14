@@ -27,7 +27,6 @@
 
                 <legend class="p-4">Rat - Relatório de Atividades de Defesa Civil</legend>
 
-
         {{ Form::open(['url' => 'rat/search']) }}
 
         <div class="row" id="search2">
@@ -162,7 +161,7 @@
 
 
                 @if (count($rats) > 0)
-                    {{ $rats->links() }}
+                    {{ $rats->appends(request()->all())->links() }}
                 @endif
             @else
                 <p class="alert alert-danger">Sua pesquisa não encontrou nenhum registro</p>
