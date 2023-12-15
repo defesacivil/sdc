@@ -4,3 +4,4 @@
 app/Http/Controllers/Compdec/RatController.php
 app/Providers/AuthServiceProvider.php
 resources/views/compdec/rat/index.blade.php
+#

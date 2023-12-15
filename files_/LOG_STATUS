@@ -1,0 +1,22 @@
+
+# Registro de usuario
+channel : login
+local   : /logs/login.log
+
+USO
+# registro login de usuario
+                Log::channel('login')->info("acesso : ".Auth::user()->id) ;
+
+
+# Navegação do usuario no sistema
+channel : navegação 
+local   : /logs/navegacao.log
+
+USO 
+# acesso ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'index',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+        ]);

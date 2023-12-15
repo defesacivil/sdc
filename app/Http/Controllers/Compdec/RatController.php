@@ -10,19 +10,13 @@ use App\Models\Compdec\RatOcorrencia;
 use App\Models\Decreto\Cobrade;
 use App\Models\Municipio\Municipio;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
-use DebugBar\DebugBar;
-use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Illuminate\Support\Str;
 
 class RatController extends Controller
@@ -67,6 +61,15 @@ class RatController extends Controller
      */
     public function index(Request $request)
     {
+
+        # acesso ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'index',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+        ]);
+
         $municipio_id = "";
         if (isset(session('user')['municipio_id'])) {
             $municipio_id = session('user')['municipio_id'];
@@ -170,6 +173,14 @@ class RatController extends Controller
     public function create()
     {
 
+        # acesso ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'create',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+        ]);
+
         /* Numero da sequencia */
         $numero = Rat::all()->count() + 1;
         /* gerar sequencia */
@@ -195,6 +206,14 @@ class RatController extends Controller
      */
     public function store(Request $request)
     {
+
+        # acesso ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'store',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+        ]);
 
         $val = Validator::make(
             $request->all(),
@@ -307,6 +326,14 @@ class RatController extends Controller
      */
     public function show(Rat $rat)
     {
+        # acesso ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'show',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'id' => $rat->id,
+        ]);
 
         # ler todos arquivos da pasta rat_upload
         $all_rat_files = Storage::files('rat_uploads/' . $rat->id, true);
@@ -341,6 +368,16 @@ class RatController extends Controller
      */
     public function edit(Rat $rat)
     {
+
+        # acesso ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'edit',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'id' => $rat->id,
+        ]);
+
         # ler todos arquivos da pasta rat_upload
         $all_rat_files = Storage::files('rat_uploads/' . $rat->id, true);
 
@@ -379,6 +416,16 @@ class RatController extends Controller
      */
     public function update(Request $request, Rat $rat)
     {
+
+        # update ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'update',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'old' => $rat,
+            'new' => $request,
+        ]);
 
         $files = $request->file('file');
 
@@ -485,6 +532,14 @@ class RatController extends Controller
      */
     public function destroy(Rat $rat)
     {
+        # update ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'destroy',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'id' => $rat->id,
+        ]);
         dd($rat);
     }
 
@@ -497,6 +552,16 @@ class RatController extends Controller
      */
     public function deleteImagem(Request $request)
     {
+        # delete imagem ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'deleteImagem',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'id' => $request->id,
+            'file' =>$request->file,
+        ]);
+
         if (Storage::delete($request->file)) {
             return response()->json(
                 [
@@ -511,10 +576,17 @@ class RatController extends Controller
 
     public function search(Request $request)
     {
+        
+        # delete imagem ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'search',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'campos' => $request,
+        ]);
 
         $filter = $request;
-
-        
 
         if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
             $filter_all = " com_rat.id > 1 ";
@@ -685,6 +757,15 @@ class RatController extends Controller
     /* Todos Relatorios de Atividade */
     public function exportRats(Request $request)
     {
+        # delete imagem ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'exportRats',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'export' => 'excel todos Registros',
+        ]);
+
         return Excel::download(new ExportRat, 'Rat_Todos_' . date('d_m_Y_H.i.s') . '.xlsx');
     }
 

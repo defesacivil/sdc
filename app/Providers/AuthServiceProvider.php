@@ -58,23 +58,30 @@ class AuthServiceProvider extends ServiceProvider
 
         if ($autor = PersonalAccessToken::findToken($request->token)) {
             $usuario = auth()->loginUsingId($autor->tokenable_id);  
-            auth()->user()->tokens()->delete();        
+            auth()->user()->tokens()->delete();  
+
+            
 
             # usuario ativo
         if(Auth::check() && $usuario['ativo'] == 1){
-           
+
+          
             // tratar usuario compdec redec
-            if( ($usuario['tipo'] == 'compdec') || ($usuario['tipo'] == 'redec') ) {
-                
+            if( ($usuario['tipo'] == 'compdec') ) {
+
+                # usuario sem liberações
                 if($usuario['municipio_id'] == 0){
                     
-                    Log::channel('usuario')->info('Login de usuario sem Liberação Principal', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
+                    
                     $usuario->Auth::logout();
                     Session::flash('message', "Usuário não associado ! é necessário realizar a associação de usuario no sistema, envie um email para sdc@defesacivil.mg.gov.br !");
                     return redirect('/');
+                # registro login usuario
                 }else {
 
-                    Log::channel('usuario')->info('Login usuario COMPDEC', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
+                    # registro login de usuario
+                    Log::channel('login')->info("usuario : ".Auth::user()->id) ;
+
                     $compdec = Compdec::where('id_municipio', $usuario['municipio_id'])
                         ->get('id');
                     
@@ -91,11 +98,12 @@ class AuthServiceProvider extends ServiceProvider
 
                 }
             
-            # cedec  REDEC
-            }elseif( ($usuario['tipo'] == 'cedec') || ($usuario['tipo'] == 'redec') ){
+            # CEDEC / REDEC
+            }elseif ($usuario['tipo'] == 'cedec'){
 
-                Log::channel('usuario')->info('Login Usuário CEDEC', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
-                # Dados Cedec_usuario
+                # registro login de usuario
+                Log::channel('login')->info("acesso : ".Auth::user()->id) ;
+
                 $cedecUsuario = CedecUsuario::find($usuario['id_user_cedec']);
    
                 //$cedecFuncionario = CedecFuncionario::find($cedecUsuario['id_funcionario'])->toArray();
@@ -114,9 +122,10 @@ class AuthServiceProvider extends ServiceProvider
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
    
+        # usuario desativado
         }else {
 
-            Log::channel('usuario')->info('Login de usuario Desativado', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
+            Log::channel('navegacao')->info('Login de usuario Desativado', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
             $usuario->Auth::logout();
             Session::flash('message', "Usuário não está ativo ! \n Gentileza aguardar a ativação ou envie um email para sdc@defesacivil.mg.gov.br");
             //return redirect('/');

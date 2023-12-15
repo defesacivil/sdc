@@ -127,11 +127,12 @@ class CompdecController extends \App\Http\Controllers\Controller
         $microrregiao = CedecMicro::orderBy('nome')->pluck('nome', 'id');
         $mesorregiao = CedecMeso::orderBy('nome')->pluck('nome', 'id');
 
-        /* */
+        /* log edit */
         Log::channel('navegacao')->info("Acesso view editar", [
             'table' => $compdec->getTable(),
             'id' => $id,
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'host' => request()->getHttpHost(),
         ]);
 
         return view(

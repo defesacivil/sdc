@@ -118,7 +118,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        Log::channel('usuario')->info('Usuario Realizou Logout', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
+        Log::channel('login')->info('Logout: '.Auth::user()->id);
         Auth::guard('web')->logout();
 
         $routeInicio = session()->get('routeInicio');

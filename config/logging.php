@@ -60,13 +60,15 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
-        # navegação do usuário
-        'navegacao' => [
+        
+
+        # log do usuário
+        'usuario' => [
             'driver' => 'single',
-            'path' => storage_path('logs/navegacao.log'),
+            'path' => storage_path('logs/usuario.log'),
             'level' => 'info',
         ],
-
+        
         # diario da aplicação
         'daily' => [
             'driver' => 'daily',
@@ -124,8 +126,26 @@ return [
             'driver' => 'custom',
             'handler' => App\Models\Logging\LogHandler::class,
             'via' => App\Logging\LogCustomMessage::class,
-            'level' => 'debug',
+            'level' => 'info',
         ],
+
+        
+
+        # navegação do usuário
+        'navegacao' => [
+            'driver' => 'daily',
+            'tap' => [App\Logging\CustomLogFilenames::class],
+            'path' => storage_path('logs/user/navegacao.log'),
+            'level' => 'info',
+        ],
+
+        # registro de login de usuario
+        'login' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/login.log'),
+            'level' => 'info',
+        ],
+
 
     ],
 
