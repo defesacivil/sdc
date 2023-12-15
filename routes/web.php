@@ -31,7 +31,8 @@ Route::get('/', function () {
 });
 
 
-#################################   CONFIG   ##################################
+
+
 
 # http://localhost:8081/drrd1?token=16|zuC7Mdwo8XAn3CzfOnzt5i4xsTefgjRF1AhfFBRI
 
@@ -49,6 +50,10 @@ Route::group(['middleware' => 'auth'], function () {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         }
     })->name('dashboard');
+
+    
+    #################################   CONFIG   ##################################
+    Route::get('config/index', 'App\Http\Controllers\Config\ConfigController@index');
 
 
 

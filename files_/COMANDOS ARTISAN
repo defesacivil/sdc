@@ -1,0 +1,24 @@
+
+# Rodar uma migrate especifica
+php artisan migrate --path=database/migrations/2023_11_29_163051_create_logs_table.php
+
+
+# Controller + Model
+php7 artisan make:controller Modulo\TesteController --resource --model=Model\Teste
+
+
+
+
+
+
+
+#limpar o cache
+
+php artisan cache:clear
+php artisan view:clear
+php artisan optimize:clear
+php artisan event:cache
+php artisan view:cache
+
+#remover os arquivos de cache
+storage/framework/views

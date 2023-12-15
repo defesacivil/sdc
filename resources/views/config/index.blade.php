@@ -38,6 +38,11 @@
                         Relatórios e Log's
                     </div>
                 </div>
+                <div class="row p-3">
+                    <div class="col text-center">
+                        <a href="config/index" title="Manutenção"><img width="120" src="{{ url('imagem/icon/gears.png') }}" title="Relatórios Log's"></a>
+                    </div>
+                </div>
                 <br>
                 <br>
 
@@ -63,10 +68,7 @@
                     <tr>
                         <td>storage_path:</td><td>{{ storage_path() }}</td>
                     </tr>
-                </table>
-
-                {{ dd(env('DIR_FOTO_COMPDEC')) }}
-
+                </table
 
             </div>
 
