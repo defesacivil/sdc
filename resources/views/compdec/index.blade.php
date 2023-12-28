@@ -37,15 +37,14 @@
             </div>
         @endcan
 
-        <div class="row" id='divbuscar'>
-            <div class="col-md-12">
+        <div class="row ">
 
+            <div class="col-md-6 divbuscar">
 
                 @can('cedec')
-
                     {{ Form::open(['url' => 'compdec']) }}
                     {{ Form::token() }}
-
+                    <br>
                     {{ Form::label('txtBusca', 'Buscar Município Compdec') }} :
                     {{ Form::text('txtBusca', '', ['class' => 'form form-control form-control-sm']) }}
                     <br>
@@ -55,85 +54,90 @@
                     {{ Form::close() }}
 
                     <br>
-
-                    @if (isset($compdecs))
-                        <table class='table table-bordered table-sm table-striped'>
-                            <tr>
-                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Cod<br><br></th>
-                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Municipio</th>
-                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Situação</th>
-                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Ultima Atualização</th>
-                                <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Opções</th>
-                            </tr>
-                            @foreach ($compdecs as $compdec)
-                                <tr>
-                                    <td>{{ $compdec->id }}</td>
-                                    <td>{{ $compdec->id_municipio . ' - ' . $compdec->nome }}</td>
-                                    <td>{{ $compdec->com_ativa == 0 ? 'Inativa' : 'Ativo' }}</td>
-
-                                    <td>{{ \Carbon\Carbon::parse($compdec->ultimo_atualiza)->format('d/m/Y H:i:s') }}</td>
-                                    <td>
-                                        <a href='{{ url('compdec/edit', ['id' => $compdec->id]) }}' title="Clique aqui para editar o Registro !"><img
-                                                src='{{ asset('/imagem/icon/editar.png') }}' alt=""></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    @endif
                 @endcan
 
             </div>
-        </div>
-        <div class="row" id="divrelatorio">
-            <div class="col-12">
-                Relatorios
-            </div>
-        </div>
 
-        <div class="p-3 row">
+            @can('cedec')
+
+                @if (isset($compdecs))
+                    <div class="row p-3">
+                        <div class="col">
+
+                            <table class='table table-bordered table-sm table-striped'>
+                                <tr>
+                                    <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Cod<br></th>
+                                    <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Municipio</th>
+                                    <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Situação</th>
+                                    <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Ultima Atualização</th>
+                                    <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Opções</th>
+                                </tr>
+                                @foreach ($compdecs as $compdec)
+                                    <tr>
+                                        <td>{{ $compdec->id }}</td>
+                                        <td>{{ $compdec->id_municipio . ' - ' . $compdec->nome }}</td>
+                                        <td>{{ $compdec->com_ativa == 0 ? 'Inativa' : 'Ativo' }}</td>
+
+                                        <td>{{ \Carbon\Carbon::parse($compdec->ultimo_atualiza)->format('d/m/Y H:i:s') }}</td>
+                                        <td>
+                                            <a href='{{ url('compdec/edit', ['id' => $compdec->id]) }}' title="Clique aqui para editar o Registro !"><img
+                                                    src='{{ asset('/imagem/icon/editar.png') }}' alt=""></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                @endif
+            @endcan
+
+        </div>
+    </div>
+    <div class="row" id="divrelatorio">
+        <div class="col-12">
+            Relatorios
+        </div>
+    </div>
+
+    <div class="p-3 row div">
+        <div class="col">
+
+            <select name="selChart" class="form-control form-control-lg col-5" id="selChart">
+                <option>Situação das Coordenadorias Municipais de Defesa Civil</option>
+                <option>Municípios com Plano de Contingência</option>
+                <option>Municípios com Mapeamento de Área de Risco</option>
+            </select>
+        </div>
+    </div>
+    <div class="row divbuscar">
+
+        {{-- Com Compdec --}}
+        <div class="col text-center p-3 border border-dark">
             <div class="col">
-
-                <select name="selChart" class="form-control form-control-lg col-5" id="selChart">
-                    <option>Situação das Coordenadorias Municipais de Defesa Civil</option>
-                    <option>Municípios com Plano de Contingência</option>
-                    <option>Municípios com Mapeamento de Área de Risco</option>
-                </select>
+                <h class="text-primary">Municípios com COMPDEC</h>
+                <h4 class="text-primary">{{ $ativa }} / {{ number_format(($ativa / 853) * 100, 1) }}%</h4>
             </div>
-        </div>
-        <div class="row">
-
-            {{-- Com Compdec --}}
-            <div class="col text-center p-3 border border-dark">
-                <div class="col">
-                    <h class="text-primary">Municípios com COMPDEC</h>
-                    <h4 class="text-primary">{{ $ativa }} / {{ number_format(($ativa/853)*100,1) }}%</h4>
-                </div>
-                <div class="col">
-                    <h class="text-danger">Municípios Sem COMPDEC</h>
-                    <h4 class="text-danger">{{ $inativa }} / {{ number_format(($inativa/853)*100,1) }}%</h4>
-                </div>
-            </div>
-
-
-            {{-- Com Compdec --}}
-            <div class="col text-center p-3 border border-dark">
-                <h>Municípios com Compdec</h>
-                <h4>{{ $ativa }} <br> {{ number_format(($ativa/853)*100,1) }}%</h4>
-            </div>
-
-
-            
-
-            
-        </div>
-        <hr>
-        <div class="row">
             <div class="col">
-                <div class="col">
-                    <canvas id="myChart"></canvas>
-                </div>
+                <h class="text-danger">Municípios Sem COMPDEC</h>
+                <h4 class="text-danger">{{ $inativa }} / {{ number_format(($inativa / 853) * 100, 1) }}%</h4>
             </div>
         </div>
+
+
+        {{-- Com Compdec --}}
+        <div class="col text-center p-3 border border-dark">
+            <h>Municípios com Compdec</h>
+            <h4>{{ $ativa }} <br> {{ number_format(($ativa / 853) * 100, 1) }}%</h4>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col">
+            <div class="col">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
 
     </div>
 
@@ -151,16 +155,16 @@
         $(document).ready(function() {
 
 
-            $("#divbuscar").hide();
+            $(".divbuscar").hide();
             $("#divrelatorio").hide();
-        
 
-        $('#buscar').click(function() {
-            $("#divbuscar").toggle();
+
+            $('#buscar').click(function() {
+                $(".divbuscar").toggle();
+            });
+
+
         });
-
-        
-    });
     </script>
 
 @stop

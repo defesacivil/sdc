@@ -88,6 +88,7 @@ class RatController extends Controller
                 ->addSelect('users.name as operador_nome')
                 ->addSelect('dec_cobrade.descricao as cobrade')
                 ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                ->where('operador_id', '=', Auth::user()->id)
                 ->paginate(10);
         } else {
 
@@ -104,11 +105,7 @@ class RatController extends Controller
                 ->paginate(10);
         }
 
-        # chutas intensas 
-        $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
 
-        # estiagem 
-        $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
 
         #Qtd por mes Ocorrencias
         $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
@@ -133,18 +130,88 @@ class RatController extends Controller
             }
         }
 
-        if ($ratSeca > 0 && $rats->total() > 0) {
-            $percent_seca = number_format(($ratSeca / $rats->total()) * 100, 2);
-        } else {
-            $percent_seca = 0;
-        }
 
-        if ($ratChuva > 0 && $rats->total() > 0) {
-            $percent_chuva = number_format(($ratChuva / $rats->total()) * 100, 2);
+
+
+        ##### Somente para usuário CEDEC ######
+
+        if ($request->user()->can('cedec')) {
+
+            # numeros por ocorrencia ATE 15
+            $porOcorrencia15['file'] = Rat::select(DB::raw("count(com_rat.ocorrencia_id) as qtd15"))
+                ->join('com_rat_ocorrencia', 'com_rat.ocorrencia_id', 'com_rat_ocorrencia.id')
+                ->addSelect('com_rat_ocorrencia.cod')
+                ->addSelect('com_rat_ocorrencia.descricao')
+                ->addSelect('com_rat_ocorrencia.alias')
+                ->where('com_rat.municipio_id', "!=", '7221')
+                ->having('qtd15', '<=', '15')
+                ->groupBy('com_rat.ocorrencia_id', 'com_rat_ocorrencia.cod', 'com_rat_ocorrencia.descricao', 'com_rat_ocorrencia.alias')
+                ->orderBy('qtd15')
+                ->get()
+                ->toArray();
+
+            # numeros por ocorrencia ACIMA DE 15
+            $porOcorrencia['file'] = Rat::select(DB::raw("count(com_rat.ocorrencia_id) as qtd"))
+                ->join('com_rat_ocorrencia', 'com_rat.ocorrencia_id', 'com_rat_ocorrencia.id')
+                ->addSelect('com_rat_ocorrencia.cod')
+                ->addSelect('com_rat_ocorrencia.descricao')
+                ->addSelect('com_rat_ocorrencia.alias')
+                ->where('com_rat.municipio_id', "!=", '7221')
+                ->having('qtd', '>', '15')
+                ->groupBy('com_rat.ocorrencia_id', 'com_rat_ocorrencia.cod', 'com_rat_ocorrencia.descricao', 'com_rat_ocorrencia.alias')
+                ->orderBy('qtd')
+                ->get()
+                ->toArray();
+
+            # numeros por regiao
+            $porRegiao['file'] = Rat::select(DB::raw("count(com_rat.id) as total"))
+                ->join('cedec_municipio', 'com_rat.municipio_id', 'cedec_municipio.id')
+                ->join('cedec_rpm_mun', 'com_rat.municipio_id', 'cedec_rpm_mun.id_municipio')
+                ->addSelect('cedec_rpm_mun.id_rpm')
+                ->where('cedec_municipio.id', "!=", '7221')
+                ->groupBy('cedec_rpm_mun.id_rpm')
+                ->get()
+                ->toArray();
+
+
+            # numeros por Mes
+            $porMes['file'] = Rat::select(DB::raw("count(com_rat.id) as total, MONTH(com_rat.dt_ocorrencia) month, DATE_FORMAT(com_rat.dt_ocorrencia, '%M') as mes"))
+                ->where('com_rat.municipio_id', "!=", '7221')
+                ->whereYear('com_rat.dt_ocorrencia', '=', 2023)
+                ->groupBy('month', 'mes')
+                ->orderBy('month')
+                ->get()
+                ->toArray();
+
+            //dd($porMes);
+
+
+            # chutas intensas 
+            $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
+            # estiagem 
+            $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
+
+            if ($ratSeca > 0 && $rats->total() > 0) {
+                $percent_seca = number_format(($ratSeca / $rats->total()) * 100, 2);
+            } else {
+                $percent_seca = 0;
+            }
+
+            if ($ratChuva > 0 && $rats->total() > 0) {
+                $percent_chuva = number_format(($ratChuva / $rats->total()) * 100, 2);
+            } else {
+                $percent_chuva = 0;
+            }
         } else {
+            $porRegiao = ['file' => ['total' => 0, 'id_rpm' => 0]];
+            $porOcorrencia15 = ['file' => ['qtd15' => 0, 'ocorrencia' => 0, 'descricao' => 0]];
+            $porOcorrencia   = ['file' => ['qtd'   => 0, 'ocorrencia' => 0, 'descricao' => 0]];
+            $porMes          = ['file' => ['total' => 0, 'month' => 0, 'year' => 0]];
+            $ratChuva = 0;
+            $ratSeca = 0;
+            $percent_seca = 0;
             $percent_chuva = 0;
         }
-        //dd($ratSeca, $rats->total());
 
         return view(
             'compdec/rat/index',
@@ -161,6 +228,10 @@ class RatController extends Controller
                 'search' => false,
                 'percent_seca' => $percent_seca,
                 'percent_chuva' => $percent_chuva,
+                'porRegiao' => $porRegiao,
+                'porOcorrencia15' => $porOcorrencia15,
+                'porOcorrencia' => $porOcorrencia,
+                'porMes'        => $porMes,
             ]
         );
     }
@@ -308,7 +379,7 @@ class RatController extends Controller
                 }
             }
 
-            
+
             return response()->json([
                 'view' => 'show/' . $rat->id,
                 //'message' => 'Registro Gravado com Sucesso',
@@ -559,7 +630,7 @@ class RatController extends Controller
             'user_id' => Auth::user()->id,
             'hostname' => request()->getClientIp(),
             'id' => $request->id,
-            'file' =>$request->file,
+            'file' => $request->file,
         ]);
 
         if (Storage::delete($request->file)) {
@@ -576,7 +647,7 @@ class RatController extends Controller
 
     public function search(Request $request)
     {
-        
+
         # delete imagem ao RAT
         Log::channel('navegacao')->info("Acesso", [
             'view' => 'search',
@@ -593,6 +664,12 @@ class RatController extends Controller
         } else {
             $filter_all = " com_rat.id > 1 ";
         }
+
+
+        $porRegiao       = ['file' =>[['total' => 0, 'id_rpm' => 0]]];
+        $porOcorrencia15 = ['file' =>[['qtd15' => 0, 'ocorrencia' => 0, 'descricao' => 0]]];
+        $porOcorrencia   = ['file' =>[['qtd'   => 0, 'ocorrencia' => 0, 'descricao' => 0]]];
+        $porMes          = ['file' =>[['total' => 0, 'month' => 0, 'year' => 0]]];
 
 
         /**
@@ -675,7 +752,7 @@ class RatController extends Controller
             $rats = array();
         } else {
 
-   # chutas intensas 
+            # chutas intensas 
             $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
 
             # estiagem 
@@ -750,6 +827,10 @@ class RatController extends Controller
                 'ratSeca' => $ratSeca,
                 'chart_ocor_list_ano_corrente' => "[" . $chart_ocor_list_ano_corrente . "]",
                 'search' => true,
+                'porRegiao' => $porRegiao,
+                'porOcorrencia15' => $porOcorrencia15,
+                'porOcorrencia' => $porOcorrencia,
+                'porMes'        => $porMes
             ]
         );
     }

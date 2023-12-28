@@ -28,6 +28,17 @@
             text-shadow: 0px 1px 4px #23430C;
             opacity: 0.5;
         }
+
+        @media print {
+            .p-3 {
+                padding: 0 !important;
+            }
+            .border {
+                border-color: #edf1ed !important;
+            }
+
+        }
+        
     </style>
 
     <!-- breadcrumb -->

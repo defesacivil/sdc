@@ -107,7 +107,7 @@
 
             <div class="row p-3">
                 <div class="p-2 col h-100">
-                    {{ Form::label('acoes', 'Histórico da Ocorrência') }}: ( <span>Caracteres Restantes: </span> <span id='caracteres'>0</span> )
+                    {{ Form::label('acoes', 'Histórico da Ocorrência') }}: ( <span>Caracteres Restantes: </span> <span id='caracteres'>0</span> ) <span class="text-danger bold">Não Colocar Imagens neste Campo</span>
                     {{ Form::textarea('acoes', $rat->acoes, ['class' => 'form form-control', 'id' => 'acoes', 'maxlength' => '15000']) }}
                 </div>
             </div>

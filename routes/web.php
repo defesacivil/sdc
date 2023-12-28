@@ -17,18 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
-        return view('dashboard');
-    } else if (null != session()->get('routeInicio')) {
-        return redirect()->away(session()->get('routeInicio'));
-    } else {
-        return redirect()->away('http://sistema.defesacivil.mg.gov.br');
-    }
 
-    //inicio com tela para login
-    //return view('welcome');
-});
 
 
 
@@ -38,11 +27,23 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
 
+
+    Route::get('/', function () {
+
+        if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
+            return redirect()->away('http://sdcold.net:8081/?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
+        } elseif (null != session()->get('routeInicio')) {
+            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
+        } else {
+            return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
+        }
+    });
+    
+
     ##############################  DASHBOARD ##############################
     Route::get('/dashboard', function () {
 
         if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
-            //return view('dashboard');
             return redirect()->away('http://sdcold.net:8081/?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         } elseif (null != session()->get('routeInicio')) {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
@@ -50,6 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         }
     })->name('dashboard');
+
+
 
     
     #################################   CONFIG   ##################################
@@ -66,8 +69,12 @@ Route::group(['middleware' => 'auth'], function () {
     # configurações COMPDEC 
     Route::get('configcompdec', 'App\Http\Controllers\Usuario\ConfigController@index')->can('compdec');
 
+    #Mensagens
+    Route::get('msg', 'App\Http\Controllers\config\ConfigController@msg');
+
     # help 
     Route::get('help', 'App\Http\Controllers\Cedec\CedecController@help');
+    
 
 
 

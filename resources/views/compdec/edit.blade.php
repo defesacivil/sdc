@@ -184,25 +184,8 @@
 
                                 </div>
                                 <div class='col'>
-                                    {{ Form::label('macroregiao', '') }}:
-                                    {{ Form::select(
-                                        'macroregiao',
-                                        [
-                                            'ALTO PARANAIBA' => 'ALTO PARANAIBA',
-                                            'CENTRAL' => 'CENTRAL',
-                                            'CENTRO OESTE' => 'CENTRO OESTE',
-                                            'JEQUITINHONHA MUCURI' => 'JEQUITINHONHA MUCURI',
-                                            'JEQUITINHONHAMUCURI' => 'JEQUITINHONHAMUCURI',
-                                            'NOROESTE DE MINAS' => 'NOROESTE DE MINAS',
-                                            'NORTE DE MINAS' => 'NORTE DE MINAS',
-                                            'SUL DE MINAS' => 'SUL DE MINAS',
-                                            'TRIANGULO' => 'TRIANGULO',
-                                            'VALE DO RIO DOCE' => 'VALE DO RIO DOCE',
-                                            'ZONA DA MATA' => 'ZONA DA MATA',
-                                        ],
-                                        $compdec->municipio->macroregiao,
-                                        ['class' => 'form form-control', 'placeholder' => 'Selecione a Macroregiao'],
-                                    ) }}
+                                    {{ Form::label('regiao_dc', 'Região de Defesa Civil') }}:
+                                    {{ Form::input('regiao_dc', $compdec->municipio->macroregiao, ['class' => 'form form-control']) }}
                                     <br>
                                 </div>
                             </div>

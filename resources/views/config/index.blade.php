@@ -41,6 +41,13 @@
                 <div class="row p-3">
                     <div class="col text-center">
                         <a href="config/index" title="Manutenção"><img width="120" src="{{ url('imagem/icon/gears.png') }}" title="Relatórios Log's"></a>
+                        <br>
+                        Gears
+                    </div>
+                    <div class="col text-center">
+                        <a href="msg" title="Msg Alert"><img width="120" src="{{ url('imagem/icon/mensagem.png') }}" title="Mensagens"></a>
+                        <br>
+                        Mensagens/Alertas
                     </div>
                 </div>
                 <br>

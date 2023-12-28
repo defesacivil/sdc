@@ -25,46 +25,50 @@ class CompdecController extends \App\Http\Controllers\Controller
      */
     public function index()
     {
-        $method = request()->method();
-        $active_tab = "";
+
+        if (request()->user()->can('cedec')) {
+            $method = request()->method();
+            $active_tab = "";
 
 
-        $situacao = DB::table("com_comdec")
-        ->select(DB::raw('com_ativa, count(id) as qtd', 'municipio_id'))
-        ->where('id_municipio', '!=', '7221')
-        ->groupBy("com_ativa")
-        ->get();
+            $situacao = DB::table("com_comdec")
+                ->select(DB::raw('com_ativa, count(id) as qtd', 'municipio_id'))
+                ->where('id_municipio', '!=', '7221')
+                ->groupBy("com_ativa")
+                ->get();
 
-  if ($method == 'GET') {
-            return view('compdec.index',[
-                'ativa' => $situacao[1]->qtd,
-                'inativa' => $situacao[0]->qtd,
-            ]);
-
-
-
-        } elseif ($method == 'POST') {
-
-            if (true) {
-
-                $param = request()->input('txtBusca');
-
-                $municipios = DB::table('com_comdec')
-                    ->join('cedec_municipio', 'com_comdec.id_municipio', '=', 'cedec_municipio.id')
-                    ->select('com_comdec.*', 'cedec_municipio.nome')
-                    ->where('cedec_municipio.nome', "LIKE", '%' . $param . '%')
-                    ->get();
-
-
-                foreach ($municipios as $key => $municipio) {
-
-                    $id_municipio[] = $municipio;
-                }
+            if ($method == 'GET') {
                 return view('compdec.index', [
-                    'compdecs' => $municipios,
-                    'active_tab' => $active_tab,
+                    'ativa' => $situacao[1]->qtd,
+                    'inativa' => $situacao[0]->qtd,
                 ]);
+            } elseif ($method == 'POST') {
+
+                if (true) {
+
+                    $param = request()->input('txtBusca');
+
+                    $municipios = DB::table('com_comdec')
+                        ->join('cedec_municipio', 'com_comdec.id_municipio', '=', 'cedec_municipio.id')
+                        ->select('com_comdec.*', 'cedec_municipio.nome')
+                        ->where('cedec_municipio.nome', "LIKE", '%' . $param . '%')
+                        ->get();
+
+
+                    foreach ($municipios as $key => $municipio) {
+
+                        $id_municipio[] = $municipio;
+                    }
+                    return view('compdec.index', [
+                        'compdecs' => $municipios,
+                        'active_tab' => $active_tab,
+                        'ativa' => 0,
+                        'inativa' => 0,
+                    ]);
+                }
             }
+        }else {
+            return view('dashboard');
         }
     }
 
@@ -134,6 +138,11 @@ class CompdecController extends \App\Http\Controllers\Controller
             'user_id' => Auth::user()->id,
             'host' => request()->getHttpHost(),
         ]);
+
+
+        
+
+
 
         return view(
             'compdec.edit',
