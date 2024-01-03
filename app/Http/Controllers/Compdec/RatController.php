@@ -186,10 +186,21 @@ class RatController extends Controller
             //dd($porMes);
 
 
-            # chutas intensas 
+            # chuvas 
             $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
+            
+            # chuvas intensas 
+            $ratChuvaIntensa = Rat::where('cobrade_id', '=', '26')->count();
+            
             # estiagem 
             $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
+
+            # perc. chuvas intensas
+            if ($ratChuvaIntensa > 0 && $rats->total() > 0) {
+                $percent_chuva_intensa = number_format(($ratChuvaIntensa / $rats->total()) * 100, 2);
+            } else {
+                $percent_chuva_intensa = 0;
+            }
 
             if ($ratSeca > 0 && $rats->total() > 0) {
                 $percent_seca = number_format(($ratSeca / $rats->total()) * 100, 2);
@@ -211,6 +222,7 @@ class RatController extends Controller
             $ratSeca = 0;
             $percent_seca = 0;
             $percent_chuva = 0;
+            $percent_chuva_intensa =0;
         }
 
         return view(
@@ -223,11 +235,13 @@ class RatController extends Controller
                 'optionCobrade' => self::dataRat()['optionCobrade'],
                 'ratSeca'   => $ratSeca,
                 'ratChuva'   => $ratChuva,
+                'ratChuvasIntensas'   => $ratChuvaIntensa,
                 'chart_ocor_list_ano_corrente' => "[" . $chart_ocor_list_ano_corrente . "]",
                 //'chart_ocor_list_total' => "[".$chart_ocor_list_total."]",
                 'search' => false,
                 'percent_seca' => $percent_seca,
                 'percent_chuva' => $percent_chuva,
+                'percent_chuva_intensa' => $percent_chuva_intensa,
                 'porRegiao' => $porRegiao,
                 'porOcorrencia15' => $porOcorrencia15,
                 'porOcorrencia' => $porOcorrencia,

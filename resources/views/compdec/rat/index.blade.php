@@ -279,7 +279,7 @@
 
             $(".filtro").hide();
 
-            $(".chartjsVis").hide();
+            //$(".chartjsVis").hide();
 
             /* Filtro Chartsj */
             $("#filt_chartjs").change(function() {
@@ -324,10 +324,10 @@
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Estiagem', 'Chuva'],
+                    labels: ['Estiagem', 'Chuvas', 'Chuvas Intensas'],
                     datasets: [{
                         label: '',
-                        data: [{{ $ratSeca }}, {{ $ratChuva }}],
+                        data: [{{ $ratSeca }}, {{ $ratChuva }}, {{ $ratChuvasIntensas }}],
                         borderWidth: 2,
                         datalabels: {
                             align: 'center',
