@@ -739,6 +739,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     # Rat DESTROY
     Route::get('rat/destroy', 'App\Http\Controllers\Compdec\RatController@destroy');
+    
+    # Rat CONFIG
+    Route::get('rat/config', 'App\Http\Controllers\Compdec\RatController@config');
 
     # Rat SEARCH
     Route::match(['GET', 'POST'], 'rat/search', 'App\Http\Controllers\Compdec\RatController@search');

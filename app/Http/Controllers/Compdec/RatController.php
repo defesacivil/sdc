@@ -436,6 +436,8 @@ class RatController extends Controller
             }
         }
 
+
+
         return view(
             'compdec/rat/show',
             [
@@ -847,6 +849,12 @@ class RatController extends Controller
                 'porMes'        => $porMes
             ]
         );
+    }
+
+
+    public function config() {
+        return view('compdec/rat/config');
+        
     }
 
     /* Todos Relatorios de Atividade */

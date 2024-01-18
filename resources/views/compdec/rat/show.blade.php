@@ -47,6 +47,11 @@
                 </p>
             </div>
             <div class="col-md-12">
+                
+                <img class="img-fluid border" src="{{ url('imagem/brasao/timbre3000.png') }}" alt="">
+                
+            </div>
+            <div class="col-md-12">
                 <p class="text-center m-4">
                     <legend>RELATÓRIO DE ATIVIDADES</legend>
                 </p>
@@ -174,6 +179,8 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
+
+                
 
 
             })

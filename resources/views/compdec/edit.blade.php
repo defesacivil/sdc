@@ -368,7 +368,9 @@
 
 
                             <div class='row'>
-                                {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
+                                <div class="col">
+                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
+                                </div>
                             </div>{{ Form::close() }}
 
                         </div>
