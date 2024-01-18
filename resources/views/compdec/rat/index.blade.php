@@ -21,11 +21,19 @@
                     <a class='btn btn-primary btn-sm' id='btnSearch' title="Criar novo Registro">Pesquisa</a>
                     <span>&nbsp;&nbsp;&nbsp;</span>
                     <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }}  title="Criar novo Registro">Exportar Excel</a>
+                    <a class='btn btn-primary btn-sm' href={{ url('rat/config') }}  title="Criar novo Registro">Configurações</a>
                 </p>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-9">
                 <legend class="p-4">Rat - Relatório de Atividades de Defesa Civil</legend>
+            </div>
+            <div class="col-3 p-2">
+                <img class="border" width="80" src="{{ url('/imagem/brasao/brasao1_854.png')}}" alt="">
+            </div>
+        </div>
+
 
         {{ Form::open(['url' => 'rat/search']) }}
 

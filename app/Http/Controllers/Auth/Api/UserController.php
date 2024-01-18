@@ -45,4 +45,25 @@ class UserController extends Controller
         $user = User::where('id_user_cedec', '=', $request['id_usuario']);
 
     }
+
+
+    /**
+     *  Atualização email e cpf do usuário
+     */ 
+    public function update(Request $request)
+    {
+        $dados = $request['content'];
+        //dd($request);
+        
+        $
+        
+        $user = User::where('id_user_cedec', "=", $dados['id_user_cedec']);
+
+        $user->email = $dados['email'];
+
+        dd($user->save());
+
+        //dd($user);
+
+    }
 }

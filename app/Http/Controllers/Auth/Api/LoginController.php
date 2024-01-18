@@ -105,10 +105,11 @@ class LoginController extends Controller
                 ]);
             } else {
 
-                $token = auth()->user()->createToken(
-                        'teste',
-                        ['*'],
-                        Carbon::now()->addHours(24));
+                // $token = auth()->user()->createToken(
+                //         'teste',
+                //         ['*'],
+                //         Carbon::now()->addHours(24));
+                $token = auth()->user()->createAccessToken();
             }
 
             return response()->json([

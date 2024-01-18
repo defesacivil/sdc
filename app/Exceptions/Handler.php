@@ -42,18 +42,27 @@ class Handler extends ExceptionHandler
     function render($request, Throwable $exception)
     {
         $message1 = $exception->getMessage();
-        if ($this->isHttpException($exception)) {
 
-            if ($exception->getStatusCode() == 404) {
+        if ($message1 == "Unauthenticated.") {
 
-                return response()->view('errors/404', ['message' => $message1], 404);
+            return response()->view('errors/noAuth', ['message' => $message1], 500);
+        } else {
+
+            if ($this->isHttpException($exception)) {
+
+                if ($exception->getStatusCode() == 404) {
+
+                    return response()->view('errors/404', ['message' => $message1], 404);
+                }
+                if ($exception->getStatusCode() == 500) {
+
+                    return response()->view('errors/500', ['message' => $message1], 500);
+                }
+            } else {
+                return response()->view('errors.500', ['message' => $message1], 500);
             }
-            if ($exception->getStatusCode() == 500) {
-                return response()->view('errors/500', ['message' => $message1], 500);
-            }
-        }else {
-            return response()->view('errors.500', ['message' => $message1], 500);
         }
+
         return parent::render($request, $exception);
     }
 }

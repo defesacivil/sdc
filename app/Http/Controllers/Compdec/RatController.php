@@ -351,6 +351,8 @@ class RatController extends Controller
             }
         }
 
+
+
         return view(
             'compdec/rat/show',
             [
@@ -752,6 +754,12 @@ class RatController extends Controller
                 'search' => true,
             ]
         );
+    }
+
+
+    public function config() {
+        return view('compdec/rat/config');
+        
     }
 
     /* Todos Relatorios de Atividade */
