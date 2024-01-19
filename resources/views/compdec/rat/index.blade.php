@@ -327,7 +327,7 @@
                     labels: ['Estiagem', 'Chuvas', 'Chuvas Intensas'],
                     datasets: [{
                         label: '',
-                        data: [{{ $ratSeca }}, {{ $ratChuva }}, {{ $ratChuvasIntensas }}],
+                        data: [{{ $ratSeca }}, {{ $ratChuva }}],
                         borderWidth: 2,
                         datalabels: {
                             align: 'center',

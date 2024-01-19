@@ -99,9 +99,9 @@
         </div>
     </div>
 
+    @can('cedec')
     <div class="p-3 row div">
         <div class="col">
-
             <select name="selChart" class="form-control form-control-lg col-5" id="selChart">
                 <option>Situação das Coordenadorias Municipais de Defesa Civil</option>
                 <option>Municípios com Plano de Contingência</option>
@@ -130,6 +130,7 @@
             <h4>{{ $ativa }} <br> {{ number_format(($ativa / 853) * 100, 1) }}%</h4>
         </div>
     </div>
+
     <hr>
     <div class="row">
         <div class="col">
@@ -138,6 +139,8 @@
             </div>
         </div>
     </div>
+
+    @endcan
 
     </div>
 

@@ -56,10 +56,14 @@ class Handler extends ExceptionHandler
                 }
                 if ($exception->getStatusCode() == 500) {
 
-                    return response()->view('errors/500', ['message' => $message1], 500);
+                    if(true) {
+                        dd('o');
+                    }else {
+                        return response()->view('errors/500', ['message' => $message1], 500);
+                    }
                 }
             } else {
-                return response()->view('errors.500', ['message' => $message1], 500);
+                //return response()->view('errors.500', ['message' => $message1], 500);
             }
         }
 
