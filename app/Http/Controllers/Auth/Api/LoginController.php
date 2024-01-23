@@ -109,7 +109,6 @@ class LoginController extends Controller
                         'teste',
                         ['*'],
                         Carbon::now()->addHours(24));
-                //$token = auth()->user()->createAccessToken();
             }
 
             return response()->json([
