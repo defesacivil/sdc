@@ -8,3 +8,7 @@ COMMENT='RDC - Região de Defesa Civil';
 ALTER TABLE gestaocedeclaravel.aju_pedido_pedidos ADD updated_at TIMESTAMP NULL;
 ALTER TABLE gestaocedeclaravel.aju_pedido_pedidos ADD created_at TIMESTAMP NULL;
 
+ALTER TABLE `com_comdec`
+	ADD COLUMN `regiaodc` INT NULL DEFAULT NULL COMMENT 'Regiao de Defes Civil' AFTER `updated_at`;
+
+

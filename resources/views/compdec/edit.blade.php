@@ -185,7 +185,7 @@
                                 </div>
                                 <div class='col'>
                                     {{ Form::label('regiao_dc', 'Região de Defesa Civil') }}:
-                                    {{ Form::input('regiao_dc', $compdec->municipio->macroregiao, ['class' => 'form form-control']) }}
+                                    {{ Form::input('regiao_dc', $municipio->regiao, ['class' => 'form form-control']) }}
                                     <br>
                                 </div>
                             </div>

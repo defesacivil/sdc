@@ -140,8 +140,7 @@ class CompdecController extends \App\Http\Controllers\Controller
         ]);
 
 
-        
-
+        dd($compdec);
 
 
         return view(
@@ -153,6 +152,7 @@ class CompdecController extends \App\Http\Controllers\Controller
                 'territorios' => $territorios,
                 'microrregiao' => $microrregiao,
                 'mesorregiao' => $mesorregiao,
+                'municipio' => $municipio,
                 'active_tab' => $active_tab,
 
             ]
