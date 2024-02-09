@@ -36,7 +36,7 @@ class Municipio extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function CedecRdc(): HasOne
+    public function cedecRdc(): HasOne
     {
         return $this->hasOne(CedecRdc::class, 'id', 'rdc_id');
     }
