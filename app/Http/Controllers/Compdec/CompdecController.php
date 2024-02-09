@@ -6,6 +6,7 @@ use App\Models\Cedec\CedecMeso;
 use App\Models\Cedec\CedecMicro;
 use App\Models\Compdec\ComAssociacao;
 use App\Models\Compdec\Compdec;
+use App\Models\Compdec\ComRdc;
 use App\Models\Compdec\ComRegiao;
 use App\Models\Compdec\ComTerritorio;
 use App\Models\Municipio\Municipio;
@@ -123,13 +124,14 @@ class CompdecController extends \App\Http\Controllers\Controller
             $compdec_id = $compdec_id_session;
         }
 
-        $compdec = Compdec::find($compdec_id);
-        $municipio = Municipio::find($compdec->municipio_id);
-        $regioes = ComRegiao::orderBy('nome')->pluck('nome', 'id');
-        $associacoes = ComAssociacao::orderBy('nome')->pluck('nome', 'id');
-        $territorios = ComTerritorio::orderBy('nome')->pluck('nome', 'id');
-        $microrregiao = CedecMicro::orderBy('nome')->pluck('nome', 'id');
-        $mesorregiao = CedecMeso::orderBy('nome')->pluck('nome', 'id');
+        $compdec      = Compdec::find($compdec_id);
+        //$municipio    = Municipio::find($compdec->municipio_id);
+        //$regioes      = ComRegiao::orderBy('nome')->pluck('nome', 'id');
+        //$associacoes  = ComAssociacao::orderBy('nome')->pluck('nome', 'id');
+        //$territorios  = ComTerritorio::orderBy('nome')->pluck('nome', 'id');
+        //$microrregiao = CedecMicro::orderBy('nome')->pluck('nome', 'id');
+        //$mesorregiao  = CedecMeso::orderBy('nome')->pluck('nome', 'id');
+
 
         /* log edit */
         Log::channel('navegacao')->info("Acesso view editar", [
@@ -148,11 +150,11 @@ class CompdecController extends \App\Http\Controllers\Controller
             'compdec.edit',
             [
                 'compdec' => $compdec,
-                'regioes' => $regioes,
-                'associacoes' => $associacoes,
-                'territorios' => $territorios,
-                'microrregiao' => $microrregiao,
-                'mesorregiao' => $mesorregiao,
+                //'regioes' => $regioes,
+                //'associacoes' => $associacoes,
+                //'territorios' => $territorios,
+                //'microrregiao' => $microrregiao,
+                //'mesorregiao' => $mesorregiao,
                 'active_tab' => $active_tab,
 
             ]
@@ -168,6 +170,9 @@ class CompdecController extends \App\Http\Controllers\Controller
      */
     public function update(Request $request, $id)
     {
+
+        dd($request);
+
 
         try {
 

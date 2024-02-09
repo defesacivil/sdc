@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Cedec\CedecUsuario;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -53,17 +54,25 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $dados = $request['content'];
-        //dd($request);
-        
-        $
-        
-        $user = User::where('id_user_cedec', "=", $dados['id_user_cedec']);
+        //dd($dados);
+                
+        $user = User::where('id_user_cedec', "=", $dados['id_user_cedec'])->first();
 
         $user->email = $dados['email'];
+        $user->ativo = $dados['ativo'];
+        $user->cpf = $dados['cpf'];
 
-        dd($user->save());
 
-        //dd($user);
+        try {
+            $result = $user->save();
+        }catch (Exception $e) {
+
+            $result = (str_contains($e->getMessage(), "Duplicate")) ? "duplicado" : "false";
+        }
+
+        return response()->json([
+            'result' => $result,
+        ]);
 
     }
 }

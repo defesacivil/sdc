@@ -27,6 +27,7 @@
                     <a class='btn btn-primary btn-sm' id='btnSearch' title="Criar novo Registro">Pesquisa</a>
                     <span>&nbsp;&nbsp;&nbsp;</span>
                     <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }} title="Criar novo Registro">Exportar Excel</a>
+                    <a class='btn btn-warning btn-sm' href={{ url('rat/config') }} title="Criar novo Registro">Configurações</a>
                 </p>
             </div>
         </div>
