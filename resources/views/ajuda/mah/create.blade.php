@@ -191,7 +191,7 @@
                                         </div>
                                         <div class="col p-3">
                                             {{ Form::label('data_vigencia', 'Data de Vigência do Decreto') }} :
-                                            {{ Form::text('data_vigencia', '', ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                            {{ Form::input('dateTime-local', 'data_vigencia', '', ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
                                         </div>
 
                                         <div class="col p-3">

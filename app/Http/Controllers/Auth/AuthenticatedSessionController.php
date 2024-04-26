@@ -27,6 +27,9 @@ class AuthenticatedSessionController extends Controller
     {
         return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
         //return view('auth.login');
+        //die();
+
+
     }
 
     /**

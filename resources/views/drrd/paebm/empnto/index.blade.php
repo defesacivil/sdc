@@ -20,7 +20,7 @@
 
             <div class="row">
                 <div class="col">
-                    <p class='text-center p-3'><a class='btn btn-success' href='{{ url('drrd') }}'>Voltar</a></p>
+                    <p class='p-3 text-center'><a class='btn btn-success' href='{{ url('drrd') }}'>Voltar</a></p>
                     <p class="text-center">
                         <legend>Cadastro Empreendimento</legend>
                     </p>
@@ -31,7 +31,7 @@
                     <label for="serach">Busca:</label>
                     {{ Form::open(['url' => 'pae/empnto', 'method' => 'POST']) }}
                     {{ Form::token() }}
-                    <div class="input-group mb-3">
+                    <div class="mb-3 input-group">
                         {{ Form::text('search', '', ['class' => 'form form-control col-md-3']) }}
                         <div class="input-group-append">
                             {{ Form::submit('Pesquisa', ['class' => 'btn btn-outline-secondary']) }}
@@ -53,6 +53,7 @@
                             <th>EMPREENDEDOR</th>
                             <th>MATERIAL</th>
                             <th>VOLUME</th>
+                            <th>ÚLTIMA AT.</th>
                             <th>AÇÕES</th>
                         </tr>
                         @foreach ($empntos as $key => $empnto)
@@ -63,6 +64,7 @@
                                 <td>{{ $empnto->empreendedor->nome }}</td>
                                 <td>{{ $empnto->material }}</td>
                                 <td>{{ $empnto->volume }}</td>
+                                <td>{{ $empnto->user_update }}</td>
                                 <td>
                                     <a href='{{ url('pae/empnto/edit/' . $empnto->id) }}'><img
                                             src='{{ asset('imagem/icon/editar.png') }}'></a>

@@ -81,6 +81,7 @@
                                 '' => 'Selecione a Situação',
                                 '1' => 'Aprovado',
                                 '0' => 'Reprovado',
+                                '2' => 'Em Regularização',
                             ],
                             '',
                             ['class' => 'form form-control'],

@@ -4,8 +4,14 @@ namespace App\Http\Controllers\Drrd;
 
 
 use App\Models\Drrd\Drrd;
+use App\Models\Drrd\PaeEmpnto;
 use App\Models\Drrd\PaeProtocolo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 
 class DrrdController extends \App\Http\Controllers\Controller
 {
@@ -15,6 +21,7 @@ class DrrdController extends \App\Http\Controllers\Controller
      */
     public function menu()
     {
+
         $totalPaebm = PaeProtocolo::count();
         return view('drrd/index',
                 [
@@ -97,4 +104,7 @@ class DrrdController extends \App\Http\Controllers\Controller
     {
         //
     }
+
+
+    
 }

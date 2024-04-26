@@ -29,7 +29,15 @@ class AjudaPedidoController extends Controller
      */
     public function index()
     {
-        return view('ajuda/mah/index');
+
+
+        $pedidos_compdec = AjudaPedido::where('municipio_id', '=', auth()->user()->municipio_id)->get();
+
+
+
+        return view('ajuda/mah/index', [
+            'pedidos_compdec' => $pedidos_compdec,
+        ]);
     }
 
 
@@ -99,30 +107,29 @@ class AjudaPedidoController extends Controller
 
                 $param = request()->input('txtBusca');
 
+                    $pedidos = DB::table('aju_pedido_pedidos')
+                        ->join('cedec_municipio', 'cedec_municipio.id', '=', 'aju_pedido_pedidos.municipio_id')
+                        ->join('dec_cobrade', 'dec_cobrade.id', '=', 'aju_pedido_pedidos.cobrade_id')
+                        ->select('aju_pedido_pedidos.*', 'cedec_municipio.nome as municipio', 'dec_cobrade.descricao as descricao_cobrade')
+                        ->where('cedec_municipio.nome', "LIKE", '%' . $param . '%')
+                        ->get();
 
-
-                $pedidos = DB::table('aju_pedido_pedidos')
-                    ->join('cedec_municipio', 'cedec_municipio.id', '=', 'aju_pedido_pedidos.municipio_id')
-                    ->join('dec_cobrade', 'dec_cobrade.id', '=', 'aju_pedido_pedidos.cobrade_id')
-                    ->select('aju_pedido_pedidos.*', 'cedec_municipio.nome as municipio', 'dec_cobrade.descricao as descricao_cobrade')
-                    ->where('cedec_municipio.nome', "LIKE", '%' . $param . '%')
-                    ->get();
-
-                return view('ajuda/mah/busca', [
-                    'pedidos' => $pedidos,
-                    'active_tab' => $active_tab,
-                ]);
+                    return view('ajuda/mah/busca', [
+                        'pedidos' => $pedidos,
+                        'active_tab' => $active_tab,
+                    ]);
+                
             }
         }
-        $pedidos = AjudaPedido::find();
+        //$pedidos = AjudaPedido::find();
 
 
-        return view(
-            'ajuda/mah/busca',
-            [
-                $pedidos => 'mahs',
-            ]
-        );
+        // return view(
+        //     'ajuda/mah/busca',
+        //     [
+        //         $pedidos => 'mahs',
+        //     ]
+        // );
     }
 
     /**
@@ -140,7 +147,7 @@ class AjudaPedidoController extends Controller
         $coordenador = "";
 
         foreach ($compdec->equipes as $key => $value) {
-            
+
 
             if (strtolower($value['nome']) == 'coordenador') {
                 $coordenador = $value;
@@ -162,8 +169,8 @@ class AjudaPedidoController extends Controller
                 DB::raw("CONCAT(codigo,' - ',descricao) as descricao_full"),
                 'id'
             )
-            ->orderBy('descricao')
-            ->pluck('descricao_full', 'id');
+                ->orderBy('descricao')
+                ->pluck('descricao_full', 'id');
 
             $coordenador = CompdecEquipe::where(['id_municipio' => $compdec->id_municipio])
                 ->where(['funcao' => 'Coordenador'])->first();
@@ -225,10 +232,10 @@ class AjudaPedidoController extends Controller
         $pedido->numero_decreto     = $request->numero_decreto;
         $pedido->tipo_decreto       = $request->tipo_decreto;
         $pedido->data_vigencia      = $request->data_vigencia;
-        $pedido->esforcos_realizados= $request->esforcos_realizados;
+        $pedido->esforcos_realizados = $request->esforcos_realizados;
         $pedido->municipio_id       = $request->municipio_id;
         $pedido->regiao_id          = $request->regiao_id;
-        $pedido->data_entrada_sistema= $request->data_entrada_sistema;
+        $pedido->data_entrada_sistema = $request->data_entrada_sistema;
         $pedido->nome_coordenador   = $request->nome_coordenador;
         $pedido->tel_coordenador    = $request->tel_coordenador;
         $pedido->cel_coordenador    = $request->cel_coordenador;
@@ -246,7 +253,7 @@ class AjudaPedidoController extends Controller
         } else {
             $pedido->save();
 
-            return redirect()->route('pedido/edit',[$pedido->id])->with([
+            return redirect()->route('pedido/edit', [$pedido->id])->with([
                 'message' => 'Registro Gravado com Sucesso, Favor Adicionar os Materiais e Anexar Documentos se necessário !',
                 'active_tab' => '#-material_pedido-tab',
             ]);
@@ -264,19 +271,21 @@ class AjudaPedidoController extends Controller
 
         $materiais = AjudaPedidoItens::where('pedido_id', "=", $pedido->id);
         $despachos = AjudaPedidoAnaliseTecnica::where('pedido_id', "=", $pedido->id);
-        
-        
+
+
         $anexos = "";
-        
-        
-        
-        return view('ajuda/mah/show', 
-        [
-            'pedido'    => $pedido,
-            'materiais' => $materiais,
-            'anexos'    => $anexos,
-            'despachos' => $despachos,
-        ]);
+
+
+
+        return view(
+            'ajuda/mah/show',
+            [
+                'pedido'    => $pedido,
+                'materiais' => $materiais,
+                'anexos'    => $anexos,
+                'despachos' => $despachos,
+            ]
+        );
     }
 
     /**
@@ -432,8 +441,6 @@ class AjudaPedidoController extends Controller
         return redirect()->back()->with([
             'message' => 'Arquivo Apagado com Sucesso',
         ]);
-
-
     }
 
     /**

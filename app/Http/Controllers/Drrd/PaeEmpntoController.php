@@ -9,7 +9,7 @@ use App\Models\Drrd\PaeEmpdor;
 use App\Models\Drrd\PaeEmpnto;
 use App\Models\Municipio\Municipio;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class PaeEmpntoController extends \App\Http\Controllers\Controller
 {
@@ -20,7 +20,7 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
      */
     public function index(Request $request)
     {
-    
+
         if ($request->method() == "GET") {
 
             $empntos = PaeEmpnto::with('municipio')->paginate(7);
@@ -31,20 +31,19 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
                     'empntos' => $empntos,
                 ]
             );
-        } elseif($request->method() == "POST") {
+        } elseif ($request->method() == "POST") {
 
             $empntos = PaeEmpnto::with('municipio')
                 ->with('empreendedor')
                 ->where('pae_empntos.nome', 'LIKE', '%' . $request->get('search') . '%')
                 ->paginate(7);
-                
-                return view(
-                    'drrd/paebm/empnto/index',
-                    [
-                        'empntos' => $empntos,
-                    ]
-                );
 
+            return view(
+                'drrd/paebm/empnto/index',
+                [
+                    'empntos' => $empntos,
+                ]
+            );
         }
     }
 
@@ -60,7 +59,7 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
 
 
         $m_construcao = [
-            'CONCRETO - ECJ' => 'CONCRETO - ECJ',
+            'ESTRUTURA DE CONTENÇÃO À JUSANTE' => 'ESTRUTURA DE CONTENÇÃO À JUSANTE',
             'ETAPA ÚNICA - ATERRO COMPACTADO' => 'ETAPA ÚNICA - ATERRO COMPACTADO',
             'JUSANTE' => 'JUSANTE',
             'LINHA DE CENTRO' => 'LINHA DE CENTRO',
@@ -79,6 +78,7 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
             'ANM' => 'ANM',
             'ANEEL' => 'ANEEL',
             'IGAM' => 'IGAM',
+            'FEAM' => 'FEAM',
         ];
         $finalidade  = [
             'INDUSTRIA' => 'INDUSTRIA',
@@ -122,8 +122,12 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
                 'orgao_fisc'         => "required|max:50",
                 // 'coordenador_search' => "required|max:70",
                 // 'pae_coordenador_id' => "required|integer",
-                'coordenador' => "max:110",
-                'tel_coordenador' => "max:20",
+                'coordenador'        => "max:110",
+                'tel_coordenador'    => "max:20",
+                'mina'               => "max:100",
+                'coordenador_sub'        => "max:110",
+                'tel_coordenador_sub'    => "max:20",
+                'email_coord_sub'        => "max:120",
             ],
             [
                 'id.required' => 'O campo Id não está presente',
@@ -149,6 +153,10 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
                 // 'pae_coordenador_id.integer' => "O campo Coordenador aceita somente números !",
                 'coordenador' => "O campo Coordenador suporta no máximo 110 caracteres!",
                 'tel_coordenador' => "O campo Telefone do Coordenador suporta no máximo 20 caracteres!",
+                'mina.max' => "O campo Nome da Mina deve ter no máximo 100 Caracteres !",
+                'coordenador_sub.max' => "O campo Coordenador Suporta no máximo 110 caracteres!",
+                'tel_coordenador_sub.max' => "O campo Telefone do Coordenador Suporta no máximo 20 caracteres !",
+                'email_coord_sub'        => "O campo Coordenador Suporta no máximo 120 caracteres!",
 
             ]
         );
@@ -167,12 +175,18 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
         $empnto->coordenador        = $request->coordenador;
         $empnto->tel_coordenador    = $request->tel_coordenador;
         // $empnto->pae_coordenador_id = $request->pae_coordenador_id;
-        $empnto->pae_empdor_id = $request->pae_empdor_id;
+        $empnto->pae_empdor_id      = $request->pae_empdor_id;
+        $empnto->mina               = $request->mina;
+        $empnto->email_coord        = $request->email_coord;
+
+        $empnto->coordenador_sub        = $request->coordenador_sub;
+        $empnto->tel_coordenador_sub    = $request->tel_coordenador_sub;
+        $empnto->email_coord_sub        = $request->email_coord_sub;
+
 
         $empnto->save();
-    
-        return redirect('pae/empnto')->with('message','Registro Gravado com Sucesso ');
 
+        return redirect('pae/empnto')->with('message', 'Registro Gravado com Sucesso ');
     }
 
     /**
@@ -201,7 +215,7 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
     {
 
         $m_construcao = [
-            'CONCRETO - ECJ' => 'CONCRETO - ECJ',
+            'ESTRUTURA DE CONTENÇÃO À JUSANTE' => 'ESTRUTURA DE CONTENÇÃO À JUSANTE',
             'ETAPA ÚNICA - ATERRO COMPACTADO' => 'ETAPA ÚNICA - ATERRO COMPACTADO',
             'JUSANTE' => 'JUSANTE',
             'LINHA DE CENTRO' => 'LINHA DE CENTRO',
@@ -220,6 +234,7 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
             'ANM' => 'ANM',
             'ANEEL' => 'ANEEL',
             'IGAM' => 'IGAM',
+            'FEAM' => 'FEAM',
         ];
         $finalidade  = [
             'INDUSTRIA' => 'INDUSTRIA',
@@ -268,8 +283,14 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
                 'orgao_fisc'         => "required|max:50",
                 // 'coordenador_search' => "required|max:70",
                 // 'pae_coordenador_id' => "required|integer",
-                'coordenador' => "required|max:110",
-                'tel_coordenador' => "max:20",
+                'coordenador'        => "required|max:110",
+                'tel_coordenador'    => "max:20",
+                'email_coord'        => "max:120",
+                'coordenador_sub'        => "max:110",
+                'tel_coordenador_sub'    => "max:20",
+                'email_coord_sub'        => "max:120",
+                'mina'               => "max:100",
+
             ],
             [
                 'id.required' => 'O campo Id não está presente',
@@ -293,7 +314,12 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
                 // 'pae_coordenador_id.integer' => "O campo Coordenador aceita somente números !",
                 'coordenador.required' => "O campo Coordenador é obrigatório !",
                 'coordenador.max' => "O campo Coordenador Suporta no máximo 110 caracteres!",
-                'tel_coordenador.max' => "O campo Telefon do Coordenador Suporta no máximo 20 caracteres !",
+                'tel_coordenador.max' => "O campo Telefone do Coordenador Suporta no máximo 20 caracteres !",
+                'mina.max' => "O campo Nome da Mina deve ter no máximo 100 Caracteres !",
+                'coordenador_sub.max' => "O campo Coordenador Suporta no máximo 110 caracteres!",
+                'tel_coordenador_sub.max' => "O campo Telefone do Coordenador Suporta no máximo 20 caracteres !",
+                'email_coord_sub'        => "O campo Coordenador Suporta no máximo 120 caracteres!",
+
 
             ]
         );
@@ -312,12 +338,27 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
         $empnto->coordenador        = $request->coordenador;
         $empnto->tel_coordenador    = $request->tel_coordenador;
         //$empnto->pae_coordenador_id = $request->pae_coordenador_id;
+        $empnto->mina               = $request->mina;
+        $empnto->email_coord        = $request->email_coord;
+
+        $empnto->coordenador_sub        = $request->coordenador_sub;
+        $empnto->tel_coordenador_sub    = $request->tel_coordenador_sub;
+        $empnto->email_coord_sub        = $request->email_coord_sub;
+        $empnto->user_update        = Auth::user()->name;
 
         $empnto->update();
-    
-        return redirect('pae/empnto')->with('message','Registro Atualizado com Sucesso ');
+        //    
+        //dd($request->close);
 
-
+        # fechar janela
+        if (!is_null($request->close)) {
+            return redirect('pae/empnto')
+                ->with('message', 'Registro Atualizado com Sucesso ')
+                ->with('closew', 'closew');
+        } else {
+            return redirect('pae/empnto/edit/' . $request->id)
+                ->with('message', 'Registro Atualizado com Sucesso ');
+        }
     }
 
     /**
@@ -381,4 +422,22 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
 
         return response()->json($data);
     }
+
+
+    /* listagem */
+    public function listagem(Request $request)
+    {
+        dd(Auth::user());
+
+        $empntos = PaeEmpnto::where($request->id);
+    
+        return view('drrd/paebm/empnto/listagem',
+    [
+        'empntos' => $empntos,
+    ]
+    );
+
+    }
+
+    
 }

@@ -15,9 +15,10 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class LoginController extends Controller
 {
+
     public function login(Request $request)
     {
-        
+
         # servidor Casa
         if($_SERVER['HTTP_HOST'] == "sdc.net:8081") {
             $credentials = $request->json('content');

@@ -57,16 +57,17 @@
         </div> --}}
 
             <div class="col-md-12">
-                    @can('cedec')
-                        <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a>
-                        <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
+                @can('cedec')
+                    <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a>
+                        
                     @endcan
 
                     <!-- Acesso COMPDEC -->
                     @can('compdec')
-                        <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
+                    <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
+                        <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
                     @endcan
-                    
+
                 </p>
 
                 @can('mah', $pedido->municipio_id)
@@ -239,23 +240,23 @@
 
                                     <table class="table table-sm table-bordered" id="tbl_material">
                                         <tr>
-                                            <td width="10%">#</td>
+                                            <td width="10%" class="text-center">#</td>
                                             {{-- <td width="20%">Código</td> --}}
-                                            <td width="20%">Material</td>
-                                            <td width="20%">Quantidade</td>
-                                            <td width="20%">Qtd Famílias Atendidas</td>
-                                            <td width="20%">Opções</td>
+                                            <td width="20%" class="text-center">Material</td>
+                                            <td width="20%" class="text-center">Quantidade</td>
+                                            <td width="20%" class="text-center">Qtd Famílias Atendidas</td>
+                                            <td width="20%" class="text-center">Opções</td>
 
                                         </tr>
 
                                         @foreach ($materiais as $key => $material)
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
+                                                <td class="text-center">{{ $key + 1 }}</td>
                                                 {{-- <td>{{ $material->codigo }}</td> --}}
-                                                <td>{{ $material->codigo . '-' . $material->descricao_item }}</td>
-                                                <td>{{ $material->qtd }}</td>
-                                                <td>{{ $material->familia_at }}</td>
-                                                <td><a href="{{ url('mah/pedidoitem/destroy/' . $material->id) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src={{ asset('imagem/icon/delete.png') }}></a></td>
+                                                <td class="text-center">{{ $material->codigo . '-' . $material->descricao_item }}</td>
+                                                <td class="text-center">{{ $material->qtd }}</td>
+                                                <td class="text-center">{{ $material->familia_at }}</td>
+                                                <td class="text-center"><a href="{{ url('mah/pedidoitem/destroy/' . $material->id) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src={{ asset('imagem/icon/delete.png') }}></a></td>
 
                                             </tr>
                                         @endforeach
@@ -282,11 +283,11 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="col-12 back">
-                                                <div class="row">
+                                            <div class="row back p-4">
+                                                <div class="col-12">
                                                     <div class="form-group col-md-12">
                                                         <label>Nome Material</label>
-                                                        <select class="js-example-basic-single form form-control form-control-sm" style="width: 100%" id="material_id" name="material_id">
+                                                        <select class="form form-control form-control-sm" id="material_id" name="material_id">
                                                             <option></option>
                                                             @foreach ($materiais_list as $material)
                                                                 <option value={{ $material['id'] }}>{{ $material['name'] }}</option>
@@ -298,14 +299,18 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <label>Quantidade</label>
-                                                    <input type="number" class="form form-control form-control-sm" id="qtd" name="qtd">
-                                                    <input type="hidden" id="tp_item" name="tp_item" value="P">
+                                                    <div class="col-12">
+                                                        <label>Quantidade</label>
+                                                        <input type="number" class="form form-control form-control-sm" id="qtd" name="qtd">
+                                                        <input type="hidden" id="tp_item" name="tp_item" value="P">
+                                                    </div>
                                                 </div>
 
                                                 <div class="row">
-                                                    <label>Qtd de Famílias Atendidas</label>
-                                                    <input type="number" class="form form-control form-control-sm" id="familia_at" name="familia_at">
+                                                    <div class="col-12">
+                                                        <label>Qtd de Famílias Atendidas</label>
+                                                        <input type="number" class="form form-control form-control-sm" id="familia_at" name="familia_at">
+                                                    </div>
                                                 </div>
 
                                             </div>
@@ -380,30 +385,36 @@
                                 </p>
                             @endcan
                             <div class="col-12 back">
-                                <table class="table table-sm">
+                                <table class="table table-sm table-bordered">
                                     <tr>
-                                        <th class="">#</th>
-                                        <th>Data</th>
-                                        <th>Descrição/Parecer</th>
-                                        <th>Situação</th>
-                                        <th>Opções</th>
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Data</th>
+                                        <th class="text-center">Descrição/Parecer</th>
+                                        <th class="text-center">Situação</th>
+                                        <th class="text-center">Opções</th>
                                     </tr>
-                                    @foreach ($despachos as $key => $despacho)
+                                    @if (count($despachos) > 0)
+                                        @foreach ($despachos as $key => $despacho)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $despacho->data_parecer }}</td>
+                                                <td>
+                                                    <p name="lk_parecer"> {{ $despacho->parecer }}...</p>
+                                                </td>
+                                                <td>{{ $despacho->tramit_parecer }}</td>
+                                                <td>
+                                                    @can('cedec')
+                                                        <button type='button' name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
+                                                        <a href='{{ route('parecer.deletar', $despacho->id) }}' onclick="return confirm('Deseja Apagar o Registro !')" name='deletarDespacho'><img src={{ asset('imagem/icon/delete.png') }}></a>
+                                                    @endcan
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
                                         <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $despacho->data_parecer }}</td>
-                                            <td>
-                                                <p name="lk_parecer"> {{ $despacho->parecer }}...</p>
-                                            </td>
-                                            <td>{{ $despacho->tramit_parecer }}</td>
-                                            <td>
-                                                @can('cedec')
-                                                    <button type='button' name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
-                                                    <a href='{{ route('parecer.deletar', $despacho->id) }}' onclick="return confirm('Deseja Apagar o Registro !')" name='deletarDespacho'><img src={{ asset('imagem/icon/delete.png') }}></a>
-                                                @endcan
-                                            </td>
+                                            <td colspan="5" class="text-center">Este processo não tem nenhum despacho</td>
                                         </tr>
-                                    @endforeach
+                                    @endif
                                 </table>
                             </div>
                         </div>

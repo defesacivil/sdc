@@ -60,6 +60,11 @@
     {{-- javascript pagina global --}}
     @include('layouts/includes/script')
     
+    @stack('other-scripts')
+
+    
+
+
     {{-- js local --}}
     @yield('code')
 

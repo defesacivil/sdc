@@ -103,7 +103,7 @@
 
 
                 <div class='col-md-9'>
-                    <div class="row border border-primary" id="show_dados_protocolo">
+                    <div class="row" id="show_dados_protocolo">
                         <!-- DADOS DO PROTOCOLO -->
                         <legend>INFORMAÇÕES PROTOCOLO</legend>
                         <div class="col">
@@ -157,8 +157,8 @@
 
                         </div>
                     </div>
+                    <div class="row">
 
-                    <div class="row border border-primary">
                         <div class='col' id='show_analise'>
                             <!-- ANALISES -->
                             <legend>ANÁLISE</legend>
@@ -216,7 +216,7 @@
                                     <tr>
                                         <td>
                                             <!-- NOTIFICACOES  -->
-                                            <table class="table table-secondary border border-primary">
+                                            <table class="table table-secondary">
 
                                                 @foreach ($analise->notificacoes as $key1 => $notificacao)
                                                     <tr>

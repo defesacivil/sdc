@@ -102,8 +102,7 @@
                     <a href="route('logout')"
                         onclick="event.preventDefault();
                             this.closest('form').submit();" title="Sair com segurança do SDC">
-                            <img width="25" class="" src='{{ asset('/imagem/icon/sair.png') }}' alt="">
-                        
+                        <img width="25" class="" src='{{ asset('/imagem/icon/sair.png') }}' alt="">
                     </a>
 
                 </form>
@@ -122,12 +121,21 @@
                                         <span class="bolder">Seção :</span>&nbsp;{{ Session::get('user')['funcionario']['secao'] }}
                                         {{ Auth::user()->email }}
                                         {{-- <a href="#">Perfil</a> --}}
-                                        @endisset
-                                    @endcan
+                                    @endisset
+                                @endcan
+                                <p>Grupos do Usuário</p>
+                                @php
+                                $permissions = auth()->user()->getAllPermissions();
+                                @endphp
+                                
+                                @foreach ($permissions as $permission)
+                                    <div>- {{ ucfirst($permission->name) }}</div>
+                                @endforeach
                             </div>
                         </li>
                     </ul>
                 </div>
+
 
 
 

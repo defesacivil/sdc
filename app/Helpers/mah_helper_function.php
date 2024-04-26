@@ -9,10 +9,10 @@ function status_pedido_ah($status){
             return "Edição Compdec";
             break;
         case '1':
-            return "Análise DLOG";
+            return "Análise DSH";
             break;
         case '2':
-            return "Análise Diretor DLOG";
+            return "Análise Diretor DSH";
             break;
         case '3':
             return "Aprovado";

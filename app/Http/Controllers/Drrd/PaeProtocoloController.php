@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Drrd;
 
 use App\Models\Drrd\PaeEmpnto;
 use App\Models\Drrd\PaeProtocolo;
+use App\Models\Drrd\PaeTramitprot;
+use App\Models\User;
+use App\Models\Usuario\RoleDem;
 use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class PaeProtocoloController extends \App\Http\Controllers\Controller
 {
@@ -21,6 +26,8 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
 
+        
+
         $notificacao = PaeProtocolo::with(
             'analise',
             'analise.protocolos'
@@ -29,37 +36,65 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
             ->whereRaw("DATEDIFF('pae_notIficacaos.dt_devolutiva', '" . Carbon::now() . "') <=5")
             ->get();
 
-        //dd($notificacao);
-
+        # acesso via index
         if ($request->method() == "GET") {
 
-            //$protocolos = PaeProtocolo::paginate(7);
-            $protocolos = PaeProtocolo::with(
-                [
-                    'empreendimento',
-                    'empreendimento.empreendedor'
-                ]
-            )->paginate(7);
+
+            $protocolos = PaeProtocolo::with( 'empreendimento',
+                                                        'empreendimento.empreendedor',
+                                                        'analises',
+                                                        'analises.notificacoes')->paginate(30);
+
+            // $protocolos = DB::table('pae_protocolos')
+            //     ->join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
+            //     ->join('pae_empdors', 'pae_empdors.id', '=', 'pae_empntos.pae_empdor_id')
+            //     ->join('users', 'users.id', '=', 'pae_protocolos.user_id')
+            //     ->join('pae_analises', 'pae_analises.pae_protocolo_id','=', 'pae_protocolos.id') 
+            //     ->where('pae_protocolos.num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
+            //     ->addSelect('pae_protocolos.*')
+            //     ->addSelect('pae_empntos.nome as empreendimento')
+            //     ->addSelect('users.name')
+            //     ->addSelect('pae_analises.*')
+            //     ->addSelect('pae_empdors.nome as empreendedor')
+
+            //     ->paginate(50);
+
+                
 
 
-
+            //dd($protocolos);
 
             return view(
                 'drrd/paebm/protocolo/index',
                 [
                     'protocolos' => $protocolos,
+                    //'tramits' => $tramits,
                 ]
             );
+
+            # busca de registro 
         } elseif ($request->method() == "POST") {
 
+            if (($request->get('search') != "") && ($request->get('dtInicio') == "") && ($request->get('dtFinal') == "")) {
 
-            $protocolos = PaeProtocolo::with(
-                [
-                    'empreendimento',
-                    'empreendimento.empreendedor'
-                ]
-            )->where('pae_protocolos.num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
-                ->paginate(7);
+                $protocolos = PaeProtocolo::with([ 'empreendimento',
+                                                        'empreendimento.empreendedor',
+                                                        'analises',
+                                                        'analises.notificacoes'])
+                                                        ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
+                                                        ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
+                                                        ->paginate(30);;
+
+            } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
+
+                $protocolos = PaeProtocolo::with([ 'empreendimento',
+                                                        'empreendimento.empreendedor',
+                                                        'analises',
+                                                        'analises.notificacoes'])
+                                                        ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
+                                                        ->paginate(30);;
+
+            }
 
             return view(
                 'drrd/paebm/protocolo/index',
@@ -79,10 +114,48 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     {
         $empntos = PaeEmpnto::all();
 
+        $sit_mancha = $finalidade  = [
+            'EM ANÁLISE' => 'EM ANÁLISE',
+            'APROVADA' => 'APROVADA',
+            'REPROVADA' => 'REPROVADA',
+        ];
+
+        $m_construcao = [
+            'CONCRETO - ECJ' => 'CONCRETO - ECJ',
+            'ETAPA ÚNICA - ATERRO COMPACTADO' => 'ETAPA ÚNICA - ATERRO COMPACTADO',
+            'JUSANTE' => 'JUSANTE',
+            'LINHA DE CENTRO' => 'LINHA DE CENTRO',
+            'MONTANTE' => 'MONTANTE',
+            'ENRONCAMENTO' => 'ENRONCAMENTO',
+            'CONCRETO' => 'CONCRETO',
+        ];
+
+        $material = [
+            'ÁGUA'              => 'ÁGUA',
+            'REJEITO'           => 'REJEITO',
+            'SEDIMENTO'         => 'SEDIMENTO',
+            'RESÍDUO INDUSTRIAL' => 'RESÍDUO INDUSTRIAL',
+        ];
+        $orgao_fisc = [
+            'ANM' => 'ANM',
+            'ANEEL' => 'ANEEL',
+            'IGAM' => 'IGAM',
+            'FEAM' => 'FEAM',
+        ];
+        $finalidade  = [
+            'INDUSTRIA' => 'INDUSTRIA',
+            'MINERAÇÃO' => 'MINERAÇÃO',
+        ];
+
         return view(
             'drrd/paebm/protocolo/create',
             [
                 'empntos' => $empntos,
+                'sit_mancha' => $sit_mancha,
+                'm_construcao' => $m_construcao,
+                'material' => $material,
+                'orgao_fisc' => $orgao_fisc,
+                'finalidade' => $finalidade,
             ]
         );
     }
@@ -108,6 +181,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                 'empnto_search' => "required",
                 'pae_empnto_id' => "required|integer",
                 /*'obs' => "required|min:5|max:1000",*/
+                'sei' => "max:150",
 
             ],
             [
@@ -123,9 +197,11 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                 /*'obs.required' => "O campo Observação é Obrigatório !",       
                 'obs.max' => "O campo Observação deve ter no máximo 1000 caracteres!",       
                 'obs.min' => "O campo Observação deve ter no mínimo 5 caracteres!",       */
+                'sei.max' => "O campo Observação deve ter no máximo 150 caracteres!",
 
             ]
         );
+
 
 
         $protocolo = new PaeProtocolo;
@@ -143,7 +219,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         $protocolo->num_protocolo  = $empdor[0]->empreendedor->id . "-" .
             $request->pae_empnto_id . "-" .
             rand(0, 999) . "-" .
-            substr(Str::replace(["-", ":"], "", $request->dt_entrada), 0,8) . "-" .
+            substr(Str::replace(["-", ":"], "", $request->dt_entrada), 0, 8) . "-" .
             ($protocolo->latest()->first()->id + 1);
 
         $protocolo->dt_entrada     = Carbon::parse($request->dt_entrada)->format('Y-m-d');
@@ -153,6 +229,8 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         $protocolo->ccpae_venc     = $request->ccpae_venc;
         $protocolo->pae_empnto_id  = $request->pae_empnto_id;
         $protocolo->obs            = $request->obs;
+        $protocolo->sei            = $request->sei;
+        $protocolo->sit_mancha     = $request->sit_mancha;
 
         $protocolo->save();
 
@@ -177,14 +255,15 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
         $protocolos = PaeProtocolo::with([
             'usuario',
+            'empreendimento',
+            'empreendimento.empreendedor',
             'analises',
             'analises.usuario',
             'analises.notificacoes',
             'analises.notificacoes.usuario',
-            'empreendimento',
-            'empreendimento.empreendedor',
         ])->where('pae_protocolos.id', '=', $paeProtocolo->id)
             ->get();
+
 
         return view(
             'drrd/paebm/protocolo/show',
@@ -203,14 +282,25 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
      */
     public function edit(PaeProtocolo $paeProtocolo)
     {
+        $sit_mancha = [
+            'EM ANÁLISE' => 'EM ANÁLISE',
+            'APROVADA' => 'APROVADA',
+            'REPROVADA' => 'REPROVADA',
+        ];
 
-        $protocolo = PaeProtocolo::join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
-                                        ->where('pae_protocolos.id', $paeProtocolo->id)->get()->first();
-                                    
+        $protocolo = DB::table('pae_protocolos')
+            ->join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
+            ->select('pae_protocolos.*', 'pae_empntos.nome')
+            ->where('pae_protocolos.id', $paeProtocolo->id)
+            ->get();
+
+        //dd($protocolo);
+
         return view(
             'drrd/paebm/protocolo/edit',
             [
-                'protocolo' => $protocolo,
+                'protocolo' => $protocolo[0],
+                'sit_mancha' => $sit_mancha,
 
             ]
         );
@@ -225,7 +315,6 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
      */
     public function update(Request $request, PaeProtocolo $paeProtocolo)
     {
-        //dd($paeProtocolo);
 
         $request->validate(
             [
@@ -234,6 +323,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                 'empnto_search' => "required",
                 'pae_empnto_id' => "required|integer",
                 'obs' => "required|min:5|max:1000",
+                'sei' => "max:150",
 
             ],
             [
@@ -241,24 +331,35 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                 'ccpae_venc.date' => "O campo CCPAE Vencimento deve ser uma Data Válida !",
                 'empnto_search.required' => "O campo Empreendimento é obrigatório !",
                 'pae_empnto_id.required' => "O campo Id Empreendimento é Obrigatório !",
-                'obs.required' => "O campo Observação é Obrigatório !",       
-                'obs.max' => "O campo Observação deve ter no máximo 1000 caracteres!",       
+                'obs.required' => "O campo Observação é Obrigatório !",
+                'obs.max' => "O campo Observação deve ter no máximo 1000 caracteres!",
                 'obs.min' => "O campo Observação deve ter no mínimo 5 caracteres!",
-
+                'sei.max' => "O campo Observação deve ter no máximo 150 caracteres!",
             ]
         );
 
 
         $protocolo = PaeProtocolo::find($request->id);
 
+        $oldValue = $protocolo;
 
         $protocolo->user_id        = Auth::user()->id;
         $protocolo->ccpae          = $request->ccpae;
         $protocolo->ccpae_venc     = $request->ccpae_venc;
         $protocolo->pae_empnto_id  = $request->pae_empnto_id;
         $protocolo->obs            = $request->obs;
+        $protocolo->sei            = $request->sei;
+        $protocolo->sit_mancha     = $request->sit_mancha;
+        $protocolo->user_update    = Auth::user()->name;
 
         $protocolo->update();
+
+        //dd(",",$oldValue );
+
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path('logs/updatePaeBM.log'),
+        ])->info('Update {"Usuário:"' . Auth()->user()->name . '"campo:"}');
 
         return redirect('pae/protocolo')->with('message', 'Registro Atualizado com Sucesso ');
     }
@@ -272,5 +373,46 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function destroy(PaeProtocolo $paeProtocolo)
     {
         //
+    }
+
+
+    /**
+     * Atribuir processo para Analista
+     */
+    public function atribuir(Request $request)
+    {
+
+
+        // $lista_analista = User::pluck('name', 'name');
+
+        $lista_analista = User::permission('paeadmin')->pluck('name', 'id');
+ 
+        dd($request->analista);
+        
+        # get 
+        if ($request->method() == "GET") {
+
+            return view(
+                'drrd/paebm/protocolo/atribuir',
+                [
+                    'protocolo_id' => $request->id,
+                    'lista_analista'  => $lista_analista,
+                ]
+
+            );
+
+        # post
+        } elseif ($request->method() == "POST") {
+
+           
+
+            $prot = PaeProtocolo::find($request->id);
+
+            $prot->analista = $request->analista;
+
+            $prot->save();
+
+            return redirect()->action(['App\Http\Controllers\Drrd\PaeProtocoloController', 'index']);
+        }
     }
 }

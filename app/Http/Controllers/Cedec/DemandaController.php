@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Usuario;
+namespace App\Http\Controllers\Cedec;
 
 use App\Http\Controllers\Controller;
-use App\Models\Usuario\PermissionRole;
+use App\Models\Cedec\Demanda;
 use Illuminate\Http\Request;
 
-class PermissionRoleController extends Controller
+class DemandaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,15 @@ class PermissionRoleController extends Controller
      */
     public function index()
     {
-        //
+
+        $catCollectcat = collect();
+
+        $categorias = $catCollectcat->put('1', 'Cidade Administrativa');
+
+        return view('cedec.demanda.index',
+    [
+            'categorias' => $categorias,
+    ]);
     }
 
     /**
@@ -25,7 +33,7 @@ class PermissionRoleController extends Controller
      */
     public function create()
     {
-        return view('config/usuario/permissao_role/create');
+        //
     }
 
     /**
@@ -42,10 +50,10 @@ class PermissionRoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
+     * @param  \App\Models\Cedec\Demanda  $demanda
      * @return \Illuminate\Http\Response
      */
-    public function show(PermissionRole $permissionRole)
+    public function show(Demanda $demanda)
     {
         //
     }
@@ -53,10 +61,10 @@ class PermissionRoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
+     * @param  \App\Models\Cedec\Demanda  $demanda
      * @return \Illuminate\Http\Response
      */
-    public function edit(PermissionRole $permissionRole)
+    public function edit(Demanda $demanda)
     {
         //
     }
@@ -65,10 +73,10 @@ class PermissionRoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
+     * @param  \App\Models\Cedec\Demanda  $demanda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PermissionRole $permissionRole)
+    public function update(Request $request, Demanda $demanda)
     {
         //
     }
@@ -76,10 +84,10 @@ class PermissionRoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
+     * @param  \App\Models\Cedec\Demanda  $demanda
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PermissionRole $permissionRole)
+    public function destroy(Demanda $demanda)
     {
         //
     }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Usuario;
 
-use App\Models\User;
-use App\Models\Usuario\RoleUser;
+use App\Http\Controllers\Controller;
+use App\Models\Usuario\PermissionRole;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class RoleUserController extends \App\Http\Controllers\Controller
+class PermissionRoleDemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +15,7 @@ class RoleUserController extends \App\Http\Controllers\Controller
      */
     public function index()
     {
- 
-        return view('config/usuario/role_user/index', [
-            'role_users' => DB::table('role_users')->paginate(5)
-        ]);
+        //
     }
 
     /**
@@ -29,7 +25,7 @@ class RoleUserController extends \App\Http\Controllers\Controller
      */
     public function create()
     {
-        //
+        return view('config/usuario/permissao_role/create');
     }
 
     /**
@@ -40,22 +36,16 @@ class RoleUserController extends \App\Http\Controllers\Controller
      */
     public function store(Request $request)
     {
-        $user = User::find($request->user_id);
-        $user->roles()->attach($request->role_id);
-
-        $user->ativo = $request->ativo;
-        $user->update();
-
-        return redirect('role_add_user/'.$request->user_id)->with('message', 'Registro Gravado Com Sucesso');
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\RoleUser  $roleUser
+     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
      * @return \Illuminate\Http\Response
      */
-    public function show(RoleUser $roleUser)
+    public function show(PermissionRole $permissionRole)
     {
         //
     }
@@ -63,10 +53,10 @@ class RoleUserController extends \App\Http\Controllers\Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\RoleUser  $roleUser
+     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
      * @return \Illuminate\Http\Response
      */
-    public function edit(RoleUser $roleUser)
+    public function edit(PermissionRole $permissionRole)
     {
         //
     }
@@ -75,10 +65,10 @@ class RoleUserController extends \App\Http\Controllers\Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\RoleUser  $roleUser
+     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RoleUser $roleUser)
+    public function update(Request $request, PermissionRole $permissionRole)
     {
         //
     }
@@ -86,13 +76,11 @@ class RoleUserController extends \App\Http\Controllers\Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\RoleUser  $roleUser
+     * @param  \App\Models\Usuario\PermissionRole  $permissionRole
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RoleUser $roleUser)
+    public function destroy(PermissionRole $permissionRole)
     {
-        dd($roleUser);
-        $user = User::find($roleUser->user_id);
-        $user->roles()->detach($roleUser->role_id);
+        //
     }
 }

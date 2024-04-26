@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class PermissionController extends \App\Http\Controllers\Controller
+class PermissionDemController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.

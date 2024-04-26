@@ -13,9 +13,9 @@ class AuthController extends Controller {
     public function authenticate()
     {
 
+        //dd(Auth::user());
         if (Auth::attempt(['cpf' => $cpf, 'password' => $password, 'ativo'=> 1]))
         {
-            //dd(Auth::user());
             return redirect()->intended('dashboard');
         }
     }

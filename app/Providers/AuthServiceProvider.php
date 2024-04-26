@@ -9,6 +9,7 @@ use App\Models\Municipio\Municipio;
 use App\Models\Permission;
 use App\Models\User;
 use App\Models\Usuario\PermissionRole;
+use App\Models\Usuario\RoleDem;
 use App\Models\Usuario\RoleUser;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -37,24 +38,7 @@ class AuthServiceProvider extends ServiceProvider
     // public function boot(Request $request)
     public function boot(Request $request)
     {
-
-        /* ACESSO COMPDEC */
-        Gate::define('compdec', function (User $user) {
-            return $user->tipo === 'compdec';
-          });
-  
-          
-          //ACESSO CEDEC
-          Gate::define('cedec', function (User $user) {
-              return $user->tipo === 'cedec';
-          });
-  
-          //ACESSO REDEC
-          Gate::define('redec', function (User $user) {
-              return $user->tipo === 'redec';
-          });
-
-          
+   
 
         if ($autor = PersonalAccessToken::findToken($request->token)) {
             $usuario = auth()->loginUsingId($autor->tokenable_id);  
@@ -138,39 +122,9 @@ class AuthServiceProvider extends ServiceProvider
 
                 
         }
-        
-        
-        
 
 
-        //dd(Gate::abilities());
-
-
-        // permissoes 
-        // Gate::define('cedec', function (User $user) {
-
-        //     if ($user->tipo === 'cedec') {
-        //         //$user->id, RoleUser::find($user->id)->get();
-        //         return true;
-        //     } else {
-        //         //     print "<script>$('img[name=^icon]').addClass('imgCinza')</script>";
-        //         return false;
-        //     }
-        // });
-
-        // ENTRADA paebm 
-        // Gate::define('paebm', function (User $user) {
-
-        //     foreach ($user->roles as $role) {
-        //         foreach ($role->permissions as $permission) {
-        //             if ($permission->name == 'paebm') {
-        //                 return true;
-        //             }
-        //         }
-        //     }
-        // });
-
-
+        /* REESCREVER GATE */
         Gate::define('mah', function (User $user, $municipio_id) {
 
             if (
@@ -184,26 +138,6 @@ class AuthServiceProvider extends ServiceProvider
                 gentileza verifique o click clicado.</p>";
             }
         });
-
-
-        //$this->defineAdminGate();
-
-        /*Auth::provider('customcs', function ($app, array $config) {
-            return $app->make(CustomEloquentUserProvider::class, ['model' => $config['model']]);
-        });*/
-
-
-        /*$permissions = Permission::with('roles')->get();
-        foreach ($permissions as $permission)
-        {
-            $gate->define($permission->name, function(User $user) use ($permission) {
-                return $user->hasPermission($permission);
-            });
-        }*/
-
-        // $gate->before(function(User $user, $ability){
-        //    return $user->hasAnyRoles('cedec');
-        //  });
 
         $this->registerPolicies();
 

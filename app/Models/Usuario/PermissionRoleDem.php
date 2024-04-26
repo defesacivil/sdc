@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class PermissionRole extends Model
+class PermissionRoleDem extends Model
 {
     protected $table = 'permission_role';
     protected $primaryKey = 'id';
@@ -22,9 +22,9 @@ class PermissionRole extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function permission(): HasOne
+    public function permissionDem(): HasOne
     {
-        return $this->hasOne(Permission::class, 'id', 'permission_id');
+        return $this->hasOne(PermissionDem::class, 'id', 'permission_id');
     }
 
 

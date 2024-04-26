@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class RoleUser extends Model
+class RoleUserDem extends Model
 {
     protected $table = 'role_users';
     protected $primaryKey = 'id';
@@ -22,9 +22,9 @@ class RoleUser extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function role(): HasOne
+    public function roleDem(): HasOne
     {
-        return $this->hasOne(Role::class, 'id', 'role_id');
+        return $this->hasOne(RoleDem::class, 'id', 'role_id');
     }
 
 

@@ -42,7 +42,7 @@ class PaeProtocolo extends Model
      */
     public function empreendimento()
     {
-        return $this->belongsTo(PaeEmpnto::class, 'pae_empnto_id', 'id');
+        return $this->hasOne(PaeEmpnto::class,  'id', 'pae_empnto_id');
     }
 
     /**
@@ -55,6 +55,17 @@ class PaeProtocolo extends Model
         return $this->hasOne(\App\Models\User::class, 'id', 'user_id');
     }
 
+    /**
+     * Get tramitações
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tramitacoes()
+    {
+        //return $this->hasMany(tramNotificacao::class, 'protocolo_id','id' );
+    }
+
+    
 
     public function getNotificacao($id_protocolo){
         

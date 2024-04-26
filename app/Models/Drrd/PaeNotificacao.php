@@ -29,7 +29,7 @@ class PaeNotificacao extends Model
      */
     public function usuario()
     {
-        return $this->hasOne(\App\Models\User::class, 'id', 'user_id');
+        return $this->hasOne(\App\Models\User::class, 'id', 'user_id')->withDefault();
     }
 
 

@@ -14,6 +14,6 @@ class PaeEmpdor extends Model
 
     public function empreendimento(){
 
-        return $this->hasMany(PaeEmpnto::class, 'id');
+        return $this->hasMany(PaeEmpnto::class, 'id')->withDefault();
     }
 }

@@ -27,7 +27,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
 
-
     Route::get('/', function () {
 
         if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
@@ -38,7 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         }
     });
-    
+
 
     ##############################  DASHBOARD ##############################
     Route::get('/dashboard', function () {
@@ -54,13 +53,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-    
+
     #################################   CONFIG   ##################################
     Route::get('config/index', 'App\Http\Controllers\Config\ConfigController@index');
 
 
 
-    Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
+
 
     # configurações 
     Route::get('config', 'App\Http\Controllers\Usuario\ConfigController@index')->can('cedec');
@@ -74,7 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     # help 
     Route::get('help', 'App\Http\Controllers\Cedec\CedecController@help');
-    
+
 
 
 
@@ -83,6 +82,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     # index
     Route::get('usuario', 'App\Http\Controllers\Usuario\UserController@index')->can('cedec');
+    
+    # user autocomplete
+    Route::get('usuario/autocomplete', 'App\Http\Controllers\Usuario\UserController@user_autocomplete')->can('cedec')->name('user.autocomplete');
 
     # edit 
     Route::get('usuarioperfil/edit/{id}', 'App\Http\Controllers\Usuario\UserController@edit')->can('cedec');
@@ -286,6 +288,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     #############################  DRRD ###########################################
     # menu DRRD
+    Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
+
+    Route::get('pae/listagem', 'App\Http\Controllers\Drrd\PaeEmpntoController@listagem');
+
 
 
 
@@ -311,7 +317,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     # empreendimento STORE
     Route::post('pae/protocolo/store', 'App\Http\Controllers\Drrd\PaeProtocoloController@store');
-
+    
+    # form atribuir processo
+    Route::match(["GET", "POST"], 'pae/protocolo/atribuir/{paeProtocolo?}', 'App\Http\Controllers\Drrd\PaeProtocoloController@atribuir');
+    
+    
 
     # PAE EMPREENDEDOR #################
     # empreendedor INDEX
@@ -739,7 +749,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     # Rat DESTROY
     Route::get('rat/destroy', 'App\Http\Controllers\Compdec\RatController@destroy');
-    
+
     # Rat CONFIG
     Route::get('rat/config', 'App\Http\Controllers\Compdec\RatController@config');
 
@@ -787,6 +797,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     # Prepara SEARCH
     Route::match(['GET', 'POST'], 'prepara/search', 'App\Http\Controllers\Compdec\PreparaController@search');
+
+
+
+    ################# DEMANDA #######################
+
+    Route::get('demanda', 'App\Http\Controllers\Cedec\DemandaController@index');
 });
 
 Route::get('autentica/{token}', 'App\Http\Controllers\Cedec\ApiController@autentica');

@@ -142,7 +142,7 @@ class CompdecController extends \App\Http\Controllers\Controller
         ]);
 
 
-        dd($compdec);
+        //dd($compdec);
 
 
         return view(

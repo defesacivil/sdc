@@ -65,7 +65,8 @@
 
                             <!-- ####### Acesso COMPDEC ###### -->
                             @can('compdec')
-                                <a class="btn btn-info btn-sm" id="btn_search1">Pesquisar</a>
+                                <a class="btn btn-info btn-sm" id="btn_search1" >Pesquisar</a>
+                                
                             @endcan
                         </li>
 
@@ -81,6 +82,15 @@
                         @endcan
                     </ul>
 
+                    
+                </div>
+                <br>
+
+                <!--search -->
+                <div class="row">
+                    <div class="col-6">
+                        <input class="form form-control" type="text" name="search" id="search">
+                    </div>
                 </div>
                 <p></p>
                 <div class="row p-3">

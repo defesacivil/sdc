@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class RoleController extends \App\Http\Controllers\Controller
+class RoleDemController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.

@@ -9,7 +9,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col p-3">
+        <div class="p-3 col">
             <p class='text-center'><a class='btn btn-success' href='{{ url('pae/empnto') }}'>Voltar</a></p><br>
             <p class="text-center">
                 <legend>Empreendimento</legend>
@@ -32,11 +32,15 @@
             </tr>
             <tr>
                 <th>EMPREENDEDOR</th>
-                <td>{{ $empnto->empreendedor->nome }}</td>
+                <td>{{ $empnto->empreendedor['nome'] }}</td>
             </tr>
             <tr>
                 <th>MATERIAL</th>
                 <td>{{ $empnto->material }}</td>
+            </tr>
+            <tr>
+                <th>NOME DA MINA</th>
+                <td>{{ $empnto->mina }}</td>
             </tr>
             <tr>
                 <th>FINALIDADE</th>
@@ -64,7 +68,11 @@
             </tr>
             <tr>
                 <th>PAE_COORDENADOR_ID</th>
-                <td>{{ $empnto->coordenador->nome }}</td>
+                <td>{{ $empnto->coordenador }}</td>
+            </tr>
+            <tr>
+                <th>E-MAIL COORDENADOR</th>
+                <td>{{ $empnto->email_coord }}</td>
             </tr>
 
         </table>

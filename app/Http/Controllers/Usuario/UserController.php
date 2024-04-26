@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Usuario;
 
-
-use App\Models\Usuario\Role;
 use \App\Models\User as UserC;
-
+use App\Models\Usuario\RoleDem;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
@@ -21,7 +19,7 @@ class UserController extends \App\Http\Controllers\Controller
     {
 
         $users = UserC::with('roles')->get();  
-        $roles = Role::with('users', 'permissions')->get();  
+        $roles = RoleDem::with('users', 'permissions')->get();  
 
 
         return view(
@@ -115,6 +113,18 @@ class UserController extends \App\Http\Controllers\Controller
     {
         //
     }
+
+
+    /* Empreendimento Autocomplete */
+    public function user_autocomplete(Request $request)
+    {
+        $data = User::select("user.name as value")
+                    ->where('user.name', 'LIKE', '%' . $request->get('search') . '%')
+                    ->get();
+
+        return response()->json($data);
+    }
+    
 
 
     
