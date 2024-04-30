@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Drrd;
 
 use App\Models\Drrd\Drrd;
 use App\Models\Drrd\PaeEmpnto;
+use App\Models\Drrd\PaeNotificacao;
 use App\Models\Drrd\PaeProtocolo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,10 +23,18 @@ class DrrdController extends \App\Http\Controllers\Controller
     public function menu()
     {
 
+
         $totalPaebm = PaeProtocolo::count();
+
+        $notificacoes = PaeNotificacao::where('dt_notificacao', '<=', \Carbon\Carbon::now())->count();
+
+        $totPaeProxVenc = PaeProtocolo::where('limite_analise', "<=", \Carbon\Carbon::now()->subDays(10))->count();
+
         return view('drrd/index',
                 [
                     'total_protocolo' => $totalPaebm,
+                    'notificacoes'  => $notificacoes,
+                    'totPaeProxVenc' => $totPaeProxVenc,
                 ]);
     }
 
@@ -103,6 +112,12 @@ class DrrdController extends \App\Http\Controllers\Controller
     public function destroy(Drrd $drrd)
     {
         //
+    }
+
+
+    public function acesso(){
+
+        return view('login');
     }
 
 

@@ -26,7 +26,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
 
-        
+
 
         $notificacao = PaeProtocolo::with(
             'analise',

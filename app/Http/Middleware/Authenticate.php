@@ -15,13 +15,14 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
 
-        //dd($request);
+        $uri = $request->getRequestUri();
 
-        //if() {
 
-        //}elseif (! $request->expectsJson()) {
-         //   return route('login');
+        if($uri == "/pae.minieradora") {
+            //return route('login');
+            dd('opa');
+        }elseif (! $request->expectsJson()) {
             //return redirect()->away(SDC);
-       // }
+       }
     }
 }

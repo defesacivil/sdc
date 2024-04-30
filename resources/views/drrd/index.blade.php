@@ -53,7 +53,7 @@
                     <div class="card text-white bg-primary mb-3">
                         <div class="card-header">PAE Próximo(s) do Vencimento</div>
                         <div class="card-body text-center">
-                            <i class="card-title display-2 bold">0</i>
+                            <i class="card-title display-2 bold">{{ $totPaeProxVenc }}</i>
                             <p class="card-text"><a href="#" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a></p>
                         </div>
                     </div>

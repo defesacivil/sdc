@@ -43,7 +43,7 @@ class AuthenticatedSessionController extends Controller
 
        // return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
 
-        //dd($request->authenticate());
+        dd($request->authenticate());
         
         $usuario = Auth::user();
         
@@ -103,6 +103,8 @@ class AuthenticatedSessionController extends Controller
             }
    
         }else {
+
+            dd(Auth::user());
 
             Log::channel('usuario')->info('Login de usuario Desativado', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
             $this->destroy($request);

@@ -43,8 +43,10 @@ class Handler extends ExceptionHandler
     {
         $message1 = $exception->getMessage();
 
-        if ($message1 == "Unauthenticated.") {
-
+        if (($message1 == "Unauthenticated.") && ($request->getRequestUri('/pae.mineradora'))) {
+            return response()->view('auth.login', ['message' => $message1], 404);
+            
+        } else if ($message1 == "Unauthenticated.") {
             return response()->view('errors/noAuth', ['message' => $message1], 500);
         } else {
 
@@ -56,9 +58,9 @@ class Handler extends ExceptionHandler
                 }
                 if ($exception->getStatusCode() == 500) {
 
-                    if(true) {
+                    if (true) {
                         dd('o');
-                    }else {
+                    } else {
                         return response()->view('errors/500', ['message' => $message1], 500);
                     }
                 }
