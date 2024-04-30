@@ -43,7 +43,9 @@ class AuthenticatedSessionController extends Controller
 
        // return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
 
-        dd($request->authenticate());
+        
+
+        //dd($credenciais);
         
         $usuario = Auth::user();
         
@@ -102,6 +104,11 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
    
+        }else if(auth()->attempt($request->only(['cpf', 'password']))) {
+
+            //return redirect('pae.mineradora');
+            dd('d');
+
         }else {
 
             dd(Auth::user());
