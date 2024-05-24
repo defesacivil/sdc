@@ -23,7 +23,15 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
 
         if ($request->method() == "GET") {
 
-            $empntos = PaeEmpnto::with('municipio')->paginate(7);
+            if(auth()->user()->tipo == 'externo'){
+
+                $empntos = PaeEmpnto::with('municipio')
+                                        ->where('pae_empdor_id', '=', Auth::user()->id_empdor)
+                                        ->paginate(7);
+
+            }else {
+                $empntos = PaeEmpnto::with('municipio')->paginate(7);
+            }
 
             return view(
                 'drrd/paebm/empnto/index',
@@ -33,10 +41,23 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
             );
         } elseif ($request->method() == "POST") {
 
+            if(auth()->user()->tipo == 'externo'){
+
+                $empntos = PaeEmpnto::with('municipio')
+                ->with('empreendedor')
+                ->where('pae_empntos.nome', 'LIKE', '%' . $request->get('search') . '%')
+                ->where('pae_empdor_id', '=', Auth::user()->id_empdor)
+                ->paginate(7);
+
+
+            }else {
+
             $empntos = PaeEmpnto::with('municipio')
                 ->with('empreendedor')
                 ->where('pae_empntos.nome', 'LIKE', '%' . $request->get('search') . '%')
                 ->paginate(7);
+
+            }
 
             return view(
                 'drrd/paebm/empnto/index',

@@ -17,9 +17,10 @@ class Authenticate extends Middleware
 
         $uri = $request->getRequestUri();
 
+        //dd($request);
 
-        if($uri == "/pae.minieradora") {
-            //return route('login');
+        if($uri == "/pae.mineradora") {
+            return route('login');
             dd('opa');
         }elseif (! $request->expectsJson()) {
             //return redirect()->away(SDC);

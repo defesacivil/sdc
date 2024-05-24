@@ -4,8 +4,10 @@
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
+            @can('cedec', 'redec')
             <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ url('/drrd') }}">Drrd</a></li>
+            @endcan()
             <li class="breadcrumb-item active" aria-current="page">Empreendedor</li>
         </ol>
     </nav>
@@ -43,7 +45,10 @@
             <div class="row">
                 <div class="col">
                     <!-- BUTTON NOVO REGISTRO -->
+
+                    @can('cedec')
                     <p class=""><a class="btn btn-primary" href="{{ url('pae/empnto/create') }}" title="Inserir novo Registro">+ Novo Registro</a></p>
+                    @endcan()
                     <p class='text-right'>Total Registros : {{ $empntos->total() }}</p>
                     <table class="table table-bordered table-condensed">
                         <tr>
@@ -66,10 +71,12 @@
                                 <td>{{ $empnto->volume }}</td>
                                 <td>{{ $empnto->user_update }}</td>
                                 <td>
+                                    @can('cedec')
                                     <a href='{{ url('pae/empnto/edit/' . $empnto->id) }}'><img
                                             src='{{ asset('imagem/icon/editar.png') }}'></a>
                                     <a onclick="return confirm('Deseja realmente apagar esse Registro !')"
                                         href='#'><img src='{{ asset('imagem/icon/delete.png') }}'></a>
+                                    @endcan()
                                     <a href='{{ url('pae/empnto/show/' . $empnto->id) }}'><img
                                             src='{{ asset('imagem/icon/view.png') }}'></a>
 

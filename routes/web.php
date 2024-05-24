@@ -291,11 +291,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
 
     # acesso mineradora
-    Route::get('pae.mineradora', function(){
-
-            
-
-    });
+    Route::get('pae/mineradora','App\Http\Controllers\Drrd\PaeProtocoloController@minerar');
     
     //'App\Http\Controllers\Drrd\DrrdController@acesso')->name('pae.mineradora');
 

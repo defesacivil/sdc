@@ -9,6 +9,7 @@ use App\Models\Drrd\PaeNotificacao;
 use App\Models\Drrd\PaeProtocolo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -23,19 +24,54 @@ class DrrdController extends \App\Http\Controllers\Controller
     public function menu()
     {
 
+        # acesso externo PAE
+        if (auth()->user()->tipo == 'externo') {
 
-        $totalPaebm = PaeProtocolo::count();
+            //$totalPaebm = PaeProtocolo::where('id_empdor', '=', auth()->user()->id_empdor)->count();
 
-        $notificacoes = PaeNotificacao::where('dt_notificacao', '<=', \Carbon\Carbon::now())->count();
+            $totalPaebm = DB::table('pae_protocolos')
+                ->join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
+                ->join('pae_empdors', 'pae_empdors.id', '=', 'pae_empntos.pae_empdor_id')
+                ->where('pae_empdors.id', '=', auth()->user()->id_empdor)->count();
 
-        $totPaeProxVenc = PaeProtocolo::where('limite_analise', "<=", \Carbon\Carbon::now()->subDays(10))->count();
 
-        return view('drrd/index',
-                [
-                    'total_protocolo' => $totalPaebm,
-                    'notificacoes'  => $notificacoes,
-                    'totPaeProxVenc' => $totPaeProxVenc,
-                ]);
+            //$notificacoes = PaeNotificacao::where('dt_notificacao', '<=', \Carbon\Carbon::now())->count();
+
+            # notificações vencidas
+            $notificacoes = DB::table('pae_protocolos')
+                ->join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
+                ->join('pae_empdors', 'pae_empdors.id', '=', 'pae_empntos.pae_empdor_id')
+                ->join('pae_analises', 'pae_analises.pae_protocolo_id', '=', 'pae_protocolos.id')
+                ->join('pae_notificacaos', 'pae_notificacaos.pae_analise_id', '=', 'pae_analises.id')
+                ->where('dt_notificacao', '<=', \Carbon\Carbon::now())
+                ->where('pae_empdors.id', '=', auth()->user()->id_empdor)->count();
+
+            //$totPaeProxVenc = PaeProtocolo::where('limite_analise', "<=", \Carbon\Carbon::now()->subDays(10))->count();
+
+            $totPaeProxVenc = DB::table('pae_protocolos')
+                ->join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
+                ->join('pae_empdors', 'pae_empdors.id', '=', 'pae_empntos.pae_empdor_id')
+                ->where('limite_analise', "<=", \Carbon\Carbon::now()->subDays(10))
+                ->where('pae_empdors.id', '=', auth()->user()->id_empdor)->count();
+        
+        # notificações gerais
+        } else {
+
+            $totalPaebm = PaeProtocolo::count();
+
+            $notificacoes = PaeNotificacao::where('dt_notificacao', '<=', \Carbon\Carbon::now())->count();
+
+            $totPaeProxVenc = PaeProtocolo::where('limite_analise', "<=", \Carbon\Carbon::now()->subDays(10))->count();
+        }
+
+        return view(
+            'drrd/index',
+            [
+                'total_protocolo' => $totalPaebm,
+                'notificacoes'  => $notificacoes,
+                'totPaeProxVenc' => $totPaeProxVenc,
+            ]
+        );
     }
 
     /**
@@ -115,11 +151,9 @@ class DrrdController extends \App\Http\Controllers\Controller
     }
 
 
-    public function acesso(){
+    public function acesso()
+    {
 
         return view('login');
     }
-
-
-    
 }

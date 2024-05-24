@@ -42,8 +42,12 @@ class Handler extends ExceptionHandler
     function render($request, Throwable $exception)
     {
         $message1 = $exception->getMessage();
-
-        if (($message1 == "Unauthenticated.") && ($request->getRequestUri('/pae.mineradora'))) {
+        
+        
+        // Acesso das mineradoras
+        if (($message1 == "Unauthenticated.") && ($request->getRequestUri('/pae/mineradora'))) {
+            
+            //dd('acesso mineradora');
             return response()->view('auth.login', ['message' => $message1], 404);
             
         } else if ($message1 == "Unauthenticated.") {

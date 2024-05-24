@@ -5,9 +5,7 @@
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            @can('cedec', 'redec')    
             <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-            @endcan
             <li class="breadcrumb-item active" aria-current="page">Drrd</li>
         </ol>
     </nav>
@@ -45,7 +43,7 @@
             </div>
             <div class="p-2 row">
                 <div class="col">
-                    <label for="search">Busca: </label> (nome da Barragem ou parte do nome / Nr Protocolo )
+                    <label for="search">Busca: </label> (nome da Barragem ou parte do nome / Nr Protocolo -)
                     {{ Form::open(['url' => 'pae/protocolo', 'method' => 'POST']) }}
                     {{ Form::token() }}
 

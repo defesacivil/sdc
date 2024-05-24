@@ -6,7 +6,9 @@
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
+            @can('cedec', 'redec') 
             <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            @endcan
             <li class="breadcrumb-item active" aria-current="page">Drrd</li>
         </ol>
     </nav>
@@ -21,12 +23,15 @@
 
             <div class="row p-2">
                 <div class="col-3">
+                    @can('cedec','redec')
                     <div class="col p-3">
                         <img src="{{ asset('imagem/icon/protocolo.png') }}" width="30"alt=""><a class="" href="{{ url('pae/protocolo') }}">Protocolos</a>
                     </div>
                     <div class="col p-3">
                         <a href="{{ url('pae/empdor') }}"><img src="{{ asset('imagem/icon/empreendedor.png') }}" width="30" height="" alt="">Empreendedores / Empresas</a><br>
                     </div>
+                    @endcan
+                    
                     <div class="col p-3">
                         <a href="{{ url('pae/empnto') }}"><img src="{{ asset('imagem/icon/barragem.png') }}" width="30"
                                 alt="">Empreendimentos / Barragens</a><br>
