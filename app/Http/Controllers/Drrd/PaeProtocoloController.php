@@ -505,5 +505,25 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     }
 
 
+    public function user()
+    {
+
+        $usuarios = User::DB("users")
+        ->where("tipo", "=", "externo")
+        ->join("pae_empdors", "", "")
+        ->get();
+
+        //dd($usuarios);
+
+        return view(
+            'drrd/paebm/users/usuario',
+            [
+               'usuarios' => $usuarios,
+            ]
+        );
+        
+    }
+
+
 
 }

@@ -156,4 +156,15 @@ class PaeEmpdorController extends \App\Http\Controllers\Controller
     public function export(){
         //return Excel::download(new PaeEmpdor, 'users.xlsx');
     }
+
+
+
+    public function empdors() {
+
+        $pae_empdors = PaeEmpdor::all();
+
+       
+        return json_encode($pae_empdors, JSON_UNESCAPED_UNICODE);     
+    }
+
 }

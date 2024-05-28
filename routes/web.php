@@ -302,7 +302,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-    #  PROTOCOLO  ###########################
+    #  PAE PROTOCOLO  ###########################
 
     # Protocolo INDEX
     Route::match(["GET", "POST"], 'pae/protocolo', 'App\Http\Controllers\Drrd\PaeProtocoloController@index');
@@ -321,12 +321,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     # Protocolo VIEW
     Route::get('pae/protocolo/show/{paeProtocolo}', 'App\Http\Controllers\Drrd\PaeProtocoloController@show');
-
+    
     # empreendimento STORE
     Route::post('pae/protocolo/store', 'App\Http\Controllers\Drrd\PaeProtocoloController@store');
     
     # form atribuir processo
     Route::match(["GET", "POST"], 'pae/protocolo/atribuir/{paeProtocolo?}', 'App\Http\Controllers\Drrd\PaeProtocoloController@atribuir');
+
+    # PAE USER ##############
+    Route::match(["GET","POST"], 'pae/user', 'App\Http\Controllers\Drrd\PaeProtocoloController@user');
+    
+    
     
     
 

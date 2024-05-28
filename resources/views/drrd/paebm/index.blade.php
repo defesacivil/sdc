@@ -7,6 +7,26 @@
 @stop
 
 @section('content')
+
+<div class="col-md-12 text-center">
+    <div class="col-md-6">
+        <p style="text-center"><a href='<?= FuncaoBase::geraLink("index", "index", "cadastroEmpr") ?>' class='btn btn-success' title="Cadastrar novo acesso de  Empreendedor">Novo Usuário Externo</a></p>
+    </div>
+
+    <div class="col-md-6">
+        <p style="text-center"><a href='<?= FuncaoBase::geraLink("index", "index", "paebmindex") ?>' class='btn btn-primary'>Voltar</a></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form action="#" method="POST" name="frmPesquisa" id="frmPesquisa">
+            <label>Pesquisa</label><br>
+            <input type="text" class="form form-control" name="pesquisa" id="pesquisa"><br>
+            <input type="submit" class="btn btn-primary" name="btn" value="Pesquisar">
+        </form>
+    </div>
+</div>
     <div class="row">
         <div class="row">
             <div class="col p-3">

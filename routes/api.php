@@ -29,7 +29,5 @@ Route::prefix('auth')->group(function(){
     Route::get('userex', [\App\Http\Controllers\Auth\Api\UserController::class, 'listCompdec']);  
     
     Route::post('update', [\App\Http\Controllers\Auth\Api\UserController::class, 'update']);  
-
-
-
+    
 });
