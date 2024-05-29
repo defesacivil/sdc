@@ -25,7 +25,7 @@
 
         <div class="row">
             <div class="col-12">
-                <a href='#' class='btn btn-success' title="Cadastrar novo acesso de  Empreendedor">* Novo Usuário Externo</a>
+                <a href='{{ url('pae/users/create') }}' class='btn btn-success' title="Cadastrar novo acesso de  Empreendedor">* Novo Usuário Externo</a>
             </div>
 
         </div>
@@ -33,12 +33,13 @@
 
         <div class="row">
             <div class="col-md-12">
-                <form action="{}" method="POST" name="frmPesquisa" id="frmPesquisa"><br>
+                <form action="{{ url('pae/user') }}" method="POST" name="frmPesquisa" id="frmPesquisa"><br>
                     <div class="col-6">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="pesquisa" id="pesquisa" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            <input type="text" class="form-control" name="pesquisa" id="pesquisa" placeholder="Pesquisar pelo nome no Usuario" aria-label="Recipient's username" aria-describedby="button-addon2">
                             <input type="submit" class="btn btn-primary" name="btn" value="Pesquisar">
-                          </div>
+                        </div>
                     </div>
                     <br>
 
@@ -54,6 +55,7 @@
                 <th>CNPJ</th>
                 <th>Nome Usuário</th>
                 <th>CPF</th>
+                <th>Situação</th>
                 <th>Opções</th>
             </tr>
 
@@ -62,13 +64,18 @@
             foreach ($usuarios as $key => $usuario) {
                 print '<tr>';
                 print '<td>' . ($key + 1) . '</td>';
-                print '<td>' . $usuario->id_empdor . '</td>';
+                print '<td>' . $usuario->empreendedor . '</td>';
                 print '<td></td>';
                 print '<td>' . $usuario->name . '</td>';
                 print '<td>' . $usuario->cpf . '</td>';
+                print '<td>' . ($usuario->ativo == 0 ? 'Desativado' : 'Ativado') . '</td>';
             
                 print '<td>';
-                print "<a href='#' title='Desativar o Acesso do Usuário'><img src='/core/imagem/cancela.png' width='25'></a>";
+                if ($usuario->ativo == 0) {
+                    print "<a href='#' title='Ativar o Usuário'><img src=" . asset('imagem/icon/check.png') . " width='25'></a>";
+                } else {
+                    print "<a href='#' title='Desativar o Acesso do Usuário'><img src=" . asset('imagem/icon/cancela.png') . " width='25'></a>";
+                }
                 print '</td>';
                 print '</tr>';
             }

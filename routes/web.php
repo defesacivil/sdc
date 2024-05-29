@@ -331,6 +331,14 @@ Route::group(['middleware' => 'auth'], function () {
     # PAE USER ##############
     Route::match(["GET","POST"], 'pae/user', 'App\Http\Controllers\Drrd\PaeProtocoloController@user');
     
+    # novo usuario externo ( mineradora)
+    Route::get('pae/users/create', 'App\Http\Controllers\User\UserController@create');
+    
+    # gravar novo usuario
+    Route::post('pae/users/store', 'App\Http\Controllers\User\UserController@store');
+
+
+    
     
     
     

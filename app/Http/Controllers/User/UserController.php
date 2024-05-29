@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Drrd\PaeEmpdor;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -24,7 +26,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+
+        $empdors = PaeEmpdor::all();
+
+        return view('drrd/paebm/users/create',
+    [
+        'empdors' => $empdors,
+    ]);
     }
 
     /**
@@ -35,7 +43,47 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request);
+
+     
+        $request->validate(
+            [
+                'selEmpreendedor' => "required|integer",
+                'nomeUser' => "required|max:80",
+                'cpfUser' => "required|max:14",
+                'emailUser' => "email",
+                
+            ],
+            [
+                'selEmpreendedor.required' => "O campo Data de Entrada é Obrigatório !",
+                'selEmpreendedor.integer' => "O campo deve ser selecionado corretamente !",
+
+                'nomeUser.required' => "O campo Nome de Usuário é Obrigatório !",
+                'nomeUser.max' => "O campo Nome de Usuário deve ter no máximo 80 Caracteres !",
+
+                'cpfUser.required' => "O campo CPF é Obrigatório !",
+                'cpfUser.max' => "O campo CPF deve ter no máximo 14 Caracteres !",
+
+                'emailUser.email' => "O campo E-mail deve ser um email válido !",
+            ]
+        );
+
+        $user = new User();
+              
+        $user->id_empdor= $request->selEmpreendedor;
+        $user->name     = $request->nomeUser;
+        $user->cpf      = $request->cpfUser;
+        $user->email      = $request->emailUser;
+        $user->password = "";
+        $user->ativo    = 0;
+        $user->tipo     = "externo";
+        $user->sub_tipo = "";
+        $user->municipio_id = 1;
+        
+        $user->save();
+
+        return redirect('pae/user')->with('message', 'Registro Gravado com Sucesso ');
+
     }
 
     /**

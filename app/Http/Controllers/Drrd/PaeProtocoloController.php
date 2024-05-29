@@ -39,26 +39,29 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         # acesso via index
         if ($request->method() == "GET") {
 
-            
+
             dd();
             # acesso externo PAE
-            if($request->user()->can('externo')) {
+            if ($request->user()->can('externo')) {
 
-                $protocolos = PaeProtocolo::with( 'empreendimento',
-                                                        'empreendimento.empreendedor',
-                                                        'analises',
-                                                        'analises.notificacoes')
-                                                        ->whereRaw('pae_empdor_id', '=', Auth::user()->id_empdor)
-                                                        ->paginate(30);
-            
-            # acesso                                                        
-            }else {
+                $protocolos = PaeProtocolo::with(
+                    'empreendimento',
+                    'empreendimento.empreendedor',
+                    'analises',
+                    'analises.notificacoes'
+                )
+                    ->whereRaw('pae_empdor_id', '=', Auth::user()->id_empdor)
+                    ->paginate(30);
 
-            $protocolos = PaeProtocolo::with( 'empreendimento',
-                                                        'empreendimento.empreendedor',
-                                                        'analises',
-                                                        'analises.notificacoes')->paginate(30);
+                # acesso                                                        
+            } else {
 
+                $protocolos = PaeProtocolo::with(
+                    'empreendimento',
+                    'empreendimento.empreendedor',
+                    'analises',
+                    'analises.notificacoes'
+                )->paginate(30);
             }
 
             // $protocolos = DB::table('pae_protocolos')
@@ -75,7 +78,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
             //     ->paginate(50);
 
-                
+
 
 
             //dd($protocolos);
@@ -93,23 +96,25 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
             if (($request->get('search') != "") && ($request->get('dtInicio') == "") && ($request->get('dtFinal') == "")) {
 
-                $protocolos = PaeProtocolo::with([ 'empreendimento',
-                                                        'empreendimento.empreendedor',
-                                                        'analises',
-                                                        'analises.notificacoes'])
-                                                        ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
-                                                        ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
-                                                        ->paginate(30);;
-
+                $protocolos = PaeProtocolo::with([
+                    'empreendimento',
+                    'empreendimento.empreendedor',
+                    'analises',
+                    'analises.notificacoes'
+                ])
+                    ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
+                    ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
+                    ->paginate(30);;
             } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
 
-                $protocolos = PaeProtocolo::with([ 'empreendimento',
-                                                        'empreendimento.empreendedor',
-                                                        'analises',
-                                                        'analises.notificacoes'])
-                                                        ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
-                                                        ->paginate(30);;
-
+                $protocolos = PaeProtocolo::with([
+                    'empreendimento',
+                    'empreendimento.empreendedor',
+                    'analises',
+                    'analises.notificacoes'
+                ])
+                    ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
+                    ->paginate(30);;
             }
 
             return view(
@@ -402,9 +407,9 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         // $lista_analista = User::pluck('name', 'name');
 
         $lista_analista = User::permission('paeadmin')->pluck('name', 'id');
- 
+
         dd($request->analista);
-        
+
         # get 
         if ($request->method() == "GET") {
 
@@ -417,10 +422,10 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
             );
 
-        # post
+            # post
         } elseif ($request->method() == "POST") {
 
-           
+
 
             $prot = PaeProtocolo::find($request->id);
 
@@ -451,16 +456,18 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
         # acesso via index
         if ($request->method() == "GET") {
-            
-            //dd('get', Auth::user()->id_empdor);
-            $protocolos = PaeProtocolo::with( 'empreendimento',
-                                                        'empreendimento.empreendedor',
-                                                        'analises',
-                                                        'analises.notificacoes')
-                                                        ->orWhereRelation('empreendimento.empreendedor', 'pae_empdor_id', '=', Auth::user()->id_empdor)
-                                                        ->paginate(30);
 
-                                                    //dd($protocolos);
+            //dd('get', Auth::user()->id_empdor);
+            $protocolos = PaeProtocolo::with(
+                'empreendimento',
+                'empreendimento.empreendedor',
+                'analises',
+                'analises.notificacoes'
+            )
+                ->orWhereRelation('empreendimento.empreendedor', 'pae_empdor_id', '=', Auth::user()->id_empdor)
+                ->paginate(30);
+
+            //dd($protocolos);
 
             return view(
                 'drrd/paebm/protocolo/index',
@@ -470,29 +477,31 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                 ]
             );
 
-            
+
             # busca de registro 
         } elseif ($request->method() == "POST") {
 
             if (($request->get('search') != "") && ($request->get('dtInicio') == "") && ($request->get('dtFinal') == "")) {
 
-                $protocolos = PaeProtocolo::with([ 'empreendimento',
-                                                        'empreendimento.empreendedor',
-                                                        'analises',
-                                                        'analises.notificacoes'])
-                                                        ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
-                                                        ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
-                                                        ->paginate(30);;
-
+                $protocolos = PaeProtocolo::with([
+                    'empreendimento',
+                    'empreendimento.empreendedor',
+                    'analises',
+                    'analises.notificacoes'
+                ])
+                    ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
+                    ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
+                    ->paginate(30);;
             } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
 
-                $protocolos = PaeProtocolo::with([ 'empreendimento',
-                                                        'empreendimento.empreendedor',
-                                                        'analises',
-                                                        'analises.notificacoes'])
-                                                        ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
-                                                        ->paginate(30);;
-
+                $protocolos = PaeProtocolo::with([
+                    'empreendimento',
+                    'empreendimento.empreendedor',
+                    'analises',
+                    'analises.notificacoes'
+                ])
+                    ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
+                    ->paginate(30);;
             }
 
             return view(
@@ -505,25 +514,35 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     }
 
 
-    public function user()
+    # visualização dos usuarios externos
+    public function user(Request $request)
     {
 
-        $usuarios = User::DB("users")
-        ->where("tipo", "=", "externo")
-        ->join("pae_empdors", "", "")
-        ->get();
+        //dd($request->all());
+        if ($request->method() == "GET") {
+            $usuarios = DB::table('users')
+                ->where("tipo", "=", "externo")
+                ->join("pae_empdors", "users.id_empdor", "=", "pae_empdors.id")
+                ->select("users.*", "pae_empdors.nome as empreendedor")
+                ->get();
+        } else {
+
+            $usuarios = DB::table('users')
+                ->where("tipo", "=", "externo")
+                ->where("users.name", 'LIKE', '%' . $request->get('pesquisa') . '%')
+                ->join("pae_empdors", "users.id_empdor", "=", "pae_empdors.id")
+                ->select("users.*", "pae_empdors.nome as empreendedor")
+                ->get();
+        }
 
         //dd($usuarios);
 
         return view(
             'drrd/paebm/users/usuario',
             [
-               'usuarios' => $usuarios,
+                'usuarios' => $usuarios,
             ]
         );
-        
     }
-
-
-
+    
 }
