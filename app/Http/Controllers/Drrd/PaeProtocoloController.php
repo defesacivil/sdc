@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class PaeProtocoloController extends \App\Http\Controllers\Controller
@@ -518,31 +520,36 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function user(Request $request)
     {
 
-        //dd($request->all());
-        if ($request->method() == "GET") {
-            $usuarios = DB::table('users')
-                ->where("tipo", "=", "externo")
-                ->join("pae_empdors", "users.id_empdor", "=", "pae_empdors.id")
-                ->select("users.*", "pae_empdors.nome as empreendedor")
-                ->get();
+
+        if (Auth::user()->hasRole('paeusuario')) {
+
+            //dd($request->all());
+            if ($request->method() == "GET") {
+                $usuarios = DB::table('users')
+                    ->where("tipo", "=", "externo")
+                    ->join("pae_empdors", "users.id_empdor", "=", "pae_empdors.id")
+                    ->select("users.*", "pae_empdors.nome as empreendedor")
+                    ->get();
+            } else {
+
+                $usuarios = DB::table('users')
+                    ->where("tipo", "=", "externo")
+                    ->where("users.name", 'LIKE', '%' . $request->get('pesquisa') . '%')
+                    ->join("pae_empdors", "users.id_empdor", "=", "pae_empdors.id")
+                    ->select("users.*", "pae_empdors.nome as empreendedor")
+                    ->get();
+            }
+
+            //dd($usuarios);
+
+            return view(
+                'drrd/paebm/users/usuario',
+                [
+                    'usuarios' => $usuarios,
+                ]
+            );
         } else {
-
-            $usuarios = DB::table('users')
-                ->where("tipo", "=", "externo")
-                ->where("users.name", 'LIKE', '%' . $request->get('pesquisa') . '%')
-                ->join("pae_empdors", "users.id_empdor", "=", "pae_empdors.id")
-                ->select("users.*", "pae_empdors.nome as empreendedor")
-                ->get();
+            return redirect()->back();
         }
-
-        //dd($usuarios);
-
-        return view(
-            'drrd/paebm/users/usuario',
-            [
-                'usuarios' => $usuarios,
-            ]
-        );
     }
-    
 }

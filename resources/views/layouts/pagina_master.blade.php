@@ -37,7 +37,7 @@
             @include('layouts/includes/nav')
         </div>
 
-        <div class="row p-2">
+        <div class="row">
         {{-- header --}}
         @yield('header')
         </div>

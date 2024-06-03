@@ -33,6 +33,8 @@
                     @endcan
                     
                     <div class="col p-3">
+                        <a href="{{ url('pae/user') }}" title="Gestão de Usuários Externos (Empreendedores)"><img src="{{ asset('imagem/boss.png') }}" width="30"
+                                alt="">Acesso Externo (Mineradoras)</a><br>
                         <a href="{{ url('pae/empnto') }}"><img src="{{ asset('imagem/icon/barragem.png') }}" width="30"
                                 alt="">Empreendimentos / Barragens</a><br>
                     </div>
