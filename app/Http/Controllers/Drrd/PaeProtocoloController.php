@@ -29,8 +29,9 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     {
 
 
+        /*bloquear acesso do empreendedor */
 
-        $notificacao = PaeProtocolo::with(
+$notificacao = PaeProtocolo::with(
             'analise',
             'analise.protocolos'
         )
@@ -42,7 +43,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         if ($request->method() == "GET") {
 
 
-            dd();
+
             # acesso externo PAE
             if ($request->user()->can('externo')) {
 
@@ -106,7 +107,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                 ])
                     ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
                     ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
-                    ->paginate(30);;
+                    ->paginate(30);
             } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
 
                 $protocolos = PaeProtocolo::with([
@@ -442,11 +443,13 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @param Pagina especifica do acesso do empreendedor
      * @return \Illuminate\Http\Response
      */
     public function minerar(Request $request)
     {
+
+
 
         $notificacao = PaeProtocolo::with(
             'analise',

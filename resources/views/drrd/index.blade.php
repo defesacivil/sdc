@@ -23,19 +23,26 @@
 
             <div class="row p-2">
                 <div class="col-3">
-                    @can('cedec','redec')
+
+                    @canany(['cedec','redec'])
                     <div class="col p-3">
-                        <img src="{{ asset('imagem/icon/protocolo.png') }}" width="30"alt=""><a class="" href="{{ url('pae/protocolo') }}">Protocolos</a>
+                        <a class="btn btn-outline-primary" href="{{ url('pae/protocolo') }}"><img src="{{ asset('imagem/icon/protocolo.png') }}" width="30"alt="">Protocolos</a><br>
                     </div>
+
                     <div class="col p-3">
-                        <a href="{{ url('pae/empdor') }}"><img src="{{ asset('imagem/icon/empreendedor.png') }}" width="30" height="" alt="">Empreendedores / Empresas</a><br>
-                    </div>
-                    @endcan
-                    
-                    <div class="col p-3">
-                        <a href="{{ url('pae/user') }}" title="Gestão de Usuários Externos (Empreendedores)"><img src="{{ asset('imagem/boss.png') }}" width="30"
+                        <a class="btn btn-outline-primary" href="{{ url('pae/user') }}" title="Gestão de Usuários Externos (Empreendedores)"><img src="{{ asset('imagem/boss.png') }}" width="30"
                                 alt="">Acesso Externo (Mineradoras)</a><br>
-                        <a href="{{ url('pae/empnto') }}"><img src="{{ asset('imagem/icon/barragem.png') }}" width="30"
+                    </div>
+
+                    <div class="col p-3">
+                        <a class="btn btn-outline-primary" href="{{ url('pae/empdor') }}"><img src="{{ asset('imagem/icon/empreendedor.png') }}" width="30" height="" alt="">Empreendedores / Mineradoras</a><br>
+                    </div>
+                    
+                    @endcanany
+                    
+                    {{-- Acesso somente da Mineradora --}}
+                    <div class="col p-3">
+                        <a class="btn btn-outline-primary" href="{{ url('pae/empnto') }}"><img src="{{ asset('imagem/icon/barragem.png') }}" width="30"
                                 alt="">Empreendimentos / Barragens</a><br>
                     </div>
 

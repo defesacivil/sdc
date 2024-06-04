@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{asset('vendor/admin-lte/adminlte.min.css')}}">
     <style>
         body {
+            background-image: url('{{ url('imagem/background/barragem.png') }}');
             background-image: url('{{ url('imagem/background/background_chuva.png') }}');
             background-repeat: no-repeat;
             background-size: cover;
@@ -34,7 +35,7 @@
                 <!-- /.login-logo -->
                 <div class="card card-outline card-primary">
                     <div class="card-header text-center">
-                        <a href="../../index.php" class="h1"><b>SDC</b></a>
+                        <a href="../../index.php" class="h1"><b>ACESSO MINERADORAS</b></a>
                     </div>
                     <div class="card-body">
                         <p class="login-box-msg">Faça login para iniciar sua sessão</p>

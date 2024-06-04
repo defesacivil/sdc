@@ -5,7 +5,6 @@
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Drrd</li>
         </ol>
     </nav>
@@ -32,9 +31,7 @@
 
             <div class="row">
                 <div class="p-3 col-12">
-                    <a class="btn btn-primary" href="{{ url('pae/protocolo/create') }}"
-                        title="Inserir novo Registro">+ Novo</a>
-                    <a class='btn btn-warning'>Pesquisar</a>
+                    
                     <a class='btn btn-success' href='{{ url('drrd') }}'>Voltar</a>
                     <p class="text-center">
                         <legend>Protocolo PAEBM</legend>
@@ -44,7 +41,7 @@
             <div class="p-2 row">
                 <div class="col">
                     <label for="search">Busca: </label> (nome da Barragem ou parte do nome / Nr Protocolo -)
-                    {{ Form::open(['url' => 'pae/protocolo', 'method' => 'POST']) }}
+                    {{ Form::open(['url' => 'pae/minerar', 'method' => 'POST']) }}
                     {{ Form::token() }}
 
                     {{ Form::text('search', '', ['class' => 'form form-control col-md-6', 'id' => 'search']) }}

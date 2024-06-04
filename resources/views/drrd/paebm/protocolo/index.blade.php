@@ -34,9 +34,13 @@
 
             <div class="row">
                 <div class="p-3 col-12">
-                    <a class="btn btn-primary" href="{{ url('pae/protocolo/create') }}"
+
+                    @if(!auth()->user()->hasRole('paeusuario'))
+                        <a class="btn btn-primary" href="{{ url('pae/protocolo/create') }}"
                         title="Inserir novo Registro">+ Novo</a>
-                    <a class='btn btn-warning'>Pesquisar</a>
+                        
+                        <a class='btn btn-warning'>Pesquisar</a>
+                    @endif
                     <a class='btn btn-success' href='{{ url('drrd') }}'>Voltar</a>
                     <p class="text-center">
                         <legend>Protocolo PAEBM</legend>
