@@ -41,7 +41,7 @@
             <div class="p-2 row">
                 <div class="col">
                     <label for="search">Busca: </label> (nome da Barragem ou parte do nome / Nr Protocolo -)
-                    {{ Form::open(['url' => 'pae/minerar', 'method' => 'POST']) }}
+                    {{ Form::open(['url' => 'pae/mineradora', 'method' => 'POST']) }}
                     {{ Form::token() }}
 
                     {{ Form::text('search', '', ['class' => 'form form-control col-md-6', 'id' => 'search']) }}
@@ -146,11 +146,13 @@
                                     @endphp
                                     {!! $aviso !!} --}}
 
-                                    {{-- $protocolo->getNotificacao(4) --}}
-                                    <a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a> |
-
-                                    {{-- editar --}}
-                                    <a href='{{ url('pae/protocolo/edit/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/editar.png') }}'></a> |
+                                    @canany(['cedec', 'redec'])
+                                        {{-- $protocolo->getNotificacao(4) gerar analise do protocolo --}}
+                                        <a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a> |
+                                    
+                                        {{-- editar --}}
+                                        <a href='{{ url('pae/protocolo/edit/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/editar.png') }}'></a> |
+                                    @endcanany
 
                                     {{-- Apagar --}}
                                     <!--<a onclick="return confirm('Deseja realmente apagar esse Registro !')" href='#'><img  width='25' src='{{ asset('imagem/icon/delete.png') }}'></a>--> |
@@ -159,7 +161,7 @@
                                     <a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> |
 
                                     {{-- notificações --}}
-                                    <a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> |
+                                    {{-- <a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> | --}}
 
                                 </td>
                             </tr>

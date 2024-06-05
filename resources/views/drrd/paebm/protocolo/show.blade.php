@@ -82,7 +82,13 @@
 
             <div class="row">
                 <div class="col p-3">
-                    <p class='text-center'><a class='btn btn-success' href='{{ url('pae/protocolo') }}'>Voltar</a></p><br>
+                @canany(['cedec', 'redec'])
+                <p class='text-center'><a class='btn btn-success' href='{{ url('pae/protocolo') }}'>Voltar</a></p><br>
+                @endcanany
+                @hasrole('paeusuario')
+                    <p class='text-center'><a class='btn btn-success' href='{{ url('pae/mineradora') }}'>Voltar</a></p><br>
+                @endcan()
+                   
                     <legend>PROTOCOLO PABM</legend>
                 </div>
             </div>

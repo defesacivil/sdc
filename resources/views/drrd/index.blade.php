@@ -6,9 +6,9 @@
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            @can('cedec', 'redec') 
-            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-            @endcan
+            @canany(['cedec', 'redec']) 
+                <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            @endcanany
             <li class="breadcrumb-item active" aria-current="page">Drrd</li>
         </ol>
     </nav>

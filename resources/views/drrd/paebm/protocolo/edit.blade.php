@@ -17,8 +17,13 @@
     <div class="col-12">
         <div class="row">
             <div class="p-3 col">
+                @canany(['cedec', 'redec'])
                 <p class='text-center'><a class='btn btn-success' href='{{ url('pae/protocolo') }}'>Voltar</a></p><br>
+                @endcanany
+                
+
                 <legend>Edição Protocolo</legend>
+
             </div>
         </div>
 

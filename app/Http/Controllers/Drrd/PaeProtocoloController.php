@@ -28,104 +28,109 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
 
+        //dd(!auth()->user()->can('paeusuario'));
 
-        /*bloquear acesso do empreendedor */
+        if (!auth()->user()->can('paeusuario')) {
+            return $this->minerar($request);
+        } else {
+            /*bloquear acesso do empreendedor */
 
-$notificacao = PaeProtocolo::with(
-            'analise',
-            'analise.protocolos'
-        )
-            ->whereRaw("'pae_protocolos.id' = 4")
-            ->whereRaw("DATEDIFF('pae_notIficacaos.dt_devolutiva', '" . Carbon::now() . "') <=5")
-            ->get();
+            $notificacao = PaeProtocolo::with(
+                'analise',
+                'analise.protocolos'
+            )
+                ->whereRaw("'pae_protocolos.id' = 4")
+                ->whereRaw("DATEDIFF('pae_notIficacaos.dt_devolutiva', '" . Carbon::now() . "') <=5")
+                ->get();
 
-        # acesso via index
-        if ($request->method() == "GET") {
+            # acesso via index
+            if ($request->method() == "GET") {
 
 
 
-            # acesso externo PAE
-            if ($request->user()->can('externo')) {
+                # acesso externo PAE
+                if ($request->user()->can('externo')) {
 
-                $protocolos = PaeProtocolo::with(
-                    'empreendimento',
-                    'empreendimento.empreendedor',
-                    'analises',
-                    'analises.notificacoes'
-                )
-                    ->whereRaw('pae_empdor_id', '=', Auth::user()->id_empdor)
-                    ->paginate(30);
+                    $protocolos = PaeProtocolo::with(
+                        'empreendimento',
+                        'empreendimento.empreendedor',
+                        'analises',
+                        'analises.notificacoes'
+                    )
+                        ->whereRaw('pae_empdor_id', '=', Auth::user()->id_empdor)
+                        ->paginate(30);
 
-                # acesso                                                        
-            } else {
+                    # acesso                                                        
+                } else {
 
-                $protocolos = PaeProtocolo::with(
-                    'empreendimento',
-                    'empreendimento.empreendedor',
-                    'analises',
-                    'analises.notificacoes'
-                )->paginate(30);
+                    $protocolos = PaeProtocolo::with(
+                        'empreendimento',
+                        'empreendimento.empreendedor',
+                        'analises',
+                        'analises.notificacoes'
+                    )->paginate(30);
+                }
+
+                // $protocolos = DB::table('pae_protocolos')
+                //     ->join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
+                //     ->join('pae_empdors', 'pae_empdors.id', '=', 'pae_empntos.pae_empdor_id')
+                //     ->join('users', 'users.id', '=', 'pae_protocolos.user_id')
+                //     ->join('pae_analises', 'pae_analises.pae_protocolo_id','=', 'pae_protocolos.id') 
+                //     ->where('pae_protocolos.num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
+                //     ->addSelect('pae_protocolos.*')
+                //     ->addSelect('pae_empntos.nome as empreendimento')
+                //     ->addSelect('users.name')
+                //     ->addSelect('pae_analises.*')
+                //     ->addSelect('pae_empdors.nome as empreendedor')
+
+                //     ->paginate(50);
+
+
+
+
+                //dd($protocolos);
+
+                return view(
+                    'drrd/paebm/protocolo/index',
+                    [
+                        'protocolos' => $protocolos,
+                        //'tramits' => $tramits,
+                    ]
+                );
+
+                # busca de registro 
+            } elseif ($request->method() == "POST") {
+
+                if (($request->get('search') != "") && ($request->get('dtInicio') == "") && ($request->get('dtFinal') == "")) {
+
+                    $protocolos = PaeProtocolo::with([
+                        'empreendimento',
+                        'empreendimento.empreendedor',
+                        'analises',
+                        'analises.notificacoes'
+                    ])
+                        ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
+                        ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
+                        ->paginate(30);
+                } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
+
+                    $protocolos = PaeProtocolo::with([
+                        'empreendimento',
+                        'empreendimento.empreendedor',
+                        'analises',
+                        'analises.notificacoes'
+                    ])
+                        ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
+                        ->paginate(30);;
+                }
+
+                return view(
+                    'drrd/paebm/protocolo/index',
+                    [
+                        'protocolos' => $protocolos,
+                    ]
+                );
             }
-
-            // $protocolos = DB::table('pae_protocolos')
-            //     ->join('pae_empntos', 'pae_empntos.id', '=', 'pae_protocolos.pae_empnto_id')
-            //     ->join('pae_empdors', 'pae_empdors.id', '=', 'pae_empntos.pae_empdor_id')
-            //     ->join('users', 'users.id', '=', 'pae_protocolos.user_id')
-            //     ->join('pae_analises', 'pae_analises.pae_protocolo_id','=', 'pae_protocolos.id') 
-            //     ->where('pae_protocolos.num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
-            //     ->addSelect('pae_protocolos.*')
-            //     ->addSelect('pae_empntos.nome as empreendimento')
-            //     ->addSelect('users.name')
-            //     ->addSelect('pae_analises.*')
-            //     ->addSelect('pae_empdors.nome as empreendedor')
-
-            //     ->paginate(50);
-
-
-
-
-            //dd($protocolos);
-
-            return view(
-                'drrd/paebm/protocolo/index',
-                [
-                    'protocolos' => $protocolos,
-                    //'tramits' => $tramits,
-                ]
-            );
-
-            # busca de registro 
-        } elseif ($request->method() == "POST") {
-
-            if (($request->get('search') != "") && ($request->get('dtInicio') == "") && ($request->get('dtFinal') == "")) {
-
-                $protocolos = PaeProtocolo::with([
-                    'empreendimento',
-                    'empreendimento.empreendedor',
-                    'analises',
-                    'analises.notificacoes'
-                ])
-                    ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
-                    ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
-                    ->paginate(30);
-            } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
-
-                $protocolos = PaeProtocolo::with([
-                    'empreendimento',
-                    'empreendimento.empreendedor',
-                    'analises',
-                    'analises.notificacoes'
-                ])
-                    ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
-                    ->paginate(30);;
-            }
-
-            return view(
-                'drrd/paebm/protocolo/index',
-                [
-                    'protocolos' => $protocolos,
-                ]
-            );
         }
     }
 
@@ -469,18 +474,11 @@ $notificacao = PaeProtocolo::with(
                 'analises',
                 'analises.notificacoes'
             )
-                ->orWhereRelation('empreendimento.empreendedor', 'pae_empdor_id', '=', Auth::user()->id_empdor)
+                ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
+                ->whereRelation('empreendimento.empreendedor', 'pae_empdor_id', '=', Auth::user()->id_empdor)
                 ->paginate(30);
 
-            //dd($protocolos);
 
-            return view(
-                'drrd/paebm/protocolo/index',
-                [
-                    'protocolos' => $protocolos,
-                    //'tramits' => $tramits,
-                ]
-            );
 
 
             # busca de registro 
@@ -496,6 +494,7 @@ $notificacao = PaeProtocolo::with(
                 ])
                     ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
                     ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
+                    ->whereRelation('empreendimento.empreendedor', 'pae_empdor_id', '=', Auth::user()->id_empdor)
                     ->paginate(30);;
             } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
 
@@ -506,16 +505,27 @@ $notificacao = PaeProtocolo::with(
                     'analises.notificacoes'
                 ])
                     ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
-                    ->paginate(30);;
-            }
+                    ->whereRelation('empreendimento.empreendedor', 'pae_empdor_id', '=', Auth::user()->id_empdor)
+                    ->paginate(30);
+            } else {
 
-            return view(
-                'drrd/paebm/protocolo/index',
-                [
-                    'protocolos' => $protocolos,
-                ]
-            );
+                $protocolos = PaeProtocolo::with([
+                    'empreendimento',
+                    'empreendimento.empreendedor',
+                    'analises',
+                    'analises.notificacoes'
+                ])
+                    ->whereRelation('empreendimento.empreendedor', 'pae_empdor_id', '=', Auth::user()->id_empdor)
+                    ->paginate(30);
+            }
         }
+
+        return view(
+            'drrd/paebm/protocolo/minerar',
+            [
+                'protocolos' => $protocolos,
+            ]
+        );
     }
 
 
