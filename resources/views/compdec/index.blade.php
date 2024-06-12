@@ -87,11 +87,50 @@
                                 @endforeach
                             </table>
                         </div>
+
+
+
+
                     </div>
                 @endif
-            @endcan
+                <div class="row">
 
-        </div>
+                    {{-- Com Compdec --}}
+                    <div class="col text-center">
+                        <h class="text-primary">Municípios com COMPDEC</h>
+                        <h4 class="text-primary">{{ $ativa }} / {{ number_format(($ativa / 853) * 100, 1) }}%</h4>
+                    </div>
+
+                    {{-- Sem compodec --}}
+                    <div class="col text-center">
+                        <h class="text-danger">Municípios Sem COMPDEC</h>
+                        <h4 class="text-danger">{{ $inativa }} / {{ number_format(($inativa / 853) * 100, 1) }}%</h4>
+                    </div>
+
+                    {{-- Plancom --}}
+                    <div class="col text-center">
+                        <h>Municípios PlanCon</h>
+                        <h4>{{ $plancon }} / {{ number_format(($plancon / 853) * 100, 1) }}%</h4>
+                    </div>
+                    <br>
+                </div>
+                <hr>
+                <div class="row">
+                    {{-- NupDec --}}
+                    <div class="col text-center">
+                        <h>Municípios Com Nupdec</h>
+                        <h4>{{ $nupdec }} / {{ number_format(($nupdec / 853) * 100, 1) }}%</h4>
+                    </div>
+                    <div class="col text-center">
+                        <h>Quantidade Total de Nupdec</h>
+                        <h4>{{ $totalNupdec }} </h4>
+                    </div>
+                </div>
+
+            </div>
+        @endcan
+
+    </div>
     </div>
     <div class="row" id="divrelatorio">
         <div class="col-12">
@@ -100,7 +139,7 @@
     </div>
 
     @can('cedec')
-    <div class="p-3 row div">
+        {{-- <div class="p-3 row div">
         <div class="col">
             <select name="selChart" class="form-control form-control-lg col-5" id="selChart">
                 <option>Situação das Coordenadorias Municipais de Defesa Civil</option>
@@ -108,38 +147,20 @@
                 <option>Municípios com Mapeamento de Área de Risco</option>
             </select>
         </div>
-    </div>
-    <div class="row divbuscar">
+    </div> --}}
 
-        {{-- Com Compdec --}}
-        <div class="col text-center p-3 border border-dark">
+
+
+
+
+        <hr>
+        <div class="row">
             <div class="col">
-                <h class="text-primary">Municípios com COMPDEC</h>
-                <h4 class="text-primary">{{ $ativa }} / {{ number_format(($ativa / 853) * 100, 1) }}%</h4>
-            </div>
-            <div class="col">
-                <h class="text-danger">Municípios Sem COMPDEC</h>
-                <h4 class="text-danger">{{ $inativa }} / {{ number_format(($inativa / 853) * 100, 1) }}%</h4>
-            </div>
-        </div>
-
-
-        {{-- Com Compdec --}}
-        <div class="col text-center p-3 border border-dark">
-            <h>Municípios com Compdec</h>
-            <h4>{{ $ativa }} <br> {{ number_format(($ativa / 853) * 100, 1) }}%</h4>
-        </div>
-    </div>
-
-    <hr>
-    <div class="row">
-        <div class="col">
-            <div class="col">
-                <canvas id="myChart"></canvas>
+                <div class="col">
+                    <canvas id="myChart"></canvas>
+                </div>
             </div>
         </div>
-    </div>
-
     @endcan
 
     </div>
@@ -158,8 +179,8 @@
         $(document).ready(function() {
 
 
-            $(".divbuscar").hide();
-            $("#divrelatorio").hide();
+            //$(".divbuscar").hide();
+            //$("#divrelatorio").hide();
 
 
             $('#buscar').click(function() {

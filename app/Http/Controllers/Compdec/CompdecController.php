@@ -38,10 +38,19 @@ class CompdecController extends \App\Http\Controllers\Controller
                 ->groupBy("com_ativa")
                 ->get();
 
+            $nupdec = $situacao = DB::table("com_comdec")
+                ->select(DB::raw('count(id) as qtd'))
+                ->where('id_municipio', '!=', '7221')
+                ->where('nudec', '=', '1')
+                ->get();
+
             if ($method == 'GET') {
                 return view('compdec.index', [
-                    'ativa' => $situacao[1]->qtd,
+                    'ativa'   => $situacao[1]->qtd,
                     'inativa' => $situacao[0]->qtd,
+                    'plancon' => 0,
+                    'nupdec' => $nupdec,
+                    'totalNupdec' => 0,
                 ]);
             } elseif ($method == 'POST') {
 
@@ -65,10 +74,13 @@ class CompdecController extends \App\Http\Controllers\Controller
                         'active_tab' => $active_tab,
                         'ativa' => 0,
                         'inativa' => 0,
+                        'plancon' => 0,
+                        'nupdec' => 0,
+                        'totalNupdec' => 0,
                     ]);
                 }
             }
-        }else {
+        } else {
             return view('dashboard');
         }
     }
