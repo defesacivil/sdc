@@ -108,7 +108,7 @@
 
 
                         <p class="mb-1">
-                            {{-- <a href="{{ url('forgot-password') }}">Esquecí a Senha</a> --}}
+                            <a href="{{ url('forgot-password') }}">Esquecí a Senha</a>
                         </p>
                         <p class="mb-0">
                             {{-- <a href="{{ url('register') }}" class="text-center">Registrar novo usuário</a> --}}

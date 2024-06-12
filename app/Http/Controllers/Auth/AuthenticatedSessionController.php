@@ -108,14 +108,14 @@ class AuthenticatedSessionController extends Controller
             if(auth()->user()->tipo == 'externo') {
                 return redirect('pae/mineradora');
             }else {
-                
+                dd(auth()->user());
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
             
 
         }else {
 
-            dd(Auth::user());
+            dd(auth()->attempt($request->only(['cpf', 'password'])));
 
             Log::channel('usuario')->info('Login de usuario Desativado', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
             $this->destroy($request);

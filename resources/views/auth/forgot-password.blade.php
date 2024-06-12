@@ -39,7 +39,7 @@
             
 
             <div class="flex items-center justify-end mt-4">
-                <input type="button" class="btn btn-primary" value="{{ __('Email Password Reset Link') }}">
+                <input type="submit" class="btn btn-primary" value="{{ __('Email Password Reset Link') }}">
 
             </div>
         </form>

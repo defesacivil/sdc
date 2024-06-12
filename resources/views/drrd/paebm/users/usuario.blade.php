@@ -46,49 +46,64 @@
         </div>
     </div>
 
-            <table class="table table-bordered">
-                <tr>
-                    <th>#</th>
-                    <th>Empreendedor</th>
-                    <th>CNPJ</th>
-                    <th>Nome Usuário</th>
-                    <th>CPF</th>
-                    <th>Situação</th>
-                    <th>Opções</th>
-                </tr>
+    <table class="table table-bordered">
+        <tr>
+            <th>#</th>
+            <th>Empreendedor</th>
+            <th>CNPJ</th>
+            <th>Nome Usuário</th>
+            <th>CPF</th>
+            <th>E-mail</th>
+            <th>Situação</th>
+            <th>Opções</th>
+        </tr>
 
-                <?php
-                
-                foreach ($usuarios as $key => $usuario) {
-                    print '<tr>';
-                    print '<td>' . ($key + 1) . '</td>';
-                    print '<td>' . $usuario->empreendedor . '</td>';
-                    print '<td></td>';
-                    print '<td>' . $usuario->name . '</td>';
-                    print '<td>' . $usuario->cpf . '</td>';
-                    print '<td>' . ($usuario->ativo == 0 ? 'Desativado' : 'Ativado') . '</td>';
-                
-                    print '<td>';
-                    if ($usuario->ativo == 0) {
-                        print "<button name='btnAtivar' class='btn btn-link' onclick=\"return confirm('ativar ?')\" title='Ativar o Usuário' data-status='{{ $usuario->ativo }}'>
-                                        <img src='" .
-                            asset('imagem/icon/check.png') .
-                            "' width='25'>
-                                        </button>";
-                    } else {
-                        print "<button name='btnDesativar' class='btn btn-link' onclick=\"return confirm('desativar ?')\" title='Desativar o Acesso do Usuário' data-status='{{ $usuario->ativo }}'>
-                                        <img src=" .
-                            asset('imagem/icon/cancela.png') .
-                            " width='25'>
-                                        </button>";
-                    }
-                    print '</td>';
-                    print '</tr>';
-                }
-                
-                ?>
+        <?php
+        
+        foreach ($usuarios as $key => $usuario) {
+            print '<tr>';
+            print '<td>' . ($key + 1) . '</td>';
+            print '<td>' . $usuario->empreendedor . '</td>';
+            print '<td></td>';
+            print '<td>' . $usuario->name . '</td>';
+            print '<td>' . $usuario->cpf . '</td>';
+            print '<td>' . $usuario->email . '</td>';
+            print '<td>' . ($usuario->ativo == 0 ? 'Desativado' : 'Ativado') . '</td>';
+        
+            print '<td>';
+            if ($usuario->ativo == 0) {
+                # Ativar
+                print "<button name='btnStatus' class='btn btn-link' title='Ativar o Usuário' data-user_id='" .
+                    $usuario->id .
+                    "' data-status='1'>
+                                                <img src='" .
+                    asset('imagem/icon/check.png') .
+                    "' width='25'>
+                                                </button>";
+            } else {
+                print "<button name='btnStatus' class='btn btn-link' title='Desativar o Acesso do Usuário' data-user_id='" .
+                    $usuario->id .
+                    "' data-status='0'>
+                                                <img src=" .
+                    asset('imagem/icon/cancela.png') .
+                    " width='25'>
+                                                </button> |";
+        
+                print "<button name='btnResetSenha' class='btn btn-link' title='Resetar Senha do Usuário Externo' data-user_id='" .
+                    $usuario->id .
+                    "'>
+                                                <img src=" .
+                    asset('imagem/icon/password.png') .
+                    " width='25'>
+                                                </button>";
+            }
+            print '</td>';
+            print '</tr>';
+        }
+        
+        ?>
 
-            </table>
+    </table>
 
 
 @stop
@@ -101,18 +116,77 @@
     <script>
         $(document).ready(function() {
 
-            //$(".default_col").addClass('collapsed');
 
-            $(".collapse-btn").dblclick(function() {
-                var targetId = $(this).attr("id");
-                $(this).closest("tr").next("tr").toggle('slow');
+            $("button[name='btnStatus']").click(function(e) {
+
+                var user_id = $(this).data('user_id');
+                var status = $(this).data('status');
+
+                var formdata = new FormData();
+                formdata.append('user_id', user_id);
+                formdata.append('status', status);
+                formdata.append('_token', "{{ csrf_token() }}");
+
+                //console.log(id)
+                const isConfirmed = confirm('Deseja Alterar o Status do Usuários ?');
+
+                if (isConfirmed) {
+                    $.ajax({
+
+                        url: '{{ url('pae/user/status') }}',
+                        type: 'POST',
+                        data: formdata,
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(data) {
+                            if (data == true) {
+                                window.location.reload();
+                            }
+                        },
+                        error: function(data) {
+                        }
+                    });
+                }
+                e.preventDefault();
+
             });
 
+            $("button[name='btnResetSenha']").click(function(e) {
 
-            $("a[name='btnAtivar']").click(function() {
+                var user_id = $(this).data('user_id');
 
-                alert();
+                var formdata = new FormData();
+                formdata.append('user_id', user_id);
+                formdata.append('_token', "{{ csrf_token() }}");
 
+                //console.log(id)
+                const isConfirmed = confirm('Deseja Resetar a senha desse Usuário ?');
+
+                if (isConfirmed) {
+                    $.ajax({
+
+                        url: '{{ url('pae/user/reset') }}',
+                        type: 'POST',
+                        data: formdata,
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(data) {
+                            if (data == true) {
+                                if(!alert('Senha Resetada com Sucesso \n a senha provisória é cedec@pae')){
+                                    window.location.reload();
+                                }
+                            }
+                        },
+                        error: function(data) {
+
+                        }
+                    });
+                }
+                e.preventDefault();
 
             });
 

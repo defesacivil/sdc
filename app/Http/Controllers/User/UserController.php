@@ -72,7 +72,7 @@ class UserController extends Controller
               
         $user->id_empdor= $request->selEmpreendedor;
         $user->name     = $request->nomeUser;
-        $user->cpf      = $request->cpfUser;
+        $user->cpf      = str_replace([".","-"],"", $request->cpfUser);
         $user->email      = $request->emailUser;
         $user->password = "";
         $user->ativo    = 0;
@@ -130,4 +130,32 @@ class UserController extends Controller
     {
         //
     }
+
+
+    # desativar
+    public function status(Request $request)
+    {
+        //dd($request->user_id);
+        $user = User::find($request->user_id);
+
+        $user->ativo = $request->status;
+        $user->save();
+
+        return true;
+    }
+
+    # Resetar senha
+    public function resetsenha(Request $request)
+    {
+        //dd($request->user_id);
+        $user = User::find($request->user_id);
+
+        $user->password = bcrypt("cedec@pae");
+        $user->save();
+
+        return true;
+    }
+
+
+    
 }

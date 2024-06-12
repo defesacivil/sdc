@@ -29,7 +29,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', function () {
 
-        if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
+        //dd("--", $_SERVER['HTTP_HOST']);
+        if(auth()->user()->tipo == 'externo'){
+            return redirect(route('pae/mineradora'));
+        }else if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
             return redirect()->away('http://sdcold.net:8081/?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         } elseif (null != session()->get('routeInicio')) {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
@@ -293,6 +296,8 @@ Route::group(['middleware' => 'auth'], function () {
     # acesso mineradora
     Route::match(["GET", "POST"], 'pae/mineradora','App\Http\Controllers\Drrd\PaeProtocoloController@minerar');
     
+    
+        
     //'App\Http\Controllers\Drrd\DrrdController@acesso')->name('pae.mineradora');
 
 
@@ -331,11 +336,17 @@ Route::group(['middleware' => 'auth'], function () {
     # PAE USER ##############
     Route::match(["GET","POST"], 'pae/user', 'App\Http\Controllers\Drrd\PaeProtocoloController@user');
     
-    # novo usuario externo ( mineradora)
+    # form novo usuario externo ( mineradora)
     Route::get('pae/users/create', 'App\Http\Controllers\User\UserController@create');
     
     # gravar novo usuario
     Route::post('pae/users/store', 'App\Http\Controllers\User\UserController@store');
+    
+    # Mudar Status
+    Route::post('pae/user/status', 'App\Http\Controllers\User\UserController@status');
+    
+    # resetar senha
+    Route::post('pae/user/reset', 'App\Http\Controllers\User\UserController@resetsenha');
 
 
     
