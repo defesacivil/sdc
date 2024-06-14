@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Usuario;
 
-use App\Models\Usuario\Permission;
-use App\Models\Usuario\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleDemController extends \App\Http\Controllers\Controller
 {
@@ -70,6 +70,7 @@ class RoleDemController extends \App\Http\Controllers\Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'name' => 'required|max:20',
             'label' => 'required|max:100',

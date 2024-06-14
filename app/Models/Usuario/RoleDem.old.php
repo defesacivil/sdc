@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoleDem extends Model
 {
+
+    protected $table = 'roles';
     protected $fillable = [
         'name',
         'label',

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Usuario;
 
 use App\Models\User;
-use App\Models\Usuario\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class RoleUserDemController extends \App\Http\Controllers\Controller
 {
@@ -16,9 +16,15 @@ class RoleUserDemController extends \App\Http\Controllers\Controller
      */
     public function index()
     {
+
+        $model_has_roles = DB::table('model_has_roles')
+                            ->join('users', 'users.id', 'model_id')
+                            ->join('roles', 'roles.id', 'model_id')
+                            ->select( 'model_has_roles.*','users.name as name', 'roles.name as role')
+                            ->paginate(5);
  
         return view('config/usuario/role_user/index', [
-            'role_users' => DB::table('role_users')->paginate(5)
+            'model_has_roles' => $model_has_roles,
         ]);
     }
 
@@ -55,7 +61,7 @@ class RoleUserDemController extends \App\Http\Controllers\Controller
      * @param  \App\Models\RoleUser  $roleUser
      * @return \Illuminate\Http\Response
      */
-    public function show(RoleUser $roleUser)
+    public function show(Role $roleUser)
     {
         //
     }
@@ -66,7 +72,7 @@ class RoleUserDemController extends \App\Http\Controllers\Controller
      * @param  \App\Models\RoleUser  $roleUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(RoleUser $roleUser)
+    public function edit(Role $roleUser)
     {
         //
     }
@@ -78,7 +84,7 @@ class RoleUserDemController extends \App\Http\Controllers\Controller
      * @param  \App\Models\RoleUser  $roleUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RoleUser $roleUser)
+    public function update(Request $request, Role $roleUser)
     {
         //
     }
@@ -89,7 +95,7 @@ class RoleUserDemController extends \App\Http\Controllers\Controller
      * @param  \App\Models\RoleUser  $roleUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RoleUser $roleUser)
+    public function destroy(Role $roleUser)
     {
         dd($roleUser);
         $user = User::find($roleUser->user_id);

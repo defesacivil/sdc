@@ -345,9 +345,9 @@ class PaeEmpntoController extends \App\Http\Controllers\Controller
             ]
         );
 
-
         $empnto = PaeEmpnto::find($request->id);
         $empnto->nome               = $request->nome;
+        $empnto->pae_empdor_id      = $request->pae_empdor_id;
         $empnto->municipio_id       = $request->municipio_id;
         $empnto->regiao_id          = $request->regiao_id;
         $empnto->m_construcao       = $request->m_construcao;

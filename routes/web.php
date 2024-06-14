@@ -108,7 +108,7 @@ Route::group(['middleware' => 'auth'], function () {
     # ROLE PERFIL 
 
     # index
-    Route::get('role', 'App\Http\Controllers\Usuario\RoleController@index');
+    Route::get('role', 'App\Http\Controllers\Usuario\RoleDemController@index');
 
     # index2 
     Route::get('role/{id}', 'App\Http\Controllers\Usuario\RoleController@index1');
@@ -193,7 +193,7 @@ Route::group(['middleware' => 'auth'], function () {
     # ROLE_USER #######################
 
     #index
-    Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserController@index');
+    Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserDemController@index');
 
     # add user
     Route::get('role_add_user/{id}', 'App\Http\Controllers\Usuario\RoleController@adduser');

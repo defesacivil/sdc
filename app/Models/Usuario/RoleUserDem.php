@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RoleUserDem extends Model
 {
-    protected $table = 'role_users';
+    protected $table = 'model_has_roles';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['user_id', 'role_id'];
+    protected $fillable = [ 'role_id', 'model_type', 'model_id'];
 
     use HasFactory;
 

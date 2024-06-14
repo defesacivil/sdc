@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Usuario;
 
-use App\Models\Usuario\Permission;
+use App\Models\Usuario\PermissionDem;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class PermissionDemController extends \App\Http\Controllers\Controller
 {

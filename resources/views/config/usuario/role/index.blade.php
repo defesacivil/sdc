@@ -66,7 +66,7 @@
                             <tr>
                                 <td scope="row">{{ $perfil->id }}</td>
                                 <td scope="row">{{ $perfil->name }}</td>
-                                <td scope="row">{{ $perfil->label }}</td>
+                                <td scope="row">{{ $perfil->guard_name }}</td>
                                 <td scope="row">{{ $perfil->created_at }}</td>
                                 <td scope="row">{{ $perfil->updated_at }}</td>
                                 <td scope="row">

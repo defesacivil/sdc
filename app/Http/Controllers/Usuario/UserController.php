@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Usuario;
 
 use \App\Models\User as UserC;
-use App\Models\Usuario\RoleDem;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
-
+use Spatie\Permission\Models\Role;
 
 class UserController extends \App\Http\Controllers\Controller
 {
@@ -19,7 +18,7 @@ class UserController extends \App\Http\Controllers\Controller
     {
 
         $users = UserC::with('roles')->get();  
-        $roles = RoleDem::with('users', 'permissions')->get();  
+        $roles = Role::with('users', 'permissions')->get();  
 
 
         return view(

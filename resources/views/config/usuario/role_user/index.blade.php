@@ -54,22 +54,24 @@
                     <th>#</th>
                     <th>Id Perfil</th>
                     <th>Id Usuário</th>
+                    <th>Tipo Modelo</th>
                     <th>Criado em</th>
                     <th>Atualizado em</th>
                     <th>Opcoes</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($role_users as $role_user)
+                @foreach ($model_has_roles as $key=>$model_has_role)
                     <tr>
-                        <td scope="row">{{ $role_user->id }}</td>
-                        <td scope="row">{{ $role_user->role_id }} </td>
-                        <td scope="row">{{ $role_user->user_id }}</td>
-                        <td scope="row">{{ $role_user->created_at }}</td>
-                        <td scope="row">{{ $role_user->updated_at }}</td>
+                        <td scope="row">{{ $key+1 }}</td>
+                        <td scope="row">{{ $model_has_role->role_id }} - {{ $model_has_role->role }} </td>
+                        <td scope="row">{{ $model_has_role->model_id }} -{{ $model_has_role->name }}</td>
+                        <td scope="row">{{ $model_has_role->model_type }}</td>
+                        <td scope="row">{{ $model_has_role->created_at }}</td>
+                        <td scope="row">{{ $model_has_role->updated_at }}</td>
                         <td scope="row">
-                            <a href='{{ url('config/role/edit/' . $role_user->id . '') }}'><img src='{{ url('imagem/icon/editar.png') }}'></a>
-                            <a onclick="return confirm('Deseja apagar esse registro ?')" href='{{ url('config/role/delete/' . $role_user->id . '') }}''><img src='{{ url('imagem/icon/delete.png') }}'></a>
+                            <a href='{{ url('config/role/edit/' . $model_has_role->role_id . '') }}'><img src='{{ url('imagem/icon/editar.png') }}'></a>
+                            <a onclick="return confirm('Deseja apagar esse registro ?')" href='{{ url('config/role/delete/' . $model_has_role->role_id . '') }}''><img src='{{ url('imagem/icon/delete.png') }}'></a>
                             {{-- <a href='#'>{!! config('constantes.icon.visualizar') !!}</a> --}}
                         </td>
 
@@ -81,7 +83,7 @@
 
         <div class="row">
             <div class="col">
-                {{ $role_users->links() }}
+                {{ $model_has_roles->links() }}
             </div>
         </div>
     </div>
