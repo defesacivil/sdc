@@ -59,6 +59,19 @@
                                 <figcaption class="figure-caption text-center">ADM. PEDIDO MAH</figcaption>
 
                         </div>
+
+
+                        {{-- MODULO CISTERNA --}}
+
+                        <div class="col-6 col-md-4 col-lg-3 text-center">
+
+                            <figure class="figure">
+                                <a href='cisterna'>
+                                    <img class="figure-img img-fluid rounded" src='{{ asset('/imagem/icon/poco.png') }}'
+                                        alt=""></a>
+                                <figcaption class="figure-caption text-center">PROJETO CISTERNA</figcaption>
+
+                        </div>
                     @endcan
 
                     {{-- ############################### MODULOS COMPDEC ################################################ --}}
