@@ -25,8 +25,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
-        //return view('auth.login');
+
+        //dd(auth()->user(), $request);
+        //return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php');
+        return view('auth.login');
         //die();
 
 
@@ -106,9 +108,10 @@ class AuthenticatedSessionController extends Controller
 
 
             if(auth()->user()->tipo == 'externo') {
-                return redirect('pae/mineradora');
+                
+                return redirect(route('pae/mineradora'));
             }else {
-                dd(auth()->user());
+                //dd(auth()->user());
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
             

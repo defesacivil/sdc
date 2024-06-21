@@ -13,7 +13,7 @@
     {{-- header css --}}
     @include('layouts/includes/header')
     
-    <!--@if (session('message'))
+    {{-- <!--@if (session('message'))
         <div class="alert alert-success">
             {{ session('message') }}
         </div>
@@ -24,7 +24,7 @@
                 <li class='error'>{{ $error }}</li>
             @endforeach
         </ul>
-    @endif-->
+    @endif--> --}}
 </head>
 
 <body class="body" style="background-color: rgb(215, 217, 219)">

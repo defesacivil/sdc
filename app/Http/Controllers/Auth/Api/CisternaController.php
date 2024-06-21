@@ -7,6 +7,7 @@ use App\Models\Ajuda\Cisterna;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class CisternaController extends Controller
 {
@@ -25,7 +26,47 @@ class CisternaController extends Controller
     }
 
 
-    # atualizar os dados no serividor
+    # processador
+    public function processar(Request $request) {
+
+        //dd($request->all());
+
+        $dados = (!empty($request->all())) ? $request->all(): "";
+
+        //dd(json_decode($dados[0], true));
+        
+        if(!empty($dados)) {
+            foreach(json_decode($dados[0], true) as $dado){
+
+                //dd($dado);
+
+                $cisterna = new Cisterna();
+                $benef = $cisterna->where('cpf', '=', $dado['cpf'])->first();
+                
+                //var_dump($benef);
+                
+                # atualização
+                if($benef) { 
+                    
+                    $benef->update($dado);
+                    
+                # novo reg
+                }else { 
+
+                    $cisterna->fill($dado);
+                    $cisterna->save();
+                }
+
+            }
+
+        }
+
+        //dd($request, $request[0]);
+
+    }
+
+
+    # novo registro os dados no serividor
     public function create(Request $request, Cisterna $cisterna)
     {
 

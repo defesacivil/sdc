@@ -42,6 +42,8 @@ class Handler extends ExceptionHandler
     function render($request, Throwable $exception)
     {
         $message1 = $exception->getMessage();
+
+        //dd('handle');
         
         
         // Acesso das mineradoras
@@ -69,7 +71,7 @@ class Handler extends ExceptionHandler
                     }
                 }
             } else {
-                //return response()->view('errors.500', ['message' => $message1], 500);
+                return response()->view('errors.500', ['message' => $message1], 500);
             }
         }
 

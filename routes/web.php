@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         //dd("--", $_SERVER['HTTP_HOST']);
         if(auth()->user()->tipo == 'externo'){
-            return redirect(route('pae/mineradora'));
+            return redirect()->action(['App\Http\Controllers\Drrd\PaeProtocoloController', 'minerar']);
         }else if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
             return redirect()->away('http://sdcold.net:8081/?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         } elseif (null != session()->get('routeInicio')) {
@@ -327,12 +327,17 @@ Route::group(['middleware' => 'auth'], function () {
     # Protocolo VIEW
     Route::get('pae/protocolo/show/{paeProtocolo}', 'App\Http\Controllers\Drrd\PaeProtocoloController@show');
     
-    # empreendimento STORE
+    # protocolo STORE
     Route::post('pae/protocolo/store', 'App\Http\Controllers\Drrd\PaeProtocoloController@store');
     
     # form atribuir processo
     Route::match(["GET", "POST"], 'pae/protocolo/atribuir/{paeProtocolo?}', 'App\Http\Controllers\Drrd\PaeProtocoloController@atribuir');
+    
+    # protocolo encerrar
+    Route::get('pae/protocolo/encerrar/{paeProtocolo}', 'App\Http\Controllers\Drrd\PaeProtocoloController@encerrar');
+    
 
+    
     # PAE USER ##############
     Route::match(["GET","POST"], 'pae/user', 'App\Http\Controllers\Drrd\PaeProtocoloController@user');
     
@@ -347,7 +352,8 @@ Route::group(['middleware' => 'auth'], function () {
     
     # resetar senha
     Route::post('pae/user/reset', 'App\Http\Controllers\User\UserController@resetsenha');
-
+    
+    
 
     
     

@@ -40,9 +40,9 @@
 
             <div class="p-2 row">
                 <div class='col'>
-                    {{ Form::label('empreendimento', '') }}:
+                    {{ Form::label('empreendimento', 'Empreendimento (Para buscar, digite parte do nome ex: "B1" )') }}:
                     {{ Form::text('empnto_search', '', ['class' => 'form form-control', 'value' => old('empnto_search'), 'id' => 'empnto_search']) }}
-                    {{ Form::hidden('pae_empnto_id', '', ['id' => 'pae_empnto_id']) }}
+                    {{ Form::hidden('pae_empnto_id', '', ['id' => 'pae_empnto_id', 'required']) }}
                 </div>
             </div>
 
@@ -155,11 +155,12 @@
                 "progressBar": true,
                 "showDuration": "600",
             }
-            toastr.success("{{ session('message') }}"); <
-            div class = "alert alert-success" >
-            {{ session('message') }} <
-                /div>
+            toastr.success("{{ session('message') }}"); 
+            // <div class = "alert alert-success" >
+            //     {{ session('message') }}
+            // </div>
         @endif
+
         @if ($errors->any())
 
             @foreach ($errors->all() as $error)
@@ -184,6 +185,7 @@
                     success: function(data) {
                         if (!data.length) {
                             var result = [{
+                                //label: "Empreendimento não encontrado",
                                 label: "Empreendimento não encontrado, clique aqui para cadastrar !",
                                 value: "{{ url('pae/empnto/create') }}"
                             }];
@@ -205,8 +207,8 @@
                 if (ui.item.label === "Empreendimento não encontrado, clique aqui para cadastrar !") {
                     var result = confirm('deseja cadastrar um Empreendimento ?');
                     if (result) {
-                        $('#empntoModal').modal('show');
-                        //window.location.href = ui.item.value + "?voltar=protocolo";
+                        //$('#empntoModal').modal('show');
+                        window.location.href = ui.item.value + "?voltar=protocolo";
                     }
                 } else {
                     $('#empnto_search').val(ui.item.label);

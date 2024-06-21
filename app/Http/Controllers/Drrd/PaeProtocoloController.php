@@ -28,9 +28,8 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
 
-        //dd(!auth()->user()->can('paeusuario'));
 
-        if (!auth()->user()->can('paeusuario')) {
+        if (auth()->user()->can('paeusuario')) {
             return $this->minerar($request);
         } else {
             /*bloquear acesso do empreendedor */
@@ -565,4 +564,27 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
             return redirect()->back();
         }
     }
+
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function encerrar(PaeProtocolo $paeProtocolo){
+
+        //dd($paeProtocolo->id);
+
+        $paeProtocolo->status = "Finalizado";
+
+        $paeProtocolo->save();
+
+        return redirect('pae/protocolo')->with('message', 'Registro Alterado com Sucesso ');
+
+
+
+
+    }
+
+
 }

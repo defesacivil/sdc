@@ -35,10 +35,11 @@
                 <!-- /.login-logo -->
                 <div class="card card-outline card-primary">
                     <div class="card-header text-center">
-                        <a href="../../index.php" class="h1"><b>ACESSO MINERADORAS</b></a>
+                        
+                        <a href="#" class="h1"><b>ACESSO MINERADORAS</b></a>
                     </div>
                     <div class="card-body">
-                        <p class="login-box-msg">Faça login para iniciar sua sessão</p>
+                        <p class="login-box-msg">Aqui, nessa página o acesso é feito <b class="text-danger"><i>SOMENTE</i></b> para Usuários do <b>PAE - Plano de Ação de Emergência de Barragens</b></p>
                         
                         <form action="{{ url('login') }}" method="post">
                             @csrf

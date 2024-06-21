@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('auth')->group(function(){
     Route::post('login', [\App\Http\Controllers\Auth\Api\LoginController::class, 'login']);  
 
+    Route::post('cisterna/sinc', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'processar']);  
+
     //Route::post('cpf', [\App\Http\Controllers\Auth\Api\UserController::class, 'cpf']);  
 
     Route::get('user', [\App\Http\Controllers\Auth\Api\UserController::class, 'listAll']);  

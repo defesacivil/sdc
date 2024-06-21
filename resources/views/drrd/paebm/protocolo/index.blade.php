@@ -31,29 +31,35 @@
                     @endforeach
                 </ul>
             @endif
-
             <div class="row">
-                <div class="p-3 col-12">
-
-                    @if(!auth()->user()->hasRole('paeusuario'))
+                <div class="p-3 col-12">      
+                    
+                    
+                    @if(auth()->user()->hasAnyRole(['cedec']))
                         <a class="btn btn-primary" href="{{ url('pae/protocolo/create') }}"
                         title="Inserir novo Registro">+ Novo</a>
                         
-                        <a class='btn btn-warning'>Pesquisar</a>
+                        <a class='btn btn-warning' id="btnShowSearch">Pesquisar</a>
                     @endif
                     <a class='btn btn-success' href='{{ url('drrd') }}'>Voltar</a>
                     <p class="text-center">
                         <legend>Protocolo PAEBM</legend>
                     </p>
+                    <i class="text-light bg-danger">Processo Finalizado Encerrado</i>
+                    <i class="text-light bg-warning">Prazo de Vencimento Próximo</i>
                 </div>
             </div>
+
+            {{-- DIV PESQUISA --}}
+            <fieldset class="p-3" id="divsearch">
+                
             <div class="p-2 row">
-                <div class="col">
-                    <label for="search">Busca: </label> (nome da Barragem ou parte do nome / Nr Protocolo )
+                <div class="col-4">
+                    <label for="search">Pesquisar: </label> (nome da Barragem ou parte do nome / Nr Protocolo )
                     {{ Form::open(['url' => 'pae/protocolo', 'method' => 'POST']) }}
                     {{ Form::token() }}
 
-                    {{ Form::text('search', '', ['class' => 'form form-control col-md-6', 'id' => 'search']) }}
+                    {{ Form::text('search', '', ['class' => 'form form-control', 'id' => 'search']) }}
                 </div>
             </div>
             <div class="p-2 row" id="dtSearch">
@@ -74,6 +80,7 @@
 
                 {{ Form::close() }}
             </div>
+            </fieldset>
 
             <div class="p-2 row">
                 <div class="col">
@@ -107,9 +114,19 @@
 
                                 $cor = '';
                                 $title = '';
-                                if ($dif <= 5) {
-                                    $cor = 'table-danger';
+                                if ( ($dif <= 5) && ($dif > 0) ) {
+                                    $cor = 'bg-warning';
                                     $title = 'Falta' . $dif . ' dia(s) para o fim da validade deste PAE !';
+                                }elseif ($dif < 0) {
+                                    $dif = 0;
+                                    $cor = 'bg-warning';
+                                    $title = 'Protocolo de PAE vencido !';
+                                }
+                                
+                                if ($protocolo->status == "Finalizado") {
+                                    $cor = 'text-light bg-danger';
+                                    $title = 'Protocolo Finalizado / Encerrado';
+
                                 }
 
                             @endphp
@@ -148,7 +165,7 @@
                                 <td class='{{ $cor }}' title='{{ $title }}'>
                                     {{-- @php
                                         if (true) {
-                                            $aviso = "<img width='20' src='" . asset('imagem/icon/aviso.png') . "' title='Exite(m) notificações que estão prestes a vencer verifique !'> |";
+                                            $aviso = "<img width='20' src='" . asset('imagem/icon/aviso.png') . "' title='Exite(m) notificações que estão prestes a vencer verifique !'>|";
                                         } else {
                                             $aviso = '';
                                         }
@@ -156,19 +173,22 @@
                                     {!! $aviso !!} --}}
 
                                     {{-- $protocolo->getNotificacao(4) --}}
-                                    <a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a> |
+                                    |<a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a>
 
                                     {{-- editar --}}
-                                    <a href='{{ url('pae/protocolo/edit/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/editar.png') }}'></a> |
+                                    |<a href='{{ url('pae/protocolo/edit/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/editar.png') }}'></a> 
 
-                                    {{-- Apagar --}}
-                                    <!--<a onclick="return confirm('Deseja realmente apagar esse Registro !')" href='#'><img  width='25' src='{{ asset('imagem/icon/delete.png') }}'></a>--> |
+                                    {{-- Deletar --}}
+                                    <!-- |<a onclick="return confirm('Deseja realmente apagar esse Registro !')" href='#'><img  width='25' src='{{ asset('imagem/icon/delete.png') }}'></a>-->
+                                    
+                                    {{-- Encerrar --}}
+                                    |<a onclick="return confirm('Deseja realmente Encerrar esse protocolo ?')" href='{{ url('pae/protocolo/encerrar/'. $protocolo->id) }}'><img  width='25' src='{{ asset('imagem/icon/icon_deletar.png') }}'></a>
 
                                     {{-- show --}}
-                                    <a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> |
+                                    |<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> 
 
                                     {{-- notificações --}}
-                                    <a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> |
+                                    {{--|<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a>| --}}
 
                                 </td>
                             </tr>
@@ -177,16 +197,16 @@
                             <tr class='{{ $cor }} collapse' title='{{ $title }}'>
                                 <td colspan="10">
                                     <div class="row border">
-                                        <div class="col-8">
+                                        <div class="col-12">
                                             <p class="text-center font-weight-bold">Análise Técnica PAE</p>
-                                            <table class="table table-sm">
+                                            <table class="table table-sm table-bordered">
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Data</th>
-                                                    <th>Status</th>
-                                                    <th>Obs</th>
-                                                    <th>Usuário</th>
-                                                    <th>Notificações</th>
+                                                    <th class="table-dark text-center">#</th>
+                                                    <th class="table-dark text-center">Data</th>
+                                                    <th class="table-dark text-center">Status</th>
+                                                    <th class="table-dark text-center">Obs</th>
+                                                    <th class="table-dark text-center">Usuário</th>
+                                                    <th class="table-dark text-center">Notificações</th>
                                                 </tr>
 
 
@@ -200,11 +220,11 @@
                                                         <td>
                                                             @if (count($analise->notificacoes) > 0)
                                                                 <table class="table-bordered">
-                                                                    <tr>
-                                                                        <td>#</td>
-                                                                        <td>Data</td>
-                                                                        <td>Dt. Devolutiva</td>
-                                                                        <td>Sei</td>
+                                                                    <tr class="text-light bg-dark">
+                                                                        <td class="text-center">#</td>
+                                                                        <td class="text-center">Data</td>
+                                                                        <td class="text-center">Dt. Devolutiva</td>
+                                                                        <td class="text-center">Sei</td>
                                                                     </tr>
                                                                     @foreach ($analise->notificacoes as $key1 => $notificacao)
                                                                         <tr>
@@ -282,6 +302,12 @@
 @section('code')
     <script>
         $(document).ready(function() {
+
+            $("#divsearch").hide();
+            
+            $("#btnShowSearch").click(function(){
+                $("#divsearch").toggle();
+            });
 
             //$(".default_col").addClass('collapsed');
 
