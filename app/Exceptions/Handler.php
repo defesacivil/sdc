@@ -44,17 +44,24 @@ class Handler extends ExceptionHandler
         $message1 = $exception->getMessage();
 
         //dd('handle');
+
+        //dd($message1);
         
         
         // Acesso das mineradoras
         if (($message1 == "Unauthenticated.") && ($request->getRequestUri('/pae/mineradora'))) {
-            
             //dd('acesso mineradora');
             return response()->view('auth.login', ['message' => $message1], 404);
             
         } else if ($message1 == "Unauthenticated.") {
+        
             return response()->view('errors/noAuth', ['message' => $message1], 500);
-        } else {
+        
+        } else if($message1 == "CSRF token mismatch.") {
+            
+            return response()->view('auth.login', ['message' => $message1], 404);
+            
+        }else {
 
             if ($this->isHttpException($exception)) {
 

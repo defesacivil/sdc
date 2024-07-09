@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="{{asset('vendor/admin-lte/adminlte.min.css')}}">
     <style>
         body {
-            background-image: url('{{ url('imagem/background/barragem.png') }}');
-            background-image: url('{{ url('imagem/background/background_chuva.png') }}');
+            background-image: url('{{ url('imagem/background/barragem.jpg') }}');
+            /* background-image: url('{{ url('imagem/background/background_chuva.png') }}'); */
             background-repeat: no-repeat;
             background-size: cover;
 
@@ -49,7 +49,7 @@
 
                                 <input type="cpf" name="cpf"
                                     class="form-control @error('cpf') is-invalid @enderror" value="{{ old('cpf') }}"
-                                    placeholder="CPF" autofocus>
+                                    placeholder="CPF" autofocus maxlength="11">
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">

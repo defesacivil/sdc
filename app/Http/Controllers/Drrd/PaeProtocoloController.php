@@ -28,6 +28,8 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
 
+        //dd(auth()->user()->getRoleNames(), auth()->user()->can('redec'), auth()->user()->getPermissionNames());
+
 
         if (auth()->user()->can('paeusuario')) {
             return $this->minerar($request);

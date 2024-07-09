@@ -15,23 +15,23 @@
 @section('content')
 
 
-    <div class="col-md-12">
+    <div class="col-12">
         <div class="row">
-            <p class="text-center"><a href='#' class='btn btn-primary'>Voltar</a></p>
+            <p class="text-center"><a href='{{ url('pae/user') }}' class='btn btn-primary'>Voltar</a></p>
             <p class="text-center">
                 <legend>Cadastro Usuário Externo (Vinculado ao Empreendedor)</legend>
             </p>
         </div>
         
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-2 col-md-2"></div>
+            <div class="col-12 col-md-8">
                 <form action="{{ url('pae/users/store') }}" method="POST" name="frmCreateUser" id="frmCreateUser">
                     
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                     <label>Empreendedor ( Mineradora )</label><br>
         
-                    <select name="selEmpreendedor" id="selEmpreendedor" class="form form-control">
+                    <select name="selEmpreendedor" id="selEmpreendedor" class="form form-control form-select">
         
                         <option value="2">ANGLO</option>
         
@@ -61,7 +61,7 @@
                     <input type="submit" class="btn btn-success" name="btn" value="Salvar">
                 </form>
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-2 col-md-2"></div>
         </div>
 
 

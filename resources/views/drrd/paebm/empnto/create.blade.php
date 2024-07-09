@@ -43,14 +43,16 @@
                         {{ Form::text('nome', '', ['class' => 'form form-control', 'value' => old('nome')]) }}
                     </div>
                 </div>
-                <div class='col'>
-                    {{ Form::label('Empreendedor', '') }}:
-                    {{ Form::text('empdor_search', '', ['class' => 'form form-control', 'id' => 'empdor_search']) }}
-                    {{ Form::hidden('pae_empdor_id', '', ['id' => 'pae_empdor_id']) }}
+                <div class="row p-2">
+                    <div class='col'>
+                        {{ Form::label('Empreendedor', 'Empreendedor ( Digite parte do nome para fazer a Busca)') }}:
+                        {{ Form::text('empdor_search', '', ['class' => 'form form-control', 'id' => 'empdor_search']) }}
+                        {{ Form::hidden('pae_empdor_id', '', ['id' => 'pae_empdor_id']) }}
+                    </div>
                 </div>
                 <div class='p-2 row'>
                     <div class="col">
-                        {{ Form::label('Município', '') }}:
+                        {{ Form::label('Município', 'Município ( Digite parte do nome para fazer a busca)') }}:
                         {{ Form::text('municipio_search', '', ['class' => 'typeahead form form-control', 'id' => 'municipio_search']) }}
                         {{ Form::hidden('municipio_id', '', ['id' => 'municipio_id']) }}
                     </div>

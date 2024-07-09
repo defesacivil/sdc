@@ -16,6 +16,9 @@
 @section('content')
     <div class="row flex-fill">
 
+
+        
+
         <div class="col-md-12">
 
             @inject('protocolo', 'App\Models\Drrd\PaeProtocolo')
@@ -172,18 +175,21 @@
                                     @endphp
                                     {!! $aviso !!} --}}
 
+                                    @can('cedec')
+                                        
                                     {{-- $protocolo->getNotificacao(4) --}}
                                     |<a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a>
-
+                                    
                                     {{-- editar --}}
                                     |<a href='{{ url('pae/protocolo/edit/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/editar.png') }}'></a> 
-
+                                    
                                     {{-- Deletar --}}
                                     <!-- |<a onclick="return confirm('Deseja realmente apagar esse Registro !')" href='#'><img  width='25' src='{{ asset('imagem/icon/delete.png') }}'></a>-->
                                     
                                     {{-- Encerrar --}}
                                     |<a onclick="return confirm('Deseja realmente Encerrar esse protocolo ?')" href='{{ url('pae/protocolo/encerrar/'. $protocolo->id) }}'><img  width='25' src='{{ asset('imagem/icon/icon_deletar.png') }}'></a>
-
+                                    
+                                    @endcan
                                     {{-- show --}}
                                     |<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> 
 

@@ -109,7 +109,7 @@ class AuthenticatedSessionController extends Controller
 
             if(auth()->user()->tipo == 'externo') {
                 
-                return redirect(route('pae/mineradora'));
+                return redirect('pae/mineradora');
             }else {
                 //dd(auth()->user());
                 return redirect()->intended(RouteServiceProvider::HOME);
@@ -118,12 +118,15 @@ class AuthenticatedSessionController extends Controller
 
         }else {
 
-            dd(auth()->attempt($request->only(['cpf', 'password'])));
+
+            //redirect()->intended(RouteServiceProvider::HOME);
+
+            //dd(auth()->attempt($request->only(['cpf', 'password'])));
 
             Log::channel('usuario')->info('Login de usuario Desativado', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
-            $this->destroy($request);
-            Session::flash('message', "Usuário não está ativo ! \n Gentileza aguardar a ativação ou envie um email para sdc@defesacivil.mg.gov.br");
-            //return redirect('/');
+            //$this->destroy($request);
+            //Session::flash('message', "Usuário não está ativo ! \n Gentileza aguardar a ativação ou envie um email para sdc@defesacivil.mg.gov.br");
+            return redirect(route('login'));
         }
 
         

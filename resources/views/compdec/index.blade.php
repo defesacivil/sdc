@@ -37,15 +37,17 @@
             </div>
         @endcan
 
-        <div class="row ">
 
-            <div class="col-md-6 divbuscar">
+        <!-- INICIO BODY -->
+        <div class="row p-3">
 
-                @can('cedec')
+            @hasrole('cedec')
+            <div class="col divbuscar border border-secondary rounded">
+
                     {{ Form::open(['url' => 'compdec']) }}
                     {{ Form::token() }}
                     <br>
-                    {{ Form::label('txtBusca', 'Buscar Município Compdec') }} :
+                    {{ Form::label('txtBusca', 'Pesquisar Município') }} :
                     {{ Form::text('txtBusca', '', ['class' => 'form form-control form-control-sm']) }}
                     <br>
 
@@ -54,15 +56,17 @@
                     {{ Form::close() }}
 
                     <br>
-                @endcan
+
+                @endhasrole
+                
 
             </div>
+            <div class="row p-3">
 
             @can('cedec')
 
                 @if (isset($compdecs))
-                    <div class="row p-3">
-                        <div class="col">
+                        <div class="col text-center">
 
                             <table class='table table-bordered table-sm table-striped'>
                                 <tr>
@@ -93,50 +97,82 @@
 
                     </div>
                 @endif
-                <div class="row">
+                <div class="row p-3">
 
                     {{-- Com Compdec --}}
-                    <div class="col text-center">
-                        <h class="text-primary">Municípios com COMPDEC</h>
-                        <h4 class="text-primary">{{ $ativa }} / {{ number_format(($ativa / 853) * 100, 1) }}%</h4>
+                    <div class="col">
+                        <div class="card mx-auto text-white bg-success mb-3" style="max-width: 18rem;">
+                            <div class="card-header">COMPDEC ATIVAS</div>
+                            <div class="card-body">
+                                <h4>
+                                    <p class="text-center">{{ $ativa }} <br> {{ number_format(($ativa / 853) * 100, 1) }}%</p>
+                                </h4>
+                            </div>
+                        </div>
                     </div>
+
 
                     {{-- Sem compodec --}}
-                    <div class="col text-center">
-                        <h class="text-danger">Municípios Sem COMPDEC</h>
-                        <h4 class="text-danger">{{ $inativa }} / {{ number_format(($inativa / 853) * 100, 1) }}%</h4>
+                    <div class="col">
+                        <div class="card mx-auto text-white bg-success mb-3" style="max-width: 18rem;">
+                            <div class="card-header">COMPDEC INATIVAS</div>
+                            <div class="card-body">
+                                <h4>
+                                    <p class="text-center">{{ $inativa }} <br> {{ number_format(($inativa / 853) * 100, 1) }}%</p>
+                                </h4>
+                            </div>
+                        </div>
                     </div>
+
 
                     {{-- Plancom --}}
-                    <div class="col text-center">
-                        <h>Municípios PlanCon</h>
-                        <h4>{{ $plancon }} / {{ number_format(($plancon / 853) * 100, 1) }}%</h4>
-                    </div>
-                    <br>
-                </div>
-                <hr>
-                <div class="row">
-                    {{-- NupDec --}}
-                    <div class="col text-center">
-                        <h>Municípios Com Nupdec</h>
-                        <h4>{{ $nupdec }} / {{ number_format(($nupdec / 853) * 100, 1) }}%</h4>
-                    </div>
-                    <div class="col text-center">
-                        <h>Quantidade Total de Nupdec</h>
-                        <h4>{{ $totalNupdec }} </h4>
+                    <div class="col">
+                        <div class="card ms-auto text-white bg-success mb-3" style="max-width: 18rem;">
+                            <div class="card-header">PLANO DE CONTINGÊNCIA</div>
+                            <div class="card-body">
+                                <h4>
+                                    <p class="text-center">{{ $plancon }} <br> {{ number_format(($plancon / 853) * 100, 1) }}%</p>
+                                </h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div class="row">
+                    {{-- NupDec --}}
+                    <div class="col-6 text-center">
+                        <div class="card mx-auto text-white bg-success mb-3" style="max-width: 18rem;">
+                            <div class="card-header">MUNICÍPIOS COM NUPDEC</div>
+                            <div class="card-body">
+                                <h4>
+                                    <p class="text-center">{{ $nupdec }} <br> {{ number_format(($nupdec / 853) * 100, 1) }}%</p>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- NupDec --}}
+                    <div class="col-6 text-center">
+                        <div class="card mx-auto text-white bg-success mb-3" style="max-width: 18rem;">
+                            <div class="card-header">TOTAL NUPDEC</div>
+                            <div class="card-body">
+                                <h4>
+                                    <p class="text-center">{{ $totalNupdec }} <br>&nbsp;</p>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endcan
 
     </div>
     </div>
-    <div class="row" id="divrelatorio">
+    {{-- <div class="row" id="divrelatorio">
         <div class="col-12">
             Relatorios
         </div>
-    </div>
+    </div> --}}
 
     @can('cedec')
         {{-- <div class="p-3 row div">
@@ -179,7 +215,7 @@
         $(document).ready(function() {
 
 
-            //$(".divbuscar").hide();
+            $(".divbuscar").hide();
             //$("#divrelatorio").hide();
 
 

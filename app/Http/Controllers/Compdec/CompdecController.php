@@ -27,7 +27,8 @@ class CompdecController extends \App\Http\Controllers\Controller
     public function index()
     {
 
-        if (request()->user()->can('cedec')) {
+
+ if (request()->user()->can('cedec')) {
             $method = request()->method();
             $active_tab = "";
 
@@ -38,19 +39,23 @@ class CompdecController extends \App\Http\Controllers\Controller
                 ->groupBy("com_ativa")
                 ->get();
 
-            $nupdec = $situacao = DB::table("com_comdec")
-                ->select(DB::raw('count(id) as qtd'))
+            //dd($situacao);
+
+            $nupdec = DB::table("com_comdec")
+                ->select(DB::raw('count(id) as qtd'), DB::raw('sum(qtd_nudec) as qtd_nudec'))
                 ->where('id_municipio', '!=', '7221')
                 ->where('nudec', '=', '1')
                 ->get();
+
+                //dd($nupdec);
 
             if ($method == 'GET') {
                 return view('compdec.index', [
                     'ativa'   => $situacao[1]->qtd,
                     'inativa' => $situacao[0]->qtd,
                     'plancon' => 0,
-                    'nupdec' => $nupdec,
-                    'totalNupdec' => 0,
+                    'nupdec' => $nupdec[0]->qtd,
+                    'totalNupdec' => $nupdec[0]->qtd_nudec,
                 ]);
             } elseif ($method == 'POST') {
 

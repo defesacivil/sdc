@@ -19,7 +19,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-12">
         <form action="#" method="POST" name="frmPesquisa" id="frmPesquisa">
             <label>Pesquisa</label><br>
             <input type="text" class="form form-control" name="pesquisa" id="pesquisa"><br>
@@ -29,9 +29,9 @@
 </div>
     <div class="row">
         <div class="row">
-            <div class="col p-3">
+            <div class="col-12 p-3">
                 <p class='text-center'><a class='btn btn-success' href='dashboard'>Voltar</a></p><br>
-                <p class="text-center"><legend>PAEBM - PROTOCOLO</legend></p>
+                <p class="text-center"><legend>PAE - PROTOCOLO</legend></p>
             </div>
         </div>
         <div class="row">
