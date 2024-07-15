@@ -84,7 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
     # USUARIO ###################
 
     # index
-    Route::get('usuario', 'App\Http\Controllers\Usuario\UserController@index')->can('cedec');
+    Route::match(["GET", "POST"], 'usuario', 'App\Http\Controllers\Usuario\UserController@index')->can('cedec');
     
     # user autocomplete
     Route::get('usuario/autocomplete', 'App\Http\Controllers\Usuario\UserController@user_autocomplete')->can('cedec')->name('user.autocomplete');

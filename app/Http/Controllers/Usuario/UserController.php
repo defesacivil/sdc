@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Usuario;
 use \App\Models\User as UserC;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Contracts\Permission;
 use Spatie\Permission\Models\Role;
 
 class UserController extends \App\Http\Controllers\Controller
@@ -17,18 +18,36 @@ class UserController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
 
-        $users = UserC::with('roles')->get();  
-        $roles = Role::with('users', 'permissions')->get();  
+        if ($request->method() == 'GET') {
 
+            return view(
+                'config/usuario/user/index');
 
-        return view(
-            'config/usuario/user/index',
-            [
-                'users' => $users,
-                'roles' => $roles,
-            ]
-        );
-  
+        } elseif($request->method() == 'POST') {
+
+            $users = UserC::with('roles',  'permissions')
+                    ->where('name', 'like', '%'.$request->get('search').'%')
+                    ->get();
+
+        //dd($users->roles());
+
+        ///dd($user->hasAllRoles('cedec'));
+
+            // $users = UserC::with('roles', 'permissions')
+            // ->where('users.name', 'like', '%'.$request->get('search').'%')
+            // ->get();
+
+            // $roles = Role::with('users', 'permissions')
+            //         ->where('roles.users.name', 'like', '%'.$request->get('search').'%')
+            //             ->get();
+
+            return view(
+                'config/usuario/user/index',
+                [
+                    'users' => $users,
+                ]
+            );
+        }
     }
 
     /**
@@ -118,14 +137,9 @@ class UserController extends \App\Http\Controllers\Controller
     public function user_autocomplete(Request $request)
     {
         $data = User::select("user.name as value")
-                    ->where('user.name', 'LIKE', '%' . $request->get('search') . '%')
-                    ->get();
+            ->where('user.name', 'LIKE', '%' . $request->get('search') . '%')
+            ->get();
 
         return response()->json($data);
     }
-    
-
-
-    
-
 }

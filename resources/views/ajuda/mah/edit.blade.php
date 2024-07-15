@@ -236,16 +236,16 @@
                             </p>
                             <div class="row">
                                 <div class="col-md-3"></div>
-                                <div class="col">
+                                <div class="col-12">
 
                                     <table class="table table-sm table-bordered" id="tbl_material">
                                         <tr>
-                                            <td width="10%" class="text-center">#</td>
+                                            <td width="5%" class="text-center">#</td>
                                             {{-- <td width="20%">Código</td> --}}
-                                            <td width="20%" class="text-center">Material</td>
+                                            <td width="40%" class="text-center">Material</td>
                                             <td width="20%" class="text-center">Quantidade</td>
                                             <td width="20%" class="text-center">Qtd Famílias Atendidas</td>
-                                            <td width="20%" class="text-center">Opções</td>
+                                            <td width="10%" class="text-center">Opções</td>
 
                                         </tr>
 
@@ -287,7 +287,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group col-md-12">
                                                         <label>Nome Material</label>
-                                                        <select class="form form-control form-control-sm" id="material_id" name="material_id">
+                                                        <select class="form form-control form-control-sm form-select" id="material_id" name="material_id">
                                                             <option></option>
                                                             @foreach ($materiais_list as $material)
                                                                 <option value={{ $material['id'] }}>{{ $material['name'] }}</option>
@@ -404,7 +404,7 @@
                                                 <td>{{ $despacho->tramit_parecer }}</td>
                                                 <td>
                                                     @can('cedec')
-                                                        <button type='button' name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
+                                                        <button type='button' class="btn" name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
                                                         <a href='{{ route('parecer.deletar', $despacho->id) }}' onclick="return confirm('Deseja Apagar o Registro !')" name='deletarDespacho'><img src={{ asset('imagem/icon/delete.png') }}></a>
                                                     @endcan
                                                 </td>

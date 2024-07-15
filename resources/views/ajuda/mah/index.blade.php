@@ -23,7 +23,7 @@
                     
                     <!-- menu opções - novo | pesquisa |voltar-->
 
-                    Prezado Coordendor,
+                    {{-- Prezado Coordendor,
 
                     Para continuar a usar o sistema é necessário fazer as atualizações necessárias abaixo
                     <div class="table-responsive table-bordered">
@@ -42,20 +42,20 @@
                                 
                             </tbody>
                         </table>
-                    </div>
+                    </div> --}}
                     
                     <ul class="nav">
                         <li class="nav-item mr-1">
                             <a class="btn btn-success btn-sm" href="{{ url('ajuda') }}">Voltar</a>
                         </li>
                         <!-- ####### Acesso COMPDEC ###### -->
-                        @can('compdec')
+                        @hasRole('compdec')
                             <li class="nav-item mr-1">
                                 <a class="btn btn-primary btn-sm" href="{{ url('mah/pedido/create') }}"
                                     title="Inserir novo Registro">+
                                     Novo Registro</a>
                             </li>
-                        @endcan
+                        @endHasRole
                         <li class="nav-item mr-1">
 
                             <!-- #######  acesso CEDEC ####### -->
