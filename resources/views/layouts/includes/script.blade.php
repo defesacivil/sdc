@@ -39,24 +39,63 @@
         "progressBar": true,
         "showDuration": "800",
     }
+    // @if (Session::has('message'))
+    //     toastr.options = {
+    //         "closeButton": true,
+    //         "progressBar": true,
+    //         "showDuration": "800",
+    //     }
+
+    //     toastr.success("{{ session('message') }}");
+    //     // <div class = "alert alert-success" >
+    //     //     {{ session('message') }}
+    //     // </div>
+    // @endif
+
+    // @if (count($errors) > 0)
+    //     @foreach ($errors->all() as $error)
+    //         toastr.error("{{ $error }}");
+    //     @endforeach
+    // @endif
+
+    @dd(Session::get('message'))
+
     @if (Session::has('message'))
-        toastr.options = {
-            "closeButton": true,
-            "progressBar": true,
-            "showDuration": "800",
-        }
+            var type = "{{ Session::get('alert-type', 'info') }}"
+            switch (type) {
+                case 'info':
 
-        toastr.success("{{ session('message') }}");
-        // <div class = "alert alert-success" >
-        //     {{ session('message') }}
-        // </div>
-    @endif
+                    toastr.options.timeOut = 10000;
+                    toastr.info("{{ Session::get('message') }}");
+                    //var audio = new Audio('audio.mp3');
+                    //audio.play();
+                    break;
+                case 'success':
 
-    @if (count($errors) > 0)
-        @foreach ($errors->all() as $error)
-            toastr.error("{{ $error }}");
-        @endforeach
-    @endif
+                    toastr.options.timeOut = 10000;
+                    toastr.success("{{ Session::get('message') }}");
+                    //var audio = new Audio('audio.mp3');
+                    //audio.play();
+
+                    break;
+                case 'warning':
+
+                    toastr.options.timeOut = 10000;
+                    toastr.warning("{{ Session::get('message') }}");
+                    //var audio = new Audio('audio.mp3');
+                    //audio.play();
+
+                    break;
+                case 'error':
+
+                    toastr.options.timeOut = 10000;
+                    toastr.error("{{ Session::get('message') }}");
+                    //var audio = new Audio('audio.mp3');
+                    //audio.play();
+
+                    break;
+            }
+        @endif
 
 </script>
 <script>

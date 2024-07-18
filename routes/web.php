@@ -99,69 +99,67 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
+
+
     # CONFIG ######################
 
     # config - usuario 
     Route::get('config/usuario', 'App\Http\Controllers\Usuario\ConfigController@usuario');
 
 
-    # ROLE PERFIL 
-
-    # index
-    Route::get('role', 'App\Http\Controllers\Usuario\RoleDemController@index');
-
-    # index2 
-    Route::get('role/{id}', 'App\Http\Controllers\Usuario\RoleController@index1');
-
-    # form create
-    Route::get('config/role/create', 'App\Http\Controllers\Usuario\RoleController@create');
-
-    # form editar
-    Route::get('config/role/edit/{id}', 'App\Http\Controllers\Usuario\RoleController@edit');
-
-    # view 
-    Route::get('config/role/show/{id}', 'App\Http\Controllers\Usuario\RoleController@show');
-
-    # delete 
-    Route::get('config/role/delete/{id}', 'App\Http\Controllers\Usuario\RoleController@destroy');
-
-    # delete permissao do Perfil
-    Route::get('role/remove_permission/{role_id}', 'App\Http\Controllers\Usuario\RoleController@removepermission');
-
-    # gravar 
-    Route::post('config/role/store', 'App\Http\Controllers\Usuario\RoleController@store');
-
-    # gravar permissao no perfil (role)
-    Route::post('role/add_permission/store', 'App\Http\Controllers\Usuario\RoleController@addpermission');
-
-    # update
-    Route::put('config/role/update/{id}', 'App\Http\Controllers\Usuario\RoleController@update');
+    # ROLE 
+        # index perfil
+        Route::get('role', 'App\Http\Controllers\Usuario\RoleController@index');
+        # create
+        Route::get('config/role/create', 'App\Http\Controllers\Usuario\RoleController@create');
+        # gravar
+        Route::get('config/role/store', 'App\Http\Controllers\Usuario\RoleController@store');
+        # editar
+        Route::get('config/role/edit/{id}', 'App\Http\Controllers\Usuario\RoleController@edit');
+        # update
+        Route::put('config/role/update/{id}', 'App\Http\Controllers\Usuario\RoleController@update');
+        # view 
+        Route::get('config/role/show/{id}', 'App\Http\Controllers\Usuario\RoleController@show');
+        # delete 
+        Route::get('config/role/delete/{id}', 'App\Http\Controllers\Usuario\RoleController@destroy');
 
 
-    # PERMiSSAO ####################
+    # PERMISSION
 
-    # index
-    Route::get('permissao', 'App\Http\Controllers\Usuario\PermissionController@index');
-
-    # cadastro permissao 
-    Route::get('config/permissao/create', 'App\Http\Controllers\Usuario\PermissionController@create');
-
-    # view 
-    //Route::get('config/permissao/show/{id}', 'App\Http\Controllers\PermissionController@show');
-
-    # editar
-    Route::get('permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionController@edit');
-
-    # deletar
-    Route::get('config/permissao/delete/{id}', 'App\Http\Controllers\Usuario\PermissionController@destroy');
-
-    # gravar Permissao 
-    Route::post('config/permissao/store', 'App\Http\Controllers\Usuario\PermissionController@store');
-
-    # update
-    Route::put('config/permissao/update/{id}', 'App\Http\Controllers\Usuario\PermissionController@update');
+        # index
+        Route::get('permissao', 'App\Http\Controllers\Usuario\PermissionController@index');
+        # create 
+        Route::get('config/permissao/create', 'App\Http\Controllers\Usuario\PermissionController@create');
+        # gravar 
+        Route::post('config/permissao/store', 'App\Http\Controllers\Usuario\PermissionController@store');
+        # editar
+        Route::get('config/permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionController@edit');
+        # update
+        Route::put('config/permissao/update/{id}', 'App\Http\Controllers\Usuario\PermissionController@update');
+        # view 
+        Route::get('config/permissao/show/{id}', 'App\Http\Controllers\PermissionController@show');
+        # delete
+        Route::get('config/permissao/delete/{id}', 'App\Http\Controllers\Usuario\PermissionController@destroy');
 
 
+    # ROLE_USER #######################
+
+        #index
+        Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserDemController@index');
+
+        # adicionar usuario em perfil
+        Route::get('usuario/role/add/{id}', 'App\Http\Controllers\Usuario\RoleUserDemController@create')->can('cedec');
+
+        # store ( sincronizar )
+        Route::post('usuario/role/add/store', 'App\Http\Controllers\Usuario\RoleUserDemController@store');
+        # edit 
+        #não implementar
+        
+        # update
+        #não implementar
+        
+        # view 
+        #não implementar
 
 
 
@@ -170,50 +168,27 @@ Route::group(['middleware' => 'auth'], function () {
     # index
     Route::get('permission_role', 'App\Http\Controllers\Usuario\PermissionRoleController@index');
 
-    # create
-    Route::get('permission/role/create/{roler_id}/{user_id}', 'App\Http\Controllers\Usuario\PermissionRoleController@create')->name('permission/role/create');
+    # Adicionar permissao para usuario 
+    Route::get('usuario/permission/add/{id}', 'App\Http\Controllers\Usuario\PermissionUserController@create')->can('cedec');
 
-    # gravar Permissao 
-    Route::post('config/permission_role/store', 'App\Http\Controllers\Usuario\PermissionRoleController@store');
+    # gravar Permissao no usuario
+    Route::post('usuario/permission/add/store', 'App\Http\Controllers\Usuario\PermissionUserController@store');
 
     # view 
-    Route::get('config/permission_role/show/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@show');
+    #não implementar 
 
     # edit
-    Route::get('permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@edit');
+    #não implementar
 
     # update
-    Route::put('config/permission_role/update/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@update');
-
+    #não implementar
+    
     # deletar
-    Route::get('config/permission_role/delete/{id}', 'App\Http\Controllers\Usuario\PermissionRoleController@destroy');
+    #não implementar
 
 
 
-    # ROLE_USER #######################
-
-    #index
-    Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserDemController@index');
-
-    # add user
-    Route::get('role_add_user/{id}', 'App\Http\Controllers\Usuario\RoleController@adduser');
-
-    # add gravar
-    Route::post('role_add_user/store', 'App\Http\Controllers\Usuario\RoleUserController@store');
-
-    # edit 
-    Route::get('role_add_user/delete/{id}', 'App\Http\Controllers\Usuario\RoleUserController@destroy');
-
-    # view 
-    Route::get('role_user/show/{id}', 'App\Http\Controllers\Usuario\RoleUserController@show');
-
-    # update
-    Route::post('role_user/update', 'App\Http\Controllers\Usuario\RoleUserController@update');
-
-    ##### add perfil
-
-    # add perfil 
-    Route::post('role_user/usuario_perfil', 'App\Http\Controllers\Usuario\RoleUserController@user_roler');
+    
 
 
 

@@ -2,18 +2,19 @@
 
 namespace App\Models\Usuario;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\Permission\Models\Role;
 
-class PermissionRoleDem extends Model
+class PermissionUser extends Model
 {
-    protected $table = 'permission_role';
+    protected $table = 'model_has_permissions';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['permission_id', 'role_id'];
+    //protected $fillable = [ 'role_id', 'model_type', 'model_id'];
 
-    
     use HasFactory;
 
 
@@ -22,11 +23,11 @@ class PermissionRoleDem extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function permissionDem(): HasOne
+    public function roleUserDem(): HasOne
     {
-        return $this->hasOne(PermissionDem::class, 'id', 'permission_id');
+        return $this->hasOne(Role::class, 'id', 'role_id');
     }
 
 
-        
+    
 }

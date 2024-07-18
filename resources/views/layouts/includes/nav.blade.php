@@ -1,9 +1,8 @@
 <div class="col-12">
     <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <img width="50" src="{{ url('imagem/logo_sdc.png') }}">
+                    <img width="32" class="mb-2" src="{{ url('imagem/logo_sdc.png') }}">
                 </li>
                 <li class="nav-item">
                     <a href="{{ url('help') }}" class="nav-link" title="Documentação de Ajuda do SDC">Ajuda</a>
@@ -107,6 +106,7 @@
 
                 </form>
             </div>
+            
             <div class="text-left">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="mr-auto navbar-nav">
@@ -129,17 +129,15 @@
                                 @endphp
                                 
                                 @foreach ($permissions as $permission)
-                                    <div>- {{ ucfirst($permission->name) }}</div>
+                                    <div class="p-1">{{ ucfirst($permission->name) }}</div>
                                 @endforeach
                             </div>
                         </li>
                     </ul>
                 </div>
-
-
-
-
             </div>
-        </div>
+            <div class="p-2">
+                <img src="{{ asset('imagem/icon/user.png') }}" alt="" width="32" height="32" class="rounded-circle me-2">
+            </div>
     </nav>
 </div>

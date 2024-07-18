@@ -12,13 +12,13 @@
         text-decoration: none
     }
 
-    .breadcrumb {
-        /*background-color: #A9D0F5;*/
+    .breadcrumb,nav {
+         /* background-color: #CBF3F0; */
     }
 
     body {
         margin: 0 auto !important;
-        min-height: 400px !important;
+        /* min-height: 400px !important; */
         /* background-color: #A9D0F5; */
     }
 

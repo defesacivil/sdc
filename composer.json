@@ -20,6 +20,7 @@
         "nwidart/laravel-modules": "9.*",
         "sopamo/laravel-filepond": "^1.2",
         "spatie/laravel-permission": "^6.7",
+        "twbs/bootstrap-icons": "^1.11",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {

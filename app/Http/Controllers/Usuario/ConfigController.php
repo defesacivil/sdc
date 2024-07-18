@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Usuario;
 
-use App\Models\Role;
+//use App\Models\Role;
 use Illuminate\Http\Request;
 
 class ConfigController extends \App\Http\Controllers\Controller

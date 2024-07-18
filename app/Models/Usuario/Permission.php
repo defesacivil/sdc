@@ -5,7 +5,7 @@ namespace App\Models\Usuario;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PermissionDem extends Model
+class Permission extends Model
 {
     protected $fillable = [
         'name',
