@@ -58,7 +58,7 @@
     //     @endforeach
     // @endif
 
-    @dd(Session::get('message'))
+    
 
     @if (Session::has('message'))
             var type = "{{ Session::get('alert-type', 'info') }}"

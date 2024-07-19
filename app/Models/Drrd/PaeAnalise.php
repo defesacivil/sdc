@@ -38,7 +38,7 @@ class PaeAnalise extends Model
      */
     public function notificacoes()
     {
-        return $this->hasMany(PaeNotificacao::class,  'pae_analise_id');
+        return $this->hasMany(PaeNotificacao::class,  'pae_analise_id', );
     }
 
     /**

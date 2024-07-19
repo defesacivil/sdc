@@ -5,8 +5,8 @@
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            @can('cedec', 'redec')    
-            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            @can('cedec', 'redec')
+                <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
             @endcan
             <li class="breadcrumb-item active" aria-current="page">Drrd</li>
         </ol>
@@ -14,11 +14,8 @@
 @endsection
 
 @section('content')
-    <div class="row flex-fill">
 
-
-        
-
+    <div class="row">
         <div class="col-md-12">
 
             @inject('protocolo', 'App\Models\Drrd\PaeProtocolo')
@@ -35,13 +32,13 @@
                 </ul>
             @endif
             <div class="row">
-                <div class="p-3 col-12">      
-                    
-                    
-                    @if(auth()->user()->hasAnyRole(['cedec']))
+                <div class="p-3 col-12">
+
+
+                    @if (auth()->user()->hasAnyRole(['cedec']))
                         <a class="btn btn-primary" href="{{ url('pae/protocolo/create') }}"
-                        title="Inserir novo Registro">+ Novo</a>
-                        
+                            title="Inserir novo Registro">+ Novo</a>
+
                         <a class='btn btn-warning' id="btnShowSearch">Pesquisar</a>
                     @endif
                     <a class='btn btn-success' href='{{ url('drrd') }}'>Voltar</a>
@@ -55,34 +52,34 @@
 
             {{-- DIV PESQUISA --}}
             <fieldset class="p-3" id="divsearch">
-                
-            <div class="p-2 row">
-                <div class="col-4">
-                    <label for="search">Pesquisar: </label> (nome da Barragem ou parte do nome / Nr Protocolo )
-                    {{ Form::open(['url' => 'pae/protocolo', 'method' => 'POST']) }}
-                    {{ Form::token() }}
 
-                    {{ Form::text('search', '', ['class' => 'form form-control', 'id' => 'search']) }}
+                <div class="p-2 row">
+                    <div class="col-4">
+                        <label for="search">Pesquisar: </label> (nome da Barragem ou parte do nome / Nr Protocolo )
+                        {{ Form::open(['url' => 'pae/protocolo', 'method' => 'POST']) }}
+                        {{ Form::token() }}
+
+                        {{ Form::text('search', '', ['class' => 'form form-control', 'id' => 'search']) }}
+                    </div>
                 </div>
-            </div>
-            <div class="p-2 row" id="dtSearch">
-                <div class="p-2 col-4">
-                    <label>Período Inicial Entrada</label>
-                    <input type="date" class="form form-control col-6" name="dtInicio" id="dtInicio">
+                <div class="p-2 row" id="dtSearch">
+                    <div class="p-2 col-4">
+                        <label>Período Inicial Entrada</label>
+                        <input type="date" class="form form-control col-6" name="dtInicio" id="dtInicio">
+                    </div>
+                    <div class="p-2 col-4">
+                        <label>Período Final Entrada</label>
+                        <input type="date" class="form form-control col-6" name="dtFinal" id="dtFinal">
+                    </div>
                 </div>
-                <div class="p-2 col-4">
-                    <label>Período Final Entrada</label>
-                    <input type="date" class="form form-control col-6" name="dtFinal" id="dtFinal">
-                </div>
-            </div>
-            <div class="p-2 row">
-                <div class="col">
-                    {{ Form::submit('Pesquisa', ['class' => 'btn btn-outline-secondary']) }}
-                </div>
+                <div class="p-2 row">
+                    <div class="col">
+                        {{ Form::submit('Pesquisa', ['class' => 'btn btn-outline-secondary']) }}
+                    </div>
 
 
-                {{ Form::close() }}
-            </div>
+                    {{ Form::close() }}
+                </div>
             </fieldset>
 
             <div class="p-2 row">
@@ -90,7 +87,7 @@
                     <!-- BUTTON NOVO REGISTRO -->
 
                     <p class='text-right'>Total Registros : {{ $protocolos->count() }}</p>
-                    <table class="table table-bordered table-sm" id="listProtocolo">
+                    <table class="table table-bordered table-sm" id="listProtocolo" style="font-size: 12px">
                         <tr>
                             <th class="bg-dark text-light" data-prot="145">Protocolo</th>
                             <th class="bg-dark text-light">Nº. Sei</th>
@@ -117,19 +114,18 @@
 
                                 $cor = '';
                                 $title = '';
-                                if ( ($dif <= 5) && ($dif > 0) ) {
+                                if ($dif <= 5 && $dif > 0) {
                                     $cor = 'bg-warning';
                                     $title = 'Falta' . $dif . ' dia(s) para o fim da validade deste PAE !';
-                                }elseif ($dif < 0) {
+                                } elseif ($dif < 0) {
                                     $dif = 0;
                                     $cor = 'bg-warning';
                                     $title = 'Protocolo de PAE vencido !';
                                 }
-                                
-                                if ($protocolo->status == "Finalizado") {
+
+                                if ($protocolo->status == 'Finalizado') {
                                     $cor = 'text-light bg-danger';
                                     $title = 'Protocolo Finalizado / Encerrado';
-
                                 }
 
                             @endphp
@@ -155,7 +151,7 @@
                                     {{ !is_null($protocolo->ccpae_venc) ? \Carbon\Carbon::parse($protocolo->ccpae_venc)->format('d/m/Y') : $protocolo->ccpae_venc }} --}}
                                 </td>
                                 <td class='{{ $cor }}' title='{{ $title }}'>
-                                    {{ $protocolo->empreendimento->nome }} - <s><b>{{ $protocolo->empreendimento->empreendedor->nome }}</b></s></td>
+                                    {{ $protocolo->empreendimento->nome }} - <b>{{ $protocolo->empreendimento->empreendedor->nome }}</b></td>
 
 
                                 <td class='{{ $cor }}' title='{{ $title }}'>
@@ -176,25 +172,23 @@
                                     {!! $aviso !!} --}}
 
                                     @can('cedec')
-                                        
-                                    {{-- $protocolo->getNotificacao(4) --}}
-                                    |<a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a>
-                                    
-                                    {{-- editar --}}
-                                    |<a href='{{ url('pae/protocolo/edit/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/editar.png') }}'></a> 
-                                    
-                                    {{-- Deletar --}}
-                                    <!-- |<a onclick="return confirm('Deseja realmente apagar esse Registro !')" href='#'><img  width='25' src='{{ asset('imagem/icon/delete.png') }}'></a>-->
-                                    
-                                    {{-- Encerrar --}}
-                                    |<a onclick="return confirm('Deseja realmente Encerrar esse protocolo ?')" href='{{ url('pae/protocolo/encerrar/'. $protocolo->id) }}'><img  width='25' src='{{ asset('imagem/icon/icon_deletar.png') }}'></a>
-                                    
+                                        {{-- $protocolo->getNotificacao(4) --}}
+                                        |<a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a>
+
+                                        {{-- editar --}}
+                                        |<a href='{{ url('pae/protocolo/edit/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/editar.png') }}'></a>
+
+                                        {{-- Deletar --}}
+                                        |<a href='{{ url('pae/protocolo/deletar/' . $protocolo->id) }}' onclick="return confirm('Deseja realmente apagar esse Registro !')"><img width='25' src='{{ asset('imagem/icon/delete.png') }}'></a>
+
+                                        {{-- Encerrar --}}
+                                        |<a onclick="return confirm('Deseja realmente Encerrar esse protocolo ?')" href='{{ url('pae/protocolo/encerrar/' . $protocolo->id) }}'><img width='25' src='{{ asset('imagem/icon/icon_deletar.png') }}'></a>
                                     @endcan
                                     {{-- show --}}
-                                    |<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a> 
+                                    |<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a>
 
                                     {{-- notificações --}}
-                                    {{--|<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a>| --}}
+                                    {{-- |<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a>| --}}
 
                                 </td>
                             </tr>
@@ -205,7 +199,7 @@
                                     <div class="row border">
                                         <div class="col-12">
                                             <p class="text-center font-weight-bold">Análise Técnica PAE</p>
-                                            <table class="table table-sm table-bordered">
+                                            <table class="table table-sm table-bordered" style="font-size: 10px">
                                                 <tr>
                                                     <th class="table-dark text-center">#</th>
                                                     <th class="table-dark text-center">Data</th>
@@ -266,7 +260,7 @@
                         <tr>
                             <td colspan="10" class='text-center'>
                                 {{ $protocolos->appends(request()->all())->links() }}
-                                
+
                             </td>
                         </tr>
                     </table>
@@ -277,6 +271,7 @@
                 <div class="col"></div>
             </div>
         </div>
+
     </div>
 
     <!-- Modal -->
@@ -310,8 +305,8 @@
         $(document).ready(function() {
 
             $("#divsearch").hide();
-            
-            $("#btnShowSearch").click(function(){
+
+            $("#btnShowSearch").click(function() {
                 $("#divsearch").toggle();
             });
 

@@ -13,8 +13,7 @@
 
 @section('content')
 
-    <div class="row flex-fill">
-        <div class="col-md-12">
+        <div class="col col-md-12">
 
             <div class="row">
                 <div class="col p-3">
@@ -36,7 +35,7 @@
 
                 <div class='row p-2'>
                     <div class='col'>
-                        {{ Form::label('Parecer', '') }}:
+                        {{ Form::label('Parecer', '' , ['class'=>'fw-bolder']) }}:
                         {{ Form::textarea('parecer', '', ['class' => 'ckeditor form form-control', 'value' => old('parecer'), 'id' => 'wysiwyg-editor']) }}
                         {{ Form::hidden('user_id', Auth::user()->id) }}
                         {{ Form::hidden('pae_protocolo_id', $protocolo[0]->id) }}
@@ -44,20 +43,20 @@
                 </div>
                 <div class='row p-2'>
                     <div class='col'>
-                        {{ Form::label('anexo', '') }}:
+                        {{ Form::label('anexo', '', ['class'=>'fw-bolder']) }}:
                         {{ Form::file('anexo', ['class' => 'form form-control']) }}
                     </div>
                 </div>
                 <div class='row p-2'>
                     <div class='col'>
-                        {{ Form::label('obs', '') }}:
+                        {{ Form::label('obs', '', ['class'=>'fw-bolder']) }}:
                         {{ Form::textarea('obs', '', ['class' => 'form form-control', 'value' => old('obs'), 'rows' => '3']) }}
                     </div>
                 </div>
 
                 <div class='row p-2'>
-                    <div class='col'>
-                        {{ Form::label('tipo', '') }}:
+                    <div class='col col-md-6'>
+                        {{ Form::label('tipo', '', ['class'=>'fw-bolder']) }}:
                         {{ Form::select(
                             'tipo',
                             [
@@ -68,13 +67,12 @@
                                 '4' => 'Analise 4',
                             ],
                             '',
-                            ['class' => 'form form-control'],
+                            ['class' => 'form form-control form-select'],
                         ) }}
                     </div>
-                </div>
-                <div class='row p-2'>
-                    <div class='col'>
-                        {{ Form::label('situacao', '') }}:
+                
+                    <div class='col col-md-6'>
+                        {{ Form::label('situacao', '', ['class'=>'fw-bolder']) }}:
                         {{ Form::select(
                             'situacao',
                             [
@@ -84,7 +82,7 @@
                                 '2' => 'Em Regularização',
                             ],
                             '',
-                            ['class' => 'form form-control'],
+                            ['class' => 'form form-control form-select'],
                         ) }}
                     </div>
                 </div>
@@ -96,8 +94,9 @@
 
                 </div>
             </div>
-        </div>
     </div>
+
+    
         @stop
 
         @section('css')

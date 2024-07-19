@@ -66,7 +66,6 @@ class PaeProtocolo extends Model
     }
 
     
-
     public function getNotificacao($id_protocolo){
         
         $notificacao = PaeProtocolo::with('analise',

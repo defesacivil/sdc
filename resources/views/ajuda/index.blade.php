@@ -16,7 +16,7 @@
 @section('content')
 
     <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
-        <div class="row flex-fill">
+        <div class="row">
 
             <div class="col-md-12">
                 <p class='text-center'><a class='btn btn-success btn-sm' href='dashboard'>Voltar</a></p><br>

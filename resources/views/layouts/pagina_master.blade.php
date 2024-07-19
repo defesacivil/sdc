@@ -77,7 +77,7 @@
         var cabecalho = $('#cabecalho').height();
         var footer = $('#footer').height();
         var view = window.innerHeight;
-        $("#corpo").height(view - barra - cabecalho - footer);
+        $("#corpo").css('min-height',(view - barra - cabecalho - footer));
         
         
     </script>

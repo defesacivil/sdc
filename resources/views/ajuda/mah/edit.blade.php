@@ -49,416 +49,409 @@
 
 @section('content')
 
-    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
-        <div class="row flex-fill">
+    <div class="row">
 
-            {{-- <div class="col-md-3">
-            <ul id="treeDemo" class="ztree"></ul>
-        </div> --}}
+        <div class="col text-center">
+            @can('cedec')
+                <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a></p>
+            @endcan
 
-            <div class="col-md-12">
-                @can('cedec')
-                    <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a>
-                        
-                    @endcan
+            <!-- Acesso COMPDEC -->
+            @can('compdec')
+                  <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
+                  <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
+                  </p>
+            @endcan
 
-                    <!-- Acesso COMPDEC -->
-                    @can('compdec')
-                    <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
-                        <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
-                    @endcan
+            @can('mah', $pedido->municipio_id)
+                <legend>Edição Pedido Ajuda Humanitária - <i>({{ $pedido->municipio->nome }})</i></legend>
+                <p>Nº : {{ $pedido->numero }}-{{ substr($pedido->data_entrada_sistema, 0, 4) }}</p>
+                <p>Data Geração :<b> {{ \Carbon\Carbon::parse($pedido->data_entrada_sistema)->format('d/m/Y H:i:s') }}</b></p>
 
-                </p>
+                <ul class="nav nav-pills nav-fill" id="tab-mah" role="tablist">
 
-                @can('mah', $pedido->municipio_id)
-                    <legend>Edição Pedido Ajuda Humanitária - <i>({{ $pedido->municipio->nome }})</i></legend>
-                    <p>Nº : {{ $pedido->numero }}-{{ substr($pedido->data_entrada_sistema, 0, 4) }}</p>
-                    <p>Data Geração :<b> {{ \Carbon\Carbon::parse($pedido->data_entrada_sistema)->format('d/m/Y H:i:s') }}</b></p>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dados_pedidos-tab" id="-dados_pedidos-tab" data-toggle="tab"
+                            role="tab">Dados Pedido</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#material_pedido-tab" id="-material_pedido-tab" data-toggle="tab"
+                            role="tab">Materiais do Pedido</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#documentos-tab" id="-documentos-tab" data-toggle="tab"
+                            role="tab">Documentos/Arquivos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#despachos_analise-tab" id="-despachos_analise-tab" data-toggle="tab"
+                            role="tab">Despachos/Analises</a>
+                    </li>
 
-                    <ul class="nav nav-pills nav-fill" id="tab-mah" role="tablist">
+                </ul>
+                <br>
 
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#dados_pedidos-tab" id="-dados_pedidos-tab" data-toggle="tab"
-                                role="tab">Dados Pedido</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#material_pedido-tab" id="-material_pedido-tab" data-toggle="tab"
-                                role="tab">Materiais do Pedido</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#documentos-tab" id="-documentos-tab" data-toggle="tab"
-                                role="tab">Documentos/Arquivos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#despachos_analise-tab" id="-despachos_analise-tab" data-toggle="tab"
-                                role="tab">Despachos/Analises</a>
-                        </li>
+                <div class="tab-content" id="nav-tabContent">
+                    {{-- Dados do pedido --}}
+                    <div class="tab-pane fade show active" id="dados_pedidos-tab" role="tabpanel"
+                        aria-labelledby="dados_pedidos-tab">
+                        {{ Form::open(['url' => 'mah/pedido/update/' . $pedido->id]) }}
+                        {{ Form::token() }}
+                        {{ Form::hidden('numero', $pedido->numero . '-' . substr($pedido->data_entrada_sistema, 0, 4), ['class' => 'form form-control', 'readonly' => 'readonly']) }}
+                        {{ Form::hidden('data_entrada_sistema', $pedido->data_entrada_sistema, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => '6']) }}
 
-                    </ul>
-                    <br>
+                        <div class="row">
+                            <div class="col">
+                                <fieldset class="border p-2">
+                                    <legend class="w-auto">Dados Município</legend>
+                                    <div class="col p-3">
+                                        {{ Form::label('municipio_id', 'Município') }} :
+                                        {{ Form::text('nome_municicpio', $pedido->municipio->nome . ' - ' . $pedido->municipio_id, ['class' => 'form form-control', 'maxlength' => '110', 'readonly' => 'readonly']) }}
+                                        {{ Form::hidden('municipio_id', $pedido->municipio_id, ['maxlength' => '11', 'readonly' => 'readonly']) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('regiao_id', 'Mesorregião Região') }} :
+                                        {{ Form::text('nome_regiao', $pedido->mesoregiao->nome . ' - ' . $pedido->regiao_id, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
+                                        {{ Form::hidden('regiao_id', $pedido->regiao_id, ['class' => 'form form-control']) }}
+                                    </div>
 
-                    <div class="tab-content" id="nav-tabContent">
-                        {{-- Dados do pedido --}}
-                        <div class="tab-pane fade show active" id="dados_pedidos-tab" role="tabpanel"
-                            aria-labelledby="dados_pedidos-tab">
-                            {{ Form::open(['url' => 'mah/pedido/update/' . $pedido->id]) }}
-                            {{ Form::token() }}
-                            {{ Form::hidden('numero', $pedido->numero . '-' . substr($pedido->data_entrada_sistema, 0, 4), ['class' => 'form form-control', 'readonly' => 'readonly']) }}
-                            {{ Form::hidden('data_entrada_sistema', $pedido->data_entrada_sistema, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => '6']) }}
-
-                            <div class="row">
-                                <div class="col">
-                                    <fieldset class="border p-2">
-                                        <legend class="w-auto">Dados Município</legend>
-                                        <div class="col p-3">
-                                            {{ Form::label('municipio_id', 'Município') }} :
-                                            {{ Form::text('nome_municicpio', $pedido->municipio->nome . ' - ' . $pedido->municipio_id, ['class' => 'form form-control', 'maxlength' => '110', 'readonly' => 'readonly']) }}
-                                            {{ Form::hidden('municipio_id', $pedido->municipio_id, ['maxlength' => '11', 'readonly' => 'readonly']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('regiao_id', 'Mesorregião Região') }} :
-                                            {{ Form::text('nome_regiao', $pedido->mesoregiao->nome . ' - ' . $pedido->regiao_id, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
-                                            {{ Form::hidden('regiao_id', $pedido->regiao_id, ['class' => 'form form-control']) }}
-                                        </div>
-
-                                        {{-- <div class="col p-3">
+                                    {{-- <div class="col p-3">
                                             {{ Form::label('rdc_id', 'Região Defesa Civil') }} :
                                             {{ Form::text('nome_rdc', $pedido->rdc_id->nome . ' - ' . $pedido->rdc_id, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
                                             {{ Form::hidden('rdc_id', $pedido->rdc_id, ['class' => 'form form-control']) }}
                                         </div> --}}
-                                        <div class="col p-3">
-                                            {{ Form::label('nome_prefeito', 'Nome do Prefeito') }} :
-                                            {{ Form::text('nome_prefeito', $pedido->nome_prefeito, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('email_prefeito', 'Email do Prefeito') }} :
-                                            {{ Form::text('email_prefeito', $pedido->email_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('tel_prefeito', 'Telefone do Prefeito') }} :
-                                            {{ Form::text('tel_prefeito', $pedido->tel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('cel_prefeito', 'Celular do Prefeito') }} :
-                                            {{ Form::text('cel_prefeito', $pedido->cel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
-                                        </div>
-                                    </fieldset>
-                                </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('nome_prefeito', 'Nome do Prefeito') }} :
+                                        {{ Form::text('nome_prefeito', $pedido->nome_prefeito, ['class' => 'form form-control', 'readonly' => 'readonly']) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('email_prefeito', 'Email do Prefeito') }} :
+                                        {{ Form::text('email_prefeito', $pedido->email_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
+                                    </div>
+                                    <div class="col col-md-6 p-3">
+                                        {{ Form::label('tel_prefeito', 'Telefone do Prefeito') }} :
+                                        {{ Form::text('tel_prefeito', $pedido->tel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                    </div>
+                                    <div class="col col-md-6 p-3">
+                                        {{ Form::label('cel_prefeito', 'Celular do Prefeito') }} :
+                                        {{ Form::text('cel_prefeito', $pedido->cel_prefeito, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                    </div>
+                                </fieldset>
                             </div>
-                            <br><br>
+                        </div>
+                        <br><br>
 
-                            <div class="row">
-                                <div class="col">
-                                    <fieldset class="border p-2">
-                                        <legend class="w-auto">Dados Coordenador de Proteção e Defesa Civil</legend>
+                        <div class="row">
+                            <div class="col">
+                                <fieldset class="border p-2">
+                                    <legend class="w-auto">Dados Coordenador de Proteção e Defesa Civil</legend>
 
-                                        <div class="col p-3">
-                                            {{ Form::label('nome_coordenador', 'Nome do Coordenador') }} :
-                                            {{ Form::text('nome_coordenador', $pedido->nome_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '110', 'readonly' => 'readonly']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('email_coordenador', 'Email do Coordenador') }} :
-                                            {{ Form::text('email_coordenador', $pedido->email_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('tel_coordenador', 'Telefone do Coordenador') }} :
-                                            {{ Form::text('tel_coordenador', $pedido->tel_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('cel_coordenador', 'Celular do Coordenador') }} :
-                                            {{ Form::text('cel_coordenador', $pedido->cel_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
-                                        </div>
-                                    </fieldset>
-                                </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('nome_coordenador', 'Nome do Coordenador') }} :
+                                        {{ Form::text('nome_coordenador', $pedido->nome_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '110', 'readonly' => 'readonly']) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('email_coordenador', 'Email do Coordenador') }} :
+                                        {{ Form::text('email_coordenador', $pedido->email_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '50', 'readonly' => 'readonly']) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('tel_coordenador', 'Telefone do Coordenador') }} :
+                                        {{ Form::text('tel_coordenador', $pedido->tel_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('cel_coordenador', 'Celular do Coordenador') }} :
+                                        {{ Form::text('cel_coordenador', $pedido->cel_coordenador, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16', 'readonly' => 'readonly']) }}
+                                    </div>
+                                </fieldset>
                             </div>
-                            <br>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <fieldset class="border p-2">
-                                        <legend class="w-auto">Dados Sobre o Desastre</legend>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <fieldset class="border p-2">
+                                    <legend class="w-auto">Dados Sobre o Desastre</legend>
 
-                                        <div class="col p-3">
-                                            {{ Form::label('id_cobrade', 'Nome do Desastre do Cobrade') }} :
-                                            {{ Form::label('cobrade_id', 'Código Cobrade') }}:
-                                            {{ Form::select('cobrade_id', $optionCobrade, $pedido->cobrade_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'cobrade_id', 'placeholder' => 'Código Brasileiro de Desastre', 'data-cobrade_id' => '']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('pop_atendida', 'População Atendida') }} :
-                                            {{ Form::text('pop_atendida', $pedido->pop_atendida, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
-                                        </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('id_cobrade', 'Nome do Desastre do Cobrade') }} :
+                                        {{ Form::label('cobrade_id', 'Código Cobrade') }}:
+                                        {{ Form::select('cobrade_id', $optionCobrade, $pedido->cobrade_id, ['class' => 'js-example-basic-single form form-control', 'id' => 'cobrade_id', 'placeholder' => 'Código Brasileiro de Desastre', 'data-cobrade_id' => '']) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('pop_atendida', 'População Atendida') }} :
+                                        {{ Form::text('pop_atendida', $pedido->pop_atendida, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                    </div>
 
-                                        <div class="col p-3">
-                                            {{ Form::label('decreto_se_ecp_vig', 'Existe decreto vigente ?') }} :
-                                            {{ Form::select('decreto_se_ecp_vig', ['0' => 'Não', '1' => 'Sim'], $pedido->decreto_se_ecp_vig, [
-                                                'class' => 'form form-control',
-                                                'required' => 'required',
-                                                'maxlength' => '16',
-                                            ]) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('numero_decreto', 'Número do Decreto') }} :
-                                            {{ Form::text('numero_decreto', $pedido->numero_decreto, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
-                                        </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('decreto_se_ecp_vig', 'Existe decreto vigente ?') }} :
+                                        {{ Form::select('decreto_se_ecp_vig', ['0' => 'Não', '1' => 'Sim'], $pedido->decreto_se_ecp_vig, [
+                                            'class' => 'form form-control',
+                                            'required' => 'required',
+                                            'maxlength' => '16',
+                                        ]) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('numero_decreto', 'Número do Decreto') }} :
+                                        {{ Form::text('numero_decreto', $pedido->numero_decreto, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                    </div>
 
-                                        <div class="col p-3">
-                                            {{ Form::label('tipo_decreto', 'Tipo do Decreto ?') }} :
-                                            {{ Form::select('tipo_decreto', ['SE' => 'SE - Situação de Emergência', 'ECP' => 'ECP - Estado de Calamidade Pública'], $pedido->tipo_decreto, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
-                                        </div>
-                                        <div class="col p-3">
-                                            {{ Form::label('data_vigencia', 'Data de Vigência do Decreto') }} :
-                                            {{ Form::date('data_vigencia', $pedido->data_vigencia, ['class' => 'form form-control', 'value' => old('data_vigencia'), 'id' => 'data_vigencia']) }}
-                                        </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('tipo_decreto', 'Tipo do Decreto ?') }} :
+                                        {{ Form::select('tipo_decreto', ['SE' => 'SE - Situação de Emergência', 'ECP' => 'ECP - Estado de Calamidade Pública'], $pedido->tipo_decreto, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '16']) }}
+                                    </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('data_vigencia', 'Data de Vigência do Decreto') }} :
+                                        {{ Form::date('data_vigencia', $pedido->data_vigencia, ['class' => 'form form-control', 'value' => old('data_vigencia'), 'id' => 'data_vigencia']) }}
+                                    </div>
 
-                                        <div class="col p-3">
-                                            {{ Form::label('esforcos_realizados', 'Esforços Realizados') }} : (Caracteres restantes : <span
-                                                id='carac_restante_esforcos'>0</span>)
-                                            {{ Form::textarea('esforcos_realizados', $pedido->esforcos_realizados, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '1000', 'rows' => 10, 'id' => 'esforcos_realizados']) }}
-                                        </div>
-                                    </fieldset>
-                                </div>
+                                    <div class="col p-3">
+                                        {{ Form::label('esforcos_realizados', 'Esforços Realizados') }} : (Caracteres restantes : <span
+                                            id='carac_restante_esforcos'>0</span>)
+                                        {{ Form::textarea('esforcos_realizados', $pedido->esforcos_realizados, ['class' => 'form form-control', 'required' => 'required', 'maxlength' => '1000', 'rows' => 10, 'id' => 'esforcos_realizados']) }}
+                                    </div>
+                                </fieldset>
                             </div>
-
-                            <br>
-                            {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
-
-                            {{ Form::close() }}
-
-
                         </div>
 
-                        {{-- MATERIAL DO PEDIDO --}}
-                        <div class="tab-pane fade" id="material_pedido-tab" role="tabpanel" aria-labelledby="material_pedido-tab">
+                        <br>
+                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
 
-                            <p><button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                    data-target="#material-pedido-modal" value="Envio Documentos Anexo">Materiais do Pedido
-                                </button>
-                            </p>
-                            <div class="row">
-                                <div class="col-md-3"></div>
-                                <div class="col-12">
+                        {{ Form::close() }}
 
-                                    <table class="table table-sm table-bordered" id="tbl_material">
+
+                    </div>
+
+                    {{-- MATERIAL DO PEDIDO --}}
+                    <div class="tab-pane fade" id="material_pedido-tab" role="tabpanel" aria-labelledby="material_pedido-tab">
+
+                        <p><button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                data-target="#material-pedido-modal" value="Envio Documentos Anexo">Materiais do Pedido
+                            </button>
+                        </p>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-12">
+
+                                <table class="table table-sm table-bordered" id="tbl_material">
+                                    <tr>
+                                        <td width="5%" class="text-center">#</td>
+                                        {{-- <td width="20%">Código</td> --}}
+                                        <td width="40%" class="text-center">Material</td>
+                                        <td width="20%" class="text-center">Quantidade</td>
+                                        <td width="20%" class="text-center">Qtd Famílias Atendidas</td>
+                                        <td width="10%" class="text-center">Opções</td>
+
+                                    </tr>
+
+                                    @foreach ($materiais as $key => $material)
                                         <tr>
-                                            <td width="5%" class="text-center">#</td>
-                                            {{-- <td width="20%">Código</td> --}}
-                                            <td width="40%" class="text-center">Material</td>
-                                            <td width="20%" class="text-center">Quantidade</td>
-                                            <td width="20%" class="text-center">Qtd Famílias Atendidas</td>
-                                            <td width="10%" class="text-center">Opções</td>
+                                            <td class="text-center">{{ $key + 1 }}</td>
+                                            {{-- <td>{{ $material->codigo }}</td> --}}
+                                            <td class="text-center">{{ $material->codigo . '-' . $material->descricao_item }}</td>
+                                            <td class="text-center">{{ $material->qtd }}</td>
+                                            <td class="text-center">{{ $material->familia_at }}</td>
+                                            <td class="text-center"><a href="{{ url('mah/pedidoitem/destroy/' . $material->id) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src={{ asset('imagem/icon/delete.png') }}></a></td>
 
                                         </tr>
-
-                                        @foreach ($materiais as $key => $material)
-                                            <tr>
-                                                <td class="text-center">{{ $key + 1 }}</td>
-                                                {{-- <td>{{ $material->codigo }}</td> --}}
-                                                <td class="text-center">{{ $material->codigo . '-' . $material->descricao_item }}</td>
-                                                <td class="text-center">{{ $material->qtd }}</td>
-                                                <td class="text-center">{{ $material->familia_at }}</td>
-                                                <td class="text-center"><a href="{{ url('mah/pedidoitem/destroy/' . $material->id) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src={{ asset('imagem/icon/delete.png') }}></a></td>
-
-                                            </tr>
-                                        @endforeach
-                                    </table>
-                                </div>
-                                <div class="col-md-3"></div>
+                                    @endforeach
+                                </table>
                             </div>
+                            <div class="col-md-3"></div>
+                        </div>
 
 
-                            {{-- MODAL ADD MATERIAIS --}}
+                        {{-- MODAL ADD MATERIAIS --}}
 
-                            <div class="modal fade" id="material-pedido-modal" aria-modal="true" role="dialog" data-backdrop="static">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content">
+                        <div class="modal fade" id="material-pedido-modal" aria-modal="true" role="dialog" data-backdrop="static">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
 
-                                        {{ Form::open(['url' => 'mah/pedidoitem/store']) }}
-                                        {{ Form::token() }}
-                                        {{ Form::hidden('pedido_id', $pedido->id, ['readonly' => 'readonly']) }}
+                                    {{ Form::open(['url' => 'mah/pedidoitem/store']) }}
+                                    {{ Form::token() }}
+                                    {{ Form::hidden('pedido_id', $pedido->id, ['readonly' => 'readonly']) }}
 
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Adicione Materiais no Pedido de Ajuda Humanitária</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row back p-4">
-                                                <div class="col-12">
-                                                    <div class="form-group col-md-12">
-                                                        <label>Nome Material</label>
-                                                        <select class="form form-control form-control-sm form-select" id="material_id" name="material_id">
-                                                            <option></option>
-                                                            @foreach ($materiais_list as $material)
-                                                                <option value={{ $material['id'] }}>{{ $material['name'] }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        <input type="hidden" name="material" id="material">
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <label>Quantidade</label>
-                                                        <input type="number" class="form form-control form-control-sm" id="qtd" name="qtd">
-                                                        <input type="hidden" id="tp_item" name="tp_item" value="P">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <label>Qtd de Famílias Atendidas</label>
-                                                        <input type="number" class="form form-control form-control-sm" id="familia_at" name="familia_at">
-                                                    </div>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Adicione Materiais no Pedido de Ajuda Humanitária</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row back p-4">
+                                            <div class="col-12">
+                                                <div class="form-group col-md-12">
+                                                    <label>Nome Material</label>
+                                                    <select class="form form-control form-control-sm form-select" id="material_id" name="material_id">
+                                                        <option></option>
+                                                        @foreach ($materiais_list as $material)
+                                                            <option value={{ $material['id'] }}>{{ $material['name'] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <input type="hidden" name="material" id="material">
                                                 </div>
 
                                             </div>
-                                        </div>
-                                        <div class="modal-footer justify-content-between">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            {{ Form::submit('Adicionar', ['class' => 'btn btn-primary', 'id' => 'add_material']) }}
-                                        </div>
 
-                                        {{ Form::close() }}
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label>Quantidade</label>
+                                                    <input type="number" class="form form-control form-control-sm" id="qtd" name="qtd">
+                                                    <input type="hidden" id="tp_item" name="tp_item" value="P">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label>Qtd de Famílias Atendidas</label>
+                                                    <input type="number" class="form form-control form-control-sm" id="familia_at" name="familia_at">
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        {{ Form::submit('Adicionar', ['class' => 'btn btn-primary', 'id' => 'add_material']) }}
+                                    </div>
+
+                                    {{ Form::close() }}
                                 </div>
                             </div>
-                            {{-- Final Modal Add Materiais --}}
-
                         </div>
+                        {{-- Final Modal Add Materiais --}}
 
-                        <!-- DOCUMENTOS ANEXOS -->
-                        <div class="tab-pane fade" id="documentos-tab" role="tabpanel" aria-labelledby="documentos-tab">
+                    </div>
 
-                            <p>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#upload_doc">
-                                    Envio Documentos Anexo
-                                </button>
-                            </p>
-                            <div class="col-12 back">
+                    <!-- DOCUMENTOS ANEXOS -->
+                    <div class="tab-pane fade" id="documentos-tab" role="tabpanel" aria-labelledby="documentos-tab">
 
-                                <table class="table table-sm">
+                        <p>
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#upload_doc">
+                                Envio Documentos Anexo
+                            </button>
+                        </p>
+                        <div class="col-12 back">
+
+                            <table class="table table-sm">
+                                <tr>
+                                    <th class="bg-second">#</th>
+                                    <th>Data Upload</th>
+                                    <th>Nome Arquivo</th>
+                                    <th>Opções</th>
+                                </tr>
+
+                                @foreach ($documentos as $key => $documento)
                                     <tr>
-                                        <th class="bg-second">#</th>
-                                        <th>Data Upload</th>
-                                        <th>Nome Arquivo</th>
-                                        <th>Opções</th>
+                                        @php
+                                            $nome = substr(basename($documento), 7 + strlen($pedido->id));
+                                            $pos = strpos($nome, '_');
+                                            $nome1 = \Carbon\Carbon::createFromTimestamp(substr($nome, 0, $pos))->format('d/m/Y H:i:s');
+
+                                        @endphp
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $nome1 }}</td>
+                                        <td><a href='{{ url('mah/download/' . $pedido->id . '/' . basename($documento)) }}'>{{ basename($documento) }}</a></td>
+                                        <td><a href="{{ url('mah/pedido/deletedoc/' . $pedido->id . '/' . basename($documento)) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src='{{ asset('imagem/icon/delete.png') }}'></a></td>
                                     </tr>
-
-                                    @foreach ($documentos as $key => $documento)
-                                        <tr>
-                                            @php
-                                                $nome = substr(basename($documento), 7 + strlen($pedido->id));
-                                                $pos = strpos($nome, '_');
-                                                $nome1 = \Carbon\Carbon::createFromTimestamp(substr($nome, 0, $pos))->format('d/m/Y H:i:s');
-
-                                            @endphp
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $nome1 }}</td>
-                                            <td><a href='{{ url('mah/download/' . $pedido->id . '/' . basename($documento)) }}'>{{ basename($documento) }}</a></td>
-                                            <td><a href="{{ url('mah/pedido/deletedoc/' . $pedido->id . '/' . basename($documento)) }}" onclick="return confirm('Deseja Apagar o Registro !')"><img src='{{ asset('imagem/icon/delete.png') }}'></a></td>
-                                        </tr>
-                                        {{-- <tr>
+                                    {{-- <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $documento->data_envio }}</td>
                                             <td>{{ $documento->nome_arquivo }}</td>
                                             <td>{{ $documento->descricao }}</td>
                                             <td><img src={{ asset('imagem/icon/delete.png') }}></td>
                                         </tr> --}}
-                                    @endforeach
+                                @endforeach
 
-                                </table>
-
-                            </div>
+                            </table>
 
                         </div>
 
-                        {{-- DESPACHOS DO PEDIDO --}}
-                        <div class="tab-pane fade" id="despachos_analise-tab" role="tabpanel" aria-labelledby="despachos_analise-tab">
+                    </div>
 
-                            @can('cedec')
-                                <p>
-                                    <button class="btn btn-success btn-sm" value="Envio Documentos Anexo" data-toggle="modal" data-target="#parecer_tec">
-                                        Análise /Despacho
-                                    </button>
-                                </p>
-                            @endcan
-                            <div class="col-12 back">
-                                <table class="table table-sm table-bordered">
-                                    <tr>
-                                        <th class="text-center">#</th>
-                                        <th class="text-center">Data</th>
-                                        <th class="text-center">Descrição/Parecer</th>
-                                        <th class="text-center">Situação</th>
-                                        <th class="text-center">Opções</th>
-                                    </tr>
-                                    @if (count($despachos) > 0)
-                                        @foreach ($despachos as $key => $despacho)
-                                            <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ $despacho->data_parecer }}</td>
-                                                <td>
-                                                    <p name="lk_parecer"> {{ $despacho->parecer }}...</p>
-                                                </td>
-                                                <td>{{ $despacho->tramit_parecer }}</td>
-                                                <td>
-                                                    @can('cedec')
-                                                        <button type='button' class="btn" name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
-                                                        <a href='{{ route('parecer.deletar', $despacho->id) }}' onclick="return confirm('Deseja Apagar o Registro !')" name='deletarDespacho'><img src={{ asset('imagem/icon/delete.png') }}></a>
-                                                    @endcan
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
+                    {{-- DESPACHOS DO PEDIDO --}}
+                    <div class="tab-pane fade" id="despachos_analise-tab" role="tabpanel" aria-labelledby="despachos_analise-tab">
+
+                        @can('cedec')
+                            <p>
+                                <button class="btn btn-success btn-sm" value="Envio Documentos Anexo" data-toggle="modal" data-target="#parecer_tec">
+                                    Análise /Despacho
+                                </button>
+                            </p>
+                        @endcan
+                        <div class="col-12 back">
+                            <table class="table table-sm table-bordered">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Data</th>
+                                    <th class="text-center">Descrição/Parecer</th>
+                                    <th class="text-center">Situação</th>
+                                    <th class="text-center">Opções</th>
+                                </tr>
+                                @if (count($despachos) > 0)
+                                    @foreach ($despachos as $key => $despacho)
                                         <tr>
-                                            <td colspan="5" class="text-center">Este processo não tem nenhum despacho</td>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $despacho->data_parecer }}</td>
+                                            <td>
+                                                <p name="lk_parecer"> {{ $despacho->parecer }}...</p>
+                                            </td>
+                                            <td>{{ $despacho->tramit_parecer }}</td>
+                                            <td>
+                                                @can('cedec')
+                                                    <button type='button' class="btn" name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
+                                                    <a href='{{ route('parecer.deletar', $despacho->id) }}' onclick="return confirm('Deseja Apagar o Registro !')" name='deletarDespacho'><img src={{ asset('imagem/icon/delete.png') }}></a>
+                                                @endcan
+                                            </td>
                                         </tr>
-                                    @endif
-                                </table>
-                            </div>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">Este processo não tem nenhum despacho</td>
+                                    </tr>
+                                @endif
+                            </table>
                         </div>
+                    </div>
 
 
-                        {{-- MODAL DESPACHOS PARECER --}}
-                        <div class="modal fade" id="parecer_tec" tabindex="-1" role="dialog" aria-labelledby="parecer_tecTitle" aria-hidden="true" data-backdrop="static">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Lançamento Despacho / Parecer</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class='col'>
-                                            {{ Form::open(['url' => 'mah/analise/store', 'id' => 'form_parecer']) }}
-                                            {{ Form::token() }}
-                                            {{ Form::hidden('data_parecer', Carbon\Carbon::now(), ['id' => 'data_parecer', 'required']) }}
-                                            {{ Form::hidden('user_id', Auth::user()->id, ['id' => 'user_id', 'required']) }}
-                                            {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
+                    {{-- MODAL DESPACHOS PARECER --}}
+                    <div class="modal fade" id="parecer_tec" tabindex="-1" role="dialog" aria-labelledby="parecer_tecTitle" aria-hidden="true" data-backdrop="static">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Lançamento Despacho / Parecer</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class='col'>
+                                        {{ Form::open(['url' => 'mah/analise/store', 'id' => 'form_parecer']) }}
+                                        {{ Form::token() }}
+                                        {{ Form::hidden('data_parecer', Carbon\Carbon::now(), ['id' => 'data_parecer', 'required']) }}
+                                        {{ Form::hidden('user_id', Auth::user()->id, ['id' => 'user_id', 'required']) }}
+                                        {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
 
-                                            {{ Form::label('Descrição Despacho / Parecer') }} <span> ( Caracteres restantes &nbsp;<i id='carac_rest'> 255 </i>&nbsp;)</span>
-                                            {{ Form::textarea('parecer', '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                        {{ Form::label('Descrição Despacho / Parecer') }} <span> ( Caracteres restantes &nbsp;<i id='carac_rest'> 255 </i>&nbsp;)</span>
+                                        {{ Form::textarea('parecer', '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
 
-                                            {{ Form::label('Descrição Despacho / Parecer') }}
-                                            {{ Form::select('tramit_parecer', $secao_tramitar, '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                        {{ Form::label('Descrição Despacho / Parecer') }}
+                                        {{ Form::select('tramit_parecer', $secao_tramitar, '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
 
 
-                                            {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnSalvarParecer']) }}
+                                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnSalvarParecer']) }}
 
-                                            {{ Form::close() }}
+                                        {{ Form::close() }}
 
-                                            <br><br>
-                                            <br>
-                                        </div>
+                                        <br><br>
+                                        <br>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endcan
-            </div>
+                </div>
+
+            @endcan
         </div>
     </div>
 

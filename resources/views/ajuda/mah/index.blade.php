@@ -14,13 +14,17 @@
 @endsection
 
 @section('content')
-<div class="container border p-3 min-vh-100"  style="background-color:#e9ecef;">
-    <div class="row flex-fill">
-        
+    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
+        <div class="row">
+
             <div class="col-md-12">
-                
+
                 <div class="row">
-                    
+
+                    <div class="col text-center">
+                        <a class="btn btn-success btn-sm" href="{{ url('ajuda') }}">Voltar</a>
+                    </div>
+
                     <!-- menu opções - novo | pesquisa |voltar-->
 
                     {{-- Prezado Coordendor,
@@ -43,56 +47,45 @@
                             </tbody>
                         </table>
                     </div> --}}
-                    
-                    <ul class="nav">
-                        <li class="nav-item mr-1">
-                            <a class="btn btn-success btn-sm" href="{{ url('ajuda') }}">Voltar</a>
-                        </li>
-                        <!-- ####### Acesso COMPDEC ###### -->
-                        @hasRole('compdec')
-                            <li class="nav-item mr-1">
-                                <a class="btn btn-primary btn-sm" href="{{ url('mah/pedido/create') }}"
-                                    title="Inserir novo Registro">+
-                                    Novo Registro</a>
-                            </li>
-                        @endHasRole
-                        <li class="nav-item mr-1">
 
+                    <ul class="nav">
+
+                        <!-- ####### Acesso COMPDEC ###### -->
+                        @if(auth()->user()->hasRole('compdec'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('mah/pedido/create') }}" title="Inserir novo Registro">+ Novo Registro</a>
+                            </li>
+                        @endif
+                        <li class="nav-item">
                             <!-- #######  acesso CEDEC ####### -->
                             @can('cedec')
-                                <a class="btn btn-info btn-sm" id="btn_search" href='mah/busca'>Pesquisar</a>
+                                <a class="nav-link" id="btn_search" href='mah/busca'>Pesquisar</a>
                             @endcan
 
                             <!-- ####### Acesso COMPDEC ###### -->
                             @can('compdec')
-                                <a class="btn btn-info btn-sm" id="btn_search1" >Pesquisar</a>
-                                
+                                <a class="nav-link" id="btn_search1">Pesquisar</a>
                             @endcan
                         </li>
 
                         @can('cedec')
-                            <li class="nav-item mr-1">
-                                <a class="btn btn-secondary btn-sm" href="{{ url('pae/empdor/export') }}"
-                                    title="Inserir novo Registro">* Exportar Excel</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('pae/empdor/export') }}"
+                                    title="Inserir novo Registro">Exportar</a>
                             </li>
-                            <li class="nav-item mr-1">
-                                <a class="btn btn-warning btn-sm" href="{{ url('mah/config') }}"
-                                    title="Configurações do Módulo">Configurações do Módulo</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('mah/config') }}"
+                                    title="Configurações do Módulo">Configurações</a>
                             </li>
-                        @endcan
+                        @endcan                        
                     </ul>
 
-                    
-                </div>
-                <br>
 
-                <!--search -->
-                <div class="row">
-                    <div class="col-6">
-                        <input class="form form-control" type="text" name="search" id="search">
-                    </div>
+                    
+
+
                 </div>
-                <p></p>
+
                 <div class="row p-3">
 
                     <br>
@@ -223,23 +216,28 @@
                                     <td>{{ $pedido->cobrade->descricao }} - {{ $pedido->cobrade->codigo }}</td>
                                     <td>
 
-                                        @if($pedido->status == 0)
+                                        @if ($pedido->status == 0)
                                             <a href="{{ route('pedido/edit', [$pedido->id]) }}"><img src='{{ asset('imagem/icon/editar.png') }}'></a>
-                                            <a href="{{route('pedido/delete', [$pedido->id])}}" onclick="return confirm('Deseja Excluir esse Pedido Nº {{$pedido->numero}}/{{substr($pedido->data_entrada_sistema, 0, 4)}} ?')"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
+                                            <a href="{{ route('pedido/delete', [$pedido->id]) }}" onclick="return confirm('Deseja Excluir esse Pedido Nº {{ $pedido->numero }}/{{ substr($pedido->data_entrada_sistema, 0, 4) }} ?')"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
                                         @elseif($pedido->status == 1)
 
                                         @elseif($pedido->status == 2)
-                                        
-                                        @elseif($pedido->status == 3)
-                                        @elseif($pedido->status == 4)
-                                        @elseif($pedido->status == 5)
-                                        @elseif($pedido->status == 6)
-                                        @elseif($pedido->status == 7)
-                                        @elseif($pedido->status == 8)
-                                        @elseif($pedido->status == 9)
 
+                                        @elseif($pedido->status == 3)
+
+                                        @elseif($pedido->status == 4)
+
+                                        @elseif($pedido->status == 5)
+
+                                        @elseif($pedido->status == 6)
+
+                                        @elseif($pedido->status == 7)
+
+                                        @elseif($pedido->status == 8)
+
+                                        @elseif($pedido->status == 9)
                                         @endif
-                                        <a href="{{url('mah/pedido/show/'.$pedido->id)}}"><img src='{{ asset('imagem/icon/view.png') }}'></a>
+                                        <a href="{{ url('mah/pedido/show/' . $pedido->id) }}"><img src='{{ asset('imagem/icon/view.png') }}'></a>
                                     </td>
 
                                 </tr>

@@ -28,7 +28,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
 
-        //dd(auth()->user()->getRoleNames(), auth()->user()->can('redec'), auth()->user()->getPermissionNames());
+        //dd(auth()->user()->getRoleNames(), auth()->user()->can('cedec'), auth()->user()->getPermissionNames());
 
 
         if (auth()->user()->can('paeusuario')) {
@@ -567,7 +567,6 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         }
     }
 
-
     /**
      * Undocumented function
      *
@@ -582,11 +581,24 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         $paeProtocolo->save();
 
         return redirect('pae/protocolo')->with('message', 'Registro Alterado com Sucesso ');
-
-
-
-
     }
 
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function delete(PaeProtocolo $paeProtocolo){
+
+        $paeProtocolo->analises()->delete();
+        
+        $paeProtocolo->delete();
+
+
+        return redirect('pae/protocolo')->with('message', 'Registro Deletado com Sucesso ');
+    }
+
+    
 
 }

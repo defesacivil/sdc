@@ -305,6 +305,9 @@ Route::group(['middleware' => 'auth'], function () {
     # protocolo STORE
     Route::post('pae/protocolo/store', 'App\Http\Controllers\Drrd\PaeProtocoloController@store');
     
+    # protocolo DELETE
+    Route::get('pae/protocolo/deletar/{paeProtocolo}', 'App\Http\Controllers\Drrd\PaeProtocoloController@delete');
+    
     # form atribuir processo
     Route::match(["GET", "POST"], 'pae/protocolo/atribuir/{paeProtocolo?}', 'App\Http\Controllers\Drrd\PaeProtocoloController@atribuir');
     

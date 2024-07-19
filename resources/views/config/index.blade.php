@@ -15,8 +15,8 @@
 
 @section('content')
 
-    <div class="container p-3 border min-vh-100" style="background-color:#e9ecef;">
-        <div class="row flex-fill">
+    <div class="container border rounded min-vh-100" style="background-color:#e9ecef;">
+        <div class="row">
 
             <div class="col-md-12">
                 <p class="p-4 text-center"><a class='btn btn-success btn-sm' href='dashboard'>Voltar</a></p>
@@ -24,28 +24,26 @@
                 <p class="text-center"><legend>Configurações</legend></p>
                 <br>
                 <div class="row">
-                    <div class="text-center col">
-                        <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/users.png') }}" title="Usuários"></a><br>
+                    <div class="text-center col col-md-3">
+                        <a href="config/usuario" class=''><img width="100" src="{{ url('imagem/icon/users.png') }}" title="Usuários"></a><br>
                         Usuários
                     </div>
-                    <div class="text-center col">
-                        <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a><br>
+                    <div class="text-center col col-md-3">
+                        <a href="config/usuario" class=''><img width="100" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a><br>
                         Configurações
                     </div>
-                    <div class="text-center col">
-                        <a href="config/usuario" class=''><img width="120" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
+                    <div class="text-center col col-md-3">
+                        <a href="config/usuario" class=''><img width="100" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
                         <br>
                         Relatórios e Log's
                     </div>
-                </div>
-                <div class="row p-3">
-                    <div class="col text-center">
-                        <a href="config/index" title="Manutenção"><img width="120" src="{{ url('imagem/icon/gears.png') }}" title="Relatórios Log's"></a>
+                    <div class="col col-md-3 text-center">
+                        <a href="config/index" class="" title="Manutenção"><img width="100" src="{{ url('imagem/icon/gears.png') }}" title="Relatórios Log's"></a>
                         <br>
                         Gears
                     </div>
-                    <div class="col text-center">
-                        <a href="msg" title="Msg Alert"><img width="120" src="{{ url('imagem/icon/mensagem.png') }}" title="Mensagens"></a>
+                    <div class="col col-md-3 text-center">
+                        <a href="msg" class="" title="Msg Alert"><img width="100" src="{{ url('imagem/icon/mensagem.png') }}" title="Mensagens"></a>
                         <br>
                         Mensagens/Alertas
                     </div>
