@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Cedec\Profissao;
 use App\Models\Municipio\Municipio;
 use App\Http\Controllers\Controller;
+use App\Models\Cedec\CedecRdc;
+use App\Models\Cedec\Telefone;
 use App\Models\Municipio\Regiao;
 use App\Models\Voluntario\Voluntario;
 use Illuminate\Support\Facades\DB;
@@ -21,17 +23,12 @@ class VoluntarioController extends Controller
     {
 
         $profissaos = Profissao::all()->pluck('nome', 'id');
-        $municipios = Municipio::all()->pluck('nome', 'id');
-        $reg_mun = DB::table('cedec_municipio')
-        ->join('cedec_rpm_mun', 'cedec_municipio.id', '=', 'cedec_rpm_mun.id_municipio')
-        ->select('cedec_municipio.id', 'cedec_rpm_mun.id_rpm')->get();
-
-
+        $municipios = Municipio::all(['nome', 'id'])->pluck('nome', 'id');
+       
         return view("cedec.voluntario.index", [
 
             'profissaos' => $profissaos,
             'municipios' => $municipios,
-            'reg_mun'    => $reg_mun,
         ]);
     }
 
@@ -53,6 +50,8 @@ class VoluntarioController extends Controller
     public function store(Request $request)
     {
 
+        dd($request);
+
         $validator = $request->validate(
             [
                 'nome'         => 'required|max:110',
@@ -61,8 +60,7 @@ class VoluntarioController extends Controller
                 'profissao'    => 'max:50',
                 'atividade'    => 'max:50',
                 'email'        => 'email|required|max:110',
-                'municipio_id' => 'required|integer',
-                'regiao_id'    => 'required',
+                'municipio_id' => 'required|integer'
             ],
             [
                 'nome.required'  => 'Campo Nome é de preenchimento Obrigatório !',
@@ -77,12 +75,16 @@ class VoluntarioController extends Controller
                 'email.email'  => 'Campo E-mail deve ter um e-mail válido !',
                 'municipio_id.required'  => 'Campo Município é de preenchimento Obrigatório !',
                 'municipio_id.integer'  => 'Campo Município deve ter valor numérico !',
-                'regiao_id.required'  => 'Campo Interno Região de DC é de preenchimento Obrigatório !',
+                
 
             ]
         );
 
             $voluntario = new Voluntario();
+
+            $regiao_id = CedecRdc::select('id_rpm')->where('id_municipio', '=', $request->municipio_id)->first();
+                            
+            //dd($regiao_id['id_rpm']);
 
             $voluntario->nome         = $request->nome;
             $voluntario->cpf          = $request->cpf;
@@ -91,9 +93,22 @@ class VoluntarioController extends Controller
             $voluntario->atividade    = $request->atividade;
             $voluntario->email        = $request->email;
             $voluntario->municipio_id = $request->municipio_id;
-            $voluntario->regiao_id    = $request->regiao_id;
+            $voluntario->regiao_id    = $regiao_id['id_rpm'];
 
-            dd($voluntario->save());
+            $voluntario->save();
+
+            $telefone = new Telefone();
+
+            foreach ($request->telefones as $key => $telefone) {
+               
+                $telefone->model_type = 'App\\Model\\Voluntario';
+                $telefone->model_id   = $voluntario->id;
+                $telefone->telefone   = $telefone->telefone;
+                $telefone->whatsapp   = $telefone->whatsapp;
+
+                $telefone->save();
+                
+            }
 
 
         return redirect('voluntariado')->with('message', 'Registro gravado com Sucesso');

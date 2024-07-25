@@ -52,13 +52,12 @@
     //     // </div>
     // @endif
 
-    // @if (count($errors) > 0)
-    //     @foreach ($errors->all() as $error)
-    //         toastr.error("{{ $error }}");
-    //     @endforeach
-    // @endif
-
-    
+    /* erros de validação */
+    @if (count($errors) > 0)
+        @foreach ($errors->all() as $error)
+            toastr.error("{{ $error }}");
+        @endforeach
+    @endif    
 
     @if (Session::has('message'))
             var type = "{{ Session::get('alert-type', 'info') }}"
@@ -78,11 +77,11 @@
                     toastr.options.timeOut = 10000;
                     toastr.warning("{{ Session::get('message') }}");
                     break;
-                case 'error':
+                // case 'error':
 
-                    toastr.options.timeOut = 10000;
-                    toastr.error("{{ Session::get('message') }}");
-                    break;
+                //     toastr.options.timeOut = 10000;
+                //     toastr.error("{{ Session::get('message') }}");
+                //     break;
             }
         @endif
 
