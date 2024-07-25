@@ -43,13 +43,14 @@ class Handler extends ExceptionHandler
     {
         $message1 = $exception->getMessage();
 
-        //dd('handle');
+        //dd($exception);
 
-        //dd($message1);
-        
-        
+        if($exception->getCode() == 0) {
+
+           return parent::render($request, $exception);
+                
         // Acesso das mineradoras
-        if (($message1 == "Unauthenticated.") && ($request->getRequestUri('/pae/mineradora'))) {
+        }elseif (($message1 == "Unauthenticated.") && ($request->getRequestUri('/pae/mineradora'))) {
             //dd('acesso mineradora');
             return response()->view('auth.login', ['message' => $message1], 404);
             
@@ -64,10 +65,13 @@ class Handler extends ExceptionHandler
         }else {
 
             if ($this->isHttpException($exception)) {
-
+                
                 if ($exception->getStatusCode() == 404) {
 
                     return response()->view('errors/404', ['message' => $message1], 404);
+                
+                }elseif($exception->getStatusCode() == 402){
+                    dd($message1);
                 }
                 if ($exception->getStatusCode() == 500) {
 
@@ -78,10 +82,13 @@ class Handler extends ExceptionHandler
                     }
                 }
             } else {
+
+//                dd($exception)->getCode();
                 return response()->view('errors.500', ['message' => $message1], 500);
             }
         }
 
+        dd('opa');
         return parent::render($request, $exception);
     }
 }

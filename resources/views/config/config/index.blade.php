@@ -18,14 +18,13 @@
     <div class="container p-3 border min-vh-100" style="background-color:#e9ecef;">
         <div class="row flex-fill">
 
-            <div class="col-md-12">
+            <div class="col-12 col-md-12">
                 <p class="p-4 text-center"><a class='btn btn-success btn-sm' href='dashboard'>Voltar</a></p>
 
                 <p class="text-center"><legend>Configurações</legend></p>
-                <br>
                 <div class="row">
                     <div class="col">
-                        <input type="checkbox" name="ck_clear_all" id="ck_clear_all">Limpar Todo o Cache
+                        <input type="checkbox" name="ck_clear_all" id="ck_clear_all" class="form form-control">Limpar Todo o Cache
                     </div>
                     
                 </div>

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Config;
+namespace App\Http\Controllers\Cedec;
 
 use App\Http\Controllers\Controller;
-use App\Models\Config\Config;
+use App\Models\Cedec\Profissao;
 use Illuminate\Http\Request;
 
-class ConfigController extends Controller
+class ProfissaoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class ConfigController extends Controller
      */
     public function index()
     {
-        return view('config.index');
+        //
     }
 
     /**
@@ -42,10 +42,10 @@ class ConfigController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Config\Config  $config
+     * @param  \App\Models\Cedec\Profissao  $profissao
      * @return \Illuminate\Http\Response
      */
-    public function show(Config $config)
+    public function show(Profissao $profissao)
     {
         //
     }
@@ -53,10 +53,10 @@ class ConfigController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Config\Config  $config
+     * @param  \App\Models\Cedec\Profissao  $profissao
      * @return \Illuminate\Http\Response
      */
-    public function edit(Config $config)
+    public function edit(Profissao $profissao)
     {
         //
     }
@@ -65,10 +65,10 @@ class ConfigController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Config\Config  $config
+     * @param  \App\Models\Cedec\Profissao  $profissao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Config $config)
+    public function update(Request $request, Profissao $profissao)
     {
         //
     }
@@ -76,21 +76,11 @@ class ConfigController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Config\Config  $config
+     * @param  \App\Models\Cedec\Profissao  $profissao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Config $config)
+    public function destroy(Profissao $profissao)
     {
         //
     }
-
-
-    /**
-     * Configurações
-     */
-
-     public function config()
-     {
-        return view('config.config.index');
-     }
 }

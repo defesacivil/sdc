@@ -29,11 +29,11 @@
                         Usuários
                     </div>
                     <div class="text-center col col-md-3">
-                        <a href="config/usuario" class=''><img width="100" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a><br>
+                        <a href="/config/config" class=''><img width="100" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a><br>
                         Configurações
                     </div>
                     <div class="text-center col col-md-3">
-                        <a href="config/usuario" class=''><img width="100" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
+                        <a href="log-viewer" class=''><img width="100" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
                         <br>
                         Relatórios e Log's
                     </div>

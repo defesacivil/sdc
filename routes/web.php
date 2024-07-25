@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 
+
+    
     ##############################  DASHBOARD ##############################
     Route::get('/dashboard', function () {
 
@@ -56,9 +58,20 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
+    Route::get('voluntariado', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
+    Route::post('voluntariado/create', 'App\Http\Controllers\Voluntario\VoluntarioController@store');
+
+
 
     #################################   CONFIG   ##################################
+    
+    # index config
     Route::get('config/index', 'App\Http\Controllers\Config\ConfigController@index');
+  
+    # configurações do sistema
+    Route::get('config/config', 'App\Http\Controllers\Config\ConfigController@config');
+
+
 
 
 

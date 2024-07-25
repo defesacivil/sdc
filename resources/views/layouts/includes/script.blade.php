@@ -67,45 +67,24 @@
 
                     toastr.options.timeOut = 10000;
                     toastr.info("{{ Session::get('message') }}");
-                    //var audio = new Audio('audio.mp3');
-                    //audio.play();
                     break;
                 case 'success':
 
                     toastr.options.timeOut = 10000;
                     toastr.success("{{ Session::get('message') }}");
-                    //var audio = new Audio('audio.mp3');
-                    //audio.play();
-
                     break;
                 case 'warning':
 
                     toastr.options.timeOut = 10000;
                     toastr.warning("{{ Session::get('message') }}");
-                    //var audio = new Audio('audio.mp3');
-                    //audio.play();
-
                     break;
                 case 'error':
 
                     toastr.options.timeOut = 10000;
                     toastr.error("{{ Session::get('message') }}");
-                    //var audio = new Audio('audio.mp3');
-                    //audio.play();
-
                     break;
             }
         @endif
 
 </script>
-<script>
 
-
-// $(window).on("load", function(){
-//         $("input").each(function() {        
-//         $("#"+$(this).attr('id')).addClass("is_invalid");
-//         $(this).append("<div class='invalid-feedback'>Campo Obrigatório !</div>");
-//         console.log($(this).addClass('is_invalid'));
-//     });
-// });
-</script>
