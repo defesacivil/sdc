@@ -50,7 +50,7 @@ class VoluntarioController extends Controller
     public function store(Request $request)
     {
 
-        dd($request);
+        dd($request->all());
 
         $validator = $request->validate(
             [
@@ -97,16 +97,18 @@ class VoluntarioController extends Controller
 
             $voluntario->save();
 
-            $telefone = new Telefone();
+            $tel = new Telefone();
+
+            //dd($telefone);
 
             foreach ($request->telefones as $key => $telefone) {
                
-                $telefone->model_type = 'App\\Model\\Voluntario';
-                $telefone->model_id   = $voluntario->id;
-                $telefone->telefone   = $telefone->telefone;
-                $telefone->whatsapp   = $telefone->whatsapp;
+                $tel->model_type = "App\\Model\\Voluntario";
+                $tel->model_id   = $voluntario->id;
+                $tel->telefone   = $telefone->telefone;
+                $tel->whatsapp   = $telefone->whatsapp;
 
-                $telefone->save();
+                dd($telefone->save());
                 
             }
 

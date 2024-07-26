@@ -41,13 +41,16 @@
                 {{ Form::select('municipio_id', $municipios, '620', ['class' => 'municipio_id form form-control', 'id' => 'municipio_id', 'placeholder' => 'Selecione um Município', 'data-alvo_id' => '', 'required']) }}
             </div>
 
-            <div class="row">
+            <div class="row telefone">
                 <div class="p-3 col-3">
                     {{ Form::label('telefone', 'Nº Telefone', ['class' => 'fw-bold']) }}:
-                    {{ Form::text('telefone', '', ['class' => 'form form-control telefone', 'id' => 'telefone0', 'name' => 'telefone[]', 'placeholder' => 'Adicione um Número de Telefone']) }}
+                    {{ Form::text('telefone', '', ['class' => 'form form-control', 'id' => 'telefone0', 'name' => 'telefones[]', 'placeholder' => 'Adicione um Número de Telefone']) }}
+                </div>
+                <div class="p-3 col">
+                    <label class="fw-bold">Tem Whatsapp ?</label><br>
+                    <input type="checkbox" name="whatsapp[]" id="whatsapp0" data-n='0' class='form form-checkbox whatsapp'>
                 </div>
             </div>
-
 
             <div id="imendaHTMLtelefone"></div>
 
@@ -55,7 +58,7 @@
                 <div class="col">
                     <a href="#" id="btnAdicionaTelefone" class="btn btn-success"><i class="fa fa-plus"></i> Adicionar Telefone</a>
                 </div>
-            </div>            
+            </div>
 
         </div>
 

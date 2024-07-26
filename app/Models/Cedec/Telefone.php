@@ -9,5 +9,7 @@ class Telefone extends Model
 {
     protected $table = 'cedec_telefone';
     protected $primaryKey = 'id';
+
+    protected $fillable = [ 'model_type', 'model_id', 'telefone', 'whatsapp'];
     use HasFactory;
 }

@@ -43,7 +43,7 @@
     @endif
 
     
-    <div class="row" id="corpo">
+    <div class="row" id="">
         <div class="col-2 col-md-2">
                 @include('layouts/pagina_menu')
 
