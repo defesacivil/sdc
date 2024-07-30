@@ -13,57 +13,49 @@
     {{-- header css --}}
     @include('layouts/includes/header')
 
-    {{-- <!--@if (session('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <ul class='errors'>
-            @foreach ($errors->all() as $error)
-                <li class='error'>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif--> --}}
 </head>
 
-<body class="min-vh-100" style="background-color: rgb(215, 217, 219)">
+<body>
+    <div class="container-fluid gx-0 overflow-x-hidden">
+        {{-- Impressao do header no PDF --}}
+        @if (!isset($pdf))
+            <!-- nav -->
+            <div class="row print" id='barra'>
+                <div class="col-12">
+                    @include('layouts/includes/nav')
+                </div>
+            </div>
 
-    {{-- Impressao do header no PDF --}}
-    @if (!isset($pdf))
-        <!-- nav -->
-        <div class="row print" id='barra'>
-            @include('layouts/includes/nav')
-        </div>
+            <div class="row" id="breadcrumb">
+                <div class="col-12">
+                    {{-- breadcrumb/pg master --}}
+                    @yield('breadcrumb')
+                </div>
+            </div>
+        @endif
 
-        <div class="row" id="cabecalho">
-            {{-- header --}}
-            @yield('header')
-        </div>
-    @endif
-
-    
-    <div class="row" id="">
-        <div class="col-2 col-md-2">
+        <div class="row" id="corpo">
+            <div class="col-2 col-md-2">
                 @include('layouts/pagina_menu')
-
-        </div> 
+            </div>
             {{-- conteudo container corpo --}}
             <div class="col-10 col-md-10">
                 @yield('content')
             </div>
-    </div>
+        </div>
 
         {{-- Impressao do header no PDF --}}
         @if (!isset($pdf))
             {{-- Rodape --}}
             <div class="row justify-content-center  print" id="footer">
-                @include('layouts/includes/footer')
+                <div class="col">
+                    @include('layouts/includes/footer')
+                </div>
             </div>
         @endif
 
 
-
+    </div>
     {{-- javascript pagina global --}}
     @include('layouts/includes/script')
 
@@ -74,12 +66,10 @@
     @yield('code')
     <script>
         var barra = $('#barra').height();
-        var cabecalho = $('#cabecalho').height();
+        var breadcrumb = $('#breadcrumb').height();
         var footer = $('#footer').height();
         var view = window.innerHeight;
-        $("#corpo").css('min-height',(view - barra - cabecalho - footer));
-        
-        
+        $("#corpo").css('min-height', (view - barra - breadcrumb - footer));
     </script>
 
 

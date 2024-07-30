@@ -1,8 +1,8 @@
 @extends('layouts.pagina_master')
 
 
-{{-- header --}}
-@section('header')
+{{-- breadcrumb --}}
+@section('breadcrumb')
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -20,13 +20,10 @@
         <div class="col-12">
             <p class='text-center'><a class='btn btn-success btn-sm' href='dashboard'>Voltar</a></p>
         </div>
-    </div>
-    <div class="row p-2">
-
-        <div class="col-12 col-md-12">
+        <div class="col-12">
 
             <div class="row p-2">
-                <div class="col-12 col-md-3 pb-2">
+                <div class="col-12 col-md-3">
                     
                         {{-- @canany(['cedec', 'redec']) --}}
                            
@@ -75,8 +72,9 @@
                 </div>
             </div>
         </div>
+    </div>
 
-    @stop
+@stop
 
     @section('css')
     @stop

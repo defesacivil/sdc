@@ -1,6 +1,6 @@
 @extends('layouts.pagina_master')
-{{-- header --}}
-@section('header')
+{{-- breadcrumb --}}
+@section('breadcrumb')
 
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
@@ -16,85 +16,84 @@
 
 
     <div class="row flex-fill">
-        <div class="col-md-12">
+        <div class="col-12 col-md-12">
 
-            <div class="row">
+            <div class="row ">
                 <div class="p-3 col">
                     <p class='text-center'><a class='btn btn-success' href='{{ url('pae/protocolo') }}'>Voltar</a></p><br>
-                    <legend>Cadastro Protocolo</legend>
+                    <legend class="fw-bold">Lancamento novo Protocolo</legend>
                 </div>
             </div>
-            <div class="row">
+
+            {{-- form --}}
+            <div class="row shadow rounded">
                 <div class="col-12">
+                    <div class="row">
+                        <div class="col">
+                            {{ Form::open(['url' => 'pae/protocolo/store', 'method' => 'POST']) }}
+                            {{ Form::token() }}
+                        </div>
+                    </div>
 
+                    <div class="p-2 row">
+                        <div class='col'>
+                            {{ Form::label('empreendimento', 'Empreendimento (Para buscar, digite parte do nome ex: "B1" )',['class'=>'fw-bold']) }}:
+                            {{ Form::text('empnto_search', '', ['class' => 'form form-control', 'value' => old('empnto_search'), 'id' => 'empnto_search']) }}
+                            {{ Form::hidden('pae_empnto_id', '', ['id' => 'pae_empnto_id', 'required']) }}
+                        </div>
+                    </div>
+
+                    <div class='p-2 row'>
+                        <div class='col'>
+                            {{ Form::label('Data Entrada', '',['class'=>'fw-bold']) }}:
+                            {{ Form::input('dateTime-local', 'dt_entrada', '', ['class' => 'form form-control', 'value' => old('dt_entrada'), 'id' => 'dt_entrada']) }}
+                            {{ Form::hidden('user_id', Auth::user()->id) }}
+                        </div>
+                        <div class='col'>
+                            {{ Form::label('limite_analise', '',['class'=>'fw-bold']) }}:
+                            {{ Form::text('limite_analise', '', ['class' => 'form form-control', 'value' => old('limite_analise'), 'id' => 'limite_analise', 'readonly' => 'readonly']) }}
+                        </div>
+                    </div>
+
+                    <div class='p-2 row'>
+                        <div class='col'>
+                            {{ Form::label('ccpae', '',['class'=>'fw-bold']) }}:
+                            {{ Form::text('ccpae', '', ['class' => 'form form-control', 'value' => old('ccpae')]) }}
+                        </div>
+                        <div class='col'>
+                            {{ Form::label('ccpae_vencimento', '',['class'=>'fw-bold']) }}:
+                            {{ Form::date('ccpae_venc', '', ['class' => 'form form-control', 'value' => old('ccpae_venc')]) }}
+                        </div>
+                    </div>
+
+                    <div class='p-2 row'>
+                        <div class='col-6'>
+                            {{ Form::label('sei', '',['class'=>'fw-bold']) }}:
+                            {{ Form::text('sei', '', ['class' => 'form form-control', 'value' => old('sei'), 'id' => 'sei', 'title' => 'Número do Processo do Sei', 'maxlength' => 150]) }}
+                        </div>
+                        <div class="col-6">
+                            {{ Form::label('sit_mancha', 'Situação da Mancha',['class'=>'fw-bold']) }}:
+                            {{ Form::select('sit_mancha', $sit_mancha, '', ['placeholder' => 'Selecione a Opção', 'class' => 'form form-control']) }}
+                        </div>
+                    </div>
+
+                    <div class='p-2 row'>
+                        <div class='col'>
+                            {{ Form::label('obs', '',['class'=>'fw-bold']) }}:
+                            {{ Form::textarea('obs', '', ['class' => 'form form-control', 'value' => old('obs')]) }}
+                        </div>
+
+
+                    </div>
+
+
+                    <div class='p-2 row'>
+                        <div class='col'>
+                            {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
+                        </div>{{ Form::close() }}
+                        <br>
+                    </div>
                 </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col">
-                    {{ Form::open(['url' => 'pae/protocolo/store', 'method' => 'POST']) }}
-                    {{ Form::token() }}
-                </div>
-            </div>
-
-            <div class="p-2 row">
-                <div class='col'>
-                    {{ Form::label('empreendimento', 'Empreendimento (Para buscar, digite parte do nome ex: "B1" )') }}:
-                    {{ Form::text('empnto_search', '', ['class' => 'form form-control', 'value' => old('empnto_search'), 'id' => 'empnto_search']) }}
-                    {{ Form::hidden('pae_empnto_id', '', ['id' => 'pae_empnto_id', 'required']) }}
-                </div>
-            </div>
-
-            <div class='p-2 row'>
-                <div class='col'>
-                    {{ Form::label('Data Entrada', '') }}:
-                    {{ Form::input('dateTime-local', 'dt_entrada', '', ['class' => 'form form-control', 'value' => old('dt_entrada'), 'id' => 'dt_entrada']) }}
-                    {{ Form::hidden('user_id', Auth::user()->id) }}
-                </div>
-                <div class='col'>
-                    {{ Form::label('limite_analise', '') }}:
-                    {{ Form::text('limite_analise', '', ['class' => 'form form-control', 'value' => old('limite_analise'), 'id' => 'limite_analise', 'readonly' => 'readonly']) }}
-                </div>
-            </div>
-
-            <div class='p-2 row'>
-                <div class='col'>
-                    {{ Form::label('ccpae', '') }}:
-                    {{ Form::text('ccpae', '', ['class' => 'form form-control', 'value' => old('ccpae')]) }}
-                </div>
-                <div class='col'>
-                    {{ Form::label('ccpae_vencimento', '') }}:
-                    {{ Form::date('ccpae_venc', '', ['class' => 'form form-control', 'value' => old('ccpae_venc')]) }}
-                </div>
-            </div>
-
-            <div class='p-2 row'>
-                <div class='col-6'>
-                    {{ Form::label('sei', '') }}:
-                    {{ Form::text('sei', '', ['class' => 'form form-control', 'value' => old('sei'), 'id' => 'sei', 'title' => 'Número do Processo do Sei', 'maxlength' => 150]) }}
-                </div>
-                <div class="col-6">
-                    {{ Form::label('sit_mancha', 'Situação da Mancha') }}:
-                    {{ Form::select('sit_mancha', $sit_mancha, '', ['placeholder' => 'Selecione a Opção', 'class' => 'form form-control']) }}
-                </div>
-            </div>
-
-            <div class='p-2 row'>
-                <div class='col'>
-                    {{ Form::label('obs', '') }}:
-                    {{ Form::textarea('obs', '', ['class' => 'form form-control', 'value' => old('obs')]) }}
-                </div>
-
-
-            </div>
-
-
-            <div class='p-2 row'>
-                <div class='col'>
-                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
-                </div>{{ Form::close() }}
-
             </div>
 
         </div>
@@ -155,7 +154,7 @@
                 "progressBar": true,
                 "showDuration": "600",
             }
-            toastr.success("{{ session('message') }}"); 
+            toastr.success("{{ session('message') }}");
             // <div class = "alert alert-success" >
             //     {{ session('message') }}
             // </div>

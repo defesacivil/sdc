@@ -15,7 +15,13 @@
 @section('content')
 
 
-    <div class="row flex-fill">
+    <div class="row p-3">
+
+        <div class="row">
+            <div class="col text-center">
+                <a class="btn btn-success btn-sm" href="{{ url('drrd') }}">Voltar</a>
+            </div>
+        </div>
 
         <div class="col-md-12">
 
@@ -27,20 +33,20 @@
                             <a class="btn btn-primary btn-sm" href="{{ url('pae/empdor/create') }}" title="Inserir novo Registro">+ Novo Registro</a>
                         </li>
                         <li class="nav-item mr-1">
-                            <a class="btn btn-info btn-sm" id="btn_search">Pesquisar</a>
+                            <a class="btn btn-warning btn-sm" id="btn_search">Pesquisar</a>
                         </li>
                         <li class="nav-item mr-1">
                             <a class="btn btn-secondary btn-sm" href="{{ url('pae/empdor/export') }}" title="Inserir novo Registro">* Exportar Excel</a>
                         </li>
                         <li class="nav-item mr-1">
-                            <a class="btn btn-success btn-sm" href="{{ url('drrd') }}">Voltar</a>
+
                         </li>
                     </ul>
 
                 </div>
             </div>
             <div class="row" id="div_search">
-                <div class="col">
+                <div class="col col-md-6">
                     <label for="serach">Busca:</label>
                     {{ Form::open(['url' => 'pae/empdor', 'method' => 'POST']) }}
                     {{ Form::token() }}
@@ -53,78 +59,81 @@
                     {{ Form::close() }}
                 </div>
             </div>
-            <div class="col">
+            <div class="row">
+                <div class="col col-md-12">
 
-                <p class='text-right'>Total Registros : {{ $empdors->total() }}</p>
-                <table class="table table-bordered table-condensed table-sm">
-                    <tr>
-                        <th class="col-1 bg-secondary">CÓDIGO</th>
-                        <th class="col-10 bg-secondary">EMPREENDEDOR</th>
-                        <th class="col-1 bg-secondary">AÇÕES</th>
-                    </tr>
-
-                    @foreach ($empdors as $key => $empdor)
+                    <p class='text-right'>Total Registros : {{ $empdors->total() }}</p>
+                    <table class="table table-bordered table-condensed table-sm">
                         <tr>
-                            <td>{{ $empdor->id }}</td>
-                            <td>{{ $empdor->nome }}</td>
+                            <th class="col-1 bg-secondary">CÓDIGO</th>
+                            <th class="col-9 bg-secondary">EMPREENDEDOR</th>
+                            <th class="col-2 bg-secondary">AÇÕES</th>
+                        </tr>
 
-                            <td>
-                                <a href='{{ url('pae/empdor/edit/' . $empdor->id) }}'><img src='{{ asset('imagem/icon/editar.png') }}'></a>
-                                <a onclick="return confirm('Deseja realmente apagar esse Registro !')" href='#'><img src='{{ asset('imagem/icon/delete.png') }}'></a>
-                                <a href='{{ url('pae/empdor/show/' . $empdor->id) }}'><img src='{{ asset('imagem/icon/view.png') }}'></a>
+                        @foreach ($empdors as $key => $empdor)
+                            <tr>
+                                <td>{{ $empdor->id }}</td>
+                                <td>{{ $empdor->nome }}</td>
+
+                                <td>
+                                    <a href='{{ url('pae/empdor/edit/' . $empdor->id) }}'><img src='{{ asset('imagem/icon/editar.png') }}'></a>
+                                    <a onclick="return confirm('Deseja realmente apagar esse Registro !')" href='#'><img src='{{ asset('imagem/icon/delete.png') }}'></a>
+                                    <a href='{{ url('pae/empdor/show/' . $empdor->id) }}'><img src='{{ asset('imagem/icon/view.png') }}'></a>
+
+                                </td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="7" class='text-center'>
+                                {{ $empdors->links() }}
 
                             </td>
                         </tr>
-                    @endforeach
-                    <tr>
-                        <td colspan="7" class='text-center'>
-                            {{ $empdors->links() }}
-
-                        </td>
-                    </tr>
-                </table>
+                    </table>
+                </div>
             </div>
+
         </div>
     </div>
 
-    @stop
+@stop
 
-    @section('css')
-        <!--<link rel="stylesheet" href="/css/admin_custom.css">-->
-    @stop
+@section('css')
+    <!--<link rel="stylesheet" href="/css/admin_custom.css">-->
+@stop
 
-    @section('js')
-        <script text="javascript/text">
-            $(document).ready(function() {
+@section('js')
+    <script text="javascript/text">
+        $(document).ready(function() {
 
-                $("#div_search").hide();
+            $("#div_search").hide();
 
-                $("#btn_search").click(function() {
-                    $("#div_search").toggle();
-                });
+            $("#btn_search").click(function() {
+                $("#div_search").toggle();
             });
-        </script>
-         <script>
+        });
+    </script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "showDuration": "800",
+        }
+        @if (session('message'))
             toastr.options = {
                 "closeButton": true,
                 "progressBar": true,
-                "showDuration": "800",
+                "showDuration": "600",
             }
-            @if (session('message'))
-                toastr.options = {
-                    "closeButton": true,
-                    "progressBar": true,
-                    "showDuration": "600",
-                }
-                toastr.success("{{ session('message') }}"); <
-                div class = "alert alert-success" >
-                    {{ session('message') }} </div>
-            @endif
-            @if ($errors->any())
-    
-                @foreach ($errors->all() as $error)
-                    toastr.error("{{ $error }}")
-                @endforeach
-            @endif
-        </script>
-    @stop
+            toastr.success("{{ session('message') }}"); <
+            div class = "alert alert-success" >
+            {{ session('message') }} < /div>
+        @endif
+        @if ($errors->any())
+
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}")
+            @endforeach
+        @endif
+    </script>
+@stop

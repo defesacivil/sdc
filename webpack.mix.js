@@ -16,5 +16,7 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .js('resources/views/js/demanda.index.js', 'public/js/views');
 
+mix.css('node_modules/bootstrap/dist/css/bootstrap.css', 'public/css/app.css');
+
 mix.js('node_modules/chart.js/dist/Chart.js', 'public/js/chart');
 mix.js('node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js', 'public/js/chartjs-datalabels');

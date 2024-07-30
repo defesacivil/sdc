@@ -24,11 +24,19 @@ class VoluntarioController extends Controller
 
         $profissaos = Profissao::all()->pluck('nome', 'id');
         $municipios = Municipio::all(['nome', 'id'])->pluck('nome', 'id');
+        $total = Voluntario::all()->count();
+        $municipio = Voluntario::all()->groupBy('municipio_id')->count();
+        $regiao = Voluntario::all()->groupBy('regiao_id')->count();
+
+        //dd($municipio);
        
         return view("cedec.voluntario.index", [
 
             'profissaos' => $profissaos,
             'municipios' => $municipios,
+            'total'      => $total,
+            'municipio'      => $municipio,
+            'regiao'      => $regiao,
         ]);
     }
 
@@ -39,6 +47,15 @@ class VoluntarioController extends Controller
      */
     public function create()
     {
+        $profissaos = Profissao::all()->pluck('nome', 'id');
+        $municipios = Municipio::all(['nome', 'id'])->pluck('nome', 'id');
+
+        return view("cedec.voluntario.create", [
+
+            'profissaos' => $profissaos,
+            'municipios' => $municipios,
+            
+        ]);
     }
 
     /**
@@ -50,7 +67,7 @@ class VoluntarioController extends Controller
     public function store(Request $request)
     {
 
-        dd($request->all());
+        //dd($request->all());
 
         $validator = $request->validate(
             [

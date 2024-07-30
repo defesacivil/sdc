@@ -1,6 +1,6 @@
 @extends('layouts.pagina_master')
 {{-- header --}}
-@section('header')
+@section('breadcrumb')
 
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
@@ -20,7 +20,7 @@
 
             <p class="text-center"><a href='{{ url('drrd') }}' class='btn btn-primary'>Voltar</a></p>
             <p class="text-center">
-                <legend>Usuários Ativos no Sistema</legend>
+                <legend class="fw-bold">Usuários Ativos no Sistema</legend>
             </p>
         </div>
     </div>
@@ -48,70 +48,73 @@
         </div>
     </div>
 
-    <div class="table-responsive-sm p-2">
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive-sm p-2">
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Empreendedor</th>
-                <th>CNPJ</th>
-                <th>Nome Usuário</th>
-                <th>CPF</th>
-                <th>E-mail</th>
-                <th>Situação</th>
-                <th>Opções</th>
-            </tr>
-            </thead>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Empreendedor</th>
+                            <th>CNPJ</th>
+                            <th>Nome Usuário</th>
+                            <th>CPF</th>
+                            <th>E-mail</th>
+                            <th>Situação</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
 
-            <?php
-            
-            foreach ($usuarios as $key => $usuario) {
-                print '<tr>';
-                print '<td>' . ($key + 1) . '</td>';
-                print '<td>' . $usuario->empreendedor . '</td>';
-                print '<td></td>';
-                print '<td>' . $usuario->name . '</td>';
-                print '<td>' . $usuario->cpf . '</td>';
-                print '<td>' . $usuario->email . '</td>';
-                print '<td>' . ($usuario->ativo == 0 ? 'Desativado' : 'Ativado') . '</td>';
-            
-                print '<td>';
-                if ($usuario->ativo == 0) {
-                    # Ativar
-                    print "<button name='btnStatus' class='btn btn-link' title='Ativar o Usuário' data-user_id='" .
-                        $usuario->id .
-                        "' data-status='1'>
-                                                                                                                                                                                                                                                <img src='" .
-                        asset('imagem/icon/check.png') .
-                        "' width='25'>
-                                                                                                                                                                                                                                                </button>";
-                } else {
-                    print "<button name='btnStatus' class='btn btn-link' title='Desativar o Acesso do Usuário' data-user_id='" .
-                        $usuario->id .
-                        "' data-status='0'>
-                                                                                                                                                                                                                                                <img src=" .
-                        asset('imagem/icon/cancela.png') .
-                        " width='25'>
-                                                                                                                                                                                                                                                </button> |";
-            
-                    print "<button name='btnResetSenha' class='btn btn-link' title='Resetar Senha do Usuário Externo' data-user_id='" .
-                        $usuario->id .
-                        "'>
-                                                                                                                                                                                                                                                <img src=" .
-                        asset('imagem/icon/password.png') .
-                        " width='25'>
-                                                                                                                                                                                                                                                </button>";
-                }
-                print '</td>';
-                print '</tr>';
-            }
-            
-            ?>
+                    <?php
+                    
+                    foreach ($usuarios as $key => $usuario) {
+                        print '<tr>';
+                        print '<td>' . ($key + 1) . '</td>';
+                        print '<td>' . $usuario->empreendedor . '</td>';
+                        print '<td></td>';
+                        print '<td>' . $usuario->name . '</td>';
+                        print '<td>' . $usuario->cpf . '</td>';
+                        print '<td>' . $usuario->email . '</td>';
+                        print '<td>' . ($usuario->ativo == 0 ? 'Desativado' : 'Ativado') . '</td>';
+                    
+                        print '<td>';
+                        if ($usuario->ativo == 0) {
+                            # Ativar
+                            print "<button name='btnStatus' class='btn btn-link' title='Ativar o Usuário' data-user_id='" .
+                                $usuario->id .
+                                "' data-status='1'>
+                                                                                                                                                                                                                                                                                                                    <img src='" .
+                                asset('imagem/icon/check.png') .
+                                "' width='25'>
+                                                                                                                                                                                                                                                                                                                    </button>";
+                        } else {
+                            print "<button name='btnStatus' class='btn btn-link' title='Desativar o Acesso do Usuário' data-user_id='" .
+                                $usuario->id .
+                                "' data-status='0'>
+                                                                                                                                                                                                                                                                                                                    <img src=" .
+                                asset('imagem/icon/cancela.png') .
+                                " width='25'>
+                                                                                                                                                                                                                                                                                                                    </button> |";
+                    
+                            print "<button name='btnResetSenha' class='btn btn-link' title='Resetar Senha do Usuário Externo' data-user_id='" .
+                                $usuario->id .
+                                "'>
+                                                                                                                                                                                                                                                                                                                    <img src=" .
+                                asset('imagem/icon/password.png') .
+                                " width='25'>
+                                                                                                                                                                                                                                                                                                                    </button>";
+                        }
+                        print '</td>';
+                        print '</tr>';
+                    }
+                    
+                    ?>
 
-        </table>
-    </div>
+                </table>
+            </div>
 
+        </div>
     </div>
 
 

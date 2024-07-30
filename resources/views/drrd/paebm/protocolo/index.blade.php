@@ -1,14 +1,14 @@
 @extends('layouts.pagina_master')
 
-{{-- header --}}
-@section('header')
+{{-- breadcrumb --}}
+@section('breadcrumb')
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             @can('cedec', 'redec')
                 <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
             @endcan
-            <li class="breadcrumb-item active" aria-current="page">Drrd</li>
+            <li class="breadcrumb-item active" aria-current="page">DSB</li>
         </ol>
     </nav>
 @endsection
@@ -43,7 +43,7 @@
                     @endif
                     <a class='btn btn-success' href='{{ url('drrd') }}'>Voltar</a>
                     <p class="text-center">
-                        <legend>Protocolo PAEBM</legend>
+                        <legend class="fw-bold">Protocolo PAE</legend>
                     </p>
                     <i class="text-light bg-danger">Processo Finalizado Encerrado</i>
                     <i class="text-light bg-warning">Prazo de Vencimento Próximo</i>
@@ -51,11 +51,11 @@
             </div>
 
             {{-- DIV PESQUISA --}}
-            <fieldset class="p-3" id="divsearch">
+            <fieldset class="p-3 shadow bd-body rounded" id="divsearch">
 
                 <div class="p-2 row">
                     <div class="col-4">
-                        <label for="search">Pesquisar: </label> (nome da Barragem ou parte do nome / Nr Protocolo )
+                        <label for="search" class='fw-bold'>Pesquisar: </label> (nome da Barragem ou parte do nome / Nr Protocolo )
                         {{ Form::open(['url' => 'pae/protocolo', 'method' => 'POST']) }}
                         {{ Form::token() }}
 
@@ -64,17 +64,17 @@
                 </div>
                 <div class="p-2 row" id="dtSearch">
                     <div class="p-2 col-4">
-                        <label>Período Inicial Entrada</label>
+                        <label class="fw-bold">Período Inicial Entrada</label>
                         <input type="date" class="form form-control col-6" name="dtInicio" id="dtInicio">
                     </div>
                     <div class="p-2 col-4">
-                        <label>Período Final Entrada</label>
+                        <label class="fw-bold">Período Final Entrada</label>
                         <input type="date" class="form form-control col-6" name="dtFinal" id="dtFinal">
                     </div>
                 </div>
                 <div class="p-2 row">
                     <div class="col">
-                        {{ Form::submit('Pesquisa', ['class' => 'btn btn-outline-secondary']) }}
+                        {{ Form::submit('Pesquisa', ['class' => 'btn btn-primary']) }}
                     </div>
 
 
@@ -294,7 +294,7 @@
         </div>
     </div>
 
-@stop
+@endsection
 
 @section('css')
     <!--<link rel="stylesheet" href="/css/admin_custom.css">-->

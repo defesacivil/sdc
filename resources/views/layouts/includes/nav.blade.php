@@ -1,4 +1,3 @@
-<div class="col-12">
     <nav class="navbar navbar-expand-lg navbar-light">
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -139,5 +138,4 @@
             <div class="p-2">
                 <img src="{{ asset('imagem/icon/user.png') }}" alt="" width="32" height="32" class="rounded-circle me-2">
             </div>
-    </nav>
-</div>
+        </nav>

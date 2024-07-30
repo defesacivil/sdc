@@ -1,6 +1,6 @@
 @extends('layouts.pagina_master')
 {{-- header --}}
-@section('header')
+@section('breadcrumb')
 
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">

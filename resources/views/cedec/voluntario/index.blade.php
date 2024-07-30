@@ -1,4 +1,4 @@
-@extends('layouts.pagina_master_web')
+@extends('layouts.pagina_master')
 
 {{-- header --}}
 @section('header')
@@ -8,17 +8,83 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 shadow bg-white rounded p-3">
             <h4>
-                <p class="p-4 text-center">Cadastro de Voluntários da Defesa Civil de MG</p>
-            </h4>
+                <h3><p class="p-4 text-center">Painel Administração <br> Cadastro de Voluntários da Defesa Civil de MG</p></h3>
+                
+            </h4> 
+            <div class="row d-flex justify-content-center p-3">
+                
+                <div class="col-3">
+                    <div class="card p-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <i class="fa fa-database fa-5x"></i>
+                                </div>
+                                <div class="col-9">
+                                    <p class="card-title h3">Registros<br>
+                                    {{ $total }}</p>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                {{-- total municipíos --}}
+                <div class="col-3">
+                    <div class="card p-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <i class="fa fa-database fa-5x"></i>
+                                </div>
+                                <div class="col-9">
+                                    <p class="card-title h3">Municípios<br>
+                                    {{ $municipio }}</p>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
 
-            <a href='#'>Cancelar cadastro></a>
-            <span>Voçe pode pedir a remoção do cadastro da base de Dados de Voluntários</span>
+                {{-- total Regiao --}}
+                <div class="col-3">
+                    <div class="card p-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <i class="fa fa-database fa-5x"></i>
+                                </div>
+                                <div class="col-9">
+                                    <p class="card-title h3">Regiões DC<br>
+                                    {{ $regiao }}</p>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            
+            </div> 
+            
+            {{-- charts --}}
+            <div class="row p-3">
+                <div class="col-4 col-md-12">
+
+                </div>
+                <div class="col-4 col-md-12">
+
+                </div>
+                <div class="col-4 col-md-12">
+
+                </div>
+            </div>
         </div>
     </div>
 
-    @include('cedec.voluntario.form.index')
+   
 
 @stop
 

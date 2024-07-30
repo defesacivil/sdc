@@ -58,8 +58,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-    Route::get('voluntariado', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
-    Route::post('voluntariado/create', 'App\Http\Controllers\Voluntario\VoluntarioController@store');
+   
 
 
 
@@ -844,3 +843,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('autentica/{token}', 'App\Http\Controllers\Cedec\ApiController@autentica');
 require __DIR__ . '/auth.php';
+
+Route::get('voluntariado', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
+Route::post('voluntariado/store', 'App\Http\Controllers\Voluntario\VoluntarioController@store');
+Route::get('voluntariado/create', 'App\Http\Controllers\Voluntario\VoluntarioController@create');
+Route::post('voluntariado/index', 'App\Http\Controllers\Voluntario\VoluntarioController@index');

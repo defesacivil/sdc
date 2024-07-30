@@ -6,6 +6,9 @@
 <link href="{{ asset('vendor/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
 {{-- <link href="{{ asset('vendor/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" /> --}}
 <style>
+
+    body { padding: 0; margin: 0; box-sizing: border-box; }
+
     .navbar {
         background-color: #FE9A2E;
         color: white !important;
@@ -17,10 +20,12 @@
     }
 
     body {
-        margin: 0 auto !important;
+        /*margin: 0 auto !important;*/
         /* min-height: 400px !important; */
         /* background-color: #A9D0F5; */
     }
+
+    
 
     .back {
         background-color: #e9ecef;
