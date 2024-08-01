@@ -1,8 +1,7 @@
 @extends('layouts.pagina_master')
 
 {{-- header --}}
-@section('header')
-
+@section('breadcrumb')
 
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
@@ -14,7 +13,7 @@
 @endsection
 
 @section('content')
-    <div class="container border p-3 min-vh-100" style="background-color:#e9ecef;">
+    <div class="shadow p-3">
         <div class="row">
 
             <div class="col-md-12">

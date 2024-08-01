@@ -1,7 +1,7 @@
 @extends('layouts.pagina_master')
 
-{{-- header --}}
-@section('header')
+{{-- breadcrumbs --}}
+@section('breadcrumb')
 
     @php
         $tab = isset($active_tab) ? $active_tab : 'dados_pedidos-tab';
@@ -39,13 +39,13 @@
             <div>
             </div>
             @can('cedec')
-                <div class="row">
+                <div class="row shadow p-3">
                     <div class="col-md-6">
 
                         {{ Form::open(['url' => 'mah/busca']) }}
                         {{ Form::token() }}
 
-                        {{ Form::label('txtBusca', 'Busca') }} :
+                        {{ Form::label('txtBusca', 'Busca', ['class'=>'fw-bold']) }} :
                         {{ Form::text('txtBusca', '', ['class' => 'form form-control form-control-sm col-12']) }}
                         <br>
 

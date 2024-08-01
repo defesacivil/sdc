@@ -51,7 +51,7 @@
 
     <div class="row">
 
-        <div class="col text-center">
+        <div class="col">
             @can('cedec')
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a></p>
             @endcan
@@ -224,7 +224,7 @@
                     <div class="tab-pane fade" id="material_pedido-tab" role="tabpanel" aria-labelledby="material_pedido-tab">
 
                         <p><button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                data-target="#material-pedido-modal" value="Envio Documentos Anexo">Materiais do Pedido
+                                data-target="#material-pedido-modal" value="Envio Documentos Anexo">Materiais do Pedido1
                             </button>
                         </p>
                         <div class="row">

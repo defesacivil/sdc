@@ -67,9 +67,7 @@ class VoluntarioController extends Controller
     public function store(Request $request)
     {
 
-        //dd($request->all());
-
-        $validator = $request->validate(
+$validator = $request->validate(
             [
                 'nome'         => 'required|max:110',
                 'cpf'          => 'required|max:15',
@@ -101,8 +99,6 @@ class VoluntarioController extends Controller
 
             $regiao_id = CedecRdc::select('id_rpm')->where('id_municipio', '=', $request->municipio_id)->first();
                             
-            //dd($regiao_id['id_rpm']);
-
             $voluntario->nome         = $request->nome;
             $voluntario->cpf          = $request->cpf;
             $voluntario->ci           = $request->ci;
@@ -114,18 +110,16 @@ class VoluntarioController extends Controller
 
             $voluntario->save();
 
-            $tel = new Telefone();
-
-            //dd($telefone);
-
+            
             foreach ($request->telefones as $key => $telefone) {
-               
+                
+                $tel = new Telefone();
                 $tel->model_type = "App\\Model\\Voluntario";
                 $tel->model_id   = $voluntario->id;
-                $tel->telefone   = $telefone->telefone;
-                $tel->whatsapp   = $telefone->whatsapp;
+                $tel->telefone   = $telefone;
+                $tel->whatsapp   = $request->sel_zap[$key];
 
-                dd($telefone->save());
+                $tel->save();
                 
             }
 

@@ -1,58 +1,64 @@
 <div class="row">
     <div class="col">
 
-        {{ Form::open(['url' => 'voluntariado/create', 'id' => 'form_voluntariado']) }}
+        {{ Form::open(['url' => 'voluntariado/store', 'id' => 'form_voluntariado']) }}
         <div class="row">
             {{ Form::token() }}
         </div>
-        <div class="row">
+        <div class="row shadow p-3">
             <div class="p-3 col-12">
                 {{ Form::label('nome', 'Nome', ['class' => 'fw-bold']) }}:
-                {{ Form::text('nome', 'teste', ['class' => 'form form-control', 'id' => 'nome', 'placeholder' => 'Nome do Voluntário', 'maxlength' => '110', 'required']) }}
+                {{ Form::text('nome', '', ['class' => 'form form-control', 'id' => 'nome', 'placeholder' => 'Nome do Voluntário', 'maxlength' => '110', 'required']) }}
             </div>
 
             <div class="p-3 col-12">
                 {{ Form::label('cpf', 'CPF', ['class' => 'fw-bold']) }}:
-                {{ Form::text('cpf', '001002', ['class' => 'form form-control', 'id' => 'cpf', 'placeholder' => 'CPF', 'maxlength' => '15', 'required']) }}
+                {{ Form::text('cpf', '', ['class' => 'form form-control', 'id' => 'cpf', 'placeholder' => 'CPF', 'maxlength' => '15', 'required']) }}
             </div>
 
             <div class="p-3 col-12">
                 {{ Form::label('ci', 'Carteira de Identidade', ['class' => 'fw-bold']) }}:
-                {{ Form::text('ci', '121212', ['class' => 'form form-control', 'id' => 'ci', 'placeholder' => 'Carteira de Identidade', 'maxlength' => '15', 'required']) }}
+                {{ Form::text('ci', '', ['class' => 'form form-control', 'id' => 'ci', 'placeholder' => 'Carteira de Identidade', 'maxlength' => '15', 'required']) }}
             </div>
 
             <div class="p-3 col-12">
                 {{ Form::label('profissao', 'Profissão', ['class' => 'fw-bold']) }}:
-                {{ Form::select('profissao', $profissaos, '2', ['class' => 'form form-control form-select profissao', 'id' => 'profissao', 'placeholder' => 'Selecione uma Profissão', 'data-alvo_id' => '', 'required']) }}
+                {{ Form::select('profissao', $profissaos, '', ['class' => 'form form-control form-select profissao', 'id' => 'profissao', 'placeholder' => 'Selecione uma Profissão', 'data-alvo_id' => '', 'required']) }}
             </div>
 
             <div class="p-3 col-12">
                 {{ Form::label('atividade', 'Atividade a Exercer', ['class' => 'fw-bold']) }}:
-                {{ Form::text('atividade', 'ati_teste', ['class' => 'form form-control', 'id' => 'atividade', 'placeholder' => '', 'maxlength' => '50', 'required']) }}
+                {{ Form::text('atividade', '', ['class' => 'form form-control', 'id' => 'atividade', 'placeholder' => '', 'maxlength' => '50', 'required']) }}
             </div>
 
             <div class="p-3 col-12">
                 {{ Form::label('email', 'E-mail', ['class' => 'fw-bold']) }}:
-                {{ Form::email('email', 'jose@jose.com', ['class' => 'form form-control', 'id' => 'email', 'placeholder' => '', 'maxlength' => '110', 'required']) }}
+                {{ Form::email('email', '', ['class' => 'form form-control', 'id' => 'email', 'placeholder' => '', 'maxlength' => '110', 'required']) }}
             </div>
 
             <div class="p-3 col-12">
                 {{ Form::label('municipio_id', 'Cidade onde Reside', ['class' => 'fw-bold']) }}:
-                {{ Form::select('municipio_id', $municipios, '620', ['class' => 'municipio_id form form-control', 'id' => 'municipio_id', 'placeholder' => 'Selecione um Município', 'data-alvo_id' => '', 'required']) }}
+                {{ Form::select('municipio_id', $municipios, '', ['class' => 'municipio_id form form-control', 'id' => 'municipio_id', 'placeholder' => 'Selecione um Município', 'data-alvo_id' => '', 'required']) }}
             </div>
 
+            {{-- Telefone --}}
             <div class="row telefone">
-                <div class="p-3 col-3">
+                <div class="p-3 col-12 col-md-6">
                     {{ Form::label('telefone', 'Nº Telefone', ['class' => 'fw-bold']) }}:
-                    {{ Form::text('telefone', '', ['class' => 'form form-control', 'id' => 'telefone0', 'name' => 'telefones[]', 'placeholder' => 'Adicione um Número de Telefone']) }}
+                    {{ Form::text('telefone', '', ['class' => 'form form-control', 'id' => 'telefone0', 'name' => 'telefones[]', 'placeholder' => 'Adicione um Número de Telefone','required']) }}
                 </div>
-                <div class="p-3 col">
+                <div class="p-3 col-12 col-md-6">
                     <label class="fw-bold">Tem Whatsapp ?</label><br>
-                    <input type="checkbox" name="whatsapp[]" id="whatsapp0" data-n='0' class='form form-checkbox whatsapp'>
+                    <select name="sel_zap[]" id="sel_zap" class="form form-control">
+                        <option value="0">Não</option>
+                        <option value="1">Sim</option>
+                    </select>
                 </div>
-            </div>
 
             <div id="imendaHTMLtelefone"></div>
+
+            </div>
+
 
             <div class="row">
                 <div class="col">

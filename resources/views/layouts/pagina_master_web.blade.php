@@ -13,27 +13,16 @@
     {{-- header css --}}
     @include('layouts/includes/header')
 
-    
-</head>
+ </head>
 
 <body class="min-vh-100" style="background-color: rgb(215, 217, 219)">
 
-    {{-- Impressao do header no PDF --}}
-    @if (!isset($pdf))
-        <!-- nav -->
-        <div class="row print" id='barra'>
-            @include('layouts/includes/web/nav')
-        </div>
-
-        <div class="row" id="cabecalho">
-            {{-- header --}}
-            @yield('header')
-        </div>
-    @endif
-
     <div class="container">
-    
-    <div class="row" id="corpo">
+
+        <div class="row" id="corpo">
+
+           @yield('header_pg')
+
 
             {{-- conteudo container corpo --}}
             <div class="col-12 col-md-12">
@@ -41,16 +30,16 @@
             </div>
 
         </div>
-        
+
     </div>
 
-        {{-- Impressao do header no PDF --}}
-        @if (!isset($pdf))
-            {{-- Rodape --}}
-            <div class="row justify-content-center  print" id="footer">
-                @include('layouts/includes/footer')
-            </div>
-        @endif
+    {{-- Impressao do header no PDF --}}
+    @if (!isset($pdf))
+        {{-- Rodape --}}
+        <div class="row justify-content-center  print" id="footer">
+            @include('layouts/includes/footer')
+        </div>
+    @endif
 
 
 
@@ -67,9 +56,7 @@
         var cabecalho = $('#cabecalho').height();
         var footer = $('#footer').height();
         var view = window.innerHeight;
-        $("#corpo").css('min-height',(view - barra - cabecalho - footer));
-        
-        
+        $("#corpo").css('min-height', (view - barra - cabecalho - footer));
     </script>
 
 

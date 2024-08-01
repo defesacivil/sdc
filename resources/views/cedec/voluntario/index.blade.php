@@ -72,6 +72,7 @@
             {{-- charts --}}
             <div class="row p-3">
                 <div class="col-4 col-md-12">
+                    
 
                 </div>
                 <div class="col-4 col-md-12">
