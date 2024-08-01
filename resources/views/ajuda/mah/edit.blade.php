@@ -92,6 +92,8 @@
 
                 <div class="tab-content" id="nav-tabContent">
                     {{-- Dados do pedido --}}
+
+                    
                     <div class="tab-pane fade show active" id="dados_pedidos-tab" role="tabpanel"
                         aria-labelledby="dados_pedidos-tab">
                         {{ Form::open(['url' => 'mah/pedido/update/' . $pedido->id]) }}

@@ -78,11 +78,6 @@
                             </li>
                         @endcan                        
                     </ul>
-
-
-                    
-
-
                 </div>
 
                 <div class="row p-3">
