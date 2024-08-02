@@ -58,16 +58,27 @@
 
             <!-- Acesso COMPDEC Enviar analise -->
             @hasrole('compdec')
-                  <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
-                  <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
-                  </p>
+                <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
+                    <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
+                </p>
             @endhasrole
 
             @can('mah', $pedido->municipio_id)
-                <legend>Edição Pedido Ajuda Humanitária - <i>({{ $pedido->municipio->nome }})</i></legend>
+
+                <div class="row">
+                    <div class="col col-md-6">
+                        <legend>Edição Pedido Ajuda Humanitária - <i>({{ $pedido->municipio->nome }})</i></legend>
                 <p>Nº : {{ $pedido->numero }}-{{ substr($pedido->data_entrada_sistema, 0, 4) }}</p>
                 <p>Data Geração :<b> {{ \Carbon\Carbon::parse($pedido->data_entrada_sistema)->format('d/m/Y H:i:s') }}</b></p>
 
+                    </div>
+                    <div class="col col-md-6">
+                        <p class="fw-bold">Status : <span class="badge text-bg-secondary">{{ status_pedido_ah($pedido->status) }}</span></p>                       
+
+                        
+                    </div>
+                </div>
+                
                 <ul class="nav nav-pills nav-fill" id="tab-mah" role="tablist">
 
                     <li class="nav-item">
@@ -93,7 +104,7 @@
                 <div class="tab-content" id="nav-tabContent">
                     {{-- Dados do pedido --}}
 
-                    
+
                     <div class="tab-pane fade show active" id="dados_pedidos-tab" role="tabpanel"
                         aria-labelledby="dados_pedidos-tab">
                         {{ Form::open(['url' => 'mah/pedido/update/' . $pedido->id]) }}
@@ -385,6 +396,7 @@
                                     <th class="text-center">#</th>
                                     <th class="text-center">Data</th>
                                     <th class="text-center">Descrição/Parecer</th>
+                                    <th class="text-center">Seção de Parecer</th>
                                     <th class="text-center">Situação</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -397,10 +409,15 @@
                                                 <p name="lk_parecer"> {{ $despacho->parecer }}...</p>
                                             </td>
                                             <td>{{ $despacho->tramit_parecer }}</td>
+                                            <td>{{ $despacho->situacao == 0 ? 'Desfavorável' : 'Favorável' }}</td>
                                             <td>
                                                 @can('cedec')
                                                     <button type='button' class="btn" name='editarDespacho'><img src={{ asset('imagem/icon/editar.png') }}></button>
                                                     <a href='{{ route('parecer.deletar', $despacho->id) }}' onclick="return confirm('Deseja Apagar o Registro !')" name='deletarDespacho'><img src={{ asset('imagem/icon/delete.png') }}></a>
+
+                                                    @if ($despacho->situacao == 1)
+                                                        <a href='#'>Tramitar Processo</a>
+                                                    @endif
                                                 @endcan
                                             </td>
                                         </tr>
@@ -426,45 +443,45 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    
-                                        <div class='col-12 p-2'>
-                                            {{ Form::open(['url' => 'mah/analise/store', 'id' => 'form_parecer']) }}
-                                            {{ Form::token() }}
-                                            {{ Form::hidden('data_parecer', Carbon\Carbon::now(), ['id' => 'data_parecer', 'required']) }}
-                                            {{ Form::hidden('user_id', Auth::user()->id, ['id' => 'user_id', 'required']) }}
-                                            {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
 
-                                            {{ Form::label('Descrição Despacho / Parecer') }} <span> ( Caracteres restantes &nbsp;<i id='carac_rest'> 255 </i>&nbsp;)</span>
-                                            {{ Form::textarea('parecer', '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                    <div class='col-12 p-2'>
+                                        {{ Form::open(['url' => 'mah/analise/store', 'id' => 'form_parecer']) }}
+                                        {{ Form::token() }}
+                                        {{ Form::hidden('data_parecer', Carbon\Carbon::now(), ['id' => 'data_parecer', 'required']) }}
+                                        {{ Form::hidden('user_id', Auth::user()->id, ['id' => 'user_id', 'required']) }}
+                                        {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
+
+                                        {{ Form::label('Descrição Despacho / Parecer') }} <span> ( Caracteres restantes &nbsp;<i id='carac_rest'> 255 </i>&nbsp;)</span>
+                                        {{ Form::textarea('parecer', '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-6 p-2">
+                                            {{ Form::label('Tramitar') }} :
+                                            {{ Form::select('tramit_parecer', $secao_tramitar, '', ['class' => 'form form-control', 'id' => 'tramitar', 'required']) }}
                                         </div>
-                                        <div class="row">
-
-                                            <div class="col-6 p-2">
-                                                {{ Form::label('Tramitar') }} :
-                                                {{ Form::select('tramit_parecer', $secao_tramitar, '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
-                                            </div>
-                                            <div class="col-6 p-2">
-                                                {{ Form::label('Status') }} :
-                                                {{ Form::select('status', [1=>'Favorável', '0'=>'Desfavorável'], '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
-                                            </div>
+                                        <div class="col-6 p-2">
+                                            {{ Form::label('Status') }} :
+                                            {{ Form::select('status', [0 => 'Desfavorável', '1' => 'Favorável'], '', ['class' => 'form form-control form-select', 'id' => 'status', 'required']) }}
                                         </div>
-                                        <br>
+                                    </div>
+                                    <br>
 
-                                            {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnSalvarParecer']) }}
+                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnSalvarParecer']) }}
 
-                                            {{ Form::close() }}
+                                    {{ Form::close() }}
 
-                                            <br><br>
-                                        </div>
-                                   
+                                    <br><br>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-            @endcan
-        </div>
+        @endcan
+    </div>
     </div>
 
 
@@ -505,6 +522,16 @@
     <script src="{{ asset('vendor/select2/js/select2.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+
+            // $('#status').change(function() {
+            //     var status = $(this).val();
+
+            //     if (status == 1) {
+            //         //$('#status').append($('<option>', { value: 1, text: 'My option'}));
+            //             $("#tramitar").append("<option value='text'>text</option>");
+            //     }
+
+            // });
 
             $('#material_id').change(function() {
                 $('#material').val($('#material_id option:selected').text());

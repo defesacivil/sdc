@@ -107,18 +107,17 @@ class AjudaPedidoController extends Controller
 
                 $param = request()->input('txtBusca');
 
-                    $pedidos = DB::table('aju_pedido_pedidos')
-                        ->join('cedec_municipio', 'cedec_municipio.id', '=', 'aju_pedido_pedidos.municipio_id')
-                        ->join('dec_cobrade', 'dec_cobrade.id', '=', 'aju_pedido_pedidos.cobrade_id')
-                        ->select('aju_pedido_pedidos.*', 'cedec_municipio.nome as municipio', 'dec_cobrade.descricao as descricao_cobrade')
-                        ->where('cedec_municipio.nome', "LIKE", '%' . $param . '%')
-                        ->get();
+                $pedidos = DB::table('aju_pedido_pedidos')
+                    ->join('cedec_municipio', 'cedec_municipio.id', '=', 'aju_pedido_pedidos.municipio_id')
+                    ->join('dec_cobrade', 'dec_cobrade.id', '=', 'aju_pedido_pedidos.cobrade_id')
+                    ->select('aju_pedido_pedidos.*', 'cedec_municipio.nome as municipio', 'dec_cobrade.descricao as descricao_cobrade')
+                    ->where('cedec_municipio.nome', "LIKE", '%' . $param . '%')
+                    ->get();
 
-                    return view('ajuda/mah/busca', [
-                        'pedidos' => $pedidos,
-                        'active_tab' => $active_tab,
-                    ]);
-                
+                return view('ajuda/mah/busca', [
+                    'pedidos' => $pedidos,
+                    'active_tab' => $active_tab,
+                ]);
             }
         }
         //$pedidos = AjudaPedido::find();
@@ -307,6 +306,7 @@ class AjudaPedidoController extends Controller
      */
     public function edit(AjudaPedido $pedido)
     {
+        $secao_parecer_list['despacho'] = 'Despacho';
         $active_tab = "";
 
         $materiais_list = [
@@ -318,25 +318,79 @@ class AjudaPedidoController extends Controller
         ];
         $pluck = collect($materiais_list)->pluck('material');
 
+        $favoravel = AjudaPedidoAnaliseTecnica::where('situacao', '=', '1')
+                        ->where('pedido_id', '=', $pedido->id)->count();
+
+        //dd($favoravel);
+
 
         /* despacho */
-        $status = 0;
+        $status = $pedido->status;
 
         if ($status == 0) { # 0 Edição Compdec
-        } elseif ($status == 1) { # 1 Analise DLOG
+
+            $secao_parecer_list['analise_dsh'] = 'Analise DSH';
+            $secao_parecer_list['analise_coord'] = 'Analise Coordenador';
+            $secao_parecer_list['aguard_disp']   = 'Aguardadndo Disponibilidade';
+            $secao_parecer_list['aguard_ret']    = 'Aguardando Retirada';
+            $secao_parecer_list['cancelado']     = 'Cancelado';
+            $secao_parecer_list['reprovado']     = 'Reprovado';
+
+        } elseif( ($status == 1) && ($favoravel >0) ){ # 1 Analise DLOG / parecer favorável
+
+            $secao_parecer_list['analise_dsh']    = 'Analise DSH';
+            $secao_parecer_list['analise_coord']  = 'Analise Coordenador';
+            $secao_parecer_list['edicao_compdec'] = 'Edição Compdec';
+            $secao_parecer_list['aguard_disp']    = 'Aguardando Disponibilidade de Material';
+            $secao_parecer_list['aguard_ret']     = 'Aguardando Retirada de Material';
+            $secao_parecer_list['cancelado']      = 'Cancelar';
+            $secao_parecer_list['reprovado']      = 'Reprovado';
+
         } elseif ($status == 2) { # 2 Analise Diretor DLOG.
+            $secao_parecer_list['analise_dsh']    = 'Analise DSH';
+            $secao_parecer_list['analise_coord']  = 'Analise Coordenador';
+            $secao_parecer_list['aguard_disp']    = 'Aguardando Disponibilidade de Material';
+            $secao_parecer_list['aguard_ret']     = 'Aguardando Retirada de Material';
+            $secao_parecer_list['cancelado']      = 'Cancelar';
+            $secao_parecer_list['reprovado']      = 'Reprovado';
+
         } elseif ($status == 3) { # 3 Aprovado
+
+            $secao_parecer_list['aguard_disp']    = 'Aguardando Disponibilidade de Material';
+            $secao_parecer_list['aguard_ret']     = 'Aguardando Retirada de Material';
+            $secao_parecer_list['cancelado']      = 'Cancelar';
+
         } elseif ($status == 4) { # 4 Aguardando Disponibilidade Mat.
+
+            $secao_parecer_list['aguard_ret']     = 'Aguardando Retirada de Material';
+            $secao_parecer_list['cancelado']      = 'Cancelar';
+
+
         } elseif ($status == 5) { # 5 Aguardando Retirada Mat.
+
+            $secao_parecer_list['cancelado']      = 'Cancelar';
+
         } elseif ($status == 6) { # 6 Atendido
+
         } elseif ($status == 7) { # 7 Cancelado
+
         } elseif ($status == 8) { # 8 Pedido Reprovado
+
         } elseif ($status == 9) { # 9 Processo Finalizado
+           
         }
 
-        $secao_parecer_list = [
-            'Analise DSH' => 'Analise DSH',
-        ];
+         //'analise_dsh'
+           //'analise_coord'
+           //'edicao_compdec'
+            // 'atendido'=>,
+            // 'aguard_disp'=>,
+            // 'aguard_ret'=>,
+            // 'cancelado'=>,
+            // 'reprovado'=>,
+            // 'finalizado'=>,
+            // 'analise_dsh'=>
+
         //$secao_parecer_pluck = collect($secao_parecer_list)->pluck(())
 
         $materiais = AjudaPedidoItens::where('pedido_id', $pedido->id)->get();

@@ -2,6 +2,36 @@
 /**
  * 
  */
+function tramit($status){
+
+    switch ($status) {
+        case "analise_drd":
+            return 'Análise DRD';
+        case "analise_dlog":
+            return 'Análise DLOG';
+        case "analise_coord":
+            return 'Analise Coordenador';
+        case "edicao_compdec":
+            return 'Edicao Pelo Compdec';
+        case "atendido":
+            return 'Atendido';
+        case "aguard_disp":
+            return 'Aguardardando Disponibilidade de Material';
+        case "aguard_ret":
+            return 'Aguardando Retirada de Material';
+        case "cancelado":
+            return 'Cancelado';
+        case "analise_dsh";    
+        return 'Análise DSH';
+        
+        default:
+            # code...
+            break;
+    }
+    
+}
+
+
 function status_pedido_ah($status){
 
     switch ($status) {
@@ -42,6 +72,7 @@ function status_pedido_ah($status){
     }
     
 }
+
 
     function statusPmda($status){
 

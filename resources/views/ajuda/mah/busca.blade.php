@@ -65,6 +65,7 @@
                             <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Municipio</th>
                             <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Cobrade</th>
                             <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Status</th>
+                            <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Data Envio Análise</th>
                             <th style="font-weight: bold; background-color: lightslategrey; text-align: center">Opções</th>
                         </tr>
                         @foreach ($pedidos as $pedido)
@@ -74,6 +75,7 @@
                                 <td>{{ $pedido->municipio }}</td>
                                 <td>{{ $pedido->descricao_cobrade }}</td>
                                 <td>{{ status_pedido_ah($pedido->status) }}</td>
+                                <td>{{ ($pedido->data_hora_envio) ? \Carbon\Carbon::parse($pedido->data_hora_envio)->format('d/m/Y H:i:s') : null }}</td>
                                 <td>
                                     {{-- Editar --}}
                                     <a href='{{ url('mah/pedido/edit', ['id' => $pedido->id]) }}'><img width="25px;"
@@ -97,7 +99,7 @@
             @endcan
             {{-- fim cedec --}}
 
-            @can('compdec')
+            {{-- @can('compdec')
 
                 <br>
 
@@ -129,7 +131,7 @@
                         @endforeach
                     </table>
                 @endif
-            @endcan
+            @endcan --}}
             {{-- fim cedec --}}
 
         </div>
