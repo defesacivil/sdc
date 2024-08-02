@@ -335,10 +335,7 @@ class AjudaPedidoController extends Controller
         }
 
         $secao_parecer_list = [
-            'Analise Dlog' => 'Analise Dlog',
-            'COLCHAO'      => 'COLCHAO',
-            'KIT HIGIENE'  => 'KIT HIGIENE',
-            'KIT LIMPEZA'  => 'KIT LIMPEZA'
+            'Analise DSH' => 'Analise DSH',
         ];
         //$secao_parecer_pluck = collect($secao_parecer_list)->pluck(())
 
@@ -527,6 +524,7 @@ class AjudaPedidoController extends Controller
 
         $pedido->status = $status;
         $pedido->tramit = $tramit;
+        $pedido->data_hora_envio = date('Y/m/d H:i:s');
 
         $pedido->save();
 

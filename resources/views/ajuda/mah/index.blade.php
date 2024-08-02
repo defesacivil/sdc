@@ -187,9 +187,9 @@
                     @endcan
 
 
-
+                     
                     <!-- ######  COMPDEC ###### -->
-                    @can('compdec')
+                    @hasrole('compdec')
                         <legend>Processos Pedido Ajuda Humanitária : <i>{{ Session::get('user')['municipio'] }}</i></legend>
                         <table class="table table-bordered table-sm">
                             <tr>
@@ -197,20 +197,25 @@
                                 <th class="bg-secondary">Número Processo</th>
                                 <th class="bg-secondary">Data Entrada</th>
                                 <th class="bg-secondary">Status</th>
+                                <th class="bg-secondary">Data Envio Análise</th>
                                 <th class="bg-secondary">Cobrade</th>
                                 <th class="bg-secondary">Opções</th>
                             </tr>
+                            
 
                             @foreach ($pedidos_compdec as $key => $pedido)
+
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $pedido->numero . '-' . substr($pedido->data_entrada_sistema, 0, 4) }}</td>
                                     <td>{{ \Carbon\Carbon::parse($pedido->data_entrada_sistema)->format('d/m/Y H:i:s') }}</td>
                                     <td>{{ status_pedido_ah($pedido->status) }}</td>
+                                    <td>{{ ($pedido->data_hora_envio) ? \Carbon\Carbon::make($pedido->data_hora_envio)->format('d/m/Y H:i:s') : null }}</td>
                                     <td>{{ $pedido->cobrade->descricao }} - {{ $pedido->cobrade->codigo }}</td>
                                     <td>
 
-                                        @if ($pedido->status == 0)
+                                        
+                                        @if ($pedido->status == 0){{-- # em edição --}}
                                             <a href="{{ route('pedido/edit', [$pedido->id]) }}"><img src='{{ asset('imagem/icon/editar.png') }}'></a>
                                             <a href="{{ route('pedido/delete', [$pedido->id]) }}" onclick="return confirm('Deseja Excluir esse Pedido Nº {{ $pedido->numero }}/{{ substr($pedido->data_entrada_sistema, 0, 4) }} ?')"><img src='{{ asset('imagem/icon/delete.png') }}'></a>
                                         @elseif($pedido->status == 1)
@@ -240,7 +245,7 @@
 
                         </table>
 
-                    @endcan
+                    @endhasrole
 
                 </div>
             </div>

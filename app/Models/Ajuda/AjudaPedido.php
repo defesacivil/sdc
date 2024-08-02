@@ -13,6 +13,7 @@ class AjudaPedido extends Model
 {
     protected $table = 'aju_pedido_pedidos';
     protected $primaryKey = 'id';
+    
 
     use HasFactory;
 

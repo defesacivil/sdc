@@ -56,12 +56,12 @@
                 <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a></p>
             @endcan
 
-            <!-- Acesso COMPDEC -->
-            @can('compdec')
+            <!-- Acesso COMPDEC Enviar analise -->
+            @hasrole('compdec')
                   <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah_compdec') }}>Voltar</a>
                   <a class='btn btn-warning btn-sm' href={{ url('mah/enviar/status/' . $pedido->id . '/1') }} onclick="return confirm('Deseja enviar Pedido para Análise ?')">Enviar para Análise</a>
                   </p>
-            @endcan
+            @endhasrole
 
             @can('mah', $pedido->municipio_id)
                 <legend>Edição Pedido Ajuda Humanitária - <i>({{ $pedido->municipio->nome }})</i></legend>
@@ -426,27 +426,37 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class='col'>
-                                        {{ Form::open(['url' => 'mah/analise/store', 'id' => 'form_parecer']) }}
-                                        {{ Form::token() }}
-                                        {{ Form::hidden('data_parecer', Carbon\Carbon::now(), ['id' => 'data_parecer', 'required']) }}
-                                        {{ Form::hidden('user_id', Auth::user()->id, ['id' => 'user_id', 'required']) }}
-                                        {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
+                                    
+                                        <div class='col-12 p-2'>
+                                            {{ Form::open(['url' => 'mah/analise/store', 'id' => 'form_parecer']) }}
+                                            {{ Form::token() }}
+                                            {{ Form::hidden('data_parecer', Carbon\Carbon::now(), ['id' => 'data_parecer', 'required']) }}
+                                            {{ Form::hidden('user_id', Auth::user()->id, ['id' => 'user_id', 'required']) }}
+                                            {{ Form::hidden('pedido_id', $pedido->id, ['id' => 'pedido_id', 'required']) }}
 
-                                        {{ Form::label('Descrição Despacho / Parecer') }} <span> ( Caracteres restantes &nbsp;<i id='carac_rest'> 255 </i>&nbsp;)</span>
-                                        {{ Form::textarea('parecer', '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                            {{ Form::label('Descrição Despacho / Parecer') }} <span> ( Caracteres restantes &nbsp;<i id='carac_rest'> 255 </i>&nbsp;)</span>
+                                            {{ Form::textarea('parecer', '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                        </div>
+                                        <div class="row">
 
-                                        {{ Form::label('Descrição Despacho / Parecer') }}
-                                        {{ Form::select('tramit_parecer', $secao_tramitar, '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
-
-
-                                        {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnSalvarParecer']) }}
-
-                                        {{ Form::close() }}
-
-                                        <br><br>
+                                            <div class="col-6 p-2">
+                                                {{ Form::label('Tramitar') }} :
+                                                {{ Form::select('tramit_parecer', $secao_tramitar, '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                            </div>
+                                            <div class="col-6 p-2">
+                                                {{ Form::label('Status') }} :
+                                                {{ Form::select('status', [1=>'Favorável', '0'=>'Desfavorável'], '', ['class' => 'form form-control', 'id' => 'parecer', 'required']) }}
+                                            </div>
+                                        </div>
                                         <br>
-                                    </div>
+
+                                            {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btnSalvarParecer']) }}
+
+                                            {{ Form::close() }}
+
+                                            <br><br>
+                                        </div>
+                                   
                                 </div>
                             </div>
                         </div>
