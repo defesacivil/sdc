@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Drrd\PaeEmpdor;
+use App\Models\Estoque\AjuDeposito;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -105,7 +106,47 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $user = User::with('funcionario')
+        ->where('id', '=', $id)->first();
+        $depositos = AjuDeposito::all();      
+        $deposito = $depositos->pluck('nome', 'id');
+
+        // $posto = <option>Escolha uma Opção</option>
+        // <option>GOVERNADOR</option>
+        // <option>SECRET.GOV</option>
+        // <option>CEL PM</option>
+        // <option>CEP BM</option>
+        // <option>TEN CEL PM</option>
+        // <option>TEN CEM BM</option>
+        // <option>MAJ PM</option>
+        // <option>MAJ BM</option>
+        // <option>CAP PM</option>
+        // <option>CAP BM</option>
+        // <option>TEN BM</option>
+        // <option>TEN PM</option>
+        // <option>SUB TEN PM</option>
+        // <option>SUB TEN BM</option>
+        // <option>1º SGT PM</option>
+        // <option>1º SGT BM</option>
+        // <option>2º SGT PM</option>
+        // <option>2º SGT BM</option>
+        // <option>3º SGT PM</option>
+        // <option>2º SGT BM</option>
+        // <option>SD PM</option>
+        // <option>SD BM</option>
+        // <option>CB PM</option>
+        // <option>CB BM</option>
+        // <option>SC</option>
+        // <option>FC</option>
+
+
+        //dd($user->funcionario->nome);
+
+        return view('usuario/edit', [
+            'user' => $user,
+            'deposito' => $deposito,
+        ]);
     }
 
     /**

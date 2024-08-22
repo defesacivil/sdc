@@ -45,7 +45,8 @@
         "files": [
             "app/Helpers/mah_helper_function.php",
             "app/Helpers/pmda_ponto_helper.php",
-            "app/Helpers/helper_geral.php"
+            "app/Helpers/helper_geral.php",
+            "app/Helpers/helper_usuario.php"
         ]
     },
     "autoload-dev": {

@@ -139,6 +139,12 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
+
+        Gate::define('viewLogViewer', function (?User $user) {
+            return true;
+            // return true if the user is allowed access to the Log Viewer
+        });
+
         $this->registerPolicies();
 
     }

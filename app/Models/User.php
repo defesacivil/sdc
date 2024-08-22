@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Cedec\CedecFuncionario;
 use App\Models\Cedec\CedecUsuario;
 use App\Models\Drrd\PaeAnalise;
 use App\Models\Usuario\PermissionDem;
@@ -58,6 +59,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(CedecUsuario::class);
     }
+
+
+    public function funcionario()
+    {
+        return $this->hasOne(CedecFuncionario::class);
+    }
+
+
 
     //public function hasRole(){
 

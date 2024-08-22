@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
 
@@ -21,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('path.public', function () {
             return base_path() . '/public';
         }); 
+
+        Log::setTimezone(new \DateTimeZone('America/Sao_Paulo'));
     }
 
     /**

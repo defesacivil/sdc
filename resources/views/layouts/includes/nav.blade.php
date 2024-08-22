@@ -122,7 +122,9 @@
                                         {{-- <a href="#">Perfil</a> --}}
                                     @endisset
                                 @endcan
+                                <p><a href='{{ url('usuario/edit/'.auth()->user()->id)}}'>Perfil do Usuário</a></p>
                                 <p>Grupos do Usuário</p>
+
                                 @php
                                 $permissions = auth()->user()->getAllPermissions();
                                 @endphp

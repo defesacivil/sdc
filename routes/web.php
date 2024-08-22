@@ -70,6 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
     # configurações do sistema
     Route::get('config/config', 'App\Http\Controllers\Config\ConfigController@config');
 
+    Route::get('config/info', 'App\Http\Controllers\Config\ConfigController@info');
+
 
 
 
@@ -210,7 +212,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('usuario/index', 'App\Http\Controllers\Usuario\CedecUsuarioController@index');
 
     # editar usuario
-    Route::get('usuario/edit/{id}', 'App\Http\Controllers\Usuario\CedecUsuarioController@edit');
+    Route::get('usuario/edit/{id}', 'App\Http\Controllers\User\UserController@edit');
 
     # gravar usuario
     Route::post('usuario/store', 'App\Http\Controllers\Usuario\CedecUsuarioController@edit');

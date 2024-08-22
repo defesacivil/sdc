@@ -268,10 +268,11 @@ class AjudaPedidoController extends Controller
     public function show(AjudaPedido $pedido)
     {
 
-        $materiais = AjudaPedidoItens::where('pedido_id', "=", $pedido->id);
-        $despachos = AjudaPedidoAnaliseTecnica::where('pedido_id', "=", $pedido->id);
+        $materiais = AjudaPedidoItens::where('pedido_id', "=", $pedido->id)->get();
+        $despachos = AjudaPedidoAnaliseTecnica::where('pedido_id', "=", $pedido->id)->get();
 
 
+        //dd($materiais);
         $anexos = "";
 
 

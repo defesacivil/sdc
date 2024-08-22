@@ -47,9 +47,17 @@
                         <br>
                         Mensagens/Alertas
                     </div>
+
+                    <div class="col col-md-3 text-center">
+                        <a href="config/info" class="" title="Msg Alert"><img width="100" src="{{ url('imagem/icon/mensagem.png') }}" title="Mensagens"></a>
+                        <br>
+                        Informações
+                    </div>
                 </div>
                 <br>
                 <br>
+
+                {{ Carbon\Carbon::now() }}
 
                 <table class="table p-3">
                     <tr>
@@ -73,7 +81,7 @@
                     <tr>
                         <td>storage_path:</td><td>{{ storage_path() }}</td>
                     </tr>
-                </table
+                </table>
 
             </div>
 

@@ -1,4 +1,4 @@
-@extends('layouts/master')
+@extends('layouts.pagina_master')
 
 @section('title', 'SDC - Sistema de Defesa Civil')
 

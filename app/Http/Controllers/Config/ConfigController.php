@@ -93,4 +93,13 @@ class ConfigController extends Controller
      {
         return view('config.config.index');
      }
+
+    /**
+     * Configurações
+     */
+
+     public function info()
+     {
+        return phpinfo();
+     }
 }

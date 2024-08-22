@@ -12,6 +12,7 @@
     </nav>
 @endsection
 
+
 @section('content')
 
     <div class="row">
@@ -26,14 +27,13 @@
                     <a class='btn btn-info btn-sm' href={{ url('rat/create') }} title="Criar novo Registro">+ Novo</a>
                     <a class='btn btn-primary btn-sm' id='btnSearch' title="Criar novo Registro">Pesquisa</a>
                     <span>&nbsp;&nbsp;&nbsp;</span>
-                    <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }} title="Criar novo Registro">Exportar Excel</a>
                     <a class='btn btn-warning btn-sm' href={{ url('rat/config') }} title="Criar novo Registro">Configurações</a>
                 </p>
             </div>
         </div>
 
 
-        @can('cedec')
+        {{-- @can('cedec')
 
             <div class="row filtro">
                 <div class="col-4">
@@ -107,7 +107,7 @@
                     </div>
                 </div>
             @endif
-        @endcan
+        @endcan --}}
 
 
 
@@ -193,15 +193,17 @@
             </div>
             <div class="p-2 col-md-12">
                 {{ Form::submit('Busca', ['class' => 'btn btn-primary']) }}
+                
                 {{ Form::close() }}
             </div>
         </div>
 
 
         <br>
-        <p class="p-2">Registros : {{ $rats->total() }}</p>
+        <p class="p-2">Registros : {{ count($rats) }}</p>
 
         <div class="table p-3 border table-responsive">
+            <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }} title="Exportar em formato Excel">Exportar Excel</a>
             <h5 class="text-center bolder">Registro das Ocorrências</h5>
             @if (count($rats) > 0)
                 <table class="table align-middle table-striped table-bordered table-sm table-hover">
@@ -244,10 +246,7 @@
                     </tfoot>
                 </table>
 
-
-                @if (count($rats) > 0)
                     {{ $rats->appends(request()->all())->links() }}
-                @endif
             @else
                 <p class="alert alert-danger">Sua pesquisa não encontrou nenhum registro</p>
             @endif
@@ -278,7 +277,7 @@
             Chart.register(ChartDataLabels);
 
 
-            $(".filtro").hide();
+            //$(".filtro").hide();
 
             //$(".chartjsVis").hide();
 
