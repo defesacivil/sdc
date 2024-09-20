@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Usuario;
 
 use App\Models\User;
-use App\Models\Usuario\RoleDem;
-use App\Models\Usuario\RoleUserDem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
-class RoleUserDemController extends \App\Http\Controllers\Controller
+class RoleUserController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.

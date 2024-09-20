@@ -21,7 +21,7 @@
                 <legend class="p-4">Rat - Configurações </legend>
             </div>
             <div class="col-3 p-2">
-                <img class="border" width="80" src="{{ url('/imagem/brasao/brasao_7221.png') }}" alt="">
+                <img class="border" width="800" height="108" src="{{ url('/imagem/brasao/brasao_'.$municipio_id.'.png') }}" alt="">
             </div>
         </div>
 

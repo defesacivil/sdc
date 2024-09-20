@@ -24,7 +24,7 @@
 
                 <div class="row">
                     <div class="col text-center">
-                        <a href="{{ url('usuario') }}">
+                        <a href="{{ url('usuario/index') }}">
                             <img class="" src="{{ asset('imagem/icon/user_icon.png') }}" width="130" title="Cadastro de Usuários">
                             <br>
                             Cadastro Usuário</a>

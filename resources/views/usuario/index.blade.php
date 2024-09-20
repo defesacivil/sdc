@@ -1,19 +1,29 @@
-@extends('adminlte::page')
+@extends('layouts.pagina_master')
 
-@section('title', 'SDC - Sistema de Defesa Civil')
+{{-- header --}}
+@section('breadcrumb')
 
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/config') }}">Configurações</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Usuários</li>
+        </ol>
+    </nav>
 
-@section('content_header')
-
-
-@stop
+@endsection
 
 <!-- conteudo -->
 @section('content')
     <legend>Cadastro Usuario</legend>
 
 
+<div class="row">
 
+    <div class="col"><a class="btn btn-link" href="{{url('usuario/create')}}">Novo Usuário</a></div>
+
+</div>
 <table class="table table-bordered table-sm data-table">
     <thead>
     <tr>

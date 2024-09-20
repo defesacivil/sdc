@@ -7,10 +7,12 @@
     "require": {
         "php": "^7.3|^8.0",
         "barryvdh/laravel-dompdf": "^2.0",
+        "dedoc/scramble": "^0.8.6",
         "doctrine/dbal": "^3.3",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.7",
+        "irazasyed/telegram-bot-sdk": "^3.14",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.5",

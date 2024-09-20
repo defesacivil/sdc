@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RoleDem extends Model
+class Role extends Model
 {
 
     protected $table = 'roles';
@@ -29,7 +29,7 @@ class RoleDem extends Model
 
     public function permissionsDem()
     {
-        return $this->belongsToMany(PermissionDem::class, 'permission_role', 'role_id', 'permission_id');
+        return $this->belongsToMany(Permission::class, 'permission_role', 'role_id', 'permission_id');
     }
 
     

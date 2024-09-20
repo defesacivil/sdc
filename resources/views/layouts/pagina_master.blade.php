@@ -35,7 +35,7 @@
         @endif
 
         <div class="row" id="corpo">
-            <div class="col-2 col-md-2">
+            <div class="col-2 col-md-2 print">
                 @include('layouts/pagina_menu')
             </div>
             {{-- conteudo container corpo --}}

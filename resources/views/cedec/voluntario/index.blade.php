@@ -67,7 +67,83 @@
                     </div>
                 </div>
             
-            </div> 
+            </div>
+
+            <hr>
+            
+            <div class="row">
+                <div class="col col-6">
+                    <h3><p class="text-center">Voluntários por Município</p></h3>
+                    <table class="table table-bordered table-sm">
+                        <tr>
+                            <th>#</th>
+                            <th>Local de Atuação</th>
+                            <th>Quantidade</th>
+                        </tr>
+
+                        @foreach ($tot_municipios as $key=>$tot_municipio)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $tot_municipio->municipio}} / {{ $tot_municipio->regiao }}ª RDC</td>
+                            <td>{{ $tot_municipio->total}}</td>
+                            
+                        </tr>
+                            
+                        @endforeach
+                    </table>
+                </div>
+
+                <div class="col col-6">
+                    <h3><p class="text-center">Voluntários por Região</p></h3>
+                    <table class="table table-bordered table-sm">
+                        <tr>
+                            <th>#</th>
+                            <th>Região de Defesa Civil</th>
+                            <th>Quantidade</th>
+                        </tr>
+
+                        @foreach ($tot_regiaos as $key=>$tot_regiao)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $tot_regiao->regiao}} ª Região de Defesa Civil</td>
+                            <td>{{ $tot_regiao->total}}</td>
+                            
+                        </tr>
+                            
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col">
+
+                    <h3><p class="text-center">Voluntários por Atividade à Exercer</p></h3>
+                    <table class="table table-bordered table-sm">
+                        <tr>
+                            <th>#</th>
+                            <th>Atividade</th>
+                            <th>Profissão</th>
+                            <th>Quantidade</th>
+                        </tr>
+
+                        @foreach ($tot_atividades as $key=>$tot_atividade)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $tot_atividade->atividade}}</td>
+                            <td><a href='{{ url('gade/listagem/profissao/'.$tot_atividade->profissao_id) }}' title="Clique para visualizar a lista desses profissionais cadastrados">{{ $tot_atividade->profissao }}</a></td>
+                            <td>{{ $tot_atividade->total}}</td>
+                            
+                        </tr>
+                            
+                        @endforeach
+                    </table>
+
+
+                </div>
+
+            </div>
             
             {{-- charts --}}
             <div class="row p-3">

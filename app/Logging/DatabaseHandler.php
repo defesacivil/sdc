@@ -1,6 +1,6 @@
-
 <?php
 
+namespace App\Logging;
 use App\Models\Logging\LogMessage;
 use Monolog\Handler\AbstractProcessingHandler;
 

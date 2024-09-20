@@ -316,7 +316,7 @@ class VistoriaController extends Controller
             ]);
         } else {
 
-    if ($vistoria->save()) {
+            if ($vistoria->save()) {
 
                 /* img el estr prefix=8caract*/
                 $files_el_estrs = $request->img_ck_el_str_;
@@ -384,7 +384,7 @@ class VistoriaController extends Controller
                     ]);
                 }
 
-            # erro no metodo atualizar 
+                # erro no metodo atualizar 
             } else {
                 return response()->json([
                     'error' => $val->errors(),
@@ -490,37 +490,34 @@ class VistoriaController extends Controller
             foreach ($files as $key => $file) {
 
                 # imagens elementos estruturais
-                $file_name = substr(basename($file), 0 ,8);
+                $file_name = substr(basename($file), 0, 8);
 
                 //dd($file_name, $file);
-                
+
                 # imagens elementos estruturais
-                if($file_name == 'el_estr_') {
+                if ($file_name == 'el_estr_') {
                     $files_el_estrs[] = $file;
                     $qtd_files_el_estrs++;
                 }
 
                 # imagens elementos construtivo
-                if(substr(basename($file), 0 ,10) == 'el_constr_') {
+                if (substr(basename($file), 0, 10) == 'el_constr_') {
                     $files_el_cons[] = $file;
                     $qtd_files_el_cons++;
                 }
 
                 # imagens agentes potencializadores 
-                if($file_name == 'ag_pote_') {
+                if ($file_name == 'ag_pote_') {
                     $files_ag_potens[] = $file;
                     $qtd_files_ag_potens++;
                 }
 
                 # imagens procedos goedinamicos
-                if($file_name == 'proc_ge_') {
+                if ($file_name == 'proc_ge_') {
                     $files_proc_geos[] = $file;
                     $qtd_files_proc_geos++;
                 }
-                
             }
-
-
         }
 
         return view(
@@ -533,8 +530,8 @@ class VistoriaController extends Controller
                 'files_proc_geos'    => $files_proc_geos,
                 'qtd_files_el_estrs' => $qtd_files_el_estrs,
                 'qtd_files_el_cons'  => $qtd_files_el_cons,
-                'qtd_files_ag_potens'=> $qtd_files_ag_potens,
-                'qtd_files_proc_geos'=> $qtd_files_proc_geos,
+                'qtd_files_ag_potens' => $qtd_files_ag_potens,
+                'qtd_files_proc_geos' => $qtd_files_proc_geos,
                 'optionMunicipio'    => $optionMunicipio,
             ]
         );
@@ -704,7 +701,7 @@ class VistoriaController extends Controller
 
 
         if ($val->fails()) {
-            
+
             return response()->json([
                 'error' => $val->errors(),
                 'keys' => $val->errors()->keys(),
@@ -935,6 +932,128 @@ class VistoriaController extends Controller
                     'result' => true,
                 ]
             );
-        };
+        }
+    }
+
+
+    public function apiAllDataVistoria()
+    {
+
+        $vistorias = DB::table('com_vistorias')
+            ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_vistorias.municipio_id')
+            ->join('users', 'users.id', '=', 'com_vistorias.operador_id')
+            ->addSelect('com_vistorias.abast_agua')
+            ->addSelect('com_vistorias.ae_deslizamento')
+            ->addSelect('com_vistorias.ae_inundacao')
+            ->addSelect('com_vistorias.ae_muro')
+            ->addSelect('com_vistorias.ae_outros')
+            ->addSelect('com_vistorias.ae_outros_txt')
+            ->addSelect('com_vistorias.ae_rede_hidraulica')
+            ->addSelect('com_vistorias.bairro')
+            ->addSelect('com_vistorias.caracterizacao')
+            ->addSelect('com_vistorias.cel')
+            ->addSelect('com_vistorias.cep')
+            ->addSelect('com_vistorias.ck_ag_pot_aterr_bot_fora')
+            ->addSelect('com_vistorias.ck_ag_pot_conc_flux_superfic')
+            ->addSelect('com_vistorias.ck_ag_pot_cort_vert')
+            ->addSelect('com_vistorias.ck_ag_pot_lixo_entulho')
+            ->addSelect('com_vistorias.ck_ag_pot_tubl_romp')
+            ->addSelect('com_vistorias.ck_ag_pot_veg_inadeq')
+            ->addSelect('com_vistorias.ck_clas_risc_alta')
+            ->addSelect('com_vistorias.ck_clas_risc_baixa')
+            ->addSelect('com_vistorias.ck_clas_risc_media')
+            ->addSelect('com_vistorias.ck_clas_risc_muito_alta')
+            ->addSelect('com_vistorias.ck_cond_acesso_a_pe')
+            ->addSelect('com_vistorias.ck_cond_acesso_veicula2_rodas')
+            ->addSelect('com_vistorias.ck_cond_acesso_veicular')
+            ->addSelect('com_vistorias.ck_cond_acesso_veicular4x4')
+            ->addSelect('com_vistorias.ck_cons_estr_alta')
+            ->addSelect('com_vistorias.ck_cons_estr_baixa')
+            ->addSelect('com_vistorias.ck_cons_estr_media')
+            ->addSelect('com_vistorias.ck_dist_encosta_2_4_m')
+            ->addSelect('com_vistorias.ck_dist_encosta_4_6_m')
+            ->addSelect('com_vistorias.ck_dist_encosta_maior_6_m')
+            ->addSelect('com_vistorias.ck_dist_encosta_menor_2_m')
+            ->addSelect('com_vistorias.ck_el_constr_trinc_muro')
+            ->addSelect('com_vistorias.ck_el_constr_trinc_parede')
+            ->addSelect('com_vistorias.ck_el_constr_trinc_piso')
+            ->addSelect('com_vistorias.ck_el_str_cic_desliza')
+            ->addSelect('com_vistorias.ck_el_str_degr_abat')
+            ->addSelect('com_vistorias.ck_el_str_incl_arv')
+            ->addSelect('com_vistorias.ck_el_str_incl_muro')
+            ->addSelect('com_vistorias.ck_el_str_incl_poste')
+            ->addSelect('com_vistorias.ck_el_str_mur_pared_def')
+            ->addSelect('com_vistorias.ck_el_str_trinc_lage')
+            ->addSelect('com_vistorias.ck_el_str_trinc_pilar')
+            ->addSelect('com_vistorias.ck_el_str_trinc_viga')
+            ->addSelect('com_vistorias.ck_esgo_sant_canalizado')
+            ->addSelect('com_vistorias.ck_esgo_sant_fossa_similar')
+            ->addSelect('com_vistorias.ck_esgo_sant_superficie')
+            ->addSelect('com_vistorias.ck_mat_constr_alvenaria')
+            ->addSelect('com_vistorias.ck_mat_constr_madeira')
+            ->addSelect('com_vistorias.ck_mat_constr_mist_plas_mad_lata')
+            ->addSelect('com_vistorias.ck_proc_geo_desliza')
+            ->addSelect('com_vistorias.ck_proc_geo_inundac')
+            ->addSelect('com_vistorias.ck_proc_geo_qued_rolam_bloc')
+            ->addSelect('com_vistorias.ck_sis_viar_acesso_av_rua')
+            ->addSelect('com_vistorias.ck_sis_viar_acesso_beco_viela')
+            ->addSelect('com_vistorias.ck_sis_viar_acesso_estrada')
+            ->addSelect('com_vistorias.ck_sis_viar_acesso_trilhas')
+            ->addSelect('com_vistorias.ck_tp_revest_via_asfaldo')
+            ->addSelect('com_vistorias.ck_tp_revest_via_n_asfalto')
+            ->addSelect('com_vistorias.ck_tp_revest_via_parale_pedra')
+            ->addSelect('com_vistorias.ck_vuln_alta')
+            ->addSelect('com_vistorias.ck_vuln_baixa')
+            ->addSelect('com_vistorias.ck_vuln_media')
+            ->addSelect('com_vistorias.ck_vuln_muito_alta')
+            ->addSelect('com_vistorias.considera_finais')
+            ->addSelect('com_vistorias.created_at')
+            ->addSelect('com_vistorias.criancas')
+            ->addSelect('com_vistorias.dt_vistoria')
+            ->addSelect('com_vistorias.endereco')
+            ->addSelect('com_vistorias.id')
+            ->addSelect('com_vistorias.idosos')
+            ->addSelect('com_vistorias.latitude')
+            ->addSelect('com_vistorias.longitude')
+            ->addSelect('com_vistorias.municipio_id')
+            ->addSelect('com_vistorias.municipio_id_dono')
+            ->addSelect('com_vistorias.muro')
+            ->addSelect('com_vistorias.nom_municipio')
+            ->addSelect('com_vistorias.nr_moradias')
+            ->addSelect('com_vistorias.num_morador')
+            ->addSelect('com_vistorias.numero')
+            ->addSelect('com_vistorias.operador_id')
+            ->addSelect('com_vistorias.parecer')
+            ->addSelect('com_vistorias.parede')
+            ->addSelect('com_vistorias.pess_dif_loc')
+            ->addSelect('com_vistorias.piso')
+            ->addSelect('com_vistorias.prop')
+            ->addSelect('com_vistorias.r_col_construtivo')
+            ->addSelect('com_vistorias.r_col_estrutural')
+            ->addSelect('com_vistorias.r_externo')
+            ->addSelect('com_vistorias.r_vazamento')
+            ->addSelect('com_vistorias.rec_medidas_recuperacao')
+            ->addSelect('com_vistorias.rec_prov_imediata')
+            ->addSelect('com_vistorias.resp_vistoriador')
+            ->addSelect('com_vistorias.sist_drenag')
+            ->addSelect('com_vistorias.tp_imovel')
+            ->addSelect('com_vistorias.tp_ocorrencia')
+            ->addSelect('com_vistorias.tr_laje')
+            ->addSelect('com_vistorias.tr_pilar')
+            ->addSelect('com_vistorias.tr_viga')
+            ->addSelect('cedec_municipio.nome as municipio')
+            ->addSelect('users.name as operador_nome')
+            ->orderBy('com_vistorias.dt_vistoria', 'asc')
+            ->get();
+
+
+        return response()->json(
+            [
+                'vistoria' => $vistorias,
+            ],
+            200,
+            ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+            JSON_UNESCAPED_UNICODE
+        );
     }
 }

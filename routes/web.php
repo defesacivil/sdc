@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Compdec\RatController;
 use App\Models\CedecUsuario;
+use Dedoc\Scramble\Scramble;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,9 +31,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
 
         //dd("--", $_SERVER['HTTP_HOST']);
-        if(auth()->user()->tipo == 'externo'){
+        if (auth()->user()->tipo == 'externo') {
             return redirect()->action(['App\Http\Controllers\Drrd\PaeProtocoloController', 'minerar']);
-        }else if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
+        } else if ($_SERVER['HTTP_HOST'] == 'sdc.net:8081') {
             return redirect()->away('http://sdcold.net:8081/?token=' . md5(12345678) . '&modulo=index&controller=index&action=menu');
         } elseif (null != session()->get('routeInicio')) {
             return redirect()->away('http://sistema.defesacivil.mg.gov.br/index.php?token=' . md5(12345678) . '&' . session()->get('routeInicio'));
@@ -43,7 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-    
+
     ##############################  DASHBOARD ##############################
     Route::get('/dashboard', function () {
 
@@ -58,19 +59,21 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-   
+
 
 
 
     #################################   CONFIG   ##################################
-    
+
     # index config
     Route::get('config/index', 'App\Http\Controllers\Config\ConfigController@index');
-  
+
     # configurações do sistema
     Route::get('config/config', 'App\Http\Controllers\Config\ConfigController@config');
 
     Route::get('config/info', 'App\Http\Controllers\Config\ConfigController@info');
+
+    Route::get('config/view_field', 'App\Http\Controllers\Config\ConfigController@listDb');
 
 
 
@@ -98,8 +101,8 @@ Route::group(['middleware' => 'auth'], function () {
     # USUARIO ###################
 
     # index
-    Route::match(["GET", "POST"], 'usuario', 'App\Http\Controllers\Usuario\UserController@index')->can('cedec');
-    
+    Route::match(["GET", "POST"], 'usuario/acl', 'App\Http\Controllers\Usuario\UserController@index')->can('cedec');
+
     # user autocomplete
     Route::get('usuario/autocomplete', 'App\Http\Controllers\Usuario\UserController@user_autocomplete')->can('cedec')->name('user.autocomplete');
 
@@ -122,58 +125,58 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     # ROLE 
-        # index perfil
-        Route::get('role', 'App\Http\Controllers\Usuario\RoleController@index');
-        # create
-        Route::get('config/role/create', 'App\Http\Controllers\Usuario\RoleController@create');
-        # gravar
-        Route::get('config/role/store', 'App\Http\Controllers\Usuario\RoleController@store');
-        # editar
-        Route::get('config/role/edit/{id}', 'App\Http\Controllers\Usuario\RoleController@edit');
-        # update
-        Route::put('config/role/update/{id}', 'App\Http\Controllers\Usuario\RoleController@update');
-        # view 
-        Route::get('config/role/show/{id}', 'App\Http\Controllers\Usuario\RoleController@show');
-        # delete 
-        Route::get('config/role/delete/{id}', 'App\Http\Controllers\Usuario\RoleController@destroy');
+    # index perfil
+    Route::get('role', 'App\Http\Controllers\Usuario\RoleController@index');
+    # create
+    Route::get('config/role/create', 'App\Http\Controllers\Usuario\RoleController@create');
+    # gravar
+    Route::get('config/role/store', 'App\Http\Controllers\Usuario\RoleController@store');
+    # editar
+    Route::get('config/role/edit/{id}', 'App\Http\Controllers\Usuario\RoleController@edit');
+    # update
+    Route::put('config/role/update/{id}', 'App\Http\Controllers\Usuario\RoleController@update');
+    # view 
+    Route::get('config/role/show/{id}', 'App\Http\Controllers\Usuario\RoleController@show');
+    # delete 
+    Route::get('config/role/delete/{id}', 'App\Http\Controllers\Usuario\RoleController@destroy');
 
 
     # PERMISSION
 
-        # index
-        Route::get('permissao', 'App\Http\Controllers\Usuario\PermissionController@index');
-        # create 
-        Route::get('config/permissao/create', 'App\Http\Controllers\Usuario\PermissionController@create');
-        # gravar 
-        Route::post('config/permissao/store', 'App\Http\Controllers\Usuario\PermissionController@store');
-        # editar
-        Route::get('config/permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionController@edit');
-        # update
-        Route::put('config/permissao/update/{id}', 'App\Http\Controllers\Usuario\PermissionController@update');
-        # view 
-        Route::get('config/permissao/show/{id}', 'App\Http\Controllers\PermissionController@show');
-        # delete
-        Route::get('config/permissao/delete/{id}', 'App\Http\Controllers\Usuario\PermissionController@destroy');
+    # index
+    Route::get('permissao', 'App\Http\Controllers\Usuario\PermissionController@index');
+    # create 
+    Route::get('config/permissao/create', 'App\Http\Controllers\Usuario\PermissionController@create');
+    # gravar 
+    Route::post('config/permissao/store', 'App\Http\Controllers\Usuario\PermissionController@store');
+    # editar
+    Route::get('config/permission/edit/{id}', 'App\Http\Controllers\Usuario\PermissionController@edit');
+    # update
+    Route::put('config/permissao/update/{id}', 'App\Http\Controllers\Usuario\PermissionController@update');
+    # view 
+    Route::get('config/permissao/show/{id}', 'App\Http\Controllers\Usuario\PermissionController@show');
+    # delete
+    Route::get('config/permissao/delete/{id}', 'App\Http\Controllers\Usuario\PermissionController@destroy');
 
 
     # ROLE_USER #######################
 
-        #index
-        Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserDemController@index');
+    #index
+    Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserDemController@index');
 
-        # adicionar usuario em perfil
-        Route::get('usuario/role/add/{id}', 'App\Http\Controllers\Usuario\RoleUserDemController@create')->can('cedec');
+    # adicionar usuario em perfil
+    Route::get('usuario/role/add/{id}', 'App\Http\Controllers\Usuario\RoleUserDemController@create')->can('cedec');
 
-        # store ( sincronizar )
-        Route::post('usuario/role/add/store', 'App\Http\Controllers\Usuario\RoleUserDemController@store');
-        # edit 
-        #não implementar
-        
-        # update
-        #não implementar
-        
-        # view 
-        #não implementar
+    # store ( sincronizar )
+    Route::post('usuario/role/add/store', 'App\Http\Controllers\Usuario\RoleUserDemController@store');
+    # edit 
+    #não implementar
+
+    # update
+    #não implementar
+
+    # view 
+    #não implementar
 
 
 
@@ -196,26 +199,29 @@ Route::group(['middleware' => 'auth'], function () {
 
     # update
     #não implementar
-    
+
     # deletar
     #não implementar
 
 
 
-    
+
 
 
 
     # CADASTRO USUARIO ##################
 
-    # cadastro usuario
+    # cadastro index
     Route::get('usuario/index', 'App\Http\Controllers\Usuario\CedecUsuarioController@index');
+
+    # cadastro Usuario
+    Route::get('usuario/create', 'App\Http\Controllers\Usuario\CedecUsuarioController@create');
 
     # editar usuario
     Route::get('usuario/edit/{id}', 'App\Http\Controllers\User\UserController@edit');
 
     # gravar usuario
-    Route::post('usuario/store', 'App\Http\Controllers\Usuario\CedecUsuarioController@edit');
+    Route::post('usuario/store', 'App\Http\Controllers\Usuario\CedecUsuarioController@store');
 
     # update usuario
     Route::post('usuario/update', 'App\Http\Controllers\Usuario\CedecUsuarioController@update');
@@ -283,10 +289,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('drrd', 'App\Http\Controllers\Drrd\DrrdController@menu');
 
     # acesso mineradora
-    Route::match(["GET", "POST"], 'pae/mineradora','App\Http\Controllers\Drrd\PaeProtocoloController@minerar');
-    
-    
-        
+    Route::match(["GET", "POST"], 'pae/mineradora', 'App\Http\Controllers\Drrd\PaeProtocoloController@minerar');
+
+
+
     //'App\Http\Controllers\Drrd\DrrdController@acesso')->name('pae.mineradora');
 
 
@@ -315,42 +321,42 @@ Route::group(['middleware' => 'auth'], function () {
 
     # Protocolo VIEW
     Route::get('pae/protocolo/show/{paeProtocolo}', 'App\Http\Controllers\Drrd\PaeProtocoloController@show');
-    
+
     # protocolo STORE
     Route::post('pae/protocolo/store', 'App\Http\Controllers\Drrd\PaeProtocoloController@store');
-    
+
     # protocolo DELETE
     Route::get('pae/protocolo/deletar/{paeProtocolo}', 'App\Http\Controllers\Drrd\PaeProtocoloController@delete');
-    
+
     # form atribuir processo
     Route::match(["GET", "POST"], 'pae/protocolo/atribuir/{paeProtocolo?}', 'App\Http\Controllers\Drrd\PaeProtocoloController@atribuir');
-    
+
     # protocolo encerrar
     Route::get('pae/protocolo/encerrar/{paeProtocolo}', 'App\Http\Controllers\Drrd\PaeProtocoloController@encerrar');
-    
 
-    
+
+
     # PAE USER ##############
-    Route::match(["GET","POST"], 'pae/user', 'App\Http\Controllers\Drrd\PaeProtocoloController@user');
-    
+    Route::match(["GET", "POST"], 'pae/user', 'App\Http\Controllers\Drrd\PaeProtocoloController@user');
+
     # form novo usuario externo ( mineradora)
     Route::get('pae/users/create', 'App\Http\Controllers\User\UserController@create');
-    
+
     # gravar novo usuario
     Route::post('pae/users/store', 'App\Http\Controllers\User\UserController@store');
-    
+
     # Mudar Status
     Route::post('pae/user/status', 'App\Http\Controllers\User\UserController@status');
-    
+
     # resetar senha
     Route::post('pae/user/reset', 'App\Http\Controllers\User\UserController@resetsenha');
-    
-    
 
-    
-    
-    
-    
+
+
+
+
+
+
 
     # PAE EMPREENDEDOR #################
     # empreendedor INDEX
@@ -520,179 +526,179 @@ Route::group(['middleware' => 'auth'], function () {
 
     ############################### MUDULO AJUDA ################################
 
-        # menu Principal Ajuda Humanitaria
-        Route::get('ajuda', 'App\Http\Controllers\Ajuda\AjudaController@menu');
-        
-        # modulo controle de estoque
-        Route::get('estoque', 'App\Http\Controllers\Ajuda\AjudaController@estoque');
+    # menu Principal Ajuda Humanitaria
+    Route::get('ajuda', 'App\Http\Controllers\Ajuda\AjudaController@menu');
 
-        # mudulo Pedido de ajuda Humanitária
-        Route::get('mah', 'App\Http\Controllers\Ajuda\AjudaPedidoController@index');
-        
-        # modulo acesso CISTERNA
-        Route::get('cisterna', 'App\Http\Controllers\Ajuda\CisternaController@index');
+    # modulo controle de estoque
+    Route::get('estoque', 'App\Http\Controllers\Ajuda\AjudaController@estoque');
+
+    # mudulo Pedido de ajuda Humanitária
+    Route::get('mah', 'App\Http\Controllers\Ajuda\AjudaPedidoController@index');
+
+    # modulo acesso CISTERNA
+    Route::get('cisterna', 'App\Http\Controllers\Ajuda\CisternaController@index');
 
 
 
     # CONTROLE DE ESTOQUE ###################################################################
 
-            # cadastro gerais
-            Route::get('estoque/cadastro', 'App\Http\Controllers\Ajuda\AjudaEstoqueController@cadastro');
+    # cadastro gerais
+    Route::get('estoque/cadastro', 'App\Http\Controllers\Ajuda\AjudaEstoqueController@cadastro');
 
-            ## fornecedor
-            Route::get('estoque/fornecedor', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@index');
-            Route::get('estoque/fornecedor/create', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@create');
-            Route::post('estoque/fornecedor/store', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@store');
-            Route::get('estoque/fornecedor/edit/{fornecedor}', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@edit');
-            Route::get('estoque/fornecedor/show/{fornecedor}', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@show');
+    ## fornecedor
+    Route::get('estoque/fornecedor', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@index');
+    Route::get('estoque/fornecedor/create', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@create');
+    Route::post('estoque/fornecedor/store', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@store');
+    Route::get('estoque/fornecedor/edit/{fornecedor}', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@edit');
+    Route::get('estoque/fornecedor/show/{fornecedor}', 'App\Http\Controllers\Estoque\AjudaEstoqFornecedorController@show');
 
-            Route::get('estoque/movimentacao', 'App\Http\Controllers\Ajuda\AjudaEstoqueController@movimentacao');
-            Route::get('estoque/relatorio', 'App\Http\Controllers\Ajuda\AjudaEstoqueController@relatorio');
+    Route::get('estoque/movimentacao', 'App\Http\Controllers\Ajuda\AjudaEstoqueController@movimentacao');
+    Route::get('estoque/relatorio', 'App\Http\Controllers\Ajuda\AjudaEstoqueController@relatorio');
 
 
     # PEDIDO DE AJUDA HUMANITARIA ####################################
 
-            
 
-            Route::get('mah/config', 'App\Http\Controllers\Ajuda\AjudaPedidoConfigController@index');
 
-            /* mah busca */
-            Route::match(["GET", "POST"], 'mah/busca', 'App\Http\Controllers\Ajuda\MahController@busca');
+    Route::get('mah/config', 'App\Http\Controllers\Ajuda\AjudaPedidoConfigController@index');
+
+    /* mah busca */
+    Route::match(["GET", "POST"], 'mah/busca', 'App\Http\Controllers\Ajuda\MahController@busca');
 
 
     ################## PEDIDO
-            # mah INDEX
-            Route::match(["GET", "POST"], 'mah/busca', 'App\Http\Controllers\Ajuda\AjudaPedidoController@busca');
+    # mah INDEX
+    Route::match(["GET", "POST"], 'mah/busca', 'App\Http\Controllers\Ajuda\AjudaPedidoController@busca');
 
-            /* mah INDEX COMPDEC **/
-            Route::get('mah_compdec', 'App\Http\Controllers\Ajuda\AjudaPedidoController@index_compdec');
+    /* mah INDEX COMPDEC **/
+    Route::get('mah_compdec', 'App\Http\Controllers\Ajuda\AjudaPedidoController@index_compdec');
 
 
-            # mah CREATE
-            Route::get('mah/pedido/create', 'App\Http\Controllers\Ajuda\AjudaPedidoController@create');
-            # mah EDIT
-            Route::get('mah/pedido/edit/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@edit')->name('pedido/edit');
-            # mah UPDATE
-            Route::post('mah/pedido/update/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@update');
-            # mah VIEW
-            Route::get('mah/pedido/show/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@show')->name('pedido/show');
-            # mah PRINT
-            Route::get('mah/pedido/print/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@print');
-            # mah STORE
-            Route::post('mah/pedido/store', 'App\Http\Controllers\Ajuda\AjudaPedidoController@store');
-            # mah DESTROY
-            Route::get('mah/pedido/destroy/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@destroy')->name('pedido/delete');
+    # mah CREATE
+    Route::get('mah/pedido/create', 'App\Http\Controllers\Ajuda\AjudaPedidoController@create');
+    # mah EDIT
+    Route::get('mah/pedido/edit/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@edit')->name('pedido/edit');
+    # mah UPDATE
+    Route::post('mah/pedido/update/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@update');
+    # mah VIEW
+    Route::get('mah/pedido/show/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@show')->name('pedido/show');
+    # mah PRINT
+    Route::get('mah/pedido/print/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@print');
+    # mah STORE
+    Route::post('mah/pedido/store', 'App\Http\Controllers\Ajuda\AjudaPedidoController@store');
+    # mah DESTROY
+    Route::get('mah/pedido/destroy/{pedido}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@destroy')->name('pedido/delete');
 
-            Route::post('mah/pedido/upload', 'App\Http\Controllers\Ajuda\AjudaPedidoController@upload');
+    Route::post('mah/pedido/upload', 'App\Http\Controllers\Ajuda\AjudaPedidoController@upload');
 
-            Route::get('mah/pedido/deletedoc/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@deletedoc');
+    Route::get('mah/pedido/deletedoc/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@deletedoc');
 
-            Route::get('mah/download/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@download');
+    Route::get('mah/download/{id}/{nome_file}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@download');
 
-            Route::get('mah/enviar/status/{pedido}/{status}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@status');
+    Route::get('mah/enviar/status/{pedido}/{status}', 'App\Http\Controllers\Ajuda\AjudaPedidoController@status');
 
 
 
     ################## ANEXO
-            // # mah CREATE
-            // Route::get('mah/anexo/create', 'App\Http\Controllers\Ajuda\AnexoController@create');
-            // # mah EDIT
-            // Route::get('mah/anexo/edit', 'App\Http\Controllers\Ajuda\AnexoController@edit');
-            // # mah UPDATE
-            // Route::post('mah/anexo/update', 'App\Http\Controllers\Ajuda\AnexoController@update');
-            // # mah VIEW
-            // Route::get('mah/panexo/show/{anexo}', 'App\Http\Controllers\Ajuda\AnexoController@show');
-            // # mah STORE
-            // Route::post('mah/anexo/store', 'App\Http\Controllers\Ajuda\AnexoController@store');
-            // # mah DESTROY
-            // Route::get('mah/anexo/destroy/{anexo}', 'App\Http\Controllers\Ajuda\AnexoController@destroy');
+    // # mah CREATE
+    // Route::get('mah/anexo/create', 'App\Http\Controllers\Ajuda\AnexoController@create');
+    // # mah EDIT
+    // Route::get('mah/anexo/edit', 'App\Http\Controllers\Ajuda\AnexoController@edit');
+    // # mah UPDATE
+    // Route::post('mah/anexo/update', 'App\Http\Controllers\Ajuda\AnexoController@update');
+    // # mah VIEW
+    // Route::get('mah/panexo/show/{anexo}', 'App\Http\Controllers\Ajuda\AnexoController@show');
+    // # mah STORE
+    // Route::post('mah/anexo/store', 'App\Http\Controllers\Ajuda\AnexoController@store');
+    // # mah DESTROY
+    // Route::get('mah/anexo/destroy/{anexo}', 'App\Http\Controllers\Ajuda\AnexoController@destroy');
 
     ################## ANALISE TECNICA
-            # mah INDEX
-            Route::get('mah/analise/index', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@index');
+    # mah INDEX
+    Route::get('mah/analise/index', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@index');
 
-            # mah CREATE
-            Route::get('mah/analise/create', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@create');
-            # mah EDIT
-            Route::get('mah/analise/edit', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@edit');
-            # mah UPDATE
-            Route::post('mah/analise/update', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@update');
-            # mah VIEW
-            Route::get('mah/panalise/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@show');
-            # mah STORE
+    # mah CREATE
+    Route::get('mah/analise/create', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@create');
+    # mah EDIT
+    Route::get('mah/analise/edit', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@edit');
+    # mah UPDATE
+    Route::post('mah/analise/update', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@update');
+    # mah VIEW
+    Route::get('mah/panalise/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@show');
+    # mah STORE
 
-            Route::post('mah/analise/store', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@store')->name('analise.store');
-            # mah DESTROY
+    Route::post('mah/analise/store', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@store')->name('analise.store');
+    # mah DESTROY
 
-            Route::get('mah/analise/destroy/{analise}', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@destroy')->name('parecer.deletar');
+    Route::get('mah/analise/destroy/{analise}', 'App\Http\Controllers\Ajuda\AjudaPedidoAnaliseTecnicaController@destroy')->name('parecer.deletar');
 
     ################## BENEFICIARIO
-            # mah CREATE
-            Route::get('mah/beneficiario/create', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@create');
-            # mah EDIT
-            Route::get('mah/beneficiario/edit', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@edit');
-            # mah UPDATE
-            Route::post('mah/beneficiario/update', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@update');
-            # mah VIEW
-            Route::get('mah/pbeneficiario/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@show');
-            # mah STORE
-            Route::post('mah/beneficiario/store', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@store');
-            # mah DESTROY
-            Route::get('mah/beneficiario/destroy', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@destroy');
+    # mah CREATE
+    Route::get('mah/beneficiario/create', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@create');
+    # mah EDIT
+    Route::get('mah/beneficiario/edit', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@edit');
+    # mah UPDATE
+    Route::post('mah/beneficiario/update', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@update');
+    # mah VIEW
+    Route::get('mah/pbeneficiario/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@show');
+    # mah STORE
+    Route::post('mah/beneficiario/store', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@store');
+    # mah DESTROY
+    Route::get('mah/beneficiario/destroy', 'App\Http\Controllers\Ajuda\AjudaPedidoBeneficiarioController@destroy');
 
     ################## PEDIDO ITEM
-            # mah CREATE
-            Route::get('mah/pedidoitem/create', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@create');
-            # mah EDIT
-            Route::get('mah/pedidoitem/edit', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@edit');
-            # mah UPDATE
-            Route::post('mah/pedidoitem/update', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@update');
-            # mah VIEW
-            Route::get('mah/pedidoitem/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@show');
-            # mah STORE
-            Route::post('mah/pedidoitem/store', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@store')->name('mah.item.store');
-            # mah DESTROY
-            Route::get('mah/pedidoitem/destroy/{pedidoItens}', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@destroy');
+    # mah CREATE
+    Route::get('mah/pedidoitem/create', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@create');
+    # mah EDIT
+    Route::get('mah/pedidoitem/edit', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@edit');
+    # mah UPDATE
+    Route::post('mah/pedidoitem/update', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@update');
+    # mah VIEW
+    Route::get('mah/pedidoitem/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@show');
+    # mah STORE
+    Route::post('mah/pedidoitem/store', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@store')->name('mah.item.store');
+    # mah DESTROY
+    Route::get('mah/pedidoitem/destroy/{pedidoItens}', 'App\Http\Controllers\Ajuda\AjudaPedidoItensController@destroy');
 
     ################## PRESTAÇÃO DE CONTAS
-            # mah CREATE
-            Route::get('mah/prestconta/create', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@create');
-            # mah EDIT
-            Route::get('mah/prestconta/edit', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@edit');
-            # mah UPDATE
-            Route::post('mah/prestconta/update', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@update');
-            # mah VIEW
-            Route::get('mah/pprestconta/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@show');
-            # mah STORE
-            Route::post('mah/prestconta/store', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@store');
-            # mah DESTROY
-            Route::get('mah/prestconta/destroy', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@destroy');
+    # mah CREATE
+    Route::get('mah/prestconta/create', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@create');
+    # mah EDIT
+    Route::get('mah/prestconta/edit', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@edit');
+    # mah UPDATE
+    Route::post('mah/prestconta/update', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@update');
+    # mah VIEW
+    Route::get('mah/pprestconta/show/{paeProtocolo}', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@show');
+    # mah STORE
+    Route::post('mah/prestconta/store', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@store');
+    # mah DESTROY
+    Route::get('mah/prestconta/destroy', 'App\Http\Controllers\Ajuda\AjudaPrestContaController@destroy');
 
 
     # AJUDA TDAP ################################
 
-            # index    
-            Route::get('ajuda/tdap', 'App\Http\Controllers\Tdap\TdapController@index');
+    # index    
+    Route::get('ajuda/tdap', 'App\Http\Controllers\Tdap\TdapController@index');
 
-            # PMDA ##################
+    # PMDA ##################
 
-            Route::get('pmda', 'App\Http\Controllers\Pmda\PmdaController@index');
-            Route::post('pmda', 'App\Http\Controllers\Pmda\PmdaController@index');
+    Route::get('pmda', 'App\Http\Controllers\Pmda\PmdaController@index');
+    Route::post('pmda', 'App\Http\Controllers\Pmda\PmdaController@index');
 
-            Route::get('pmda/create', 'App\Http\Controllers\Pmda\PmdaController@create');
+    Route::get('pmda/create', 'App\Http\Controllers\Pmda\PmdaController@create');
 
 
-            # editar 
-            Route::get('pmda/edit/{pmda}', 'App\Http\Controllers\Pmda\PmdaController@edit')->name('pmda/edit');
+    # editar 
+    Route::get('pmda/edit/{pmda}', 'App\Http\Controllers\Pmda\PmdaController@edit')->name('pmda/edit');
 
-            # iss gravar
-            Route::post('pmda/edit/iss', 'App\Http\Controllers\Pmda\PmdaController@iss')->name('updateIss');
-            Route::post('pmda/edit/municipio', 'App\Http\Controllers\Pmda\PmdaController@municipio')->name('updateMunicipio');
+    # iss gravar
+    Route::post('pmda/edit/iss', 'App\Http\Controllers\Pmda\PmdaController@iss')->name('updateIss');
+    Route::post('pmda/edit/municipio', 'App\Http\Controllers\Pmda\PmdaController@municipio')->name('updateMunicipio');
 
-            #PONTO DE CAPTAÇÃO
-            Route::post('pmda/edit/ponto', 'App\Http\Controllers\Pmda\PmdaPontoController@store')->name('novoPonto');
-            Route::get('pmda/ponto/delete/{ponto}', 'App\Http\Controllers\Pmda\PmdaPmdaPontoController@destroy')->name('delPonto');
-            Route::post('pmda/ponto/search', 'App\Http\Controllers\Pmda\PmdaPontoController@search')->name('searchPonto');
+    #PONTO DE CAPTAÇÃO
+    Route::post('pmda/edit/ponto', 'App\Http\Controllers\Pmda\PmdaPontoController@store')->name('novoPonto');
+    Route::get('pmda/ponto/delete/{ponto}', 'App\Http\Controllers\Pmda\PmdaPmdaPontoController@destroy')->name('delPonto');
+    Route::post('pmda/ponto/search', 'App\Http\Controllers\Pmda\PmdaPontoController@search')->name('searchPonto');
 
 
 
@@ -768,7 +774,7 @@ Route::group(['middleware' => 'auth'], function () {
     ##################################### RAT ######################################
 
     # Rat Index
-    Route::get('rat', 'App\Http\Controllers\Compdec\RatController@index');
+    Route::match(['GET', 'POST'], 'rat', 'App\Http\Controllers\Compdec\RatController@index');
 
     # Rat CREATE
     Route::get('rat/create', 'App\Http\Controllers\Compdec\RatController@create');
@@ -789,10 +795,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('rat/destroy', 'App\Http\Controllers\Compdec\RatController@destroy');
 
     # Rat CONFIG
-    Route::get('rat/config', 'App\Http\Controllers\Compdec\RatController@config');
+    Route::match(['GET', 'POST'], 'rat/config', 'App\Http\Controllers\Compdec\RatController@config');
 
     # Rat SEARCH
-    Route::match(['GET', 'POST'], 'rat/search', 'App\Http\Controllers\Compdec\RatController@search');
+    //Route::match(['GET', 'POST'], 'rat/search', 'App\Http\Controllers\Compdec\RatController@search');
 
 
     # Rat DELETE IMAGEM
@@ -843,16 +849,24 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('demanda', 'App\Http\Controllers\Cedec\DemandaController@index');
 
 
-    # painel admin voluntariado
-    Route::get('voluntariado/admin', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
+    # painel admin gade
+    Route::get('gade/admin', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
+
+    Route::get('gade/listagem/profissao/{field}', 'App\Http\Controllers\Voluntario\VoluntarioController@profissao');
+    
+    Route::get('bot', 'App\Http\Controllers\Cedec\BotTelegramController@index');
+
+
+   
+
 });
 
+
+
+# rotas publicas
 Route::get('autentica/{token}', 'App\Http\Controllers\Cedec\ApiController@autentica');
 require __DIR__ . '/auth.php';
 
+Route::get('gade', 'App\Http\Controllers\Voluntario\VoluntarioController@create');
 
-
-Route::get('voluntariado', 'App\Http\Controllers\Voluntario\VoluntarioController@create');
-
-Route::post('voluntariado/store', 'App\Http\Controllers\Voluntario\VoluntarioController@store');
-
+Route::post('gade/store', 'App\Http\Controllers\Voluntario\VoluntarioController@store');

@@ -4,6 +4,7 @@ use App\Http\Controllers\Cedec\ApiController;
 use App\Models\Drrd\PaeProtocolo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,21 @@ Route::prefix('auth')->group(function(){
     Route::post('update', [\App\Http\Controllers\Auth\Api\UserController::class, 'update']);  
     
 });
+
+# rat
+Route::get('pubrat', [\App\Http\Controllers\Compdec\RatController::class, 'apiAllDataRat']);  
+
+# vistoria
+Route::get('pubvistoria', [\App\Http\Controllers\Compdec\VistoriaController::class, 'apiAllDataVistoria']);  
+
+
+# updates
+Route::get('/bot/getupdates', function() {
+    $updates = Telegram::getUpdates();
+    return (json_encode($updates));
+});
+
+
+# bot
+Route::get('/bot/resetsenha', [\App\Http\Controllers\Cedec\BotTelegramController::class, 'index']);  
+

@@ -41,26 +41,32 @@ class Handler extends ExceptionHandler
 
     function render($request, Throwable $exception)
     {
-         $message1 = $exception->getMessage();
 
-//         //dd($exception);
+        // array messagem
+         $message1 = [
+            'exception' =>$exception->getMessage(),
+            'req' =>$request
+        ];
+
+        //dd($message1);
 
         if($exception->getCode() == 0) {
 
            return parent::render($request, $exception);
                 
         // Acesso das mineradoras
-        }elseif (($message1 == "Unauthenticated.") && ($request->getRequestUri('/pae/mineradora'))) {
+        }elseif (($message1['exception'] == "Unauthenticated.") && ($request->getRequestUri('/pae/mineradora'))) {
             //dd('acesso mineradora');
-            return response()->view('auth.login', ['message' => $message1], 404);
+            return response()->view('auth.login', ['message' => $message1['exception']], 404);
             
-        } else if ($message1 == "Unauthenticated.") {
+        } else if ($message1['exception'] == "Unauthenticated.") {
         
-            return response()->view('errors/noAuth', ['message' => $message1], 500);
+            //return response()->view('errors/noAuth', ['message' => $message1['exception']], 500);
+            return response()->view('errors/noAuth', ['message' => "Usuario não Autenticado"], 500);
         
-        } else if($message1 == "CSRF token mismatch.") {
+        } else if($message1['exception'] == "CSRF token mismatch.") {
             
-            return response()->view('auth.login', ['message' => $message1], 404);
+            return response()->view('auth.login', ['message' => $message1['exception']], 404);
             
         }else {
 
@@ -68,23 +74,23 @@ class Handler extends ExceptionHandler
                 
                 if ($exception->getStatusCode() == 404) {
 
-                    return response()->view('errors/404', ['message' => $message1], 404);
+                    return response()->view('errors/404', ['message' => $message1['exception']], 404);
                 
                 }elseif($exception->getStatusCode() == 402){
-                    dd($message1);
+                    dd($message1['exception']);
                 }
                 if ($exception->getStatusCode() == 500) {
 
                     if (true) {
                         dd('o');
                     } else {
-                        return response()->view('errors/500', ['message' => $message1], 500);
+                        return response()->view('errors/500', ['message' => $message1['exception']], 500);
                     }
                 }
             } else {
 
 //                dd($exception)->getCode();
-                return response()->view('errors.500', ['message' => $message1], 500);
+                return response()->view('errors.500', ['message' => $message1['exception']], 500);
             }
         }
 

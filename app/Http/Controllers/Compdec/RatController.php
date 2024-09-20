@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
+
 class RatController extends Controller
 {
 
@@ -68,44 +69,196 @@ class RatController extends Controller
             'modulo' => 'RAT',
             'user_id' => Auth::user()->id,
             'hostname' => request()->getClientIp(),
+            'campos' => $request->all(),
         ]);
 
-        $municipio_id = "";
-        if (isset(session('user')['municipio_id'])) {
-            $municipio_id = session('user')['municipio_id'];
+        $filter = $request->except('_token');
+
+
+        $porRegiao       = ['file' => [['total' => 0, 'id_rpm' => 0]]];
+        $porOcorrencia15 = ['file' => [['qtd15' => 0, 'ocorrencia' => 0, 'descricao' => 0]]];
+        $porOcorrencia   = ['file' => [['qtd'   => 0, 'ocorrencia' => 0, 'descricao' => 0]]];
+        $porMes          = ['file' => [['total' => 0, 'month' => 0, 'year' => 0]]];
+
+        $porRegiao = ['file' => ['total' => 0, 'id_rpm' => 0]];
+        $porOcorrencia15 = ['file' => ['qtd15' => 0, 'ocorrencia' => 0, 'descricao' => 0]];
+        $porOcorrencia   = ['file' => ['qtd'   => 0, 'ocorrencia' => 0, 'descricao' => 0]];
+        $porMes          = ['file' => ['total' => 0, 'month' => 0, 'year' => 0]];
+        $ratChuva = 0;
+        $ratSeca = 0;
+        $percent_seca = 0;
+        $percent_chuva = 0;
+        //$percent_chuva_intensa =0;
+
+
+        $filter_all = " com_rat.id > 1 ";
+
+        $cedec_redec = $request->user()->hasRole(['cedec', 'redec']);
+
+        //$municipio_id = isset(session('user')['municipio_id']) ? session('user')['municipio_id'] : Auth::user()->municipio_id;
+
+
+        
+        /**
+         * Usuario CEDEC e REDEC
+         */
+        if ($cedec_redec) {
+             
+            if (isset($filter['municipio_id'])) {
+                $filter_all .= ' and com_rat.municipio_id = "' . $filter['municipio_id'] . '" ';
+            }
+        } 
+       
+        # ano
+        if (isset($filter['ano'])) {
+            $filter_all .= ' and year(com_rat.dt_ocorrencia) = "' . $filter['ano'] . '" ';
         }
 
-        //dd(session('user')['municipio_id'], $request->user()->can('cedec'));
+        # numero da ocorrencia
+        if (isset($filter['num_ocorrencia'])) {
+            $filter_all .= ' and com_rat.num_ocorrencia = "' . $filter['num_ocorrencia'] . '" ';
+        }
 
-        if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
+        // data inicial
+        if (isset($filter['data_inicio']) and is_null($filter['data_final'])) {
+            $filter_all .= ' and com_rat.dt_ocorrencia >= cast("' . $filter['data_inicio'] . '" as date) ';
+        }
 
-            $rats = DB::table('com_rat')
-                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
-                ->join('users', 'users.id', '=', 'com_rat.operador_id')
-                ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
-                ->addSelect('com_rat.*')
-                ->addSelect('cedec_municipio.nome as nome')
-                ->addSelect('users.name as operador_nome')
-                ->addSelect('dec_cobrade.descricao as cobrade')
-                ->orderBy('com_rat.dt_ocorrencia', 'asc')
-                ->where('operador_id', '=', Auth::user()->id)
-                ->paginate(10);
+        // data final
+        if (isset($filter['data_final']) and is_null($filter['data_inicio'])) {
+            $filter_all .= ' and com_rat.dt_ocorrencia <= "' . $filter['data_final'] . '" ';
+        }
+
+        // data inicial e final
+        if (isset($filter['data_inicio']) and $filter['data_final']) {
+            $filter_all .= ' and cast(com_rat.dt_ocorrencia as date) between "' . $filter['data_inicio'] . '" and "' . $filter['data_final'] . '" ';
+        }
+
+        // endereco
+        if (isset($filter['endereco'])) {
+            $filter_all .= ' and com_rat.endereco like "%' . $filter['endereco'] . '%" ';
+        }
+
+        // historico
+        if (isset($filter['historico'])) {
+            $filter_all .= ' and com_rat.acoes like "%' . $filter['historico'] . '%" ';
+        }
+
+        // ocorrencia_id
+        if (isset($filter['ocorrencia_id'])) {
+            $filter_all .= ' and com_rat.ocorrencia_id = "' . $filter['ocorrencia_id'] . '" ';
+        }
+
+        // alvo_id
+        if (isset($filter['alvo_id'])) {
+            $filter_all .= ' and com_rat.alvo_id = "' . $filter['alvo_id'] . '" ';
+        }
+
+        // cobrade_id
+        if (isset($filter['cobrade_id'])) {
+            $filter_all .= ' and com_rat.cobrade_id = "' . $filter['cobrade_id'] . '" ';
+        }
+
+        // envolvidos
+        if (isset($filter['envolvidos'])) {
+            $filter_all .= ' and com_rat.envolvidos like "%' . $filter['envolvidos'] . '%" ';
+        }
+
+        // nome_operacao
+        if (isset($filter['nome_operacao'])) {
+            $filter_all .= ' and com_rat.nome_operacao like "%' . $filter['nome_operacao'] . '%" ';
+        }
+
+
+        $sem_filtros = true;
+
+        /* verifica sem filtros */
+        foreach ($filter as $key => $campo) {
+
+            if ($key != '_token') {
+                if (!is_null($campo)) {
+                    $sem_filtros = false;
+                    continue;
+                }
+            }
+        }
+
+        //var_dump($filter_all, $filter);
+        //var_dump($request->method(), $filter_all, Auth::user()->municipio_id);
+
+        if ($sem_filtros) {
+            $rats = array();
         } else {
 
-            $rats = DB::table('com_rat')
-                ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
-                ->join('users', 'users.id', '=', 'com_rat.operador_id')
-                ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
-                ->addSelect('com_rat.*')
-                ->addSelect('cedec_municipio.nome as nome')
-                ->addSelect('users.name as operador_nome')
-                ->addSelect('dec_cobrade.descricao as cobrade')
-                ->orderBy('com_rat.dt_ocorrencia', 'asc')
-                ->where('com_rat.municipio_id', '=', $municipio_id)
-                ->paginate(10);
-        }
+            # get index
+            if ($request->method() == 'GET') {
+
+                if ($cedec_redec) {
+
+                    $rats = DB::table('com_rat')
+                        ->whereRaw(DB::raw($filter_all))
+                        ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                        ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                        ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                        ->addSelect('com_rat.*')
+                        ->addSelect('cedec_municipio.nome as nome')
+                        ->addSelect('users.name as operador_nome')
+                        ->addSelect('dec_cobrade.descricao as cobrade')
+                        ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                        ->paginate(30);
 
 
+                    # COMPDEC
+                } else {
+
+                    $rats = DB::table('com_rat')
+                        ->whereRaw(DB::raw($filter_all))
+                        ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                        ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                        ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                        ->addSelect('com_rat.*')
+                        ->addSelect('cedec_municipio.nome as nome')
+                        ->addSelect('users.name as operador_nome')
+                        ->addSelect('dec_cobrade.descricao as cobrade')
+                        ->where('com_rat.municipio_id',  '=', Auth::user()->municipio_id)
+                        ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                        ->paginate(30);
+                }
+
+                # POST Buscar
+            } elseif ($request->method() == 'POST') {
+
+
+                if ($cedec_redec) {
+
+                    $rats = DB::table('com_rat')
+                        ->whereRaw(DB::raw($filter_all))
+                        ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                        ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                        ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                        ->addSelect('com_rat.*')
+                        ->addSelect('cedec_municipio.nome as nome')
+                        ->addSelect('users.name as operador_nome')
+                        ->addSelect('dec_cobrade.descricao as cobrade')
+                        ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                        ->paginate(30);
+                } else {
+
+                    $rats = DB::table('com_rat')
+                        ->whereRaw(DB::raw($filter_all))
+                        ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+                        ->join('users', 'users.id', '=', 'com_rat.operador_id')
+                        ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+                        ->addSelect('com_rat.*')
+                        ->addSelect('cedec_municipio.nome as nome')
+                        ->addSelect('users.name as operador_nome')
+                        ->addSelect('dec_cobrade.descricao as cobrade')
+                        ->where('com_rat.municipio_id',  '=', Auth::user()->municipio_id)
+                        ->orderBy('com_rat.dt_ocorrencia', 'asc')
+                        ->paginate(30);
+                }
+            }
+        }   
 
         #Qtd por mes Ocorrencias
         $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
@@ -129,6 +282,7 @@ class RatController extends Controller
                 $chart_ocor_list_ano_corrente .= $val['cobrade_count'] . "','";
             }
         }
+
 
 
 
@@ -188,10 +342,10 @@ class RatController extends Controller
 
             # chuvas 
             $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
-            
+
             # chuvas intensas 
             //$ratChuvaIntensa = Rat::where('cobrade_id', '=', '26')->count();
-            
+
             # estiagem 
             $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
 
@@ -202,27 +356,21 @@ class RatController extends Controller
             //     $percent_chuva_intensa = 0;
             // }
 
-            if ($ratSeca > 0 && $rats->total() > 0) {
+
+            //dd($ratSeca);
+
+
+            if ($ratSeca > 0 && count($rats) > 0) {
                 $percent_seca = number_format(($ratSeca / $rats->total()) * 100, 2);
             } else {
                 $percent_seca = 0;
             }
 
-            if ($ratChuva > 0 && $rats->total() > 0) {
+            if ($ratChuva > 0 && count($rats) > 0) {
                 $percent_chuva = number_format(($ratChuva / $rats->total()) * 100, 2);
             } else {
                 $percent_chuva = 0;
             }
-        } else {
-            $porRegiao = ['file' => ['total' => 0, 'id_rpm' => 0]];
-            $porOcorrencia15 = ['file' => ['qtd15' => 0, 'ocorrencia' => 0, 'descricao' => 0]];
-            $porOcorrencia   = ['file' => ['qtd'   => 0, 'ocorrencia' => 0, 'descricao' => 0]];
-            $porMes          = ['file' => ['total' => 0, 'month' => 0, 'year' => 0]];
-            $ratChuva = 0;
-            $ratSeca = 0;
-            $percent_seca = 0;
-            $percent_chuva = 0;
-            //$percent_chuva_intensa =0;
         }
 
         return view(
@@ -661,229 +809,15 @@ class RatController extends Controller
 
 
 
-    public function search(Request $request)
+
+
+
+    public function config()
     {
 
+        $municipio_id = isset(session('user')['municipio_id']);
 
-        # delete imagem ao RAT
-        Log::channel('navegacao')->info("Acesso", [
-            'view' => 'search',
-            'modulo' => 'RAT',
-            'user_id' => Auth::user()->id,
-            'hostname' => request()->getClientIp(),
-            'campos' => $request,
-        ]);
-
-        $filter = $request;
-
-        //var_dump($request);
-
-        $sem_filtros = true;
-
-        var_dump($sem_filtros);
-
-        /* verifica sem filtros */
-        // foreach ($filter->request as $key=>$campo) {
-
-        //     if($key != '_token'){
-        //         if(!is_null($campo)) {
-        //            $sem_filtros = false; 
-        //            continue;
-        //         }
-                
-        //     } 
-
-        // }
-        
-        if ($request->user()->can('cedec')) { # sem filtro de registros por municipios
-            $filter_all = " com_rat.id > 1 ";
-        } else {
-            $filter_all = " com_rat.id > 1 ";
-        }
-
-
-        $porRegiao       = ['file' =>[['total' => 0, 'id_rpm' => 0]]];
-        $porOcorrencia15 = ['file' =>[['qtd15' => 0, 'ocorrencia' => 0, 'descricao' => 0]]];
-        $porOcorrencia   = ['file' =>[['qtd'   => 0, 'ocorrencia' => 0, 'descricao' => 0]]];
-        $porMes          = ['file' =>[['total' => 0, 'month' => 0, 'year' => 0]]];
-
-
-        /**
-         * 
-         *  tratar dos dados sql
-         * 
-         */
-
-        //dd($filter->ano);
-        if ($filter->ano) {
-            $filter_all .= ' and year(com_rat.dt_ocorrencia) = "' . $filter->ano . '" ';
-        }
-
-        if ($filter->num_ocorrencia) {
-            $filter_all .= ' and com_rat.num_ocorrencia = "' . $filter->num_ocorrencia . '" ';
-        }
-
-        // municipio
-        if ($filter->municipio_id) {
-            $filter_all .= ' and com_rat.municipio_id = "' . $filter->municipio_id . '" ';
-        }
-
-        // Ocorrencias Associadas
-        // if ($filter->ocorr_ass) {
-        //     $filter_all .= ' or com_rat.ocorr_ass = '. $filter->ocorr_ass;
-        // }
-
-        // data inicial
-        if ($filter->data_inicio and is_null($filter->data_final)) {
-            $filter_all .= ' and com_rat.dt_ocorrencia >= cast("' . $filter->data_inicio . '" as date) ';
-        }
-
-        // data final
-        if ($filter->data_final and is_null($filter->data_inicio)) {
-            $filter_all .= ' and com_rat.dt_ocorrencia <= "' . $filter->data_final . '" ';
-        }
-
-        // data inicial e final
-        if ($filter->data_inicio and $filter->data_final) {
-            $filter_all .= ' and cast(com_rat.dt_ocorrencia as date) between "' . $filter->data_inicio . '" and "' . $filter->data_final . '" ';
-        }
-
-        // endereco
-        if ($filter->endereco) {
-            $filter_all .= ' and com_rat.endereco like "%' . $filter->endereco . '%" ';
-        }
-
-        // historico
-        if ($filter->historico) {
-            $filter_all .= ' and com_rat.acoes like "%' . $filter->historico . '%" ';
-        }
-
-        // ocorrencia_id
-        if ($filter->ocorrencia_id) {
-            $filter_all .= ' and com_rat.ocorrencia_id = "' . $filter->ocorrencia_id . '" ';
-        }
-
-        // alvo_id
-        if ($filter->alvo_id) {
-            $filter_all .= ' and com_rat.alvo_id = "' . $filter->alvo_id . '" ';
-        }
-
-        // cobrade_id
-        if ($filter->cobrade_id) {
-            $filter_all .= ' and com_rat.cobrade_id = "' . $filter->cobrade_id . '" ';
-        }
-
-        // envolvidos
-        if ($filter->envolvidos) {
-            $filter_all .= ' and com_rat.envolvidos like "%' . $filter->envolvidos . '%" ';
-        }
-
-        // nome_operacao
-        if ($filter->nome_operacao) {
-            $filter_all .= ' and com_rat.nome_operacao like "%' . $filter->nome_operacao . '%" ';
-        }
-
-
-        # chutas intensas 
-        $ratChuva = Rat::where('cobrade_id', '=', '26')->count();
-
-        # estiagem 
-        $ratSeca = Rat::where('cobrade_id', '=', '31')->count();
-            // ->whereRaw(DB::raw($filter_all))->count();
-
-        #Qtd por mes Ocorrencias
-        $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
-            ->groupBy('cobrade_id')
-            ->get()->toArray();
-
-        $chart_ocorrencias_array = $chart_ocor_corrente;
-        $chart_ocor_list_ano_corrente = "'";
-
-        foreach ($chart_ocorrencias_array as $key => $val) {
-            if (array_key_last($chart_ocorrencias_array) == $key) {
-                $chart_ocor_list_ano_corrente .= $val['cobrade_count'] . "'";
-            } else {
-                $chart_ocor_list_ano_corrente .= $val['cobrade_count'] . "','";
-            }
-        }
-
-        
-        /* pesquisa sem parametro retorna sem dados**/
-        if ($sem_filtros) {
-            $rats = array();
-            
-        } else {
-
-            $municipio_id = "";
-            if (isset(session('user')['municipio_id'])) {
-                $municipio_id = session('user')['municipio_id'];
-            }
-
-            if(!$sem_filtros) {
-
-                if ( $request->user()->hasRole('cedec') ) { # sem filtro de registros por municipios
-
-                    
-                    $rats = DB::table('com_rat')
-                    ->whereRaw(DB::raw($filter_all))
-                    ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
-                    ->join('users', 'users.id', '=', 'com_rat.operador_id')
-                    ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
-                    ->addSelect('com_rat.*')
-                    ->addSelect('cedec_municipio.nome as nome')
-                    ->addSelect('users.name as operador_nome')
-                    ->addSelect('dec_cobrade.descricao as cobrade')
-                    ->orderBy('com_rat.dt_ocorrencia', 'asc')
-                    ->paginate(1);
-                    //->get();
-                    //->toSql();
-
-                    var_dump($rats);
-                } else {
-
-                    $rats = DB::table('com_rat')
-                        ->whereRaw(DB::raw($filter_all))
-                        ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
-                        ->join('users', 'users.id', '=', 'com_rat.operador_id')
-                        ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
-                        ->addSelect('com_rat.*')
-                        ->addSelect('cedec_municipio.nome as nome')
-                        ->addSelect('users.name as operador_nome')
-                        ->addSelect('dec_cobrade.descricao as cobrade')
-                        ->where('com_rat.municipio_id', '=', $municipio_id)
-                        ->orderBy('com_rat.dt_ocorrencia', 'asc')
-                        ->paginate(10);
-                }
-            }
-        }
-
-
-        
-
-        return view(
-            'compdec/rat/index',
-            [
-                'rats' => $rats,
-                'optionOcorrencia' => self::dataRat()['ratCodOcorrencia'],
-                'ratAlvo' => self::dataRat()['ratAlvo'],
-                'optionMunicipio' => self::dataRat()['optionMunicipio'],
-                'optionCobrade' => self::dataRat()['optionCobrade'],
-                'ratChuva' => $ratChuva,
-                'ratSeca' => $ratSeca,
-                'chart_ocor_list_ano_corrente' => "[" . $chart_ocor_list_ano_corrente . "]",
-                'search' => true,
-                'porRegiao' => $porRegiao,
-                'porOcorrencia15' => $porOcorrencia15,
-                'porOcorrencia' => $porOcorrencia,
-                'porMes'        => $porMes
-            ]
-        );
-    }
-
-
-    public function config() {
         return view('compdec/rat/config');
-        
     }
 
     /* Todos Relatorios de Atividade */
@@ -937,5 +871,57 @@ class RatController extends Controller
         $name_pdf = 'Rat_' . Str::slug($rat->municipio['nome']) . date('ymdHis') . '.pdf';
 
         return $pdf->stream($name_pdf);
+    }
+
+
+    /**
+     * Listagem Geral dos RAT´s
+     *
+     * Campos
+     * 
+     * id 
+     *
+     * 
+     */
+    public function apiAllDataRat()
+    {
+
+        $rats = DB::table('com_rat')
+            ->join('cedec_municipio', 'cedec_municipio.id', '=', 'com_rat.municipio_id')
+            ->join('users', 'users.id', '=', 'com_rat.operador_id')
+            ->join('dec_cobrade', 'dec_cobrade.id', 'com_rat.cobrade_id')
+            ->addSelect('com_rat.num_ocorrencia')
+            ->addSelect('com_rat.dt_ocorrencia')
+            ->addSelect('com_rat.municipio_id')
+            ->addSelect('com_rat.operador_id')
+            ->addSelect('com_rat.ocorrencia_id')
+            ->addSelect('com_rat.alvo_id')
+            ->addSelect('com_rat.cobrade_id')
+            ->addSelect('com_rat.lugar_descricao')
+            ->addSelect('com_rat.envolvidos')
+            ->addSelect('com_rat.nome_operacao')
+            ->addSelect('com_rat.endereco')
+            ->addSelect('com_rat.numero')
+            ->addSelect('com_rat.bairro')
+            ->addSelect('com_rat.estado')
+            ->addSelect('com_rat.referencia')
+            ->addSelect('com_rat.cep')
+            ->addSelect('cedec_municipio.nome as nome')
+            ->addSelect('users.name as operador_nome')
+            ->addSelect('dec_cobrade.descricao as cobrade')
+            ->orderBy('com_rat.dt_ocorrencia', 'asc')
+            ->get();
+        //->where('operador_id', '=', Auth::user()->id)
+        // ->paginate(10);
+
+
+        return response()->json(
+            [
+                'rat' => $rats,
+            ],
+            200,
+            ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+            JSON_UNESCAPED_UNICODE
+        );
     }
 }

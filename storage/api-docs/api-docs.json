@@ -1,0 +1,27 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Rat - Relatório de Atividades",
+        "description": "Registro de Relatórios de Atividades",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api": {}
+    },
+    "components": {
+        "schemas": {
+            "Result": {
+                "title": "Sample schema for using references",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

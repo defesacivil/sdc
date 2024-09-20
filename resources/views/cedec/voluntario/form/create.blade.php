@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col">
 
-        {{ Form::open(['url' => 'voluntariado/store', 'id' => 'form_voluntariado']) }}
+        {{ Form::open(['url' => 'gade/store', 'id' => 'form_voluntariado']) }}
         <div class="row">
             {{ Form::token() }}
         </div>
@@ -13,7 +13,7 @@
 
             <div class="p-3 col-12">
                 {{ Form::label('cpf', 'CPF', ['class' => 'fw-bold']) }}:
-                {{ Form::text('cpf', '', ['class' => 'form form-control', 'id' => 'cpf', 'placeholder' => 'CPF', 'maxlength' => '15', 'required']) }}
+                {{ Form::text('cpf', '', ['class' => 'form form-control', 'id' => 'cpf', 'placeholder' => 'CPF', 'maxlength' => '11', 'required']) }}
             </div>
 
             <div class="p-3 col-12">
@@ -27,7 +27,7 @@
             </div>
 
             <div class="p-3 col-12">
-                {{ Form::label('atividade', 'Atividade a Exercer', ['class' => 'fw-bold']) }}:
+                {{ Form::label('atividade', 'Atividade a exercer', ['class' => 'fw-bold']) }}:
                 {{ Form::text('atividade', '', ['class' => 'form form-control', 'id' => 'atividade', 'placeholder' => '', 'maxlength' => '50', 'required']) }}
             </div>
 
@@ -36,16 +36,20 @@
                 {{ Form::email('email', '', ['class' => 'form form-control', 'id' => 'email', 'placeholder' => '', 'maxlength' => '110', 'required']) }}
             </div>
 
-            <div class="p-3 col-12">
-                {{ Form::label('municipio_id', 'Cidade onde Reside', ['class' => 'fw-bold']) }}:
+            <div class="p-3 col-6">
+                {{ Form::label('municipio_id', 'Cidade onde reside', ['class' => 'fw-bold']) }}:
                 {{ Form::select('municipio_id', $municipios, '', ['class' => 'municipio_id form form-control', 'id' => 'municipio_id', 'placeholder' => 'Selecione um Município', 'data-alvo_id' => '', 'required']) }}
+            </div>
+            <div class="p-3 col-6">
+                {{ Form::label('disp_viagem', 'Disponibilidade para viagens ? ', ['class' => 'fw-bold']) }}:
+                {{ Form::select('disp_viagem', ['0' =>'Não', '1'=>'Sim'], '0', ['class' => 'form form-control', 'id' => 'disp_viagem', 'placeholder' => '', 'required']) }}
             </div>
 
             {{-- Telefone --}}
             <div class="row telefone">
                 <div class="p-3 col-12 col-md-6">
                     {{ Form::label('telefone', 'Nº Telefone', ['class' => 'fw-bold']) }}:
-                    {{ Form::text('telefone', '', ['class' => 'form form-control', 'id' => 'telefone0', 'name' => 'telefones[]', 'placeholder' => 'Adicione um Número de Telefone','required']) }}
+                    {{ Form::text('telefone', '', ['class' => 'form form-control', 'id' => 'telefone0', 'name' => 'telefones[]', 'placeholder' => 'Adicione um Número de Telefone', 'maxlength' => '14', 'required']) }}
                 </div>
                 <div class="p-3 col-12 col-md-6">
                     <label class="fw-bold">Tem Whatsapp ?</label><br>
@@ -62,7 +66,7 @@
 
             <div class="row">
                 <div class="col">
-                    <a href="#" id="btnAdicionaTelefone" class="btn btn-success"><i class="fa fa-plus"></i> Adicionar Telefone</a>
+                    <a href="#" id="btnAdicionaTelefone" class="btn btn-link"><i class="fa fa-plus"></i> Adicionar Telefone</a>
                 </div>
             </div>
 
@@ -70,7 +74,7 @@
 
         <div class="row 2">
             <div class="col text-center p-3">
-                {{ Form::submit('Salvar', ['class' => 'btn btn-primary', 'id' => 'btn']) }}
+                {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'btn']) }}
             </div>
         </div>
         {{ Form::close() }}

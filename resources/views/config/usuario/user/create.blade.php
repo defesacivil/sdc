@@ -8,7 +8,7 @@
 
 <!-- conteudo -->
 @section('content')
-    <legend>Cadastro Usuario</legend>
+    <legend>Cadastro novo Usuario</legend>
 
 
 {{$usuario}}

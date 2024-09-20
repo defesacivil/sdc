@@ -1,7 +1,7 @@
 @extends('layouts.pagina_master')
 
 {{-- header --}}
-@section('header')
+@section('breadcrumb')
 
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
@@ -112,7 +112,7 @@
 
 
 
-        {{ Form::open(['url' => 'rat/search']) }}
+        {{ Form::open(['url' => 'rat']) }}
 
         <div class="row" id="search2">
             <div class="p-1 col-md-6">
@@ -161,7 +161,7 @@
                     <div class="p-2 row">
                         <div class="col-md-12">
                             {{ Form::label('operador_id', 'Nome do Operador') }}:
-                            {{ Form::text('operador_id', '', ['class' => 'form form-control', 'id' => 'historico', 'placeholder' => 'Parte do Nome do Operador', 'maxlength' => '70']) }}
+                            {{ Form::text('operador_id', '', ['class' => 'form form-control', 'id' => 'operador_id', 'placeholder' => 'Parte do Nome do Operador', 'maxlength' => '70']) }}
                         </div>
                     </div>
                 @endcan
@@ -203,8 +203,9 @@
         <p class="p-2">Registros : {{ count($rats) }}</p>
 
         <div class="table p-3 border table-responsive">
-            <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }} title="Exportar em formato Excel">Exportar Excel</a>
+            {{-- <a class='btn btn-warning btn-sm' href={{ url('rat/exportRats') }} title="Exportar em formato Excel">Exportar Excel</a> --}}
             <h5 class="text-center bolder">Registro das Ocorrências</h5>
+
             @if (count($rats) > 0)
                 <table class="table align-middle table-striped table-bordered table-sm table-hover">
                     <thead class="table-light">
@@ -246,7 +247,7 @@
                     </tfoot>
                 </table>
 
-                    {{ $rats->appends(request()->all())->links() }}
+                    {{ $rats->appends(request()->except('_token'))->links() }}
             @else
                 <p class="alert alert-danger">Sua pesquisa não encontrou nenhum registro</p>
             @endif

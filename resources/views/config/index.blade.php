@@ -23,35 +23,53 @@
 
                 <p class="text-center"><legend>Configurações</legend></p>
                 <br>
+
+
                 <div class="row">
+                    
                     <div class="text-center col col-md-3">
-                        <a href="config/usuario" class=''><img width="100" src="{{ url('imagem/icon/users.png') }}" title="Usuários"></a><br>
-                        Usuários
+                        <a href="config/usuario" class=''><img width="100" src="{{ asset('imagem/icon/config_user.png') }}" title="Configurações de Usuários"></a><br>
+                        Configurações de Usuários
                     </div>
+
                     <div class="text-center col col-md-3">
-                        <a href="/config/config" class=''><img width="100" src="{{ url('imagem/icon/config_user.png') }}" title="Configurações"></a><br>
-                        Configurações
-                    </div>
-                    <div class="text-center col col-md-3">
-                        <a href="log-viewer" class=''><img width="100" src="{{ url('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
+                        <a href="log-viewer" class=''><img width="100" src="{{ asset('imagem/icon/report.png') }}" title="Relatórios Log's"></a>
                         <br>
                         Relatórios e Log's
                     </div>
+
+
+                    {{-- Limpeza de Cache --}}
                     <div class="col col-md-3 text-center">
-                        <a href="config/index" class="" title="Manutenção"><img width="100" src="{{ url('imagem/icon/gears.png') }}" title="Relatórios Log's"></a>
+                        <a href="config/index" class="" title="Manutenção"><img width="100" src="{{ asset('imagem/icon/clean.png') }}" title="Manutenção do Cache"></a>
                         <br>
-                        Gears
+                        Cache
                     </div>
+
+                    <hr>
+
                     <div class="col col-md-3 text-center">
-                        <a href="msg" class="" title="Msg Alert"><img width="100" src="{{ url('imagem/icon/mensagem.png') }}" title="Mensagens"></a>
+                        <a href="msg" class="" title="Msg Alert"><img width="100" src="{{ asset('imagem/icon/mensagem.png') }}" title="Mensagens Alerta do sistema /Usuários"></a>
                         <br>
-                        Mensagens/Alertas
+                        Mensagens / Alertas Padrão
                     </div>
 
                     <div class="col col-md-3 text-center">
-                        <a href="config/info" class="" title="Msg Alert"><img width="100" src="{{ url('imagem/icon/mensagem.png') }}" title="Mensagens"></a>
+                        <a href="config/info" class="" title="Msg Alert"><img width="100" src="{{ asset('imagem/icon/info.png') }}" title="Mensagens"></a>
                         <br>
                         Informações
+                    </div>
+
+                    <div class="col col-md-3 text-center">
+                        <a href="config/view_field" class="" title="Msg Alert"><img width="100" src="{{ asset('imagem/icon/db.png') }}" title="Lista DB"></a>
+                        <br>
+                        Campos Tabela BD
+                    </div>
+
+                    <div class="col col-md-3 text-center">
+                        <a href="docs/api" class="" title="Msg Alert"><img width="100" src="{{ asset('imagem/icon/doc.png') }}" title="Documentação API"></a>
+                        <br>
+                        Documentação API
                     </div>
                 </div>
                 <br>

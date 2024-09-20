@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cedec;
 use App\Http\Controllers\Controller;
 use App\Models\Cedec\Telefone;
 use Illuminate\Http\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelefoneController extends Controller
 {
@@ -15,7 +16,7 @@ class TelefoneController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**

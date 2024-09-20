@@ -10,6 +10,7 @@ use App\Models\Cedec\CedecRdc;
 use App\Models\Cedec\Telefone;
 use App\Models\Municipio\Regiao;
 use App\Models\Voluntario\Voluntario;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class VoluntarioController extends Controller
@@ -28,8 +29,28 @@ class VoluntarioController extends Controller
         $municipio = Voluntario::all()->groupBy('municipio_id')->count();
         $regiao = Voluntario::all()->groupBy('regiao_id')->count();
 
-        //dd($municipio);
-       
+
+        # qtd por municipio
+        $tot_municipios = DB::table("cedec_voluntario")
+            ->join("cedec_municipio", "cedec_municipio.id", "=", "cedec_voluntario.municipio_id")
+            ->select("cedec_municipio.nome as municipio", "cedec_voluntario.regiao_id as regiao", DB::raw("count(cedec_voluntario.municipio_id) as total"))
+            ->groupBy('cedec_voluntario.municipio_id')
+            ->orderBy('cedec_municipio.nome')
+            ->get();
+
+        # qtd por região
+        $tot_regiaos = DB::table("cedec_voluntario")
+            ->join("cedec_rpm_mun", "cedec_rpm_mun.id_municipio", "=", "cedec_voluntario.municipio_id")
+            ->select("cedec_rpm_mun.id_rpm as regiao", DB::raw("count(cedec_voluntario.regiao_id) as total"))
+            ->groupBy('cedec_voluntario.regiao_id')->get();
+
+        # atividades
+
+        $tot_atividades = DB::table("cedec_voluntario")
+        ->join("cedec_profissaos", "cedec_profissaos.id", "=", "cedec_voluntario.profissao")
+        ->select("cedec_voluntario.atividade", "cedec_profissaos.nome as profissao", "cedec_profissaos.id as profissao_id", DB::raw("count(cedec_voluntario.atividade) as total"))
+        ->groupBy('cedec_voluntario.atividade')->get();
+
         return view("cedec.voluntario.index", [
 
             'profissaos' => $profissaos,
@@ -37,6 +58,9 @@ class VoluntarioController extends Controller
             'total'      => $total,
             'municipio'      => $municipio,
             'regiao'      => $regiao,
+            'tot_municipios' => $tot_municipios,
+            'tot_regiaos' => $tot_regiaos,
+            'tot_atividades' => $tot_atividades,
         ]);
     }
 
@@ -54,7 +78,7 @@ class VoluntarioController extends Controller
 
             'profissaos' => $profissaos,
             'municipios' => $municipios,
-            
+
         ]);
     }
 
@@ -67,7 +91,7 @@ class VoluntarioController extends Controller
     public function store(Request $request)
     {
 
-$validator = $request->validate(
+        $validator = $request->validate(
             [
                 'nome'         => 'required|max:110',
                 'cpf'          => 'required|max:15',
@@ -75,7 +99,8 @@ $validator = $request->validate(
                 'profissao'    => 'max:50',
                 'atividade'    => 'max:50',
                 'email'        => 'email|required|max:110',
-                'municipio_id' => 'required|integer'
+                'municipio_id' => 'required|integer',
+                'disp_viagem'  => 'integer|max:1'
             ],
             [
                 'nome.required'  => 'Campo Nome é de preenchimento Obrigatório !',
@@ -90,29 +115,31 @@ $validator = $request->validate(
                 'email.email'  => 'Campo E-mail deve ter um e-mail válido !',
                 'municipio_id.required'  => 'Campo Município é de preenchimento Obrigatório !',
                 'municipio_id.integer'  => 'Campo Município deve ter valor numérico !',
-                
 
             ]
         );
 
-            $voluntario = new Voluntario();
+        $voluntario = new Voluntario();
 
-            $regiao_id = CedecRdc::select('id_rpm')->where('id_municipio', '=', $request->municipio_id)->first();
-                            
-            $voluntario->nome         = $request->nome;
-            $voluntario->cpf          = $request->cpf;
-            $voluntario->ci           = $request->ci;
-            $voluntario->profissao    = $request->profissao;
-            $voluntario->atividade    = $request->atividade;
-            $voluntario->email        = $request->email;
-            $voluntario->municipio_id = $request->municipio_id;
-            $voluntario->regiao_id    = $regiao_id['id_rpm'];
+        $regiao_id = CedecRdc::select('id_rpm')->where('id_municipio', '=', $request->municipio_id)->first();
 
+        $voluntario->nome         = $request->nome;
+        $voluntario->cpf          = $request->cpf;
+        $voluntario->ci           = $request->ci;
+        $voluntario->profissao    = $request->profissao;
+        $voluntario->atividade    = $request->atividade;
+        $voluntario->email        = $request->email;
+        $voluntario->municipio_id = $request->municipio_id;
+        $voluntario->regiao_id    = $regiao_id['id_rpm'];
+        $voluntario->disp_viagem  = $request->disp_viagem;
+        $voluntario->status       = 1;
+
+        try {
             $voluntario->save();
 
-            
+
             foreach ($request->telefones as $key => $telefone) {
-                
+
                 $tel = new Telefone();
                 $tel->model_type = "App\\Model\\Voluntario";
                 $tel->model_id   = $voluntario->id;
@@ -120,11 +147,15 @@ $validator = $request->validate(
                 $tel->whatsapp   = $request->sel_zap[$key];
 
                 $tel->save();
-                
             }
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            //dd($e);
+            return redirect('gade')->withErrors(['message' => 'O CPF já está em nossa base de Dados !']);
+        }
 
 
-        return redirect('voluntariado')->with('message', 'Registro gravado com Sucesso');
+        return redirect('gade')->with('message', 'Registro gravado com Sucesso');
     }
 
     /**
@@ -170,5 +201,25 @@ $validator = $request->validate(
     public function destroy(Voluntario $voluntario)
     {
         //
+    }
+
+
+    public function profissao($field)
+    {
+      
+        $dados = DB::table('cedec_voluntario')
+        ->join('cedec_profissaos', 'cedec_profissaos.id', '=', 'cedec_voluntario.profissao')
+        ->select('cedec_voluntario.nome', 'cedec_voluntario.email', 'cedec_profissaos.nome as profissao')
+        ->where('cedec_voluntario.profissao', '=', $field)->get();
+
+        //dd($dados);
+        
+        return view('cedec.voluntario.listagem.profissao',[
+
+            'dados' => $dados,
+        ]
+        );
+
+
     }
 }

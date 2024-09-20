@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RoleDemController extends \App\Http\Controllers\Controller
+class RoleController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.

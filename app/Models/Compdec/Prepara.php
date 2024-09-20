@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Prepara extends Model
 {
-    protected $table = $com_prepara;
+    protected $table = 'com_prepara';
     protected $primaryKey = "id";
     use HasFactory;
 }

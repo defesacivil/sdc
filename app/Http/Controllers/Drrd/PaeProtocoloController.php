@@ -31,9 +31,11 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         //dd(auth()->user()->getRoleNames(), auth()->user()->can('cedec'), auth()->user()->getPermissionNames());
 
 
+        /** Acesso exclusivo do empreendedor */
         if (auth()->user()->can('paeusuario')) {
             return $this->minerar($request);
         } else {
+            
             /*bloquear acesso do empreendedor */
 
             $notificacao = PaeProtocolo::with(
@@ -59,7 +61,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                         'analises.notificacoes'
                     )
                         ->whereRaw('pae_empdor_id', '=', Auth::user()->id_empdor)
-                        ->paginate(30);
+                        ->paginate(10);
 
                     # acesso                                                        
                 } else {
@@ -69,7 +71,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                         'empreendimento.empreendedor',
                         'analises',
                         'analises.notificacoes'
-                    )->paginate(30);
+                    )->paginate(10);
                 }
 
                 // $protocolos = DB::table('pae_protocolos')
@@ -112,7 +114,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                     ])
                         ->orWhere('num_protocolo', 'LIKE', '%' . $request->get('search') . '%')
                         ->orWhereRelation('empreendimento', 'nome', 'LIKE', '%' . $request->get('search') . '%')
-                        ->paginate(30);
+                        ->paginate(10);
                 } elseif (($request->get('search') == "") && ($request->get('dtInicio') != "") && ($request->get('dtFinal') != "")) {
 
                     $protocolos = PaeProtocolo::with([
@@ -122,7 +124,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                         'analises.notificacoes'
                     ])
                         ->orWhereBetween('dt_entrada', [$request->get('dtInicio'),  $request->get('dtFinal')])
-                        ->paginate(30);;
+                        ->paginate(10);;
                 }
 
                 return view(
@@ -203,31 +205,31 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
         $request->validate(
             [
-                'dt_entrada' => "required|date",
-                'user_id' => "required|integer",
+                'dt_entrada'     => "required|date",
+                'user_id'        => "required|integer",
                 'limite_analise' => "required",
-                'ccpae' => "nullable|digits_between:1,50",
-                'ccpae_venc' => "nullable|date",
-                'empnto_search' => "required",
-                'pae_empnto_id' => "required|integer",
-                /*'obs' => "required|min:5|max:1000",*/
-                'sei' => "max:150",
+                'ccpae'          => "nullable|digits_between:1,50",
+                'ccpae_venc'     => "nullable|date",
+                'empnto_search'  => "required",
+                'pae_empnto_id'  => "required|integer",
+                /*'obs'          => "required|min:5|max:1000",*/
+                'sei'            => "max:150",
 
             ],
             [
-                'dt_entrada.required' => "O campo Data de Entrada é Obrigatório !",
-                'dt_entrada.date' => "O campo Data de Entrada deve ser uma Data válida !",
-                'user_id' => "O campo Usuario é Obrigatório !",
+                'dt_entrada.required'     => "O campo Data de Entrada é Obrigatório !",
+                'dt_entrada.date'         => "O campo Data de Entrada deve ser uma Data válida !",
+                'user_id'                 => "O campo Usuario é Obrigatório !",
                 'limite_analise.required' => "O campo Data Limite é Obrigatório !",
-                //'limite_analise.data' => "O campo Data de Limite deve ser uma Data válida !",
-                'ccpae.digits_between' => "O campo CCPAE deve ser somente números !",
-                'ccpae_venc.date' => "O campo CCPAE Vencimento deve ser uma Data Válida !",
-                'empnto_search.required' => "O campo Empreendimento é obrigatório !",
-                'pae_empnto_id.required' => "O campo Id Empreendimento é Obrigatório !",
-                /*'obs.required' => "O campo Observação é Obrigatório !",       
-                'obs.max' => "O campo Observação deve ter no máximo 1000 caracteres!",       
-                'obs.min' => "O campo Observação deve ter no mínimo 5 caracteres!",       */
-                'sei.max' => "O campo Observação deve ter no máximo 150 caracteres!",
+                //'limite_analise.data'   => "O campo Data de Limite deve ser uma Data válida !",
+                'ccpae.digits_between'    => "O campo CCPAE deve ser somente números !",
+                'ccpae_venc.date'         => "O campo CCPAE Vencimento deve ser uma Data Válida !",
+                'empnto_search.required'  => "O campo Empreendimento é obrigatório !",
+                'pae_empnto_id.required'  => "O campo Id Empreendimento é Obrigatório !",
+                /*'obs.required'          => "O campo Observação é Obrigatório !",       
+                'obs.max'                 => "O campo Observação deve ter no máximo 1000 caracteres!",       
+                'obs.min'                 => "O campo Observação deve ter no mínimo 5 caracteres!",       */
+                'sei.max'                 => "O campo Observação deve ter no máximo 150 caracteres!",
 
             ]
         );
@@ -535,7 +537,8 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
     {
 
 
-        if (Auth::user()->hasRole('paeusuario')) {
+        # criar regra para pae bm
+        if (Auth::user()->hasrole('cedec')) {
 
             //dd($request->all());
             if ($request->method() == "GET") {

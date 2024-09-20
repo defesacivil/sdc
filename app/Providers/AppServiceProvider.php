@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use Dedoc\Scramble\Scramble;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         }); 
 
         Log::setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+
     }
 
     /**
@@ -33,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Scramble::routes(function (Route $route) {
+            return Str::startsWith($route->uri, 'api/pub');
+        });
         //
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();

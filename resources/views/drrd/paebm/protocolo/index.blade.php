@@ -171,7 +171,7 @@
                                     @endphp
                                     {!! $aviso !!} --}}
 
-                                    @can('cedec')
+                                    @hasrole('cedec')
                                         {{-- $protocolo->getNotificacao(4) --}}
                                         |<a href='{{ url('pae/analise/create/' . $protocolo->id) }}' title='Gerar registro de Análise'><img width='25' src='{{ asset('imagem/icon/cadastro.png') }}'></a>
 
@@ -183,7 +183,7 @@
 
                                         {{-- Encerrar --}}
                                         |<a onclick="return confirm('Deseja realmente Encerrar esse protocolo ?')" href='{{ url('pae/protocolo/encerrar/' . $protocolo->id) }}'><img width='25' src='{{ asset('imagem/icon/icon_deletar.png') }}'></a>
-                                    @endcan
+                                    @endrole
                                     {{-- show --}}
                                     |<a href='{{ url('pae/protocolo/show/' . $protocolo->id) }}'><img width='20' src='{{ asset('imagem/icon/view.png') }}'></a>
 

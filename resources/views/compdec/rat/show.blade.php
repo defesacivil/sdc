@@ -48,7 +48,7 @@
             </div>
             <div class="col-md-12">
                 
-                <img class="img-fluid border" src="{{ url('imagem/brasao/timbre3000.png') }}" alt="">
+                <img class="img-fluid border" width="100%" height="108px" src="{{ url('imagem/brasao/timbre.png') }}" alt="">
                 
             </div>
             <div class="col-md-12">

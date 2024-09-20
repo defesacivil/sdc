@@ -6,18 +6,20 @@
 @endsection
 
 @section('header_pg')
-    <div class="col-12 shadow" id="header_vol">
+    <div class="col-12" id="header_vol">
         <div class="row">
+            <img style="padding: 0,0,0,9px" id="header_vol" src='{{ asset('imagem/background/topo_gade.png') }}' width="1320" height="235"/>
             <div class="col-2 p-3">
-                <img width="100" class="mb-2 img-fluid" src="{{ url('imagem/DEFESACIVILMG_400.png') }}">
+                {{-- <img width="100" class="mb-2 img-fluid" src="{{ asset('imagem/DEFESACIVILMG_400.png') }}"> --}}
             </div>
             <div class="col-10 p-3">
-                <p class="text-center">
+                
+                {{-- <p class="text-center">
                 <h1>Gabinete Militar do Governado de Minas Gerais<br>Coordenadoria Estadual de Defesa Civil de Minas Gerais</h1>
                 </p>
                 <p>
                 <h3 class="text-white">"Sua dedicação pode salvar vidas. Junte-se à Rede de Voluntários da Defesa Civil de Minas Gerais e faça a diferença em nossa comunidade!"</h3>
-                </p>
+                </p> --}}
             </div>
         </div>
 
@@ -27,7 +29,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col">
             <h3>
                 <p class="p-4 text-center">Formulário de Cadastro de Voluntários da Defesa Civil de MG</p>
             </h3>
@@ -52,8 +54,10 @@
 
         $(document).ready(function() {
 
-            $('#header_vol').css('background-image', 'url("{{ asset('imagem/background/imagem2.png') }} ")');
-            $('#header_vol').css('background-position', 'right 20px bottom 0px');
+            //$('#cpf').mask("000.000.000-00");
+
+            $('#header_vol').css('padding', 0);
+
 
             $('.whatsapp').click(function() {
                 if ($(this).is(':checked')) {
@@ -109,7 +113,7 @@
             html += "<div class='row telefone" + idContador + "'>"
                 html += "<div class='p-3 col-12 col-md-6'>";
                     html += "<label class='fw-bold' id='label" + idContador + "'>Nº Telefone " + idContador + ":</label>";
-                    html += "<input type='text' id='telefone" + idContador + "' class='form-control telefone excluir' name='telefones[]' placeholder='Insira um " + tipo + "'/>";
+                    html += "<input type='text' id='telefone" + idContador + "' class='form-control telefone excluir' name='telefones[]' placeholder='Insira um " + tipo + "' maxlength='14'/>";
                     html += "<span class='input-group-btn'>";
                         html += "<button class='btn btnExcluir' id='button" + idContador + "' onclick='exclui(" + idContador + ")' type='button'><span class='fa fa-trash'></span></button>";
                     html += "</span>";
