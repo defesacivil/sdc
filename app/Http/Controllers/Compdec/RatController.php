@@ -907,6 +907,7 @@ class RatController extends Controller
             ->addSelect('com_rat.referencia')
             ->addSelect('com_rat.cep')
             ->addSelect('cedec_municipio.nome as nome')
+            ->addSelect('cedec_municipio.CodmunDv')
             ->addSelect('users.name as operador_nome')
             ->addSelect('dec_cobrade.descricao as cobrade')
             ->orderBy('com_rat.dt_ocorrencia', 'asc')

@@ -8,6 +8,7 @@ use App\Models\Cedec\CedecUsuario;
 use App\Models\Municipio\Municipio;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class CedecUsuarioController extends \App\Http\Controllers\Controller
@@ -72,6 +73,9 @@ class CedecUsuarioController extends \App\Http\Controllers\Controller
  //       dd($request);
 
         $user = new User();
+
+        Log::error($request);
+        dd($request);
 
         $request->validate(
             [

@@ -849,10 +849,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('demanda', 'App\Http\Controllers\Cedec\DemandaController@index');
 
 
-    # painel admin gade
-    Route::get('gade/admin', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
-
-    Route::get('gade/listagem/profissao/{field}', 'App\Http\Controllers\Voluntario\VoluntarioController@profissao');
     
     Route::get('bot', 'App\Http\Controllers\Cedec\BotTelegramController@index');
 
@@ -863,6 +859,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
+
+
+
 # rotas publicas
 Route::get('autentica/{token}', 'App\Http\Controllers\Cedec\ApiController@autentica');
 require __DIR__ . '/auth.php';
@@ -870,3 +869,9 @@ require __DIR__ . '/auth.php';
 Route::get('gade', 'App\Http\Controllers\Voluntario\VoluntarioController@create');
 
 Route::post('gade/store', 'App\Http\Controllers\Voluntario\VoluntarioController@store');
+
+//if(str_contains("10.180.216", $_SERVER['REMOTE_ADDR'])
+# painel admin gade
+Route::get('gade/admin', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
+
+Route::get('gade/listagem/profissao/{field}', 'App\Http\Controllers\Voluntario\VoluntarioController@profissao');

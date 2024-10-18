@@ -66,15 +66,33 @@
                 <th>REGIAO_ID</th>
                 <td>{{ $empnto->regiao->nome }}</td>
             </tr>
+            <tr><td colspan="2"><hr></td></tr>
             <tr>
-                <th>PAE_COORDENADOR_ID</th>
+                <th>PAE_COORDENADOR</th>
                 <td>{{ $empnto->coordenador }}</td>
             </tr>
             <tr>
                 <th>E-MAIL COORDENADOR</th>
                 <td>{{ $empnto->email_coord }}</td>
             </tr>
-
+            <tr>
+                <th>TEL COORDENADOR</th>
+                <td>{{ $empnto->tel_coordenador }}</td>
+            </tr>
+            <tr><td colspan="2"><hr></td></tr>
+            <tr>
+                <th>COORDENADOR SUBSTITUTO</th>
+                <td>{{ $empnto->coordenador_sub }}</td>
+            </tr>
+            <tr>
+                <th>E-MAIL COORDENADOR SUBSTITUTO</th>
+                <td>{{ $empnto->email_coord_sub }}</td>
+            </tr>
+            <tr>
+                <th>TEL COORDENADOR SUBSTITUTO</th>
+                <td>{{ $empnto->tel_coordenador_sub }}</td>
+            </tr>
+            
         </table>
     </div>
     </div>

@@ -1042,6 +1042,7 @@ class VistoriaController extends Controller
             ->addSelect('com_vistorias.tr_pilar')
             ->addSelect('com_vistorias.tr_viga')
             ->addSelect('cedec_municipio.nome as municipio')
+            ->addSelect('cedec_municipio.CodmunDv')
             ->addSelect('users.name as operador_nome')
             ->orderBy('com_vistorias.dt_vistoria', 'asc')
             ->get();

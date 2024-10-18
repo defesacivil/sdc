@@ -19,9 +19,18 @@
     <div class="container p-3 border min hv-100" style="background-color:#e9ecef;">
         <div class="row p-3">
 
+            @hasanyrole(['cedec', 'redec'])
+                <div class="col-md-12 text-center">
+                    <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a></p>
+                </div>
+            @endhasanyrole
+
+
+            @hasanyrole(['compdec'])
             <div class="col-md-12 text-center">
-                <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah/busca') }}>Voltar</a></p>
+                <p class="pt-4"><a class='btn btn-success btn-sm' href={{ url('mah') }}>Voltar</a></p>
             </div>
+            @endhasanyrole
         </div>
 
         <div class="row rounded shadow bd-body">

@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -48,7 +49,7 @@ class Handler extends ExceptionHandler
             'req' =>$request
         ];
 
-        //dd($message1);
+        Log::error($message1);
 
         if($exception->getCode() == 0) {
 
@@ -66,7 +67,7 @@ class Handler extends ExceptionHandler
         
         } else if($message1['exception'] == "CSRF token mismatch.") {
             
-            return response()->view('auth.login', ['message' => $message1['exception']], 404);
+            return response()->view('auth.login', ['message' => $message1['exception'], 'ot' => $message1], 404);
             
         }else {
 
