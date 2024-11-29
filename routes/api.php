@@ -25,15 +25,24 @@ Route::prefix('auth')->group(function(){
     Route::post('login', [\App\Http\Controllers\Auth\Api\LoginController::class, 'login']);  
 
     Route::post('cisterna/sinc', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'processar']);  
-
+    
     //Route::post('cpf', [\App\Http\Controllers\Auth\Api\UserController::class, 'cpf']);  
-
+    
     Route::get('user', [\App\Http\Controllers\Auth\Api\UserController::class, 'listAll']);  
     Route::get('userex', [\App\Http\Controllers\Auth\Api\UserController::class, 'listCompdec']);  
     
     Route::post('update', [\App\Http\Controllers\Auth\Api\UserController::class, 'update']);  
     
 });
+
+
+###### rotas públicas #######
+
+Route::get('cisterna/listall', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'ListAll']);  
+Route::get('cisterna/busca/{cpf}', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'busca']);  
+Route::post('cisterna/create', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'create']);  
+Route::post('cisterna/uploadFotos', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'uploadFotos']);
+
 
 # rat
 Route::get('pubrat', [\App\Http\Controllers\Compdec\RatController::class, 'apiAllDataRat']);  

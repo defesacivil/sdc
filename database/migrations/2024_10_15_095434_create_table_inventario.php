@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nome', 70);
             $table->string('marca', 70);
             $table->string('modelo', 70);
+            $table->string('patrimonio', 70);
             $table->timestamps();
         });
     }

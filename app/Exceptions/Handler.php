@@ -49,6 +49,8 @@ class Handler extends ExceptionHandler
             'req' =>$request
         ];
 
+        dd($message1);
+
         Log::error($message1);
 
         if($exception->getCode() == 0) {
@@ -73,6 +75,8 @@ class Handler extends ExceptionHandler
 
             if ($this->isHttpException($exception)) {
                 
+               
+
                 if ($exception->getStatusCode() == 404) {
 
                     return response()->view('errors/404', ['message' => $message1['exception']], 404);
@@ -90,7 +94,7 @@ class Handler extends ExceptionHandler
                 }
             } else {
 
-//                dd($exception)->getCode();
+                //dd($exception)->getCode();
                 return response()->view('errors.500', ['message' => $message1['exception']], 500);
             }
         }
