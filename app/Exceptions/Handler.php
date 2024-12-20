@@ -49,6 +49,7 @@ class Handler extends ExceptionHandler
             'req' =>$request
         ];
 
+        //dd($message1);
         dd($message1);
 
         Log::error($message1);

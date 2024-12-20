@@ -90,13 +90,13 @@ class CisternaController extends Controller
     {
 
         $dados = json_decode($request->getContent(), true);
-        
+
         $dados['id_cad'] = $dados['id'];
         unset($dados['id']);
 
         $cisterna = new Cisterna();
 
-        
+
         $cisterna->id_cad                 = $dados['id_cad'];
         $cisterna->municipio              = $dados['municipio'];
         $cisterna->comunidade             = $dados['comunidade'];
@@ -122,7 +122,11 @@ class CisternaController extends Controller
         $cisterna->testadaDispParteFogao  = $dados['testadaDispParteFogao'];
         $cisterna->atendPipa              = $dados['atendPipa'];
         $cisterna->outroAtendPipa         = $dados['outroAtendPipa'];
-        $cisterna->respAtendPipa          = $dados['respAtendPipa'];
+        $cisterna->respAtDefesaCivil      = $dados['respAtDefesaCivil'];
+        $cisterna->respAtExercito         = $dados['respAtExercito'];
+        $cisterna->respAtParticular       = $dados['respAtParticular'];
+        $cisterna->respAtPrefeitura       = $dados['respAtPrefeitura'];
+        $cisterna->respAtOutros           = $dados['respAtOutros'];
         $cisterna->outrObs                = $dados['outrObs'];
         $cisterna->nomeAgente             = $dados['nomeAgente'];
         $cisterna->cpfAgente              = $dados['cpfAgente'];
@@ -150,20 +154,40 @@ class CisternaController extends Controller
         // }
     }
 
-    public function uploadFotos(Request $request) {
 
-        
-        $request->validate(['image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048']);
-    
-        //$imagePath = $request->file('image')->store('images/'.$request->cpf, 'public'); 
-        $imagePath = $request->file('image')->store('images', 'public'); 
-    
-        return response()->json(
-            [
-                'message' => 'Imagem enviada com sucesso', 
-                //'path' => Storage::url($imagePath)
-            ]);
-       
+    public function uploadFotos(Request $request)
+    {
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cpf' => 'required',
+            'nome' => 'required',
+        ]);
+
+            $filename = $request->input('nome');
+            $cpf = $request->input('cpf');
+
+            $existeImage = Storage::exists('cisterna/' . $request->cpf . '/' . $request->nome);
+
+            if(!$existeImage) {
+
+                $request->file('image')->storeAs('cisterna/' . $request->cpf, $filename);
+
+            return response()->json(
+                [
+                    'message' => 'Imagem enviada com sucesso',
+                    //'path' => Storage::url($imagePath)
+                    //'cpf' => $request->cpf,
+                    //'image' => $request->hasFile('image')
+                    'filename' => $request->input('nome')
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                    'message' => 'ja existe o arquivo' 
+                ]);
+        }
     }
 
 

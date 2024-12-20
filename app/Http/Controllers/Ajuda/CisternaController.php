@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Ajuda;
 use App\Http\Controllers\Controller;
 use App\Models\Ajuda\Cisterna;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CisternaController extends Controller
 {
@@ -53,7 +55,23 @@ class CisternaController extends Controller
      */
     public function show(Cisterna $cisterna)
     {
-        //
+
+        $dados = DB::table("sinc_cisterna")
+                ->join("cedec_municipio", "sinc_cisterna.municipio", "=", "cedec_municipio.Codmundv")
+                ->select("sinc_cisterna.*", "cedec_municipio.nome as municipio")
+                ->first();
+
+
+        $cpf = str_replace([".","-"], "", $cisterna->cpf );
+
+        $images = Storage::files('cisterna/'.$cpf, true);
+
+               return view('ajuda/cisterna/view',
+        [
+            'cisterna' => $dados,
+            'images' => $images,
+
+        ]);
     }
 
     /**

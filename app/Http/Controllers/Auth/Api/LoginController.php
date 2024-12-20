@@ -122,9 +122,11 @@ class LoginController extends Controller
 
 
     /* */
-    public function update($val)
+    public function update(Request $request)
     {
+        $user = auth()->user();
 
-        $user = "";
+        $user->email = $request->email;
+
     }
 }

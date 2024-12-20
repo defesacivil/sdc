@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Compdec\RatController;
+use App\Http\Middleware\CheckLocalNetwork;
 use App\Models\CedecUsuario;
 use Dedoc\Scramble\Scramble;
 use Illuminate\Contracts\Session\Session;
@@ -537,6 +538,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     # modulo acesso CISTERNA
     Route::get('cisterna', 'App\Http\Controllers\Ajuda\CisternaController@index');
+    Route::get('cisterna/show/{cisterna}', 'App\Http\Controllers\Ajuda\CisternaController@show');
 
 
 
@@ -865,6 +867,11 @@ Route::group(['middleware' => 'auth'], function () {
 # rotas publicas
 Route::get('autentica/{token}', 'App\Http\Controllers\Cedec\ApiController@autentica');
 require __DIR__ . '/auth.php';
+
+# cadastro usuario na cedec
+Route::get('usuario', 'App\Http\Controllers\Usuario\userController@newuser')->middleware(CheckLocalNetwork::class);
+Route::post('usuario/novo', 'App\Http\Controllers\Usuario\userController@gravar')->middleware(CheckLocalNetwork::class);
+
 
 Route::get('gade', 'App\Http\Controllers\Voluntario\VoluntarioController@create');
 

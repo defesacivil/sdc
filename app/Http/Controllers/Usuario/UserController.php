@@ -142,4 +142,14 @@ class UserController extends \App\Http\Controllers\Controller
 
         return response()->json($data);
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function newUser()
+    {
+        return view('config/usuario/user/newuser');
+    }
 }

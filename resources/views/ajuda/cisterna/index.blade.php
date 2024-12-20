@@ -36,7 +36,7 @@ index processos - editar / visualizar / mensagem / enviar */
                 <a class='btn btn-warning btn-sm' href={{ url('exportar') }} title="Exportar dados para Excel">Exportar Excel</a></p>
 
                 
-                @can('cedec')
+                @hasrole('cedec')
                 <div class="row text-center">
 
                     <div class="col text-center p-2">
@@ -46,7 +46,7 @@ index processos - editar / visualizar / mensagem / enviar */
                         <div class="col card text-white bg-primary mb-3" style="width: 18rem;">
                             <div class="card-header">Quantidade Beneficiários Registrados</div>
                             <div class="card-body text-center">
-                                <i class="card-title display-2 bold">0</i>
+                                <i class="card-title display-2 bold">{{($dados) ? count($dados) : 0}}</i>
                             </div>
                         </div>
                     </div>
@@ -71,6 +71,8 @@ index processos - editar / visualizar / mensagem / enviar */
                                     <th>CPF</th>
                                     <th>Município</th>
                                     <th>Comunidade</th>
+                                    <th>Data/Hora</th>
+                                    <th>Opções</th>
                                 </tr>
                             </thead>
                             <tbody class="table-group-divider">
@@ -82,6 +84,10 @@ index processos - editar / visualizar / mensagem / enviar */
                                         <td>{{ $dado->cpf }}</td>
                                         <td>{{ $dado->municipio }}</td>
                                         <td>{{ $dado->comunidade }}</td>
+                                        <td>{{ $dado->created_at }}</td>
+                                        <td>
+                                            <a href={{ url('cisterna/show/'.$dado->id)}}><img src='{{ asset('/imagem/icon/view.png') }}'></a>
+                                        </td>
                                         
                                     </tr>
                                     
@@ -98,7 +104,7 @@ index processos - editar / visualizar / mensagem / enviar */
                 </div>
 
 
-                @endcan
+                @endrole
             </div>
         </div>
     </div>
