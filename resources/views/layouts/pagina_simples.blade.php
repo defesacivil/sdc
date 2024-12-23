@@ -31,6 +31,11 @@
         @include('layouts/includes/footer')
     </footer>
 
+    {{-- javascript pagina global --}}
+    @include('layouts/includes/script')
+
+    @stack('other-scripts')
+
 
     {{-- js local --}}
     @yield('code')

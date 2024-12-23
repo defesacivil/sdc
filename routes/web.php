@@ -869,8 +869,8 @@ Route::get('autentica/{token}', 'App\Http\Controllers\Cedec\ApiController@autent
 require __DIR__ . '/auth.php';
 
 # cadastro usuario na cedec
-Route::get('usuario', 'App\Http\Controllers\Usuario\userController@newuser')->middleware(CheckLocalNetwork::class);
-Route::post('usuario/novo', 'App\Http\Controllers\Usuario\userController@gravar')->middleware(CheckLocalNetwork::class);
+Route::get('usuario', 'App\Http\Controllers\Usuario\userController@createNewUser')->middleware(CheckLocalNetwork::class);
+Route::post('usuario/novo', 'App\Http\Controllers\Usuario\userController@storeNewUser')->middleware(CheckLocalNetwork::class);
 
 
 Route::get('gade', 'App\Http\Controllers\Voluntario\VoluntarioController@create');
