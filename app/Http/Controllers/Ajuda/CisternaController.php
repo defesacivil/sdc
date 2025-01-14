@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Ajuda;
 
+use App\Exports\ExportCisterna;
 use App\Http\Controllers\Controller;
 use App\Models\Ajuda\Cisterna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CisternaController extends Controller
 {
@@ -18,10 +20,13 @@ class CisternaController extends Controller
     public function index()
     {
 
-        $dados = Cisterna::all();
+        $dados = Cisterna::with('getMunicipio')->get();
+
+        $totalMunicipios = Cisterna::groupBy('municipio')->get();
         return view('ajuda/cisterna/index',
                     [
                         'dados'=> $dados,
+                        'totalMunicipios'=> $totalMunicipios,
                     ]
         );
     }
@@ -56,11 +61,9 @@ class CisternaController extends Controller
     public function show(Cisterna $cisterna)
     {
 
-        $dados = DB::table("sinc_cisterna")
-                ->join("cedec_municipio", "sinc_cisterna.municipio", "=", "cedec_municipio.Codmundv")
-                ->select("sinc_cisterna.*", "cedec_municipio.nome as municipio")
-                ->first();
-
+        $dados = Cisterna::with('getMunicipio')
+                         ->where('id', $cisterna->id)
+                         ->first();
 
         $cpf = str_replace([".","-"], "", $cisterna->cpf );
 
@@ -106,5 +109,10 @@ class CisternaController extends Controller
     public function destroy(Cisterna $cisterna)
     {
         //
+    }
+
+    public function exportAllExcel()
+    {
+        return Excel::download(new ExportCisterna, 'Dados_app' . date('d_m_Y_H.i.s') . '.xlsx');
     }
 }

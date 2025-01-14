@@ -19,13 +19,14 @@
         <div class="row flex-fill">
 
             <div class="col-md-12">
-                <p class="p-4 text-center"><a class='btn btn-success btn-sm' href={{ url('ajuda') }}>Voltar</a>&nbsp;
+                <p class="p-4 text-center"><a class='btn btn-success btn-sm' href={{ url('cisterna') }}>Voltar</a>&nbsp;
                     <a class='btn btn-warning btn-sm' href={{ url('exportar') }} title="Exportar dados para Excel">Exportar Excel</a>
                 </p>
 
 
                 @hasrole('cedec')
                     <div class="row bg-white rounded">
+
 
                         <div class="row p-3">
                             <div class="col-2">id</div>
@@ -39,7 +40,7 @@
 
                         <div class="row p-3">
                             <div class="col-2">Municipio </div>
-                            <div class="col-9">{{ $cisterna->municipio }}</div>
+                            <div class="col-9">{{ $cisterna->getMunicipio['nome'] }}</div>
                         </div>
 
                         <div class="row p-3">

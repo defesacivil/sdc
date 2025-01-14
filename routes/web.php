@@ -163,13 +163,13 @@ Route::group(['middleware' => 'auth'], function () {
     # ROLE_USER #######################
 
     #index
-    Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserDemController@index');
+    Route::get('role_user', 'App\Http\Controllers\Usuario\RoleUserController@index');
 
     # adicionar usuario em perfil
-    Route::get('usuario/role/add/{id}', 'App\Http\Controllers\Usuario\RoleUserDemController@create')->can('cedec');
+    Route::get('usuario/role/add/{id}', 'App\Http\Controllers\Usuario\RoleUserController@create')->can('cedec');
 
     # store ( sincronizar )
-    Route::post('usuario/role/add/store', 'App\Http\Controllers\Usuario\RoleUserDemController@store');
+    Route::post('usuario/role/add/store', 'App\Http\Controllers\Usuario\RoleUserController@store');
     # edit 
     #não implementar
 
@@ -539,6 +539,8 @@ Route::group(['middleware' => 'auth'], function () {
     # modulo acesso CISTERNA
     Route::get('cisterna', 'App\Http\Controllers\Ajuda\CisternaController@index');
     Route::get('cisterna/show/{cisterna}', 'App\Http\Controllers\Ajuda\CisternaController@show');
+    
+    Route::get('cisterna/exportAllExcel', 'App\Http\Controllers\Ajuda\CisternaController@exportAllExcel')->name('exportar');
 
 
 

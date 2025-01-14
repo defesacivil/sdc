@@ -71,6 +71,7 @@ class VoluntarioController extends Controller
      */
     public function create()
     {
+        
         $profissaos = Profissao::all()->pluck('nome', 'id');
         $municipios = Municipio::all(['nome', 'id'])->pluck('nome', 'id');
 

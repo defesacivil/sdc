@@ -187,7 +187,7 @@ class CompdecController extends \App\Http\Controllers\Controller
     public function update(Request $request, $id)
     {
 
-        dd($request);
+        dd($id);
 
 
         try {

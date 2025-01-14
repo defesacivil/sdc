@@ -143,6 +143,7 @@ class CisternaController extends Controller
         $cisterna->img_op2                = $dados['img_op2'];
         $cisterna->img_op3                = $dados['img_op3'];
         $cisterna->img_op4                = $dados['img_op4'];
+        $cisterna->tel                    = $dados['tel'];
 
         $result = $cisterna->save();
         //dd($result)  ;      

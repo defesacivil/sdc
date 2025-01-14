@@ -31,6 +31,7 @@ Route::prefix('auth')->group(function(){
     Route::get('user', [\App\Http\Controllers\Auth\Api\UserController::class, 'listAll']);  
     Route::get('userex', [\App\Http\Controllers\Auth\Api\UserController::class, 'listCompdec']);  
     
+    /* atualizar usuario */
     Route::post('update', [\App\Http\Controllers\Auth\Api\UserController::class, 'update']);  
     
 });
@@ -42,6 +43,8 @@ Route::get('cisterna/listall', [\App\Http\Controllers\Auth\Api\CisternaControlle
 Route::get('cisterna/busca/{cpf}', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'busca']);  
 Route::post('cisterna/create', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'create']);  
 Route::post('cisterna/uploadFotos', [\App\Http\Controllers\Auth\Api\CisternaController::class, 'uploadFotos'])->middleware('throttle:60,1'); 
+
+
 
 
 # rat

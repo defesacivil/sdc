@@ -112,6 +112,7 @@ class LoginController extends Controller
                         Carbon::now()->addHours(24));
             }
 
+
             return response()->json([
                 'token' => $token,
                 'result' => true,

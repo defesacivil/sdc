@@ -49,21 +49,25 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
+        //dd($request);
+
         $dados = $request['content'];
-        //dd($dados);
 
         $user = User::where('id_user_cedec', "=", $dados['id_user_cedec'])->first();
 
         $user->email = $dados['email'];
         $user->ativo = $dados['ativo'];
         $user->cpf = $dados['cpf'];
+        $user->municipio_id = $dados['municipio_id'];
+
+        //dd($user, $dados['id_user_cedec']);
 
 
         try {
             $result = $user->save();
         } catch (Exception $e) {
 
-            $result = (str_contains($e->getMessage(), "Duplicate")) ? "duplicado" : "false";
+            $result = (str_contains($e->getMessage(), "Duplicate")) ? 2 : "false";
         }
 
         return response()->json([

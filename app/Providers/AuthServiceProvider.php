@@ -39,12 +39,9 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(Request $request)
     {
    
-
         if ($autor = PersonalAccessToken::findToken($request->token)) {
             $usuario = auth()->loginUsingId($autor->tokenable_id);  
-            auth()->user()->tokens()->delete();  
-
-            
+            auth()->user()->tokens()->delete();            
 
             # usuario ativo
         if(Auth::check() && $usuario['ativo'] == 1){
@@ -109,6 +106,7 @@ class AuthServiceProvider extends ServiceProvider
         # usuario desativado
         }else {
 
+            //dd($usuario);
             Log::channel('navegacao')->info('Login de usuario Desativado', ['table' => 'users', 'id_usuario' => Auth::user()->id]);
             $usuario->Auth::logout();
             Session::flash('message', "Usuário não está ativo ! \n Gentileza aguardar a ativação ou envie um email para sdc@defesacivil.mg.gov.br");

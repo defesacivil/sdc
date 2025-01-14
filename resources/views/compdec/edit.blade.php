@@ -1,7 +1,7 @@
 @extends('layouts.pagina_master')
 
 {{-- header --}}
-@section('header')
+@section('breadcrumb')
 
     <!-- breadcrumb -->
     <nav aria-label="breadcrumb">
@@ -23,6 +23,7 @@
 
         <div class="row">
 
+            <p class="pt-4 text-center"><a class='btn btn-success btn-sm' href={{ url('/compdec') }}>Voltar</a>
             <div class="p-2 border col-md-12">
 
                 <legend class="text-center alert alert-primary">
@@ -140,7 +141,7 @@
 
                             <br>
                             <legend class="text-center alert alert-primary">Dados do Prefeito</legend>
-                            
+
                             <div class="row">
                                 <div class='col-12 col-md-6'>
                                     <div>
@@ -189,12 +190,12 @@
                             <div class='row'>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('latitude', '') }}:
-                                    {{ Form::text('latitude', $compdec->municipio->latitude, ['class' => 'form form-control', 'maxlength' => 13]) }}
+                                    {{ Form::text('latitude', $compdec->municipio->latitude, ['class' => 'form form-control', 'maxlength' => 13, 'readonly' => 'readonly']) }}
                                     <br>
                                 </div>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('longitude', '') }}:
-                                    {{ Form::text('longitude', $compdec->municipio->longitude, ['class' => 'form form-control', 'maxlength' => 13]) }}
+                                    {{ Form::text('longitude', $compdec->municipio->longitude, ['class' => 'form form-control', 'maxlength' => 13, 'readonly' => 'readonly']) }}
                                     <br>
                                 </div>
                             </div>
@@ -202,12 +203,12 @@
                             <div class='row'>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('latitude_dec', 'Latitude Formato Decimal') }}:
-                                    {{ Form::text('latitude_dec', $compdec->municipio->latitude_dec, ['class' => 'form form-control', 'maxlength' => 15]) }}
+                                    {{ Form::text('latitude_dec', $compdec->municipio->latitude_dec, ['class' => 'form form-control', 'maxlength' => 15, 'readonly' => 'readonly']) }}
                                     <br>
                                 </div>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('longitude_dec', 'Longitude Formato Decimal') }}:
-                                    {{ Form::text('longitude_dec', $compdec->municipio->longitude_dec, ['class' => 'form form-control', 'maxlength' => 15]) }}
+                                    {{ Form::text('longitude_dec', $compdec->municipio->longitude_dec, ['class' => 'form form-control', 'maxlength' => 15, 'readonly' => 'readonly']) }}
                                     <br>
                                 </div>
                             </div>
@@ -215,7 +216,7 @@
                             <div class='row'>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('distancia_bh', 'Distância de BH em KM') }}:
-                                    {{ Form::number('distancia_bh', $compdec->municipio->distancia_bh, ['class' => 'form form-control', 'maxlength' => 15]) }}
+                                    {{ Form::number('distancia_bh', $compdec->municipio->distancia_bh, ['class' => 'form form-control', 'maxlength' => 15, 'readonly' => 'readonly']) }}
                                     <br>
                                 </div>
                                 <div class='col-12 col-md-6'>
@@ -229,7 +230,7 @@
 
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('area', 'Area Territorio KM²') }}:
-                                    {{ Form::text('area', $compdec->municipio->area, ['class' => 'form form-control', 'maxlength' => 45]) }}
+                                    {{ Form::text('area', $compdec->municipio->area, ['class' => 'form form-control', 'maxlength' => 45, 'readonly' => 'readonly']) }}
                                     <br>
                                 </div>
 
@@ -350,13 +351,13 @@
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('id_micro', 'Microrregiao') }}:<br>
                                     <span>{{ $compdec->id_micro }} - <span>
-                                    <br>
+                                            <br>
                                 </div>
 
                             </div>
 
                             <legend class="text-center alert alert-primary">Informações Leis/Decretos</legend>
-                            
+
                             <div class="row">
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('num_lei', 'Núnero da Lei') }}:
@@ -397,7 +398,7 @@
 
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <button class="btn btn-primary" type="button" onclick="gravar()">Gravar</button>
+                                    <button class="btn btn-primary btnGravarInfo" type="button">Gravar</button>
                                 </div>
                             </div>
 
@@ -869,7 +870,7 @@
 
                             <div class="row">
                                 <div class="text-center col">
-                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id'=> 'gravarp1']) }}
+                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'gravarp1']) }}
                                     {{ Form::close() }}
                                 </div>
                             </div>
@@ -926,7 +927,7 @@
                             </div>
 
 
-                            
+
                             <legend class="alert alert-info">Equipe Compdec</legend>
                             <!-- BUTTON ADICIONAR MEMBROS EQUIPE -->
                             <p>
@@ -1270,8 +1271,6 @@
     <script type='text/javascript'>
         $(document).ready(function() {
 
-
-
             $("#fone_com1").inputmask('(99) 9999[9]-9999');
             $("#fone_com2").inputmask('(99) 9999[9]-9999');
             $("#fax").inputmask('(99) 9999[9]-9999');
@@ -1358,6 +1357,78 @@
                     $('#nome').val(data.data.nome);
                 })
             });
+
+            $(".btnGravarInfo").click(function(e) {
+
+                var formdata = new FormData();
+
+                var id = '{{ $compdec->id }}';
+
+                formdata.append('_token', "{{ csrf_token() }}");
+
+                formdata.append('id', id);
+                formdata.append('prefeito', $('#prefeito').val());
+                formdata.append('tel_prefeito', $('#tel_prefeito').val());
+                formdata.append('cel_prefeito', $('#cel_prefeito').val());
+                formdata.append('email_prefeito', $('#email_prefeito').val());
+                formdata.append('populacao', $('#populacao').val());
+                formdata.append('pop_rural', $('#pop_rural').val());
+
+                formdata.append('endereco', $('#endereco').val());
+                formdata.append('bairro', $('#bairro').val());
+                formdata.append('cep', $('#cep').val());
+                formdata.append('email_prefeitura', $('#email_prefeitura').val());
+                formdata.append('fax_prefeitura', $('#fax_prefeitura').val());
+                formdata.append('tel_prefeitura', $('#tel_prefeitura').val());
+
+                formdata.append('cobra_iss', $('#cobra_iss').val());
+                formdata.append('aliquota_iss', $('#aliquota_iss').val());
+                formdata.append('cobra_iss', $('#cobra_iss').val());
+                formdata.append('num_lei_iss', $('#num_lei_iss').val());
+                formdata.append('resp_cob_iss', $('#resp_cob_iss').val());
+
+                formdata.append('num_lei', $('#num_lei').val());
+                formdata.append('dt_lei', $('#dt_lei').val());
+                formdata.append('num_decreto', $('#num_decreto').val());
+                formdata.append('dt_decreto', $('#dt_decreto').val());
+                formdata.append('num_portaria', $('#num_portaria').val());
+                formdata.append('dt_portaria', $('#dt_portaria').val());
+
+
+                var result = confirm('Deseja realmente Salvar os Dados ?');
+
+                var url = '{{ url('compdec/update/'.$compdec->id) }}';
+
+                if (result) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: formdata,
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(data) {
+                            console.log(data);
+                            //window.location.href = "{{ url('compdec/edit/' . $compdec->id) }}";
+                        },
+                        error: function(data) {
+                            console.log(data + "erro");
+                        }
+                    });
+                    e.preventDefault();
+                }
+
+            });
+
+            function gravar_estruturas() {
+
+            }
+
+            function gravar_equipe() {
+
+            }
+
 
         });
     </script>

@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
         ];
 
         //dd($message1);
-        dd($message1);
+        //dd($message1);
 
         Log::error($message1);
 

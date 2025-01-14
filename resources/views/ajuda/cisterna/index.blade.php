@@ -33,26 +33,31 @@ index processos - editar / visualizar / mensagem / enviar */
 
             <div class="col-md-12">
                 <p class="p-4 text-center"><a class='btn btn-success btn-sm' href={{ url('ajuda') }}>Voltar</a>&nbsp;
-                <a class='btn btn-warning btn-sm' href={{ url('exportar') }} title="Exportar dados para Excel">Exportar Excel</a></p>
+                <a class='btn btn-warning btn-sm' href={{ route('exportar') }} title="Exportar dados para Excel">Exportar Excel</a></p>
 
                 
                 @hasrole('cedec')
                 <div class="row text-center">
 
-                    <div class="col text-center p-2">
-                    </div>
                     <!-- Card -->
-                    <div class="col text-center p-2">
-                        <div class="col card text-white bg-primary mb-3" style="width: 18rem;">
+                    <div class="col col-3 p-2">
+                        <div class="col card text-white bg-primary mb-3" style="width: 25rem;">
                             <div class="card-header">Quantidade Beneficiários Registrados</div>
                             <div class="card-body text-center">
                                 <i class="card-title display-2 bold">{{($dados) ? count($dados) : 0}}</i>
                             </div>
                         </div>
                     </div>
-                    <div class="col text-center p-2">
+
+                    {{-- Total por municipio --}}
+                    <div class="col col-3 p-2">
+                        <div class="col card text-white bg-primary mb-3" style="width: 25rem;">
+                            <div class="card-header">Quantidade Municípios Registrados </div>
+                            <div class="card-body text-center">
+                                <i class="card-title display-2 bold">{{($totalMunicipios) ? count($totalMunicipios) : 0}}</i>
+                            </div>
+                        </div>
                     </div>
-                    <br>
 
                     {{-- quantidade registros --}}
                     
@@ -82,7 +87,7 @@ index processos - editar / visualizar / mensagem / enviar */
                                         <td scope="row">{{ ($key+1) }}</td>
                                         <td>{{ $dado->nome }}</td>
                                         <td>{{ $dado->cpf }}</td>
-                                        <td>{{ $dado->municipio }}</td>
+                                        <td>{{ $dado->getMunicipio->nome}}</td>
                                         <td>{{ $dado->comunidade }}</td>
                                         <td>{{ $dado->created_at }}</td>
                                         <td>
