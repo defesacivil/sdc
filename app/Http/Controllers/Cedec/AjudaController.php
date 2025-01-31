@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Decreto;
+namespace App\Http\Controllers\Cedec;
 
 use App\Http\Controllers\Controller;
-use App\Models\Decreto\Decreto;
+use App\Models\Cedec\Ajuda;
 use Illuminate\Http\Request;
 
-class DecretoController extends Controller
+class AjudaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +15,7 @@ class DecretoController extends Controller
      */
     public function index()
     {
-
-        $decretos = Decreto::all();
-        return view('decreto.index',[
-            'decretos' => $decretos,
-        ]);
+        return view('cedec.ajuda.index');
     }
 
     /**
@@ -29,9 +25,7 @@ class DecretoController extends Controller
      */
     public function create()
     {
-        
-        return view('decreto.index',[
-        ]);
+        //
     }
 
     /**
@@ -48,10 +42,10 @@ class DecretoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Decreto\Decreto  $decreto
+     * @param  \App\Models\Cedec\\Ajuda  $ajuda
      * @return \Illuminate\Http\Response
      */
-    public function show(Decreto $decreto)
+    public function show(Ajuda $ajuda)
     {
         //
     }
@@ -59,10 +53,10 @@ class DecretoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Decreto\Decreto  $decreto
+     * @param  \App\Models\Cedec\\Ajuda  $ajuda
      * @return \Illuminate\Http\Response
      */
-    public function edit(Decreto $decreto)
+    public function edit(Ajuda $ajuda)
     {
         //
     }
@@ -71,10 +65,10 @@ class DecretoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Decreto\Decreto  $decreto
+     * @param  \App\Models\Cedec\\Ajuda  $ajuda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Decreto $decreto)
+    public function update(Request $request, Ajuda $ajuda)
     {
         //
     }
@@ -82,10 +76,10 @@ class DecretoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Decreto\Decreto  $decreto
+     * @param  \App\Models\Cedec\\Ajuda  $ajuda
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Decreto $decreto)
+    public function destroy(Ajuda $ajuda)
     {
         //
     }

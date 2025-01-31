@@ -36,6 +36,8 @@ class CompdeceqController extends Controller
      */
     public function store(Request $request)
     {
+
+        dd($request);
         $equipe = new CompdecEquipe;
 
         

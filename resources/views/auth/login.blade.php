@@ -111,7 +111,10 @@
                         <p class="mb-1">
                             <a href="{{ url('forgot-password') }}">Esquecí a Senha</a>
                         </p>
-                        <p class="mb-0">
+                        <br>
+                        <p class="mb-0 h1">
+
+                            <b><a href="https://www.sistema.defesacivil.mg.gov.br" class="text-center">Acesso ao SDC clique <br> http://www.sistema.defesacivil.mg.gov.br</a></b>
                             {{-- <a href="{{ url('register') }}" class="text-center">Registrar novo usuário</a> --}}
                         </p>
                     </div>

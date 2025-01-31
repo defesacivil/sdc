@@ -64,7 +64,7 @@
                         </div>
                         {{-- FORM UPLOAD FOTO PREFEITO --}}
                         <div class='col-12 col-md-12' id='form_upload_foto_prefeito'>
-                            {{ Form::open(['url' => 'prefeitura/upload/' . $compdec->id_municipio, 'files' => true]) }}
+                            {{ Form::open(['url' => 'prefeitura/upload/' . $compdec->id_municipio, 'files' => true, 'id'=>'frm_upload_pref']) }}
                             {{ Form::label('fotoPref', 'Upload de Foto do Prefeito:') }}<br>
                             {{ Form::file('fotoPref') }}
                             <br><br>
@@ -79,7 +79,7 @@
                             <div class="mb-3 text-center col-md-6 border-dark" style="max-width: 18rem; max-height: 18rem; min-height: 16rem;">
                                 Coordenador<br>
                                 <img class="figure img-thumbnail" style='width: 150px; height:150px; '
-                                    src='{{ url('storage/' . env('DIR_FOTO_COMPDEC') . '/' . $compdec->fotoCompdec) }}' width='100'
+                                    src='{{ url('storage/' . env('DIR_FOTO_COMPDEC', null) . '/' . $compdec->fotoCompdec) }}' width='100'
                                     min-heigth='100'>
                                 <p class="p-2 text-center">
                                     @php
@@ -96,7 +96,7 @@
                         </div>
                         {{-- FORM UPLOAD FOTO COORDENADOR --}}
                         <div class='col-md-6' id='form_upload_foto_compdec'>
-                            {{ Form::open(['url' => 'compdec/upload/' . $compdec->id, 'files' => true]) }}
+                            {{ Form::open(['url' => 'compdec/upload/' . $compdec->id, 'files' => true, 'id'=>'frm_upload_compdec']) }}
                             {{ Form::label('fotoCompdec', 'Upload de Foto do Coordenador:', ['id' => 'lblFotCompdec']) }}<br>
                             {{ Form::file('fotoCompdec') }}
                             <br><br>
@@ -118,11 +118,11 @@
                         <li class="nav-item"><a class="nav-link active" id="-municipio-tab" data-toggle="tab" href="#municipio-tab"
                                 role="tab" aria-controls="municipio-tab" aria-selected="true">Informações Município</a></li>
                         {{-- DADOS GERAIS --}}
-                        <li class="nav-item"><a class="nav-link" id="-gerais-tab" data-toggle="tab" href="#gerais-tab" role="tab"
-                                aria-controls="gerais-tab" aria-selected="false">Informações Estruturas</a></li>{{-- Dados Gerais --}}
+                        {{-- <li class="nav-item"><a class="nav-link" id="-gerais-tab" data-toggle="tab" href="#gerais-tab" role="tab"
+                                aria-controls="gerais-tab" aria-selected="false">Informações Estruturas</a></li> --}}
                         {{-- EQUIPE --}}
                         <li class="nav-item"><a class="nav-link" id="-equipe-tab" data-toggle="tab" href="#equipe-tab" role="tab"
-                                aria-controls="equipe-tab" aria-selected="false">Equipe Compdec</a></li>
+                                aria-controls="equipe-tab" aria-selected="false">Informações da Compdec</a></li>
                         {{-- ARQUIVOS --}}
                         <li class="nav-item"><a class="nav-link" id="-arquivo-tab" data-toggle="tab" href="#arquivo-tab" role="tab"
                                 aria-controls="arquivo-tab" aria-selected="false">Documentos e Arquivos </a></li>
@@ -398,7 +398,7 @@
 
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <button class="btn btn-primary btnGravarInfo" type="button">Gravar</button>
+                                    <button class="btn btn-primary gravar" type="button" >Gravar</button>
                                 </div>
                             </div>
 
@@ -416,19 +416,15 @@
                                 <div class='col-md-12'>
                                     <div class='p-2 row'>
                                         <div class="p-2 border col border-secondary">
-                                            {{ Form::label('efetivo', 'Funcionários Efetivos') }}:
-                                            <div class='form-check'>
-                                                {{ Form::radio('efetivo', 1, $compdec->efetivo == 1 ? true : false) }}
-                                                <label class='form-check-label' for='efetivo'>
-                                                    Sim
-                                                </label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="efetivo" id="efetivo_sim" <?=( ($compdec->efetivo == 1) ? "checked" : "") ?> />
+                                                <label class="form-check-label" for=""> Sim</label>
                                             </div>
-                                            <div class='form-check'>
-                                                {{ Form::radio('efetivo', 0, $compdec->efetivo == 0 ? true : false) }}
-                                                <label class='form-check-label' for='efetivo'>
-                                                    Não
-                                                </label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="efetivo1" id="efetivo_nao"  <?=( ($compdec->efetivo == 0) ? "checked" : "") ?> />
+                                                <label class="form-check-label" for="">Não</label>
                                             </div>
+
                                             <br>
                                         </div>
                                         &nbsp;
@@ -870,8 +866,9 @@
 
                             <div class="row">
                                 <div class="text-center col">
-                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'gravarp1']) }}
-                                    {{ Form::close() }}
+                                    <button class="btn btn-primary gravar" type="button" id="gravar_p1" >Gravar</button>
+                                    {{-- {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'gravarp1']) }} --}}
+                                    {{-- {{ Form::close() }} --}}
                                 </div>
                             </div>
 
@@ -882,9 +879,12 @@
 
                         <!------- MEMBROS EQUIPE ------->
                         <div class="tab-pane fade" id="equipe-tab" role="tabpanel" aria-labelledby="equipe-tab">
-                            <br>
-
                             <legend class="alert alert-info">Informações de Localização da Coordenadoria Municipal de Defesa Civil</legend>
+                            <br>
+                            {{ Form::open(['url' => 'compdec.update/' . $compdec->municipio->id]) }}
+                            {{ Form::token() }}
+                            {{ Form::hidden('id', $compdec->municipio->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+
                             <div class="row">
                                 <br>
                                 <div class='col'>
@@ -920,12 +920,23 @@
 
                             <div class='row'>
                                 <div class='col'>
-                                    {{ Form::label('email', 'Email Principal') }}:
-                                    {{ Form::email('email', $compdec->email, ['class' => 'form form-control', 'maxlength' => 150]) }}
+                                    {{ Form::label('email2', 'Email Alternativo') }}:
+                                    {{ Form::email('email2', $compdec->email2, ['class' => 'form form-control', 'maxlength' => 150]) }}
+                                    <br>
+                                </div>
+                                <div class='col'>
+                                    {{ Form::label('email2', 'Email Alternativo') }}:
+                                    {{ Form::email('email3', $compdec->email3, ['class' => 'form form-control', 'maxlength' => 150]) }}
                                     <br>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="col text-center">
+                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }} 
+                                    {{ Form::close() }}
+                                </div>
+                            </div>
+                            <br>
 
 
                             <legend class="alert alert-info">Equipe Compdec</legend>
@@ -972,11 +983,7 @@
                             </table>
 
 
-                            <div class="row">
-                                <div class="col text-center">
-                                    <button class="btn btn-primary" type="button" onclick="gravar()">Gravar</button>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <!-- LISTA ARQUIVOS LEIS DOCUMENTOS -->
@@ -1101,7 +1108,7 @@
                     <div class="modal-lg modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Adicionar Membros Equipe</h5>
+                                <h5 class="modal-title" id="staticBackdropLabel">Adicionar Membros Equipe -<?=$compdec->municipio->nome?></h5>
 
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -1110,7 +1117,7 @@
                             <div class="modal-body">
                                 <div class="container-fluid">
                                     {{ Form::open(['url' => 'compdec.equipe/' . $compdec->id]) }}
-
+                                    {{ Form::token() }}
                                     {{ Form::hidden('id_municipio', $compdec->id_municipio) }}
 
                                     <div class="row">
@@ -1185,7 +1192,7 @@
                                 <p>Tamanho máximo : <b><span style='color:red'>2Mb</span></b></p>
 
                                 {{ Form::open(['url' => 'compdec.leis/' . $compdec->id, 'files' => true]) }}
-
+                                {{ Form::token() }}
                                 {{ Form::hidden('id_municipio', $compdec->id_municipio) }}
 
                                 {{ Form::label('arquivo', 'Arquivo para Upload') }}:<br>
@@ -1227,7 +1234,7 @@
                                 <p>Tamanho máximo : <b><span style='color:red'>20Mb</span></b></p>
 
                                 {{ Form::open(['url' => 'compdec.plano/' . $compdec->id, 'files' => true]) }}
-
+                                {{ Form::token() }}
                                 {{ Form::hidden('id_municipio', $compdec->id_municipio) }}
 
                                 {{ Form::label('file_plano', 'Arquivo para Upload') }}:<br>
@@ -1292,15 +1299,30 @@
             $('#form_upload_foto_prefeito').hide();
             $('#form_upload_foto_compdec').hide();
 
+            /* 
+            upload da foto do prefeito
+            */
             $('#btnPref').click(function() {
-                $('#alt_foto_prefeito').toggle();
-                $('#form_upload_foto_prefeito').toggle();
+                $("#fotoPref").trigger('click');
+                //$('#alt_foto_prefeito').toggle();
+                //$('#form_upload_foto_prefeito').toggle();
+            });
+            $("#fotoPref").change(function(){
+                $("#frm_upload_pref").submit();
             });
 
+            /*
+            upload foto Compdec
+            */
             $('#btnCompdec').click(function() {
-                $('#alt_foto_compdec').toggle();
-                $('#form_upload_foto_compdec').toggle();
+                $("#fotoCompdec").trigger('click');
+                //$('#alt_foto_compdec').toggle();
+                //$('#form_upload_foto_compdec').toggle();
             });
+            $("#fotoCompdec").change(function(){
+                $("#frm_upload_compdec").submit();
+            });
+
 
             $("#cobra_iss").change(function() {
                 if ($("#cobra_iss").val() == 'SIM') {
@@ -1358,7 +1380,7 @@
                 })
             });
 
-            $(".btnGravarInfo").click(function(e) {
+            $(".gravar").click(function(e) {
 
                 var formdata = new FormData();
 
@@ -1371,6 +1393,7 @@
                 formdata.append('tel_prefeito', $('#tel_prefeito').val());
                 formdata.append('cel_prefeito', $('#cel_prefeito').val());
                 formdata.append('email_prefeito', $('#email_prefeito').val());
+
                 formdata.append('populacao', $('#populacao').val());
                 formdata.append('pop_rural', $('#pop_rural').val());
 
@@ -1383,18 +1406,25 @@
 
                 formdata.append('cobra_iss', $('#cobra_iss').val());
                 formdata.append('aliquota_iss', $('#aliquota_iss').val());
-                formdata.append('cobra_iss', $('#cobra_iss').val());
                 formdata.append('num_lei_iss', $('#num_lei_iss').val());
                 formdata.append('resp_cob_iss', $('#resp_cob_iss').val());
 
-                formdata.append('num_lei', $('#num_lei').val());
-                formdata.append('dt_lei', $('#dt_lei').val());
-                formdata.append('num_decreto', $('#num_decreto').val());
-                formdata.append('dt_decreto', $('#dt_decreto').val());
-                formdata.append('num_portaria', $('#num_portaria').val());
-                formdata.append('dt_portaria', $('#dt_portaria').val());
-
-
+                formdata.append('lei_numero', $('#num_lei').val());
+                formdata.append('lei_data', $('#dt_lei').val());
+                formdata.append('decreto_numero', $('#num_decreto').val());
+                formdata.append('decreto_data', $('#dt_decreto').val());
+                formdata.append('port_numero', $('#num_portaria').val());
+                formdata.append('port_data', $('#dt_portaria').val());
+                
+                /* 2 parte */
+                formdata.append('compdec_endereco', $('#compdec_endereco').val());
+                formdata.append('compdec_tel', $('#compdec_tel').val());
+                formdata.append('compdec_tel2', $('#compdec_tel2').val());
+                formdata.append('compdec_cel', $('#compdec_cel').val());
+                formdata.append('compdec_email', $('#compdec_email').val());
+                formdata.append('compdec_email2', $('#compdec_email2').val());
+                formdata.append('compdec_email3', $('#compdec_email3').val());
+                
                 var result = confirm('Deseja realmente Salvar os Dados ?');
 
                 var url = '{{ url('compdec/update/'.$compdec->id) }}';
@@ -1409,7 +1439,7 @@
                         cache: false,
                         processData: false,
                         success: function(data) {
-                            console.log(data);
+                            //console.log(data);
                             //window.location.href = "{{ url('compdec/edit/' . $compdec->id) }}";
                         },
                         error: function(data) {

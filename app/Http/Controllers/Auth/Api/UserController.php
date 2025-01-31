@@ -74,4 +74,5 @@ class UserController extends Controller
             'result' => $result,
         ]);
     }
+
 }

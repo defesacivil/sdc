@@ -92,6 +92,7 @@ index processos - editar / visualizar / mensagem / enviar */
                                         <td>{{ $dado->created_at }}</td>
                                         <td>
                                             <a href={{ url('cisterna/show/'.$dado->id)}}><img src='{{ asset('/imagem/icon/view.png') }}'></a>
+                                            <a href={{ url('cisterna/analise/'.$dado->id)}}><img src='{{ asset('/imagem/icon/check.png') }}'></a>
                                         </td>
                                         
                                     </tr>

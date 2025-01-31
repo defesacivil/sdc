@@ -131,7 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
     # create
     Route::get('config/role/create', 'App\Http\Controllers\Usuario\RoleController@create');
     # gravar
-    Route::get('config/role/store', 'App\Http\Controllers\Usuario\RoleController@store');
+    Route::post('config/role/store', 'App\Http\Controllers\Usuario\RoleController@store');
     # editar
     Route::get('config/role/edit/{id}', 'App\Http\Controllers\Usuario\RoleController@edit');
     # update
@@ -518,6 +518,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     # MENU
     Route::get('equipe', 'App\Http\Controllers\Equipe\EquipeController@index');
+    
+    # AJUDA
+    Route::get('cedec/ajuda', 'App\Http\Controllers\Cedec\AjudaController@index');
 
     ## DSP
     Route::match(["GET", "POST"], 'dsp', 'App\Http\Controllers\Equipe\DspController@index');
@@ -852,9 +855,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('demanda', 'App\Http\Controllers\Cedec\DemandaController@index');
 
-
-    
     Route::get('bot', 'App\Http\Controllers\Cedec\BotTelegramController@index');
+
+
+
+    #################  DECRETOS #####################################
+
+    Route::get('decreto', 'App\Http\Controllers\Decreto\DecretoController@index');
 
 
    

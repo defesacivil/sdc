@@ -42,9 +42,9 @@ class CompdecController extends \App\Http\Controllers\Controller
             //dd($situacao);
 
             $nupdec = DB::table("com_comdec")
-                ->select(DB::raw('count(id) as qtd'), DB::raw('sum(qtd_nudec) as qtd_nudec'))
+                ->select(DB::raw('count(id) as qtd'), DB::raw('sum(nupdec_qtd) as qtd_nudec'))
                 ->where('id_municipio', '!=', '7221')
-                ->where('nudec', '=', '1')
+                ->where('nupdec', '=', '1')
                 ->get();
 
                 //dd($nupdec);
@@ -187,7 +187,7 @@ class CompdecController extends \App\Http\Controllers\Controller
     public function update(Request $request, $id)
     {
 
-        dd($id);
+        dd($request);
 
 
         try {
@@ -198,12 +198,12 @@ class CompdecController extends \App\Http\Controllers\Controller
 
             $compdec->fill($input);
 
-            $compdec->save();
+            dd($compdec->save());
         } catch (\Exception $ex) {
             $ex->getMessage();
         }
 
-        return back()->with('message', 'Registro Atualizado com Sucesso !');
+        //return back()->with('message', 'Registro Atualizado com Sucesso !');
     }
 
     /**
@@ -254,7 +254,7 @@ class CompdecController extends \App\Http\Controllers\Controller
     }
 
     /**
-     *  upload foto prefeito
+     *  upload foto Coordenador
      * 
      */
     public function upload(Request $request, $id)
@@ -273,13 +273,13 @@ class CompdecController extends \App\Http\Controllers\Controller
 
         $fileName = $request->id . "-" . time() . '.' . $request->file('fotoCompdec')->extension();
 
-        $request->file('fotoCompdec')->storeAs('compdec', $fileName);
+        $request->file('fotoCompdec')->storeAs(env('DIR_FOTO_COMPDEC'), $fileName);
 
         $compdec = Compdec::find($request->id);
 
 
-        if (Storage::exists('compdec/' . $compdec->fotoCompdec)) {
-            Storage::delete('compdec/' . $compdec->fotoCompdec);
+        if (Storage::exists(env('DIR_FOTO_COMPDEC') .'/'. $compdec->fotoCompdec)) {
+            Storage::delete(env('DIR_FOTO_COMPDEC') .'/'. $compdec->fotoCompdec);
         }
 
         $compdec->fotoCompdec = $fileName;

@@ -47,6 +47,8 @@
                     @endif
 
 
+                    @hasrole(['adminSeg'])
+
                     {{ Form::open(['url' => 'usuario/update']) }}
                     {{ Form::token() }}
 
@@ -234,7 +236,13 @@
                         {{ Form::submit('Gravar', ['class' => 'btn btn-primary']) }}
                     </div>{{ Form::close() }}
 
-
+                    @else
+                    <div class="row">
+                        <div class="col text-center">
+                            <h5 class="text-danger">Usuário sem Perfil para acesso</h5>
+                        </div>
+                    </div>
+                    @endhasrole
             </div>
         </div>
 

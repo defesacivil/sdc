@@ -82,7 +82,7 @@
                                         <td>{{ $compdec->id_municipio . ' - ' . $compdec->nome }}</td>
                                         <td>{{ $compdec->com_ativa == 0 ? 'Inativa' : 'Ativo' }}</td>
 
-                                        <td>{{ \Carbon\Carbon::parse($compdec->ultimo_atualiza)->format('d/m/Y H:i:s') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($compdec->updated_at)->format('d/m/Y H:i:s') }}</td>
                                         <td>
                                             <a href='{{ url('compdec/edit', ['id' => $compdec->id]) }}' title="Clique aqui para editar o Registro !"><img
                                                     src='{{ asset('/imagem/icon/editar.png') }}' alt=""></a>
@@ -140,7 +140,7 @@
 
                 <div class="row">
                     {{-- NupDec --}}
-                    <div class="col-6 text-center">
+                    <div class="col text-center">
                         <div class="card mx-auto text-white bg-success mb-3" style="max-width: 18rem;">
                             <div class="card-header">MUNICÍPIOS COM NUPDEC</div>
                             <div class="card-body">
@@ -152,7 +152,7 @@
                     </div>
 
                     {{-- NupDec --}}
-                    <div class="col-6 text-center">
+                    <div class="col text-center">
                         <div class="card mx-auto text-white bg-success mb-3" style="max-width: 18rem;">
                             <div class="card-header">TOTAL NUPDEC</div>
                             <div class="card-body">

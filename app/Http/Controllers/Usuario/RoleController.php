@@ -21,7 +21,7 @@ class RoleController extends \App\Http\Controllers\Controller
         $request = request();
         if($request)
         return view('config/usuario/role/index', [
-                    'perfis' => DB::table('roles')->paginate(5)
+                    'perfis' => DB::table('roles')->paginate(50)
                 ]);
     }
 
@@ -70,7 +70,7 @@ class RoleController extends \App\Http\Controllers\Controller
      */
     public function store(Request $request)
     {
-        
+
         $request->validate([
             'name' => 'required|max:20',
             'label' => 'required|max:100',
@@ -84,7 +84,8 @@ class RoleController extends \App\Http\Controllers\Controller
         ]);
 
         $role = Role::create($request->all());
-        return redirect('config/role/create')->with('message', 'Registro Gravado Com Sucesso');
+        return redirect('role')->with('message', 'Registro Gravado Com Sucesso');
+
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cedec;
 use App\Http\Controllers\Controller;
 use App\Models\Cedec\Msg;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MsgController extends Controller
 {
@@ -36,7 +37,21 @@ class MsgController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $msg = new Msg();
+        
+        $msg->titulo = $request->titulo;
+        $msg->mensagem = $request->mensagem;
+        $msg->tipo = $request->tipo;
+        $msg->status = 0;
+        $msg->user_id = Auth::user()->id;
+        $msg->grupo = $request->grupo;
+        
+        return $msg->save();
+
+
+        //return redirect('boletim')->with('message','Registro Lançado com Sucesso ');
+
     }
 
     /**
@@ -49,6 +64,20 @@ class MsgController extends Controller
     {
         //
     }
+
+
+    /**
+     * Display the resource.
+     *
+     * @param  \App\Models\Cedec\Msg $msg
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function list(Msg $msg, Request $request)
+    {
+        view('cedec.msg.list');
+    }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -82,5 +111,21 @@ class MsgController extends Controller
     public function destroy(Msg $msg)
     {
         //
+    }
+
+
+
+    /**
+     * despacho mensagens
+     *
+     * @param  \App\Models\Cedec\Msg  $msg
+     * @return \Illuminate\Http\Response
+     */
+    public function despachos(Msg $msg, Request $request)
+    {
+
+                
+
+        return $mensagens;
     }
 }

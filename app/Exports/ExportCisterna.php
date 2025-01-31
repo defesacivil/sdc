@@ -15,7 +15,8 @@ class ExportCisterna implements FromCollection, WithHeadings, WithTitle, WithMap
      */
     public function collection()
     {
-        return Cisterna::all();
+        //return Cisterna::all();
+        return Cisterna::with('getMunicipio')->get();
         //return Cisterna::find(1);
     }
 
@@ -59,14 +60,6 @@ class ExportCisterna implements FromCollection, WithHeadings, WithTitle, WithMap
             'cpfAgente',
             'nomeEng',
             'creaEng',
-            'ck_amianto',
-            'ck_pvc',
-            'ck_concreto',
-            'ck_ceramica',
-            'ck_fib_cimento',
-            'ck_zinco',
-            'ck_metalico',
-            'ck_outros',
             'obs',
             'tel',
             'created_at',
@@ -89,11 +82,11 @@ class ExportCisterna implements FromCollection, WithHeadings, WithTitle, WithMap
 
             $cisterna->id,
             $cisterna->id_cad,
-            $cisterna->municipio,
+            $cisterna->getMunicipio->nome,
             $cisterna->comunidade,
             $cisterna->nome,
             $cisterna->endereco,
-            $cisterna->localização,
+            $cisterna->localiza,
             $cisterna->cpf,
             $cisterna->dtNasc,
             $cisterna->cadUnico,
@@ -123,14 +116,6 @@ class ExportCisterna implements FromCollection, WithHeadings, WithTitle, WithMap
             $cisterna->cpfAgente,
             $cisterna->nomeEng,
             $cisterna->creaEng,
-            $cisterna->ck_amianto,
-            $cisterna->ck_pvc,
-            $cisterna->ck_concreto,
-            $cisterna->ck_ceramica,
-            $cisterna->ck_fib_cimento,
-            $cisterna->ck_zinco,
-            $cisterna->ck_metalico,
-            $cisterna->ck_outros,
             $cisterna->obs,
             $cisterna->tel,
             $cisterna->created_at

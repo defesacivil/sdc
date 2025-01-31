@@ -4,8 +4,68 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c2cd62857c83eb6232d58a755aa691d",
+    "content-hash": "958c6fec4a571614a1e3bbb5457ccfd0",
     "packages": [
+        {
+            "name": "abiturma/laravel-latex",
+            "version": "1.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koona-labs/laravel-latex.git",
+                "reference": "22b58b9c7412419d275796a0604dcbb9918cb7ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koona-labs/laravel-latex/zipball/22b58b9c7412419d275796a0604dcbb9918cb7ce",
+                "reference": "22b58b9c7412419d275796a0604dcbb9918cb7ce",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "^8.0|^9.0|^10.0",
+                "illuminate/console": "^8.0|^9.0|^10.0",
+                "illuminate/filesystem": "^8.0|^9.0|^10.0",
+                "illuminate/support": "^8.0|^9.0|^10.0",
+                "illuminate/view": "^8.0|^9.0|^10.0",
+                "php": "^8.0",
+                "titasgailius/terminal": "^1.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.24",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Latex": "Abiturma\\LaravelLatex\\Facades\\Latex"
+                    },
+                    "providers": [
+                        "Abiturma\\LaravelLatex\\LatexServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Abiturma\\LaravelLatex\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Kunert",
+                    "email": "aaron.kunert@abiturma.de"
+                }
+            ],
+            "description": "A LaTeX compiler wrapper for Laravel",
+            "support": {
+                "issues": "https://github.com/koona-labs/laravel-latex/issues",
+                "source": "https://github.com/koona-labs/laravel-latex/tree/1.3.2"
+            },
+            "time": "2023-07-13T09:01:46+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",
@@ -7652,6 +7712,59 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.6"
             },
             "time": "2023-01-03T09:29:04+00:00"
+        },
+        {
+            "name": "titasgailius/terminal",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TitasGailius/terminal.git",
+                "reference": "57459adcdea62ffc9975f3277f0e142f979154dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TitasGailius/terminal/zipball/57459adcdea62ffc9975f3277f0e142f979154dd",
+                "reference": "57459adcdea62ffc9975f3277f0e142f979154dd",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/process": "^4.4.2|^5.0|^6.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3",
+                "phpunit/phpunit": "^9.0",
+                "symfony/var-dumper": "^5.0|^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TitasGailius\\Terminal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Titas Gailius",
+                    "email": "titas.gailius@gmail.com"
+                }
+            ],
+            "description": "Terminal is an Elegent wrapper around Symfony's Process component.",
+            "keywords": [
+                "bash",
+                "exec",
+                "laravel",
+                "process",
+                "symfony",
+                "terminal"
+            ],
+            "support": {
+                "issues": "https://github.com/TitasGailius/terminal/issues",
+                "source": "https://github.com/TitasGailius/terminal"
+            },
+            "time": "2022-02-26T08:49:10+00:00"
         },
         {
             "name": "twbs/bootstrap-icons",
