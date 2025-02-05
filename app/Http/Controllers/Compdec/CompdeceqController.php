@@ -40,14 +40,13 @@ class CompdeceqController extends Controller
         dd($request);
         $equipe = new CompdecEquipe;
 
-        
-        $equipe->nome = $request->nome;
+        $equipe->nome         = $request->nome;
         $equipe->id_municipio = $request->id_municipio;
-        $equipe->funcao = $request->funcao;
-        $equipe->telefone = $request->telefone;
-        $equipe->celular = $request->celular;
-        $equipe->email = $request->email;
-        $equipe->id_compdec = $request->id;
+        $equipe->funcao       = $request->funcao;
+        $equipe->telefone     = $request->telefone;
+        $equipe->celular      = $request->celular;
+        $equipe->email        = $request->email;
+        $equipe->id_compdec   = $request->id;
 
         if($equipe->save()){
             return back()

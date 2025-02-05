@@ -540,6 +540,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('mah', 'App\Http\Controllers\Ajuda\AjudaPedidoController@index');
 
     # modulo acesso CISTERNA
+    Route::get('cisterna/create', 'App\Http\Controllers\Ajuda\CisternaController@create');
+    
     Route::get('cisterna', 'App\Http\Controllers\Ajuda\CisternaController@index');
     Route::get('cisterna/show/{cisterna}', 'App\Http\Controllers\Ajuda\CisternaController@show');
     

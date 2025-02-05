@@ -38,7 +38,7 @@ class CisternaController extends Controller
      */
     public function create()
     {
-        //
+       return view('ajuda/cisterna/create');
     }
 
     /**
@@ -49,7 +49,12 @@ class CisternaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validação 
+
+        // Gravar
+
+        // Fotos 
+        
     }
 
     /**

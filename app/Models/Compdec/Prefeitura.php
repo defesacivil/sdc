@@ -12,8 +12,26 @@ class Prefeitura extends Model
     use HasFactory;
 
     protected $fillable = [
-        'fotoPref'
+        'fotoPref',
+        'latitude',
+        'longitude',
+        'latitude_dec',
+        'longitude_dec',
+        'distancia_bh',
+        'populacao',
+        'area',
+        'pop_rural',
+        'endereco',
+        'bairro',
+        'cep',
+        'email_prefeitura',
+        'fax_prefeitura',
+        'tel_prefeitura',
+        'num_lei',
+        'dt_lei',
+        'num_decreto',
+        'dt_decreto',
+        'num_portaria',
+        'dt_portaria'
     ];
-
-    
 }

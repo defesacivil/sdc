@@ -135,9 +135,11 @@
 
                         <!-- FORM INFORMAÇÕES MUNICIPIO -->
                         <div class="tab-pane fade show active" id="municipio-tab" role="tabpanel" aria-labelledby="municipio-tab">
-                            {{ Form::open(['url' => 'municipio/update/' . $compdec->municipio->id]) }}
+                            {{ Form::open(['url' => 'compdec/update/' . $compdec->id]) }}
                             {{ Form::token() }}
-                            {{ Form::hidden('id', $compdec->municipio->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+                            {{ Form::hidden('id_municipio', $compdec->municipio->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+                            {{ Form::hidden('id', $compdec->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+                            {{ Form::hidden('parte', 'parte1', ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
 
                             <br>
                             <legend class="text-center alert alert-primary">Dados do Prefeito</legend>
@@ -145,27 +147,27 @@
                             <div class="row">
                                 <div class='col-12 col-md-6'>
                                     <div>
-                                        {{ Form::label('prefeito', 'Nome do Prefeito') }}:
-                                        {{ Form::text('prefeito', $compdec->municipio->nome_prefeito, ['class' => 'form form-control', 'maxlength' => 70]) }}
+                                        {{ Form::label('prefeito_nome', 'Nome do Prefeito') }}:
+                                        {{ Form::text('prefeito_nome', $compdec->prefeito_nome, ['class' => 'form form-control', 'maxlength' => 70, 'required']) }}
                                     </div>
                                     <br>
                                 </div>
                                 <div class='col-12 col-md-6'>
-                                    {{ Form::label('tel_prefeito', 'Telefone Prefeito') }}:
-                                    {{ Form::text('tel_prefeito', $compdec->municipio->tel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    {{ Form::label('prefeito_tel', 'Telefone Prefeito') }}:
+                                    {{ Form::text('prefeito_tel', $compdec->prefeito_tel, ['class' => 'form form-control', 'maxlength' => 20, 'required']) }}
                                     <br>
                                 </div>
                             </div>
 
                             <div class='row'>
                                 <div class='col-12 col-md-6'>
-                                    {{ Form::label('cel_prefeito', 'Celular Prefeito') }}:
-                                    {{ Form::text('cel_prefeito', $compdec->municipio->cel_prefeito, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    {{ Form::label('prefeito_cel', 'Celular Prefeito') }}:
+                                    {{ Form::text('prefeito_cel', $compdec->prefeito_cel, ['class' => 'form form-control', 'maxlength' => 20, 'required']) }}
                                     <br>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    {{ Form::label('email_prefeito', 'Email do Prefeito') }}:
-                                    {{ Form::email('email_prefeito', $compdec->municipio->email_prefeito, ['class' => 'form form-control', 'maxlength' => 110]) }}
+                                    {{ Form::label('prefeito_email', 'Email do Prefeito') }}:
+                                    {{ Form::email('prefeito_email', $compdec->prefeito_email, ['class' => 'form form-control', 'maxlength' => 110, 'required']) }}
 
                                 </div>
                             </div>
@@ -174,8 +176,8 @@
                             <legend class="text-center alert alert-primary">Informações de Localização</legend>
                             <div class='row'>
                                 <div class='col-12 col-md-12'>
-                                    {{ Form::label('nome', 'Nome do Município') }}:
-                                    {{ Form::text('', $compdec->municipio->nome, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => 70]) }}
+                                    {{ Form::label('municipio_nome', 'Nome do Município') }}:
+                                    {{ Form::text('', $compdec->municipio->nome, ['class' => 'form form-control', 'readonly' => 'readonly', 'maxlength' => 70, 'required']) }}
                                     <br>
                                 </div>
                             </div>
@@ -221,7 +223,7 @@
                                 </div>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('populacao', 'Número de Habitantes (População)') }}:
-                                    {{ Form::number('populacao', $compdec->municipio->populacao, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    {{ Form::number('populacao', $compdec->municipio->populacao, ['class' => 'form form-control', 'maxlength' => 20, 'required']) }}
                                     <br>
                                 </div>
                             </div>
@@ -236,15 +238,12 @@
 
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('pop_rural', 'Populacao Rural') }}:
-                                    {{ Form::text('pop_rural', $compdec->municipio->pop_rural, ['class' => 'form form-control', 'maxlength' => 11]) }}
+                                    {{ Form::text('pop_rural', $compdec->municipio->pop_rural, ['class' => 'form form-control', 'maxlength' => 11, 'required']) }}
                                     <br>
                                 </div>
 
 
                             </div>
-
-
-
 
                             <legend class="text-center alert alert-primary">Endereço e Contatos da Prefeitura</legend>
 
@@ -270,7 +269,7 @@
                                 </div>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('email_prefeitura', 'Email Prefeitura') }}:
-                                    {{ Form::email('email_prefeitura', $compdec->municipio->email_prefeitura, ['class' => 'form form-control', 'maxlength' => 110]) }}
+                                    {{ Form::email('email_prefeitura', $compdec->municipio->email_prefeitura, ['class' => 'form form-control', 'maxlength' => 110, 'required']) }}
                                     <br>
                                 </div>
                             </div>
@@ -282,7 +281,7 @@
                                 </div>
                                 <div class='col-12 col-md-6'>
                                     {{ Form::label('tel_prefeitura', 'Telefone Prefeitura') }}:
-                                    {{ Form::text('tel_prefeitura', $compdec->municipio->tel_prefeitura, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    {{ Form::text('tel_prefeitura', $compdec->municipio->tel_prefeitura, ['class' => 'form form-control', 'maxlength' => 20, 'required']) }}
                                     <br>
                                 </div>
 
@@ -291,27 +290,27 @@
                             <legend class="text-center alert alert-primary">Informações Recolhimento de ISS</legend>
                             <div class="row">
                                 <div class='col-12 col-md-6'>
-                                    {{ Form::label('cobra_iss', 'Isenção de ISS') }}:
-                                    {{ Form::select('cobra_iss', ['SIM' => 'SIM', 'NAO' => 'NAO'], $compdec->municipio->cobra_iss, ['class' => 'form form-select form-control', 'placeholder' => 'Selecione a Opção']) }}
+                                    {{ Form::label('iss_tem_cobranca', 'Isenção de ISS') }}:
+                                    {{ Form::select('iss_tem_cobranca', ['SIM' => 'SIM', 'NAO' => 'NAO'], $compdec->iss_tem_cobranca, ['class' => 'form form-select form-control', 'placeholder' => 'Selecione a Opção']) }}
 
                                     <br>
                                 </div>
                                 <div class='col-12 col-md-6'>
-                                    {{ Form::label('aliquota_iss', 'Aliquota Iss %') }}:
-                                    {{ Form::text('aliquota_iss', $compdec->municipio->aliquota_iss, ['class' => 'form form-control', 'maxlength' => 20]) }}
+                                    {{ Form::label('iss_aliquota', 'Aliquota Iss %') }}:
+                                    {{ Form::text('iss_aliquota', $compdec->iss_aliquota, ['class' => 'form form-control', 'maxlength' => 20]) }}
                                     <br>
                                 </div>
                             </div>
                             <div class='row'>
                                 <div class='col-12 col-md-6'>
-                                    {{ Form::label('num_lei_iss', 'Número Lei Cobranca Iss') }}:
-                                    {{ Form::text('num_lei_iss', $compdec->municipio->num_lei_iss, ['class' => 'form form-control', 'maxlength' => 30]) }}
+                                    {{ Form::label('iss_lei_cobranca', 'Número Lei Cobranca Iss') }}:
+                                    {{ Form::text('iss_lei_cobranca', $compdec->iss_lei_cobranca, ['class' => 'form form-control', 'maxlength' => 30]) }}
                                     <br>
                                 </div>
 
                                 <div class='col-12 col-md-6'>
-                                    {{ Form::label('resp_cob_iss', 'Quem é responsável pela cobranca do ISS') }}:
-                                    {{ Form::select('resp_cob_iss', ['Inexistente' => 'Inexistente', 'Prestador' => 'Prestador', 'Município' => 'Municipio'], $compdec->municipio->resp_cob_iss, [
+                                    {{ Form::label('iss_resp_recolhe', 'Quem é responsável pela cobranca do ISS') }}:
+                                    {{ Form::select('iss_resp_recolhe', ['Inexistente' => 'Inexistente', 'Prestador' => 'Prestador', 'Município' => 'Municipio'], $compdec->iss_resp_recolhe, [
                                         'class' => 'form form-control',
                                         'placeholder' => 'Selecione a Responsabilidade Cobrança Iss',
                                     ]) }}
@@ -356,49 +355,16 @@
 
                             </div>
 
-                            <legend class="text-center alert alert-primary">Informações Leis/Decretos</legend>
-
-                            <div class="row">
-                                <div class='col-12 col-md-6'>
-                                    {{ Form::label('num_lei', 'Núnero da Lei') }}:
-                                    {{ Form::number('num_lei', $compdec->num_lei, ['class' => 'form form-control', 'max' => 20000]) }}
-                                    <br>
-                                </div>
-
-                                <div class='col-12 col-md-6'>
-                                    {{ Form::label('dt_lei', 'Data da Lei') }}:
-                                    {{ Form::date('dt_lei', $compdec->dt_lei, ['class' => 'form form-control']) }}
-                                    <br>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class='col-12 col-md-6'>
-                                    {{ Form::label('num_decreto', 'Número do Decreto') }}:
-                                    {{ Form::number('num_decreto', $compdec->num_decreto, ['class' => 'form form-control', 'max' => 20000]) }}
-                                    <br>
-                                </div>
-                                <div class='col-12 col-md-6'>
-                                    {{ Form::label('dt_decreto', 'Data Decreto') }}:
-                                    {{ Form::date('dt_decreto', $compdec->dt_decreto, ['class' => 'form form-control']) }}
-                                    <br>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class='col-12 col-md-6'>
-                                    {{ Form::label('num_portaria', 'Portaria de Nomeação Coord.') }}:
-                                    {{ Form::number('num_portaria', $compdec->num_portaria, ['class' => 'form form-control', 'max' => 20000]) }}
-                                    <br>
-                                </div>
-                                <div class='col-12 col-md-6'>
-                                    {{ Form::label('dt_portaria', 'Data Portaria') }}:
-                                    {{ Form::date('dt_portaria', $compdec->dt_portaria, ['class' => 'form form-control']) }}
-                                    <br>
-                                </div>
-                            </div>
-
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <button class="btn btn-primary gravar" type="button" >Gravar</button>
+                                    {{-- <button class="btn btn-primary gravar" type="button" >Gravar</button> --}}
+                                    <div class="row">
+                                        <div class="text-center col">
+                                            {{-- <button class="btn btn-primary gravar" type="button" id="gravar_p1" >Gravar</button> --}}
+                                            {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'gravarp1']) }}
+                                            {{ Form::close() }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -867,8 +833,8 @@
                             <div class="row">
                                 <div class="text-center col">
                                     <button class="btn btn-primary gravar" type="button" id="gravar_p1" >Gravar</button>
-                                    {{-- {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'gravarp1']) }} --}}
-                                    {{-- {{ Form::close() }} --}}
+                                    {{ Form::submit('Gravar', ['class' => 'btn btn-primary', 'id' => 'gravarp1']) }} --}}
+                                    {{ Form::close() }}
                                 </div>
                             </div>
 
@@ -879,11 +845,54 @@
 
                         <!------- MEMBROS EQUIPE ------->
                         <div class="tab-pane fade" id="equipe-tab" role="tabpanel" aria-labelledby="equipe-tab">
-                            <legend class="alert alert-info">Informações de Localização da Coordenadoria Municipal de Defesa Civil</legend>
+                            <legend class="alert alert-info">Informações Coordenadoria Municipal de Defesa Civil</legend>
                             <br>
-                            {{ Form::open(['url' => 'compdec.update/' . $compdec->municipio->id]) }}
+
+                            {{ Form::open(['url' => 'compdec/update/' . $compdec->id]) }}
                             {{ Form::token() }}
-                            {{ Form::hidden('id', $compdec->municipio->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+                            {{ Form::hidden('id', $compdec->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+                            {{ Form::hidden('id_municipio', $compdec->municipio->id, ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+                            {{ Form::hidden('parte', 'parte2', ['readonly' => 'readonly', 'required', 'maxlength' => 5]) }}
+
+                            <legend class="text-center alert alert-primary">Informações Leis/Decretos</legend>
+
+                            <div class="row">
+                                <div class='col-12 col-md-6'>
+                                    {{ Form::label('lei_numero', 'Núnero da Lei') }}:
+                                    {{ Form::number('lei_numero', $compdec->lei_numero, ['class' => 'form form-control', 'maxlength' => 10, 'required']) }}
+                                    <br>
+                                </div>
+
+                                <div class='col-12 col-md-6'>
+                                    {{ Form::label('lei_data', 'Data da Lei') }}:
+                                    {{ Form::date('lei_data', $compdec->lei_data, ['class' => 'form form-control', 'required']) }}
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-12 col-md-6'>
+                                    {{ Form::label('decreto_numero', 'Número do Decreto') }}:
+                                    {{ Form::number('decreto_numero', $compdec->decreto_numero, ['class' => 'form form-control', 'maxlength' => 10, 'required']) }}
+                                    <br>
+                                </div>
+                                <div class='col-12 col-md-6'>
+                                    {{ Form::label('decreto_data', 'Data Decreto') }}:
+                                    {{ Form::date('decreto_data', $compdec->decreto_data, ['class' => 'form form-control', 'required']) }}
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-12 col-md-6'>
+                                    {{ Form::label('port_numero', 'Portaria de Nomeação Coord.') }}:
+                                    {{ Form::number('port_numero', $compdec->port_numero, ['class' => 'form form-control', 'maxlength' => 10, 'required']) }}
+                                    <br>
+                                </div>
+                                <div class='col-12 col-md-6'>
+                                    {{ Form::label('port_data', 'Data Portaria') }}:
+                                    {{ Form::date('port_data', $compdec->port_data, ['class' => 'form form-control', 'required']) }}
+                                    <br>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <br>
@@ -913,7 +922,7 @@
                             <div class='row'>
                                 <div class='col'>
                                     {{ Form::label('email', 'Email Principal') }}:
-                                    {{ Form::email('email', $compdec->email, ['class' => 'form form-control', 'maxlength' => 150]) }}
+                                    {{ Form::email('email', $compdec->email, ['class' => 'form form-control', 'maxlength' => 150, 'required']) }}
                                     <br>
                                 </div>
                             </div>
@@ -942,7 +951,7 @@
                             <legend class="alert alert-info">Equipe Compdec</legend>
                             <!-- BUTTON ADICIONAR MEMBROS EQUIPE -->
                             <p>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                                     data-target="#modal-equipe">
                                     Adicionar Membro Equipe
                                 </button>
@@ -1286,11 +1295,13 @@
             $("#celular").inputmask('(99) 9999[9]-9999');
 
             /* cad municipio */
-            $("#tel_prefeito").inputmask('(99) 9999[9]-9999');
-            $("#cel_prefeito").inputmask('(99) 9999[9]-9999');
+            $("#prefeito_tel").inputmask('(99) 9999[9]-9999');
+            $("#prefeito_cel").inputmask('(99) 9999[9]-9999');
             $("#tel").inputmask('(99) 9999[9]-9999');
             $("#cep").inputmask('99999-999');
-
+            
+            $("#tel_prefeitura").inputmask('(99) 9999[9]-9999');
+            $("#fax_prefeitura").inputmask('(99) 9999[9]-9999');
 
 
             /* ativar tab */
@@ -1324,29 +1335,29 @@
             });
 
 
-            $("#cobra_iss").change(function() {
-                if ($("#cobra_iss").val() == 'SIM') {
-                    $("#aliquota_iss").val(0);
-                    $("#aliquota_iss").attr('disabled', true);
-                    $("#num_lei_iss").attr('disabled', true);
-                    $("#num_lei_iss").val(0);
-                    $("#resp_cob_iss").attr('disabled', true);
-                    $("#resp_cob_iss").val('Inexistente');
+            $("#iss_tem_cobranca").change(function() {
+                if ($("#iss_tem_cobranca").val() == 'SIM') {
+                    $("#iss_aliquota").val(0);
+                    $("#iss_aliquota").attr('disabled', false);
+                    $("#iss_lei_cobranca").attr('disabled', false);
+                    $("#iss_resp_recolhe").attr('disabled', false);
                 } else {
-                    $("#aliquota_iss").attr('disabled', false);
-                    $("#num_lei_iss").attr('disabled', false);
-                    $("#resp_cob_iss").attr('disabled', false);
+                    $("#iss_lei_cobranca").val(0);
+                    $("#iss_aliquota").attr('disabled', true);
+                    $("#iss_lei_cobranca").attr('disabled', true);
+                    $("#iss_resp_recolhe").attr('disabled', true);
+                    $("#iss_resp_recolhe").val('Inexistente');
 
                 }
             });
 
-            if ($("#cobra_iss").val() == 'SIM') {
-                $("#aliquota_iss").val(0);
-                $("#aliquota_iss").attr('disabled', true);
-                $("#num_lei_iss").attr('disabled', true);
-                $("#num_lei_iss").val(0);
-                $("#resp_cob_iss").attr('disabled', true);
-                $("#resp_cob_iss").val('Inexistente');
+            if ($("#iss_tem_cobranca").val() == 'SIM') {
+                $("#iss_aliquota").val(0);
+                $("#iss_aliquota").attr('disabled', false);
+                $("#iss_lei_cobranca").attr('disabled', false);
+                $("#iss_lei_cobranca").val(0);
+                $("#iss_resp_recolhe").attr('disabled', false);
+                $("#iss_resp_recolhe").val('Inexistente');
             }
 
             $('#fileUploadForm').ajaxForm({

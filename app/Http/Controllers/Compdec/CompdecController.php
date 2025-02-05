@@ -9,6 +9,7 @@ use App\Models\Compdec\Compdec;
 use App\Models\Compdec\ComRdc;
 use App\Models\Compdec\ComRegiao;
 use App\Models\Compdec\ComTerritorio;
+use App\Models\Compdec\Prefeitura;
 use App\Models\Municipio\Municipio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,7 @@ class CompdecController extends \App\Http\Controllers\Controller
     {
 
 
- if (request()->user()->can('cedec')) {
+        if (request()->user()->can('cedec')) {
             $method = request()->method();
             $active_tab = "";
 
@@ -47,7 +48,7 @@ class CompdecController extends \App\Http\Controllers\Controller
                 ->where('nupdec', '=', '1')
                 ->get();
 
-                //dd($nupdec);
+            //dd($nupdec);
 
             if ($method == 'GET') {
                 return view('compdec.index', [
@@ -187,23 +188,99 @@ class CompdecController extends \App\Http\Controllers\Controller
     public function update(Request $request, $id)
     {
 
-        dd($request);
+        $parte = isset($request->parte) ? $request->parte : "";
+        $compdec = Compdec::find($id);
+        $municipio = Municipio::find($request->id_municipio);
 
+        
+        /* parte 1 */
+        if ($parte == 'parte1') {
+
+            $request->validate(
+                [
+                    'prefeito_nome' => 'required|max:70|min:10',
+                    'prefeito_tel' => 'required',
+                    'prefeito_cel' => 'required',
+                    'prefeito_email' => 'required',
+                ],
+                [
+                    'required'  => 'Campo obrigatório !',
+                    'prefeito_nome.max'    => 'Campo deve ter 70 Caracteres no máximo !',
+                    'prefeito_nome.min'   => 'Campo deve ter 10 Caracteres no mínimo !',
+                ]
+            );
+
+            
+            $compdec->prefeito_nome    = $request->prefeito_nome;
+            $compdec->prefeito_tel     = $request->prefeito_tel;
+            $compdec->prefeito_cel     = $request->prefeito_cel;
+            $compdec->prefeito_email   = $request->prefeito_email;
+
+            $compdec->iss_tem_cobranca = $request->iss_tem_cobranca;
+            $compdec->iss_aliquota     = $request->iss_aliquota;
+            $compdec->iss_lei_cobranca = $request->iss_lei_cobranca;
+            $compdec->iss_resp_recolhe = $request->iss_resp_recolhe; 
+            $result = $compdec->update();
+
+
+             //$municipio->latitude         = $request->latitude;
+             //$municipio->longitude        = $request->longitude;
+             //$municipio->latitude_dec     = $request->latitude_dec;
+             //$municipio->longitude_dec    = $request->longitude_dec;
+             //$municipio->distancia_bh     = $request->distancia_bh;
+             $municipio->populacao        = $request->populacao;
+             //$municipio->area             = $request->area;
+             $municipio->pop_rural        = $request->pop_rural;
+             $municipio->endereco         = $request->endereco;
+             $municipio->bairro           = $request->bairro;
+             $municipio->cep              = $request->cep;
+             $municipio->email_prefeitura = $request->email_prefeitura;
+             $municipio->fax_prefeitura   = $request->fax_prefeitura;
+             $municipio->tel_prefeitura   = $request->tel_prefeitura;
+             $municipio->update();
+
+
+
+        /* Informações COMPDEC */
+        } elseif ($parte == 'parte2') {
+
+            //dd($request, $compdec);
+
+            $compdec->lei_numero     = $request->lei_numero;
+            $compdec->lei_data       = $request->lei_data;
+            $compdec->decreto_numero = $request->decreto_numero;
+            $compdec->decreto_data   = $request->decreto_data;
+            $compdec->port_numero    = $request->port_numero;
+            $compdec->port_data      = $request->port_data;
+
+
+            $compdec->endereco  = $request->endereco;
+            $compdec->fone_com1 = $request->fone_com1;
+            $compdec->fone_com2 = $request->fone_com2;
+            $compdec->fax       = $request->fax;
+            $compdec->email     = $request->email;
+            $compdec->email2    = $request->email2;
+            $compdec->email3    = $request->email3;
+
+            $result = $compdec->update();
+
+
+        }
+
+
+        
 
         try {
-
-            $input = $request->all();
-
-            $compdec = Compdec::find($id);
-
-            $compdec->fill($input);
-
-            dd($compdec->save());
         } catch (\Exception $ex) {
             $ex->getMessage();
         }
 
-        //return back()->with('message', 'Registro Atualizado com Sucesso !');
+        //if($result === true) {
+        return back()
+                ->with('message', 'Registro Atualizado com Sucesso !');
+        //}else {
+             
+       // }
     }
 
     /**
@@ -278,8 +355,8 @@ class CompdecController extends \App\Http\Controllers\Controller
         $compdec = Compdec::find($request->id);
 
 
-        if (Storage::exists(env('DIR_FOTO_COMPDEC') .'/'. $compdec->fotoCompdec)) {
-            Storage::delete(env('DIR_FOTO_COMPDEC') .'/'. $compdec->fotoCompdec);
+        if (Storage::exists(env('DIR_FOTO_COMPDEC') . '/' . $compdec->fotoCompdec)) {
+            Storage::delete(env('DIR_FOTO_COMPDEC') . '/' . $compdec->fotoCompdec);
         }
 
         $compdec->fotoCompdec = $fileName;
