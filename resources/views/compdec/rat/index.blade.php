@@ -228,15 +228,19 @@
                                 <td>{{ $rat->cobrade }}</td>
                                 <td>{{ $rat->endereco }}</td>
                                 <td>{{ \Carbon\Carbon::parse($rat->dt_ocorrencia)->format('d/m/Y H:i:s') }}</td>
-                                <td>{{ $rat->operador_nome }}</td>
-                                <td>
+                                <td >{{ $rat->operador_nome }}</td>
+                                <td style="white-space: nowrap;">
                                     @if ($rat->operador_id == Auth::user()->id)
                                         <a href="{{ url('rat/edit/' . $rat->id) }}"><img width="25" src={{ asset('/imagem/icon/editar.png') }}></a>
                                     @else
                                         <img class="imgDisabled" src='{{ asset('/imagem/icon/editar.png') }}' title="Não é possivel editar esta ocorrência !, pois ela foi criada por outro usuário !">
                                     @endif
-
                                     <a href="{{ url('rat/show/' . $rat->id) }}"><img width="25" src={{ asset('/imagem/icon/view.png') }}></a>
+                                    
+                                    @can('cedec_redec_delete')
+                                    <a href="{{ url('rat/destroy/' . $rat->id) }}"><img width="25" src={{ asset('/imagem/icon/delete.png') }}></a>
+                                    @endcan
+
                                 </td>
                             </tr>
                         @endForeach

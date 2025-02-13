@@ -10,9 +10,11 @@ use App\Models\Compdec\RatOcorrencia;
 use App\Models\Decreto\Cobrade;
 use App\Models\Municipio\Municipio;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -63,6 +65,7 @@ class RatController extends Controller
     public function index(Request $request)
     {
 
+        //Gate::inspect();
         # acesso ao RAT
         Log::channel('navegacao')->info("Acesso", [
             'view' => 'index',
@@ -98,17 +101,17 @@ class RatController extends Controller
         //$municipio_id = isset(session('user')['municipio_id']) ? session('user')['municipio_id'] : Auth::user()->municipio_id;
 
 
-        
+
         /**
          * Usuario CEDEC e REDEC
          */
         if ($cedec_redec) {
-             
+
             if (isset($filter['municipio_id'])) {
                 $filter_all .= ' and com_rat.municipio_id = "' . $filter['municipio_id'] . '" ';
             }
-        } 
-       
+        }
+
         # ano
         if (isset($filter['ano'])) {
             $filter_all .= ' and year(com_rat.dt_ocorrencia) = "' . $filter['ano'] . '" ';
@@ -258,7 +261,7 @@ class RatController extends Controller
                         ->paginate(30);
                 }
             }
-        }   
+        }
 
         #Qtd por mes Ocorrencias
         $chart_ocor_corrente = Rat::select("cobrade_id", DB::raw("count(*) as cobrade_count"))
@@ -767,6 +770,7 @@ class RatController extends Controller
      */
     public function destroy(Rat $rat)
     {
+
         # update ao RAT
         Log::channel('navegacao')->info("Acesso", [
             'view' => 'destroy',
@@ -775,7 +779,20 @@ class RatController extends Controller
             'hostname' => request()->getClientIp(),
             'id' => $rat->id,
         ]);
-        dd($rat);
+
+        try {
+
+            $rat->delete();
+            Storage::disk('public')->deleteDirectory('rat_uploads/' . $rat->id);
+
+            return back()->with(['message' => 'Registro Deletado Com Sucesso !',
+                'status' => true,
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => 'Ocorreu um erro ao deletar o usuário.'], 500);
+        }
     }
 
 

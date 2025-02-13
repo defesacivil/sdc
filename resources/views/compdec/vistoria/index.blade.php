@@ -135,6 +135,9 @@
                                                 {{-- <a href="{{ url('interdicao/show/'.$vistoria->id) }}" title='Termo de Interdição'><img width="25" src={{ asset('/imagem/icon/relatorio.png') }} ></a> --}}
                                             @endif
                                         <a href="{{ url('vistoria/show/' . $vistoria->id) }}"><img width="25" src={{ asset('/imagem/icon/view.png') }}></a>
+                                        @can('cedec_redec_delete')
+                                    <a href="{{ url('vistoria/destroy/' . $vistoria->id) }}"><img width="25" src={{ asset('/imagem/icon/delete.png') }} onclick="return confirm('Confirma a Exclusão do Registro')"></a>
+                                    @endcan
                                     </td>
                                 </tr>
                             @endForeach

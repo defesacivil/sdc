@@ -148,6 +148,7 @@
         <h1><span>4</span><span>0</span><span>4</span></h1>
       </div>
       <h2>Aconteceu algo inesperado !</h2>
+     
     </div>
     <div id="message">
       <h4>{{ url()->current() }}</h4>

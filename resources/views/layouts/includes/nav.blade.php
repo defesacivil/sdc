@@ -111,27 +111,38 @@
                     <ul class="mr-auto navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                &nbsp;&nbsp;&nbsp;{{ Auth::user()->name }}
+                                &nbsp;&nbsp;&nbsp;
+                                @auth
+                                 {{ Auth::user()->name }}
+                                @endauth
                             </a>
 
                             <div class="dropdown-menu p-2" aria-labelledby="navbarDropdown">
                                 @can('cedec')
                                     @isset(Session::get('user')['funcionario']['secao'])
                                         <span class="bolder">Seção :</span>&nbsp;{{ Session::get('user')['funcionario']['secao'] }}
+                                        
+                                        @auth
                                         {{ Auth::user()->email }}
+                                        @endauth
+                                        
                                         {{-- <a href="#">Perfil</a> --}}
                                     @endisset
                                 @endcan
+                                @auth
                                 <p><a href='{{ url('usuario/edit/'.auth()->user()->id)}}'>Perfil do Usuário</a></p>
+                                
+                                @endauth
                                 <p>Grupos do Usuário</p>
 
-                                @php
-                                $permissions = auth()->user()->getAllPermissions();
-                                @endphp
-                                
+                                @auth
+                                    @php
+                                    $permissions = auth()->user()->getAllPermissions();
+                                    @endphp
                                 @foreach ($permissions as $permission)
-                                    <div class="p-1">{{ ucfirst($permission->name) }}</div>
+                                <div class="p-1">{{ ucfirst($permission->name) }}</div>
                                 @endforeach
+                                @endauth
                             </div>
                         </li>
                     </ul>

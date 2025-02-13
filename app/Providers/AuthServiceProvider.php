@@ -28,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+           //'Rat::class' => 'RatPolicy::class',
     ];
 
     /**
@@ -142,6 +143,13 @@ class AuthServiceProvider extends ServiceProvider
             return true;
             // return true if the user is allowed access to the Log Viewer
         });
+
+        Gate::define('cedec_redec_delete', function (?User $user) {
+            return in_array($user->tipo, ['cedec','redec']);
+            // return true if the user is allowed access to the Log Viewer
+        });
+        
+
 
         $this->registerPolicies();
 

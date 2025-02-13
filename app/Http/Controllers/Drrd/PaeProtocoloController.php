@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -35,7 +36,7 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
         if (auth()->user()->can('paeusuario')) {
             return $this->minerar($request);
         } else {
-            
+
             /*bloquear acesso do empreendedor */
 
             $notificacao = PaeProtocolo::with(
@@ -203,6 +204,8 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
 
         //dd($request, Carbon::parse($request->limite_analise)->format('Y-m-d'));
 
+       
+
         $request->validate(
             [
                 'dt_entrada'     => "required|date",
@@ -221,10 +224,10 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
                 'dt_entrada.date'         => "O campo Data de Entrada deve ser uma Data válida !",
                 'user_id'                 => "O campo Usuario é Obrigatório !",
                 'limite_analise.required' => "O campo Data Limite é Obrigatório !",
-                //'limite_analise.data'   => "O campo Data de Limite deve ser uma Data válida !",
                 'ccpae.digits_between'    => "O campo CCPAE deve ser somente números !",
                 'ccpae_venc.date'         => "O campo CCPAE Vencimento deve ser uma Data Válida !",
                 'empnto_search.required'  => "O campo Empreendimento é obrigatório !",
+                //'limite_analise.data'   => "O campo Data de Limite deve ser uma Data válida !",
                 'pae_empnto_id.required'  => "O campo Id Empreendimento é Obrigatório !",
                 /*'obs.required'          => "O campo Observação é Obrigatório !",       
                 'obs.max'                 => "O campo Observação deve ter no máximo 1000 caracteres!",       
@@ -234,13 +237,13 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
             ]
         );
 
+        try { 
+
+            $protocolo = new PaeProtocolo;
+            $empdor = PaeEmpnto::with(['empreendedor'])->where('id', '=', $request->pae_empnto_id)->get();
 
 
-        $protocolo = new PaeProtocolo;
-        $empdor = PaeEmpnto::with(['empreendedor'])->where('id', '=', $request->pae_empnto_id)->get();
-
-
-        /*
+            /*
             id_empreendedor-
             id_empreendimento-
             num_aleatorio_ate_999-
@@ -248,25 +251,28 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
             (id_protocolo+1)
 
         */
-        $protocolo->num_protocolo  = $empdor[0]->empreendedor->id . "-" .
-            $request->pae_empnto_id . "-" .
-            rand(0, 999) . "-" .
-            substr(Str::replace(["-", ":"], "", $request->dt_entrada), 0, 8) . "-" .
-            ($protocolo->latest()->first()->id + 1);
+            $protocolo->num_protocolo  = $empdor[0]->empreendedor->id . "-" .
+                $request->pae_empnto_id . "-" .
+                rand(0, 999) . "-" .
+                substr(Str::replace(["-", ":"], "", $request->dt_entrada), 0, 8) . "-" .
+                ($protocolo->latest()->first()->id + 1);
 
-        $protocolo->dt_entrada     = Carbon::parse($request->dt_entrada)->format('Y-m-d');
-        $protocolo->user_id        = $request->user_id;
-        $protocolo->limite_analise = Carbon::parse(Str::replace("/", "-", $request->limite_analise))->format('Y-m-d');
-        $protocolo->ccpae          = $request->ccpae;
-        $protocolo->ccpae_venc     = $request->ccpae_venc;
-        $protocolo->pae_empnto_id  = $request->pae_empnto_id;
-        $protocolo->obs            = $request->obs;
-        $protocolo->sei            = $request->sei;
-        $protocolo->sit_mancha     = $request->sit_mancha;
+            $protocolo->dt_entrada     = Carbon::parse($request->dt_entrada)->format('Y-m-d');
+            $protocolo->user_id        = $request->user_id;
+            $protocolo->limite_analise = Carbon::parse(Str::replace("/", "-", $request->limite_analise))->format('Y-m-d');
+            $protocolo->ccpae          = $request->ccpae;
+            $protocolo->ccpae_venc     = $request->ccpae_venc;
+            $protocolo->pae_empnto_id  = $request->pae_empnto_id;
+            $protocolo->obs            = $request->obs;
+            $protocolo->sei            = $request->sei;
+            $protocolo->sit_mancha     = $request->sit_mancha;
 
-        $protocolo->save();
+            //$protocolo->save();
 
-        return redirect('pae/protocolo')->with('message', 'Registro Gravado com Sucesso ');
+            return redirect()->back()->with('message', 'Registro Gravado com Sucesso ');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors('error', 'Ocorreu um erro ao gravar ');
+        }
     }
 
     /**
@@ -575,7 +581,8 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
      *
      * @return void
      */
-    public function encerrar(PaeProtocolo $paeProtocolo){
+    public function encerrar(PaeProtocolo $paeProtocolo)
+    {
 
         //dd($paeProtocolo->id);
 
@@ -592,16 +599,14 @@ class PaeProtocoloController extends \App\Http\Controllers\Controller
      *
      * @return void
      */
-    public function delete(PaeProtocolo $paeProtocolo){
+    public function delete(PaeProtocolo $paeProtocolo)
+    {
 
         $paeProtocolo->analises()->delete();
-        
+
         $paeProtocolo->delete();
 
 
         return redirect('pae/protocolo')->with('message', 'Registro Deletado com Sucesso ');
     }
-
-    
-
 }

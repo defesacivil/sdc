@@ -53,6 +53,10 @@ class DrrdController extends \App\Http\Controllers\Controller
                 ->join('pae_empdors', 'pae_empdors.id', '=', 'pae_empntos.pae_empdor_id')
                 ->where('limite_analise', "<=", \Carbon\Carbon::now()->subDays(10))
                 ->where('pae_empdors.id', '=', auth()->user()->id_empdor)->count();
+
+
+            $totCcpae = DB::table('pae_protocolos')
+                ->where('ccpae', '<>', NULL)->count();
         
         # notificações gerais
         } else {
@@ -62,14 +66,17 @@ class DrrdController extends \App\Http\Controllers\Controller
             $notificacoes = PaeNotificacao::where('dt_notificacao', '<=', \Carbon\Carbon::now())->count();
 
             $totPaeProxVenc = PaeProtocolo::where('limite_analise', "<=", \Carbon\Carbon::now()->subDays(10))->count();
+
+            $totCcpae = PaeProtocolo::where('ccpae', '<>', NULL)->count();
         }
 
         return view(
             'drrd/index',
             [
                 'total_protocolo' => $totalPaebm,
-                'notificacoes'  => $notificacoes,
-                'totPaeProxVenc' => $totPaeProxVenc,
+                'notificacoes'    => $notificacoes,
+                'totPaeProxVenc'  => $totPaeProxVenc,
+                'totCcpae'        => $totCcpae,
             ]
         );
     }

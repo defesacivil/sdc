@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Config;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class VistoriaController extends Controller
 {
@@ -793,7 +794,33 @@ class VistoriaController extends Controller
      */
     public function destroy(Vistoria $vistoria)
     {
-        //
+        # update ao RAT
+        Log::channel('navegacao')->info("Acesso", [
+            'view' => 'destroy',
+            'modulo' => 'RAT',
+            'user_id' => Auth::user()->id,
+            'hostname' => request()->getClientIp(),
+            'id' => $vistoria->id,
+        ]);
+        
+        try {
+
+            $interdicao = Interdicao::where('ids_vistoria', $vistoria->id);
+            $interdicao->delete();
+
+
+            $vistoria->delete();
+
+            Storage::disk('public')->deleteDirectory('vistoria_foto/' . $vistoria->id);
+
+            return back()->with(['message' => 'Registro Deletado Com Sucesso !',
+                'status' => true,
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => 'Ocorreu um erro ao deletar o usuário.'], 500);
+        }
     }
 
 

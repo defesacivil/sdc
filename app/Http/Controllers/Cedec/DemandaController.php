@@ -20,10 +20,12 @@ class DemandaController extends Controller
 
         $categorias = $catCollectcat->put('1', 'Cidade Administrativa');
 
-        return view('cedec.demanda.index',
-    [
-            'categorias' => $categorias,
-    ]);
+        return view(
+            'cedec.demanda.index',
+            [
+                'categorias' => $categorias,
+            ]
+        );
     }
 
     /**
@@ -33,7 +35,47 @@ class DemandaController extends Controller
      */
     public function create()
     {
-        //
+
+        $servicos = [
+
+            'SDC - Cadastro'     => 'SDC - Cadastro',
+            'Sei - permissão'    => 'Sei - permissão',
+            'Sei - Cadastro'     => 'Sei - Cadastro',
+            'Impressora sem Toner'     => 'Trocar Tonner de Impressora',
+            'Acesso Caixa Email' => 'Acesso do Email da Caixa Administrativa',
+        ];
+
+        $email_adm = [
+
+            'defesacivil@defesacivil.mg.gov.br' => 'DefesaCivil',
+            'sdb@defesacivil.mg.gov.br'         => 'DSB' ,
+            'splan@defesacivil.mg.gov.br'       => 'SPLAN' ,
+            'apdc@defesacivil.mg.gov.br'        => 'APDC' ,
+        ];
+
+        $secao = [
+
+            'STO'    => 'STO - Superintendencia Técnico Operacional',
+            'DPLAN'  => 'DPLAN - Diretoria de Planejamento',
+            'SPLAN'  => 'SPLAN - Superintendencia de Planejamento',
+            'SADM'   => 'SADM - Superintendencia Administativa',
+            'DRRD'   => 'DRRD - Diretoria de Redução Risco de Desastre',
+            'DRD'    => 'DRD - Diretoria de Resposta a Desastre',
+            'DEPDC'  => 'DEPDC - Diretoria de Ensino',
+            'DSB'    => 'DSB - Diretoria de Segurança de Barragens',
+            'NAR'    => 'NAR - Núcleo de Apoio as Regionais',
+            'CINDEC' => 'CINDEC - Centro de Inteligência em Defesa Civil',
+            'GMG'    => 'GMG - Gabinete Militar do Governador',
+        ];
+
+        return view(
+            'cedec.demanda.create',
+            [
+                'servicos'  => $servicos,
+                'secao'     => $secao,
+                'email_adm' => $email_adm,
+            ]
+        );
     }
 
     /**
@@ -44,7 +86,7 @@ class DemandaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -55,7 +97,7 @@ class DemandaController extends Controller
      */
     public function show(Demanda $demanda)
     {
-        //
+        dd($demanda);
     }
 
     /**

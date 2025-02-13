@@ -542,7 +542,10 @@ Route::group(['middleware' => 'auth'], function () {
     # modulo acesso CISTERNA
     Route::get('cisterna/create', 'App\Http\Controllers\Ajuda\CisternaController@create');
     
+    Route::post('cisterna/store', 'App\Http\Controllers\Ajuda\CisternaController@store');
+    
     Route::get('cisterna', 'App\Http\Controllers\Ajuda\CisternaController@index');
+    
     Route::get('cisterna/show/{cisterna}', 'App\Http\Controllers\Ajuda\CisternaController@show');
     
     Route::get('cisterna/exportAllExcel', 'App\Http\Controllers\Ajuda\CisternaController@exportAllExcel')->name('exportar');
@@ -744,7 +747,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('vistoria/store', 'App\Http\Controllers\Compdec\VistoriaController@store');
 
     # Vistoria DESTROY
-    Route::get('vistoria/destroy', 'App\Http\Controllers\Compdec\VistoriaController@destroy');
+    Route::get('vistoria/destroy/{vistoria}', 'App\Http\Controllers\Compdec\VistoriaController@destroy');
 
     Route::match(['GET', 'POST'], 'vistoria/search', 'App\Http\Controllers\Compdec\VistoriaController@search');
 
@@ -801,7 +804,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('rat/store', 'App\Http\Controllers\Compdec\RatController@store');
 
     # Rat DESTROY
-    Route::get('rat/destroy', 'App\Http\Controllers\Compdec\RatController@destroy');
+    Route::get('rat/destroy/{rat}', 'App\Http\Controllers\Compdec\RatController@destroy');
 
     # Rat CONFIG
     Route::match(['GET', 'POST'], 'rat/config', 'App\Http\Controllers\Compdec\RatController@config');
@@ -857,6 +860,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('demanda', 'App\Http\Controllers\Cedec\DemandaController@index');
 
+    Route::get('demanda/create', 'App\Http\Controllers\Cedec\DemandaController@create');
+    
+    Route::post('demanda/store', 'App\Http\Controllers\Cedec\DemandaController@store');
+    
+    Route::get('demanda/show', 'App\Http\Controllers\Cedec\DemandaController@show');
+    
     Route::get('bot', 'App\Http\Controllers\Cedec\BotTelegramController@index');
 
 
@@ -893,3 +902,6 @@ Route::post('gade/store', 'App\Http\Controllers\Voluntario\VoluntarioController@
 Route::get('gade/admin', 'App\Http\Controllers\Voluntario\VoluntarioController@index');
 
 Route::get('gade/listagem/profissao/{field}', 'App\Http\Controllers\Voluntario\VoluntarioController@profissao');
+
+
+Route::get('demanda/create', 'App\Http\Controllers\Cedec\DemandaController@create');

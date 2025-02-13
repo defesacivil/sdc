@@ -22,6 +22,18 @@
                 <div class="p-3 col">
                     <p class='text-center'><a class='btn btn-success' href='{{ url('pae/protocolo') }}'>Voltar</a></p><br>
                     <legend class="fw-bold">Lancamento novo Protocolo</legend>
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+
                 </div>
             </div>
 
@@ -37,7 +49,7 @@
 
                     <div class="p-2 row">
                         <div class='col'>
-                            {{ Form::label('empreendimento', 'Empreendimento (Para buscar, digite parte do nome ex: "B1" )',['class'=>'fw-bold']) }}:
+                            {{ Form::label('empreendimento', 'Empreendimento (Para buscar, digite parte do nome ex: "B1" )', ['class' => 'fw-bold']) }}:
                             {{ Form::text('empnto_search', '', ['class' => 'form form-control', 'value' => old('empnto_search'), 'id' => 'empnto_search']) }}
                             {{ Form::hidden('pae_empnto_id', '', ['id' => 'pae_empnto_id', 'required']) }}
                         </div>
@@ -45,41 +57,41 @@
 
                     <div class='p-2 row'>
                         <div class='col'>
-                            {{ Form::label('Data Entrada', '',['class'=>'fw-bold']) }}:
+                            {{ Form::label('Data Entrada', '', ['class' => 'fw-bold']) }}:
                             {{ Form::input('dateTime-local', 'dt_entrada', '', ['class' => 'form form-control', 'value' => old('dt_entrada'), 'id' => 'dt_entrada']) }}
                             {{ Form::hidden('user_id', Auth::user()->id) }}
                         </div>
                         <div class='col'>
-                            {{ Form::label('limite_analise', '',['class'=>'fw-bold']) }}:
+                            {{ Form::label('limite_analise', '', ['class' => 'fw-bold']) }}:
                             {{ Form::text('limite_analise', '', ['class' => 'form form-control', 'value' => old('limite_analise'), 'id' => 'limite_analise', 'readonly' => 'readonly']) }}
                         </div>
                     </div>
 
                     <div class='p-2 row'>
                         <div class='col'>
-                            {{ Form::label('ccpae', '',['class'=>'fw-bold']) }}:
+                            {{ Form::label('ccpae', '', ['class' => 'fw-bold']) }}:
                             {{ Form::text('ccpae', '', ['class' => 'form form-control', 'value' => old('ccpae')]) }}
                         </div>
                         <div class='col'>
-                            {{ Form::label('ccpae_vencimento', '',['class'=>'fw-bold']) }}:
+                            {{ Form::label('ccpae_vencimento', '', ['class' => 'fw-bold']) }}:
                             {{ Form::date('ccpae_venc', '', ['class' => 'form form-control', 'value' => old('ccpae_venc')]) }}
                         </div>
                     </div>
 
                     <div class='p-2 row'>
                         <div class='col-6'>
-                            {{ Form::label('sei', '',['class'=>'fw-bold']) }}:
+                            {{ Form::label('sei', '', ['class' => 'fw-bold']) }}:
                             {{ Form::text('sei', '', ['class' => 'form form-control', 'value' => old('sei'), 'id' => 'sei', 'title' => 'Número do Processo do Sei', 'maxlength' => 150]) }}
                         </div>
                         <div class="col-6">
-                            {{ Form::label('sit_mancha', 'Situação da Mancha',['class'=>'fw-bold']) }}:
+                            {{ Form::label('sit_mancha', 'Situação da Mancha', ['class' => 'fw-bold']) }}:
                             {{ Form::select('sit_mancha', $sit_mancha, '', ['placeholder' => 'Selecione a Opção', 'class' => 'form form-control']) }}
                         </div>
                     </div>
 
                     <div class='p-2 row'>
                         <div class='col'>
-                            {{ Form::label('obs', '',['class'=>'fw-bold']) }}:
+                            {{ Form::label('obs', '', ['class' => 'fw-bold']) }}:
                             {{ Form::textarea('obs', '', ['class' => 'form form-control', 'value' => old('obs')]) }}
                         </div>
 
